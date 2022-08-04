@@ -1,0 +1,39 @@
+metadata:
+  name: example workflow
+  author: Author
+  info: extended info
+  version: 0.1
+
+workcell: example_wc.yml
+
+modules:
+  - name: ot2-1
+    type: OT2
+    id: some_unique_id
+  - name: pf400
+    type: pf400
+    id: other_unique_id
+  - name: ot2-2
+    type: OT2
+    id: unique_id_3
+
+#TODO: add require for the steps
+actions:
+  - name: step 1
+    module: ot2_1
+    command:
+      instruction: ot2_protocoll
+      args:
+        config_path: path
+        vars: Optional
+    comment: this is an optional string
+
+  - name: transfer 1
+    module: pf400
+    command:
+      instruction: move
+      args:
+        x: 1
+        y: 1
+        z: 1
+    comment: this is an optional string
