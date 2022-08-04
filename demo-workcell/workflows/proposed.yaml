@@ -1,0 +1,57 @@
+modules:
+  - name:
+    ip:
+    port:
+    alias: #opt
+  - name:
+    ip:
+    port:
+    alias: #opt
+  - name:
+    ip:
+    port:
+    alias: #opt
+
+actions:
+  - step:
+    name:
+    command:
+      robot:
+      instruction:
+      args:
+      dependencies:
+    priority: 1
+    comment: this is an optional string
+    # how do we feel about implicit transfers?
+  - step:
+    name:
+    command:
+      robot:
+      instruction:
+      args:
+      dependencies:
+    priority: 1
+    comment: this is an optional string
+
+metadata:
+  author:
+  info:
+  version:
+# Modules
+# Ot2 - Deck1
+
+# Steps
+# - Create plan
+# - scripts/create_pcr_plan.py
+# - CSV FILE
+# - PF400
+# - move
+# - A
+# - B
+# - OT2 - Deck1
+# - RUN ot2 protocol
+# - Hydex
+#   - Take image
+#   - NAME / LOCATION
+
+# Reagents

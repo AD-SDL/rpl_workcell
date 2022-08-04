@@ -1,0 +1,60 @@
+metadata:
+  name: example workflow
+  author: Author
+  info: extended info
+  version: 0.1
+
+# Pull into workcell.yml
+
+workcell: name
+modules: #things we want to use from the workcell, not things that are in workcell
+  - name: OT2-1
+    type: OT2
+    config:
+      ip: "1.1.1.1"
+      port: 31950
+    positions:
+      deck_1: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0] #specifically 6
+    tag:
+      type: str
+      id: uuid
+  - name: pf400-1
+    type: pf400
+    config:
+      ip: "2.2.2.2"
+      port: 10100
+    tag:
+      type: str
+      id: uuid
+  - name: OT2-2
+    type: OT2
+    config:
+      ip: "3.3.3.3"
+      port: 31950
+    tag:
+      type: str
+      id: uuid
+
+actions:
+  - step:
+      name: step 1
+      module: ot2_1
+      command:
+        instruction: ot2_protocoll
+        args:
+          config_path: path
+          vars: Optional
+      dependencies: None
+      priority: None
+      comment: this is an optional string
+      # how do we feel about implicit transfers?
+  - step:
+    name: step2
+    module: pf499
+    command: transfer
+    args:
+      coords: x, y, z
+      stuff: stuff
+    dependencies: step1
+    priority: 1
+    comment: this is an optional string

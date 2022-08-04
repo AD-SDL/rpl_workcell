@@ -1,0 +1,24 @@
+modules:
+  - name: ot2-external
+    ip: "192.168.50.29" # wireless, snowcrash
+    _ip: "169.254.170.12" #wired
+    port: 31950
+    alias: p1000_robot
+  - name: ot2-internal
+    ip: "192.168.50.197" # wireless, snowcrash
+    _ip: "169.254.10.241" # wired
+    port: 31950
+    alias: p300_multi
+  - name: pf400
+    ip: "192.158.50.50" #? Ask eric or raf about this
+    _ip: TODO
+    port: 10100
+    alias: pf400
+  - name: sealer
+    _ip: TODO
+    port: TODO
+    alias: sealer
+  - name: pealer
+    _ip: TODO
+    port: TODO
+    alias: pealer

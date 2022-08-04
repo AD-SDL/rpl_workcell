@@ -1,28 +1,46 @@
+from pathlib import Path
+from argparse import ArgumentParser
 
-import os
+from devtools import debug
+
+from data_classes import WorkCell
 
 
+class wc_client:
+    def __init__(self, wc_config_file):
+        self.state = None
 
-class wc_client():
+        self.workflow = WorkCell.from_yaml(wc_config_file)
+        self.modules = self.workflow.modules
+        self.actions = self.workflow.actions
 
-  def __init__(self, wc_config_file):
-    self.wc_config_file = wc_config_file
-    self.modules = self.get_modules()
-    self.state = None
+    def check_modules(self):
+        for module in self.modules:
+            print(f"Checking module: {module}")
 
-    self.check_modules()
-    self.check_action()
+    def check_actions(self):
+        for step in self.actions:
+            print(f"Checking step: {step}")
 
-  def check_modules():
-    pass
+    def run_flow(self):
 
-  def check_action():
-    pass
+        for step in self.actions:
+            print(step)
 
-  def run_flow(self, flow_def_file):
-    with f as Open(flow_def_file):
-        flow_def = yaml.safeload(f)
+    def print_flow(self):
+        debug(self.workflow)
 
-    for step in flow_def:
-        print(step)
- 
+
+def main(args):
+    wc = wc_client(args.workflow)
+    wc.print_flow()
+    wc.check_modules()
+    wc.check_actions()
+
+
+if __name__ == "__main__":
+    parser = ArgumentParser()
+    parser.add_argument("-wf", "--workflow", help="Path to workflow file", type=Path, required=True)
+
+    args = parser.parse_args()
+    main(args)
