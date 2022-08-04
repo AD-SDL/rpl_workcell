@@ -1,4 +1,3 @@
-from importlib_metadata import metadata
 import yaml
 import json
 from pathlib import Path
@@ -42,27 +41,41 @@ class BaseModel(_BaseModel):
         return cls(**raw_data)  # type: ignore[call-arg]
 
 
+class Tag(BaseModel):
+    type: str
+    id: str  # not quite sure what this will be
+
+
 class Module(BaseModel):
     name: str
-    ip: str
-    port: Union[str, int]
-    alias: Optional[str]
+    type: str
+    config: Dict  # contains ip and port
+    positions: Optional[dict]
+    tag: Optional[Tag]
     id: UUID = Field(default_factory=uuid4)
 
 
+class SimpleModule(BaseModel):
+    name: str
+    type: str
+    id: Optional[Union[UUID, str]]
+    # what else? Equipemnt it needs?
+
+
 class Command(BaseModel):
-    robot: Union[str, UUID]
     instruction: str
     args: Dict
-    dependencies: Optional[str]
 
 
 class Step(BaseModel):
     name: str
+    module: str
     command: Command
-    comment: Optional[str]
+    requirements: Optional[Dict]
     dependencies: Optional[Union[str, UUID]]
+    priority: Optional[int]
     id: UUID = Field(default_factory=uuid4)
+    comment: Optional[str]
 
 
 class Metadata(BaseModel):
@@ -72,7 +85,12 @@ class Metadata(BaseModel):
     version: float = 0.1
 
 
-class WorkCell(BaseModel):
-    modules: List[Module]
+class Workflow(BaseModel):
+    workcell: Union[str, Path]
+    modules: List[SimpleModule]
     actions: List[Step]
     metadata: Metadata
+
+
+class WorkCell(BaseModel):
+    modules: List[Module]
