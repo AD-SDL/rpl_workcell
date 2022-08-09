@@ -63,14 +63,17 @@ class SimpleModule(BaseModel):
 
 
 class Command(BaseModel):
+    name: str
     instruction: str
     args: Dict
+    checks: Optional[str]
+    comment: Optional[str]
 
 
 class Step(BaseModel):
     name: str
     module: str
-    command: Command
+    commands: List[Command]
     requirements: Optional[Dict]
     dependencies: Optional[Union[str, UUID]]
     priority: Optional[int]
@@ -88,7 +91,7 @@ class Metadata(BaseModel):
 class Workflow(BaseModel):
     workcell: Union[str, Path]
     modules: List[SimpleModule]
-    actions: List[Step]
+    flowdef: List[Step]
     metadata: Metadata
 
 

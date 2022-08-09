@@ -6,42 +6,54 @@ from devtools import debug
 from data_classes import Workflow, WorkCell
 
 
-class WC_Client:
+class WF_Client:
     def __init__(self, wc_config_file):
+        """Initialize a workflow client
+
+        Parameters
+        ----------
+        wc_config_file : Pathlike
+            The workflow config path
+        """
         self.state = None
 
         self.workflow = Workflow.from_yaml(wc_config_file)
         self.modules = self.workflow.modules
-        self.actions = self.workflow.actions
+        self.flowdef = self.workflow.flowdef
         self.workcell = WorkCell.from_yaml(self.workflow.workcell)
 
     def check_modules(self):
+        """Checks the modules required by the workflow"""
         for module in self.modules:
             print(f"Checking module: {module}")
 
-    def check_actions(self):
-        for step in self.actions:
+    def check_flowdef(self):
+        """Checks the actions provided by the workflow"""
+        for step in self.flowdef:
             print(f"Checking step: {step}")
 
     def run_flow(self):
+        """Executes the flowdef commmands"""
 
-        for step in self.actions:
+        for step in self.flowdef:
             print(step)
 
     def print_flow(self):
+        """Prints the workflow dataclass, for debugging"""
         debug(self.workflow)
 
     def print_workcell(self):
+        """Print the workcell datacall, for debugging"""
         debug(self.workcell)
 
 
-def main(args):
-    wc = WC_Client(args.workflow)
+def main(args):  # noqa: D103
+    wc = WF_Client(args.workflow)
     if args.verbose:
         wc.print_flow()
         wc.print_workcell()
     wc.check_modules()
-    wc.check_actions()
+    wc.check_flowdef()
 
 
 if __name__ == "__main__":
