@@ -4,7 +4,7 @@ metadata:
   info: extended info
   version: 0.1
 
-workcell: demo-workcell/example_wc.yml
+workcell: rpl-workcell/demo-workcell/example_wc.yml
 
 modules:
   - name: ot2-1
@@ -26,16 +26,5 @@ flowdef:
         args:
           config_path: path
           vars: Optional
-        checks: str #str, step fallback
-        comment: this is an optional string
-  - name: transfer 1 #step
-    module: pf400-1 # target
-    commands: # potentially needs to be a list?
-      - name: action name
-        instruction: move
-        args:
-          x: 1
-          y: 1
-          z: 1
         checks: str #str, step fallback
         comment: this is an optional string
