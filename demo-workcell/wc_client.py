@@ -11,8 +11,10 @@ def main(args):
     if args.verbose:
         wei.print_flow()
         wei.print_workcell()
-    wei.check_modules()
-    wei.check_flowdef()
+    # wei.check_modules()
+    # wei.check_flowdef()
+
+    wei.run_flow()
 
 
 if __name__ == "__main__":
