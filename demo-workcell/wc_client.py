@@ -1,8 +1,6 @@
 from pathlib import Path
 from argparse import ArgumentParser
 
-# TODO: Currently does not work due to relative imports,
-# when this becomes a package it will be good
 from rpl_wei.wei_client_base import WEI
 
 
@@ -11,8 +9,10 @@ def main(args):
     if args.verbose:
         wei.print_flow()
         wei.print_workcell()
-    # wei.check_modules()
-    # wei.check_flowdef()
+
+    # This might have to happen outside of the users control
+    wei.check_modules()
+    wei.check_flowdef()
 
     wei.run_flow()
 
