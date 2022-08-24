@@ -4,13 +4,12 @@ metadata:
   info: extended info
   version: 0.1
 
-# workcell: rpl-workcell/demo-workcell/example_wc.yml
-workcell: /Users/kyle/github/rpl-workcell/demo-workcell/example_wc.yml
+# This should be an absolute path, replace when you use
+workcell: rpl-workcell/demo-workcell/example_wc.yaml
 
 modules:
   - name: ot2-1
   - name: pf400
-  - name: ot2-2
 
 flowdef:
   - name: Example ot2 command
@@ -18,6 +17,7 @@ flowdef:
     command: run protocol
     args:
       config_path: path_to_config.yaml
+      vars: { "time": 10 }
     checks: null
 
   - name: Move plate to sealer
@@ -26,5 +26,6 @@ flowdef:
     args:
       target: sealer
       source: ot2-1_deck1
+      vars: { "time": 2 }
     checks: null
     comment: we can add comments if we wanted
