@@ -9,6 +9,8 @@ modules:
     type: pf400
     config:
       ros_node: "pf400 rosnode"
+    positions:
+      final_destination: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   - name: sciclops
     type: sciclops
     config:
