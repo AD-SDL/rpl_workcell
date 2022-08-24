@@ -17,76 +17,75 @@ modules:
 flowdef:
   - name: PCR Plate Exchange
     module: sciclops
-    command:
-      instruction: get_plate
-      args:
-        loc: "tower1"
-      checks: null
-      comment: Stage pcr plates
+    command: get_plate
+    args:
+      loc: "tower1"
+    checks: null
+    comment: Stage pcr plates
+
   - name: PCR to OT2
     module: pf400
-    command:
-      instruction: move
-      args:
-        target: ot2_alpha_deck1
-        source: sciclops_exchange
-      checks: null
-      comment: Place plate in ot2
+    command: move
+    args:
+      target: ot2_alpha_deck1
+      source: sciclops_exchange
+    checks: null
+    comment: Place plate in ot2
+
   - name: Mix OT2 reactions
     module: ot2
-    command:
-      instruction: run protocol
-      args:
-        config_path: pcr_workcell/protocol_files/ot2_pcr_config.yaml
-      checks: RESOURCE_CHECK
-      comment: resource check not implemented, but will be
+    command: run_protocol
+    args:
+      config_path: pcr_workcell/protocol_files/ot2_pcr_config.yaml
+    checks: RESOURCE_CHECK
+    comment: resource check not implemented, but will be
+
   - name: Move plate to sealer
     module: pf400
-    command:
-      instruction: move
-      args:
-        target: sealer
-        source: ot2_alpha_deck1
-      checks: null
-      comment: null
+    command: move
+    args:
+      target: sealer
+      source: ot2_alpha_deck1
+    checks: null
+    comment: null
+
   - name: Seal PCR plate
     module: sealer
-    command:
-      instruction: seal
-      args:
-        time: 3
-        temperature: 175
-      checks: null
-  - name: Thermocycler
+    command: seal
+    args:
+      time: 3
+      temperature: 175
+    checks: null
+
+  - name: Thermocycle
     module: biometra
-    command:
-      instruction: thermocycle
-      args:
-        protocol_file: pcr_workcell/protocol_files/biometra_protocol.yaml
-      checks: null
-      comment: null
+    command: thermocycle
+    args:
+      protocol_file: pcr_workcell/protocol_files/biometra_protocol.yaml
+    checks: null
+    comment: null
+
   - name: Move to pealer
     module: pf400
-    command:
-      instruction: move
-      args:
-        target: pealer
-        source: biometra1
-      checks: null
-      comment: null
+    command: move
+    args:
+      target: pealer
+      source: biometra1
+    checks: null
+    comment: null
+
   - name: Peal
     module: pealer
-    command:
-      instruction: peal
-      args: null
-      checks: null
-      comment: null
+    command: peal
+    args: null
+    checks: null
+    comment: null
+
   - name: Move to final destination
     module: pf400
-    command:
-      instruction: move
-      args:
-        target: final_destination
-        source: pealer
-      checks: null
-      comments: null
+    command: move
+    args:
+      target: final_destination
+      source: pealer
+    checks: null
+    comments: null

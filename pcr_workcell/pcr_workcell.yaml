@@ -8,19 +8,19 @@ modules:
   - name: pf400
     type: pf400
     config:
-      ros_node: "pf400 rosnode"
+      ros_node: pf400 rosnode
     positions:
       final_destination: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   - name: sciclops
     type: sciclops
     config:
-      ros_node: "sciclops rosnode"
+      ros_node: sciclops rosnode
     positions:
       exchange: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   - name: sealer
     type: sealer
     config:
-      ros_node: sealer
+      ros_node: sealer rosnode
     positions:
       default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   - name: pealer
