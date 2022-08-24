@@ -37,7 +37,7 @@ flowdef:
     command:
       instruction: run protocol
       args:
-        config_path: pcr_mix_cfg.yml
+        config_path: pcr_workcell/protocol_files/ot2_pcr_config.yaml
       checks: RESOURCE_CHECK
       comment: resource check not implemented, but will be
   - name: Move plate to sealer
@@ -62,7 +62,7 @@ flowdef:
     command:
       instruction: thermocycle
       args:
-        protocol_file: biometra_protocol.yml
+        protocol_file: pcr_workcell/protocol_files/biometra_protocol.yaml
       checks: null
       comment: null
   - name: Move to pealer
