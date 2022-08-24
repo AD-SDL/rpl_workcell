@@ -9,34 +9,22 @@ workcell: /Users/kyle/github/rpl-workcell/demo-workcell/example_wc.yml
 
 modules:
   - name: ot2-1
-    type: OT2
-    id: some_unique_id
   - name: pf400
-    type: pf400
-    id: other_unique_id
   - name: ot2-2
-    type: OT2
-    id: unique_id_3
 
 flowdef:
-  - name: step 1 #step
-    module: ot2_1 # target
-    commands: # potentially needs to be a list?
-      - name: action name
-        instruction: ot2_protocoll
-        args:
-          config_path: path
-          vars: { time: 10 }
-        checks: str #str, step fallback
-        comment: this is an optional string
+  - name: Example ot2 command
+    module: ot2
+    command: run protocol
+    args:
+      config_path: path_to_config.yaml
+    checks: null
 
-  - name: step 2 #step
-    module: ot2_1 # target
-    commands: # potentially needs to be a list?
-      - name: action name
-        instruction: ot2_protocoll
-        args:
-          config_path: path
-          vars: { time: 2 }
-        checks: str #str, step fallback
-        comment: this is an optional string
+  - name: Move plate to sealer
+    module: pf400
+    command: move
+    args:
+      target: sealer
+      source: ot2-1_deck1
+    checks: null
+    comment: we can add comments if we wanted

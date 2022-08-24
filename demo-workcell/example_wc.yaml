@@ -1,26 +1,37 @@
 modules:
-  - name: OT2-1
+  - name: ot2_alpha
     type: OT2
     config:
-      ip: "1.1.1.1"
-      port: 31950
+      ros_node: ot2-1 rosnode
     positions:
-      deck_1: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-    tag:
-      type: str
-      id: uuid
-  - name: pf400-1
+      deck1: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - name: pf400
     type: pf400
     config:
-      ros_node: "pf400 rosnode"
-    tag:
-      type: str
-      id: uuid
-  - name: OT2-2
-    type: OT2
+      ros_node: pf400 rosnode
+    positions:
+      final_destination: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - name: sciclops
+    type: sciclops
     config:
-      ip: "3.3.3.3"
-      port: 31950
-    tag:
-      type: str
-      id: uuid
+      ros_node: sciclops rosnode
+    positions:
+      exchange: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - name: sealer
+    type: sealer
+    config:
+      ros_node: sealer rosnode
+    positions:
+      default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - name: pealer
+    type: pealer
+    config:
+      ros_node: pealer rosnode
+    positions:
+      default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - name: biometra
+    type: biometra
+    config:
+      ros_node: biometra rosnode
+    positions:
+      default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
