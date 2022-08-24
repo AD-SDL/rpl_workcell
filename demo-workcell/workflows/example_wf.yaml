@@ -4,7 +4,8 @@ metadata:
   info: extended info
   version: 0.1
 
-workcell: rpl-workcell/demo-workcell/example_wc.yml
+# workcell: rpl-workcell/demo-workcell/example_wc.yml
+workcell: /Users/kyle/github/rpl-workcell/demo-workcell/example_wc.yml
 
 modules:
   - name: ot2-1
@@ -25,6 +26,17 @@ flowdef:
         instruction: ot2_protocoll
         args:
           config_path: path
-          vars: Optional
+          vars: { time: 10 }
+        checks: str #str, step fallback
+        comment: this is an optional string
+
+  - name: step 2 #step
+    module: ot2_1 # target
+    commands: # potentially needs to be a list?
+      - name: action name
+        instruction: ot2_protocoll
+        args:
+          config_path: path
+          vars: { time: 2 }
         checks: str #str, step fallback
         comment: this is an optional string
