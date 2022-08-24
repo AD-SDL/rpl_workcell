@@ -1,0 +1,35 @@
+modules:
+  - name: ot2_alpha
+    type: OT2
+    config:
+      ros_node: ot2_alpha
+    positions:
+      deck1: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - name: pf400
+    type: pf400
+    config:
+      ros_node: "pf400 rosnode"
+  - name: sciclops
+    type: sciclops
+    config:
+      ros_node: "sciclops rosnode"
+    positions:
+      exchange: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - name: sealer
+    type: sealer
+    config:
+      ros_node: sealer
+    positions:
+      default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - name: pealer
+    type: pealer
+    config:
+      ros_node: sealer rosnode
+    positions:
+      default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - name: biometra
+    type: biometra
+    config:
+      ros_node: biometra rosnode
+    positions:
+      default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]

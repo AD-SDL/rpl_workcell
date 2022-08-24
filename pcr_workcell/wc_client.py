@@ -10,7 +10,6 @@ def main(args):
         wei.print_flow()
         wei.print_workcell()
 
-    # This might have to happen outside of the users control
     wei.check_modules()
     wei.check_flowdef()
 
