@@ -4,45 +4,89 @@ metadata:
   info: extended info
   version: 0.1
 
-workcell: example_wc.yml
+workcell: rpl-workcell/pcr_workcell/pcr_workcell.yml
 
 modules:
-  - name: ot2-1
-    type: OT2
-    id: some_unique_id
+  - name: ot2
   - name: pf400
-    type: pf400
-    id: other_unique_id
-  - name: ot2-2
-    type: OT2
-    id: unique_id_3
+  - name: pealer
+  - name: sealer
+  - name: biometra
+  - name: sciclops
 
-#TODO: add require for the steps
-actions:
-  - name: Make Samples
-    module: ot2_alpha
+flowdef:
+  - name: PCR Plate Exchange
+    module: sciclops
     command:
-      instruction: ot2_protocol
+      instruction: get_plate
       args:
-        config_path: make_sample_pcr.yml
-
-  - name: Transfer OT1 > Sealer
+        loc: "tower1"
+      checks: null
+      comment: Stage pcr plates
+  - name: PCR to OT2
     module: pf400
     command:
       instruction: move
       args:
-        dest: sealer_entry
-        source: ot2_1
-       
-  - name: Seal
-    module: sealer_1
+        target: ot2_alpha_deck1
+        source: sciclops_exchange
+      checks: null
+      comment: Place plate in ot2
+  - name: Mix OT2 reactions
+    module: ot2
+    command:
+      instruction: run protocol
+      args:
+        config_path: pcr_mix_cfg.yml
+      checks: RESOURCE_CHECK
+      comment: resource check not implemented, but will be
+  - name: Move plate to sealer
+    module: pf400
+    command:
+      instruction: move
+      args:
+        target: sealer
+        source: ot2_alpha_deck1
+      checks: null
+      comment: null
+  - name: Seal PCR plate
+    module: sealer
     command:
       instruction: seal
-      
-  - name: Transfer Sealer > Biometra
+      args:
+        time: 3
+        temperature: 175
+      checks: null
+  - name: Thermocycler
+    module: biometra
+    command:
+      instruction: thermocycle
+      args:
+        protocol_file: biometra_protocol.yml
+      checks: null
+      comment: null
+  - name: Move to pealer
     module: pf400
     command:
       instruction: move
       args:
-        dest: biometra_entry
-        source: sealer_entry
+        target: pealer
+        source: biometra1
+      checks: null
+      comment: null
+  - name: Peal
+    module: pealer
+    command:
+      instruction: peal
+      args: null
+      checks: null
+      comment: null
+  - name: Move to final destination
+    module: pf400
+    command:
+      instruction: move
+      args:
+        target: final_destination
+        source: pealer
+      checks: null
+      comments: null
