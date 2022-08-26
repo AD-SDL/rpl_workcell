@@ -2,30 +2,29 @@ modules:
   - name: pf400
     type: pf400
     config:
-      ros_node: '/PF400_Joint_Node/action_handler'
+      ros_node: "/PF400_Joint_Node/action_handler"
     positions:
       final_destination: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
   - name: sciclops
     type: sciclops
     config:
-      ros_node: '/sciclopsNode/action_handler'
+      ros_node: "/sciclopsNode/action_handler"
     positions:
       exchange: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367]
-  
+
   - name: sealer
     type: sealer
     config:
-      ros_node: '/sp_module/sealerNode/action_handler'
+      ros_node: "/sp_module/sealerNode/action_handler"
     positions:
       default: [231.788, -27.154, 313.011, 342.317, 0.0, 683.702]
-
   - name: peeler
     type: peeler
     config:
-      ros_node: '/sp_module/peelerNode/action_handler'
+      ros_node: "/sp_module/peelerNode/action_handler"
     positions:
-      default: [264.584, -29.413,	284.376, 372.338, 0.0, 651.621]
+      default: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
 
   - name: ot2_alpha
     type: OT2

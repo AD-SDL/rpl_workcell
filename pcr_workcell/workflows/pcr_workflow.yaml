@@ -4,12 +4,12 @@ metadata:
   info: extended info
   version: 0.1
 
-workcell: pcr_workcell.yaml
+workcell: /Users/kyle/github/rpl-workcell/pcr_workcell/pcr_workcell.yaml
 
 modules:
   - name: ot2
   - name: pf400
-  - name: pealer
+  - name: peeler
   - name: sealer
   - name: biometra
   - name: sciclops
@@ -65,17 +65,17 @@ flowdef:
     checks: null
     comment: null
 
-  - name: Move to pealer
+  - name: Move to peeler
     module: pf400
     command: move
     args:
-      target: pealer
+      target: peeler
       source: biometra1
     checks: null
     comment: null
 
   - name: Peal
-    module: pealer
+    module: peeler
     command: peal
     args: {}
     checks: null
@@ -86,6 +86,6 @@ flowdef:
     command: move
     args:
       target: final_destination
-      source: pealer
+      source: peeler
     checks: null
     comments: null
