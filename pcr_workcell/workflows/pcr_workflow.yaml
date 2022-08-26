@@ -4,7 +4,7 @@ metadata:
   info: extended info
   version: 0.1
 
-workcell: pcr_workcell/pcr_workcell.yaml
+workcell: pcr_workcell.yaml
 
 modules:
   - name: ot2
