@@ -2,7 +2,7 @@ modules:
   - name: pf400
     type: pf400
     config:
-      ros_node: "/PF400_Joint_Node/action_handler"
+      ros_node: "/pf400_client/PF400_Client_Node/action_handler"
     positions:
       final_destination: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
