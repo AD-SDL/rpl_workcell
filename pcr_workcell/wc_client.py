@@ -2,17 +2,18 @@ from pathlib import Path
 from argparse import ArgumentParser
 
 from rpl_wei.wei_client_base import WEI
+from rpl_wei.data_classes import Module, Step
 import logging
 
-# def wei_service_callback(step):
-#     wei_execution_node = weiExecNode()
-    # rclpy.init() # without this line the weiExecNode does not get started
+def wei_service_callback(step: Step , **kwargs):
+    #  {'node':sciclops_node,'action_handle':'get_plate','action_vars':{'pos':'tower1'}},
 
-    #get all info
-    #get info from workcell
-    #substitute things from wc_dictionary
-    #send_wei_command(service,action_handler,actions_vars)
-##
+    module: Module = kwargs['step_module']
+
+    msg = {"node": module.config['ros_node'], "action_handle": step.command, "action_vars": step.args}
+    print("\nClient callback:")
+    print(msg)
+    print()
 
 def print_callback(step, **kwargs):
     print("\nFrom callback")
@@ -29,7 +30,7 @@ def main(args):
     # get the workflow id (currently defaulting to first one available)
     wf_id = list(wei.get_workflows().keys())[0]
 
-    wei.run_workflow(wf_id, [print_callback])
+    wei.run_workflow(wf_id, [wei_service_callback])
 
 
 

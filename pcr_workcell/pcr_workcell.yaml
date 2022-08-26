@@ -26,10 +26,10 @@ modules:
     positions:
       default: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
 
-  - name: ot2_alpha
+  - name: ot2
     type: OT2
     config:
-      ros_node: ot2_alpha
+      ros_node: ot2
     positions:
       deck1: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
