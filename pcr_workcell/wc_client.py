@@ -2,22 +2,26 @@ from pathlib import Path
 from argparse import ArgumentParser
 
 from rpl_wei.wei_client_base import WEI
+import logging
 
 
 def main(args):
-    wei = WEI(args.workflow)
-    if args.verbose:
-        wei.print_flow()
-        wei.print_workcell()
+    wei = WEI(
+        args.workcell,
+        args.workflow,
+        workcell_log_level=logging.DEBUG,
+        workflow_log_level=logging.DEBUG,
+    )
 
-    wei.check_modules()
-    wei.check_flowdef()
+    # get the workflow id (currently defaulting to first one available)
+    wf_id = list(wei.get_workflows().keys())[0]
 
-    wei.run_flow()
+    wei.run_workflow(wf_id)
 
 
 if __name__ == "__main__":
     parser = ArgumentParser()
+    parser.add_argument("-wc", "--workcell", help="Path to workcell file", type=Path)
     parser.add_argument("-wf", "--workflow", help="Path to workflow file", type=Path, required=True)
     parser.add_argument("-v", "--verbose", help="Extended printing options", action="store_true")
 
