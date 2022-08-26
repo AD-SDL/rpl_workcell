@@ -33,7 +33,6 @@ def main(args):
     wei.run_workflow(wf_id, [wei_service_callback])
 
 
-
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("-wc", "--workcell", help="Path to workcell file", type=Path)
