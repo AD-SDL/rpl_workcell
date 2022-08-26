@@ -83,7 +83,7 @@ flowdef:
 
   - name: Move to final destination
     module: pf400
-    command: move
+    command: transfer
     args:
       pos1: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
       pos2: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367]
