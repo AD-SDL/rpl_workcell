@@ -42,8 +42,10 @@ flowdef:
     module: pf400
     command: transfer
     args:
-      target: sealer
-      source: sciclops_exchange
+      pos1: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367]
+      pos2: [231.788, -27.154, 313.011, 342.317, 0.0, 683.702]
+      # target: sealer
+      # source: sciclops_exchange
     checks: null
     comment: null
 
@@ -67,8 +69,8 @@ flowdef:
     module: pf400
     command: transfer
     args:
-      target: peeler
-      source: sealer
+      pos1: [231.788, -27.154, 313.011, 342.317, 0.0, 683.702]
+      pos2: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
     checks: null
     comment: null
 
@@ -83,7 +85,7 @@ flowdef:
     module: pf400
     command: move
     args:
-      target: final_destination
-      source: peeler
+      pos1: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
+      pos2: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367]
     checks: null
     comments: null
