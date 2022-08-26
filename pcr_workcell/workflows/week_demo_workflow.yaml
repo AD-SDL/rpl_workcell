@@ -74,7 +74,7 @@ flowdef:
 
   - name: Peel
     module: peeler
-    command: peal
+    command: peel
     args: {}
     checks: null
     comment: null
