@@ -13,20 +13,20 @@ modules:
   - name: pealer
 
 flowdef:
-  #  - name: PCR Plate Exchange
-  #  module: sciclops
-  #  command: get_plate
-  #  args:
-  #    pos: "tower1"
-  #  checks: null
-  #  comment: Stage pcr plates
+  - name: PCR Plate Exchange
+    module: sciclops
+    command: get_plate
+    args:
+      pos: "tower1"
+    checks: null
+    comment: Stage pcr plates
 
   - name: PCR to OT2
     module: pf400
     command: transfer
     args:
       pos1: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367]
-      pos2: [195.99, 60.21,  92.13,  565.41,   82.24,  -65.25]
+      pos2: [195.99, 60.21, 92.13, 565.41, 82.24, -65.25]
     checks: null
     comment: Place plate in ot2
 
@@ -37,25 +37,24 @@ flowdef:
   #     config_path: pcr_workcell/protocol_files/ot2_pcr_config.yaml
   #   checks: RESOURCE_CHECK
   #   comment: resource check not implemented, but will be
-
   - name: Move plate to sealer
     module: pf400
     command: transfer
     args:
-      pos1: [195.99, 60.21,  92.13,  565.41,   82.24,  -65.25]
-      pos2: [231.788, -27.154, 313.011, 342.317, 0.0, 683.702]
+      pos1: [195.99, 60.21, 92.13, 565.41, 82.24, -65.25]
+      pos2: [231.788, -27.154, 313.011, 342.317, 20.0, 683.702]
       # target: sealer
       # source: sciclops_exchange
     checks: null
     comment: null
 
-      #- name: Seal PCR plate
-      # module: sealer
-      #command: seal
-      #args:
-      #time: 3
-      #temp: 175
-      #checks: null
+    #- name: Seal PCR plate
+    # module: sealer
+    #command: seal
+    #args:
+    #time: 3
+    #temp: 175
+    #checks: null
 
   # - name: Thermocycle
   #   module: biometra
@@ -72,7 +71,8 @@ flowdef:
       pos1: [231.788, -27.154, 313.011, 342.317, 0.0, 683.702]
       pos2: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
     checks: null
-    comment: null
+    comment:
+      null
 
       # - name: Peel
       #module: peeler
