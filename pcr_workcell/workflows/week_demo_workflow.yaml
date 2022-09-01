@@ -51,9 +51,9 @@ flowdef:
   - name: Seal PCR plate
     module: sealer
     command: seal
-    args: {}
-    time: 3
-    temp: 175
+    args:
+      time: 3
+      temp: 175
     checks: null
 
   # - name: Thermocycle
