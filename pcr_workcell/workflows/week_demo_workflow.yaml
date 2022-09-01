@@ -48,13 +48,13 @@ flowdef:
     checks: null
     comment: null
 
-    #- name: Seal PCR plate
-    # module: sealer
-    #command: seal
-    #args:
-    #time: 3
-    #temp: 175
-    #checks: null
+  - name: Seal PCR plate
+    module: sealer
+    command: seal
+    args:
+    time: 3
+    temp: 175
+    checks: null
 
   # - name: Thermocycle
   #   module: biometra
@@ -71,15 +71,14 @@ flowdef:
       pos1: [231.788, -27.154, 313.011, 342.317, 0.0, 683.702]
       pos2: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
     checks: null
-    comment:
-      null
+    comment: null
 
-      # - name: Peel
-      #module: peeler
-      #command: peel
-      #args: {}
-      #checks: null
-      #comment: null
+  - name: Peel
+    module: peeler
+    command: peel
+    args: {}
+    checks: null
+    comment: null
 
   - name: Move to final destination
     module: pf400
