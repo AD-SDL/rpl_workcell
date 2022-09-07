@@ -3,9 +3,8 @@ Week 2 demonstration. Commands below.
 
 ## Cloning and switching to demo branch: 
 ```
-git clone https://github.com/AD-SDL/wei_ros.git
-cd wei_ros 
-git switch demo_week_2
+git clone https://github.com/AD-SDL/rpl_workcell.git
+cd rpl_workcell/campaign_pcr/week_03
 ```
 
 
