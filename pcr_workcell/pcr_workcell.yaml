@@ -26,12 +26,12 @@ modules:
     positions:
       default: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
 
-  - name: ot2_alpha
-    type: OT2
+  - name: ot2                                                     ## correct? was ot2_alpha
+    type: ot2
     config:
-      ros_node: ot2
-    positions:
-      deck2: [195.99, 60.21,  92.13,  565.41,   82.24,  -65.25]
+      ros_node: "ot2_module/ot2Node/actions"                      ## ros node meaning ros service
+    positions:                                                    ## N/A
+      deck2: [195.99, 60.21,  92.13,  565.41,   82.24,  -65.25]   ## N/A
 
   - name: biometra
     type: biometra
