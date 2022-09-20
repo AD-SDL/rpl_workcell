@@ -26,16 +26,31 @@ modules:
     positions:
       default: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
 
-  - name: ot2                                                     ## correct? was ot2_alpha
+  - name: ot2_alpha                                                     ## correct? was ot2_alpha
     type: ot2
     config:
       ros_node: "ot2_module/ot2Node/actions"                      ## ros node meaning ros service
     positions:                                                    ## N/A
       deck2: [195.99, 60.21,  92.13,  565.41,   82.24,  -65.25]   ## N/A
 
+  - name: ot2_beta                                               ## correct? was ot2_alpha
+    type: ot2
+    config:
+      ros_node: "ot2_module/ot2Node/actions"                      ## ros node meaning ros service
+    positions:                                                    ## N/A
+      deck2: [195.99, 60.21,  92.13,  565.41,   82.24,  -65.25]   ## N/A
+
+
   - name: biometra
     type: biometra
     config:
       ros_node: biometra rosnode
+    positions:
+      default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+  - name: hidex
+    type: hidex
+    config:
+      ros_node: hidex rosnode
     positions:
       default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
