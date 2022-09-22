@@ -46,7 +46,7 @@ modules:
     config:
       ros_node: biometra rosnode
     positions:
-      default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+      default: [277.638, 39.029, 74.413, 602.159, 78.980, -910.338]
 
   - name: hidex
     type: hidex

@@ -57,6 +57,15 @@ flowdef:
       temperature: 175
     checks: null
 
+  - name: Move plate Thermocycle
+    module: pf400
+    command: move
+    args:
+      target: biometra
+      source: sealer
+    checks: null
+    comment: null
+
   - name: Thermocycle
     module: biometra
     command: thermocycle
