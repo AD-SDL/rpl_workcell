@@ -23,7 +23,7 @@ flowdef:
     checks: null
     comment: Stage pcr plates
 
-  - name: PCR to OT2
+  - name: Sciclops to OT2
     module: pf400
     command: transfer
     args:
@@ -49,8 +49,8 @@ flowdef:
     args:
       target: sealer
       source: ot2_alpha_deck1
-      source_plate_rotation: 0
-      target_plate_rotation: 90
+      source_plate_rotation: 90
+      target_plate_rotation: 0
     checks: null
     comment: null
 

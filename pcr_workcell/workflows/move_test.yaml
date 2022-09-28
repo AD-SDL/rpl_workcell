@@ -10,40 +10,46 @@ modules:
   - name: pf400
 
 flowdef:
-  - name: PCR to OT2
+  - name: Sciclops to OT2
     module: pf400
     command: transfer
     args:
-      pos1: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367]
-      pos2: [195.99, 60.21, 92.13, 565.41, 82.24, -65.25]
+      source: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367]
+      target: [197.185, 59.736, 90.509, 566.953, 82.069, -65.550]
+      source_plate_rotation: 0
+      target_plate_rotation: 90
     checks: null
     comment: Place plate in ot2
 
-  - name: Move plate to sealer
+  - name: OT2 to sealer
     module: pf400
     command: transfer
     args:
-      pos1: [195.99, 60.21, 92.13, 565.41, 82.24, -65.25]
-      pos2: [231.788, -27.154, 313.011, 342.317, 20.0, 683.702]
-      # target: sealer
-      # source: sciclops_exchange
+      source: [197.185, 59.736, 90.509, 566.953, 82.069, -65.550]
+      target: [231.788, -27.154, 313.011, 342.317, 0.0, 683.702]
+      source_plate_rotation: 90
+      target_plate_rotation: 0
     checks: null
     comment: null
 
-  - name: Move to peeler
+  - name: Sealer to peeler
     module: pf400
     command: transfer
     args:
-      pos1: [231.788, -27.154, 313.011, 342.317, 0.0, 683.702]
-      pos2: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
+      source: [231.788, -27.154, 313.011, 342.317, 0.0, 683.702]
+      target: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
+      source_plate_rotation: 0
+      target_plate_rotation: 0
     checks: null
     comment: null
 
-  - name: Move to final destination
+  - name: Pealer to Sciclops
     module: pf400
     command: transfer
     args:
-      pos1: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
-      pos2: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367]
+      source: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
+      target: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367]
+      source_plate_rotation: 0
+      target_plate_rotation: 0
     checks: null
     comments: null
