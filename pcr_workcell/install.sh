@@ -11,7 +11,7 @@ git clone https://github.com/AD-SDL/pf400_module
 git clone --recurse-submodules https://github.com/AD-SDl/ot2_module 
 git clone https://github.com/AD-SDL/wei_ros
 cd ..
-rosdep install --from-paths src --ignore-src
+rosdep install --from-paths src --ignore-src --rosdistro humble -y
 colcon build
 
 
