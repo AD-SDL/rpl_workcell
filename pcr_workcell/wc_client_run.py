@@ -29,35 +29,31 @@ def wei_service_callback(step: Step, **kwargs):
         msg["node"], msg["action_handle"], msg["action_vars"]
     )
 
+def parse_args():
+    parser = ArgumentParser()
+    parser.add_argument("-wc", "--workcell", help="Path to workcell file", type=Path)
+    parser.add_argument("-wf", "--workflow", help="Path to workflow file", type=Path, required=True)
+    parser.add_argument("-v", "--verbose", help="Extended printing options", action="store_true")
 
-def print_callback(step, **kwargs):
-    print("\nFrom callback")
-    print(step)
-
+    return parser.parse_args()
 
 def main(args):
-    wei = WEI(
-        args.workcell,
-        args.workflow,
+    wc_file_path = args.workcell.resolve()
+    wf_file_path = args.workflow.resolve()
+    
+    wei_client = WEI(
+        wc_file_path,
+        wf_file_path,
         workcell_log_level=logging.DEBUG,
         workflow_log_level=logging.DEBUG,
     )
 
     # get the workflow id (currently defaulting to first one available)
-    wf_id = list(wei.get_workflows().keys())[0]
+    wf_id = list(wei_client.get_workflows().keys())[0]
 
-    wei.run_workflow(wf_id, [wei_service_callback])
+    wei_client.run_workflow(wf_id, [wei_service_callback])
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument("-wc", "--workcell", help="Path to workcell file", type=Path)
-    parser.add_argument(
-        "-wf", "--workflow", help="Path to workflow file", type=Path, required=True
-    )
-    parser.add_argument(
-        "-v", "--verbose", help="Extended printing options", action="store_true"
-    )
-
-    args = parser.parse_args()
+    args = parse_args()
     main(args)

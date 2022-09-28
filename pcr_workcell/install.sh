@@ -1,6 +1,6 @@
 #!bin/bash
 
-ROS_WS=~/wei_ws_week3
+ROS_WS=~/wei_ws
 
 mkdir -p $ROS_WS
 mkdir -p $ROS_WS/src

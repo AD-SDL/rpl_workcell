@@ -1,7 +1,7 @@
 metadata:
-  name: example workflow
-  author: Author
-  info: extended info
+  name: PCR - Workflow
+  author: Casey Stone, Rafael Vescovi
+  info: Initial PCR workflow for RPL workcell
   version: 0.1
 
 workcell: ../pcr_workcell.yaml
@@ -33,7 +33,7 @@ flowdef:
     comment: Place plate in ot2
 
   - name: Mix OT2 reactions
-    module: ot2
+    module: ot2_pcr_alpha
     command: run_protocol
     args:
       config_path: pcr_workcell/protocol_files/ot2_pcr_config.yaml
