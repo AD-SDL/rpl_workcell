@@ -23,15 +23,14 @@ flowdef:
     checks: null
     comment: Stage pcr plates
 
-  - name: Sciclops to OT2
+  - name: Move from Sciclops to OT2
     module: pf400
     command: transfer
     args:
-      target: ot2_alpha_deck1
-      source: sciclops_exchange
+      source: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367]
+      target: [197.185, 59.736, 90.509, 566.953, 82.069, -65.550]
       source_plate_rotation: 0
       target_plate_rotation: 90
-
     checks: null
     comment: Place plate in ot2
 
@@ -43,12 +42,12 @@ flowdef:
     checks: RESOURCE_CHECK
     comment: resource check not implemented, but will be
 
-  - name: Move plate to sealer
+  - name: Move from OT2 to sealer
     module: pf400
     command: transfer
     args:
-      target: sealer
-      source: ot2_alpha_deck1
+      source: [197.185, 59.736, 90.509, 566.953, 82.069, -65.550]
+      target: [231.788, -27.154, 313.011, 342.317, 0.0, 683.702]
       source_plate_rotation: 90
       target_plate_rotation: 0
     checks: null
@@ -62,12 +61,12 @@ flowdef:
       temperature: 175
     checks: null
 
-  - name: Move plate Thermocycle
+  - name: Move from sealer to Thermocycler
     module: pf400
     command: transfer
     args:
-      target: biometra
-      source: sealer
+      target: [277.638, 39.029, 74.413, 602.159, 78.980, -910.338]
+      source: [231.788, -27.154, 313.011, 342.317, 0.0, 683.702]
       source_plate_rotation: 0
       target_plate_rotation: 90
     checks: null
@@ -81,12 +80,12 @@ flowdef:
     checks: null
     comment: null
 
-  - name: Move to peeler
+  - name: Move from Thermocycler to peeler
     module: pf400
     command: transfer
     args:
-      target: peeler
-      source: biometra1
+      target: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
+      source: [277.638, 39.029, 74.413, 602.159, 78.980, -910.338] 
       source_plate_rotation: 90
       target_plate_rotation: 0
     checks: null
@@ -99,12 +98,12 @@ flowdef:
     checks: null
     comment: null
 
-  - name: Move to final destination
+  - name: Move from pealer to final destination
     module: pf400
     command: transfer
     args:
-      target: final_destination
-      source: peeler
+      source: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
+      target: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367]
       source_plate_rotation: 0
       target_plate_rotation: 0
     checks: null
