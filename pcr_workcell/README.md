@@ -1,18 +1,25 @@
-# WEI Examples
-Week 2 demonstration. Commands below. 
+# RPL Weekly Campaigns
 
-## Cloning and getting to week 3 test: 
+
+
+## Initial setup 
+
 ```
+DEMO_PATH=~/wei_ws
+mkdir $DEMO_PATH
+cd $DEMO_PATH
+mkdir demo
+cd demo
 git clone https://github.com/AD-SDL/rpl_workcell.git
-cd rpl_workcell/campaign_pcr/week_03
+```
+
+## Installing the nodes
+
+```
+bash $DEMO_PATH/demo/rpl_workcell/pcr_workcell/install.sh
 ```
 
 
-## Installing the example
-
-```
-bash install.sh
-```
 ## Running the example
 
 ```
@@ -23,6 +30,25 @@ bash run_nodes.sh
 
 And finally run the scripts with the steps you want to test (in the new terminal)
 
+
+## Running the Campaigns
+
+For the PCR campaign:
+
 ```
-bash run_demo.sh
+source $DEMO_PATH/install/setup.bash
+python3 $DEMO_PATH/demo/rpl_workcell/pcr_workcell/wc_client_run.py -wc $DEMO_PATH/demo/rpl_workcell/pcr_workcell/pcr_workcell.yaml -wf $DEMO_PATH/demo/rpl_workcell/pcr_workcell/workflows/pcr_workflow.yaml
 ```
+
+For the Growth campaign:
+
+```
+python3 $DEMO_PATH/demo/rpl_workcell/pcr_workcell/wc_client_run.py -wc $DEMO_PATH/demo/rpl_workcell/pcr_workcell/pcr_workcell.yaml -wf $DEMO_PATH/demo/rpl_workcell/pcr_workcell/workflows/growth_workflow.yaml
+```
+
+For the MoveTest campaign:
+```
+python3 $DEMO_PATH/demo/rpl_workcell/pcr_workcell/wc_client_run.py -wc $DEMO_PATH/demo/rpl_workcell/pcr_workcell/pcr_workcell.yaml -wf $DEMO_PATH/demo/rpl_workcell/pcr_workcell/workflows/move_test.yaml
+```
+
+

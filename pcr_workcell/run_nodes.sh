@@ -1,6 +1,6 @@
 #!bin/bash
 
-source ~/wei_ws_week3/install/setup.bash
+source ~/wei_ws/install/setup.bash
 
 #TODO: launch the ot2 docker
 ros2 launch sp_module_client sp_module.launch.py &
