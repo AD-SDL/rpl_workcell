@@ -25,10 +25,13 @@ flowdef:
 
   - name: PCR to OT2
     module: pf400
-    command: move
+    command: transfer
     args:
       target: ot2_alpha_deck1
       source: sciclops_exchange
+      source_plate_rotation: 0
+      target_plate_rotation: 90
+
     checks: null
     comment: Place plate in ot2
 
@@ -42,10 +45,12 @@ flowdef:
 
   - name: Move plate to sealer
     module: pf400
-    command: move
+    command: transfer
     args:
       target: sealer
       source: ot2_alpha_deck1
+      source_plate_rotation: 0
+      target_plate_rotation: 90
     checks: null
     comment: null
 
@@ -59,10 +64,12 @@ flowdef:
 
   - name: Move plate Thermocycle
     module: pf400
-    command: move
+    command: transfer
     args:
       target: biometra
       source: sealer
+      source_plate_rotation: 0
+      target_plate_rotation: 90
     checks: null
     comment: null
 
@@ -76,10 +83,12 @@ flowdef:
 
   - name: Move to peeler
     module: pf400
-    command: move
+    command: transfer
     args:
       target: peeler
       source: biometra1
+      source_plate_rotation: 90
+      target_plate_rotation: 0
     checks: null
     comment: null
 
@@ -92,9 +101,11 @@ flowdef:
 
   - name: Move to final destination
     module: pf400
-    command: move
+    command: transfer
     args:
       target: final_destination
       source: peeler
+      source_plate_rotation: 0
+      target_plate_rotation: 0
     checks: null
     comments: null
