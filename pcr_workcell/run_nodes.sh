@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 session="nodes"
 tmux new-session -d -s $session
@@ -21,6 +21,8 @@ tmux send-keys -t $session:$window 'ros2 launch sciclops_module_client sciclops_
 window=3
 tmux new-window -t $session:$window -n 'ot2_module'
 tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
+tmux send-keys -t $session:$window 'export robot_ip=192.168.50.197' C-m #this need to become an arg on the roslaunch
+tmux send-keys -t $session:$window 'export robot_name=ot2_pcr_alpha' C-m #this need to become an arg on the roslaunch
 tmux send-keys -t $session:$window 'ros2 launch ot2_module_client ot2_module.launch.py' C-m
 
 # window=4
