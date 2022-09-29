@@ -1,5 +1,7 @@
-#!bin/bash
+#!/bin/bash
 
+
+source /opt/ros/humble/install.bash
 ROS_WS=~/wei_ws
 
 mkdir -p $ROS_WS
@@ -8,7 +10,8 @@ cd $ROS_WS/src
 git clone https://github.com/AD-SDL/azenta_module
 git clone https://github.com/AD-SDL/hudson_module
 git clone https://github.com/AD-SDL/pf400_module
-git clone --recurse-submodules https://github.com/AD-SDl/ot2_module 
+git clone https://github.com/AD-SDl/ot2_module  #--recurse-submodules 
+git clone https://github.com/AD-SDl/ot2_driver 
 git clone https://github.com/AD-SDL/wei_ros
 git clone https://github.com/AD-SDL/rpl_wei
 cd ..
