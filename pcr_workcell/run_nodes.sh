@@ -8,8 +8,8 @@ tmux new-window -t $session:$window -n 'pf400_module'
 tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
 tmux send-keys -t $session:$window 'ros2 launch pf400_client pf400_client.launch.py' C-m
 
-window=2
-tmux rename-window -t $session:$window -n 'sp_module'
+window=1
+tmux new-window -t $session:$window -n 'sp_module'
 tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
 tmux send-keys -t $session:$window 'ros2 launch sp_module_client sp_module.launch.py' C-m
 
