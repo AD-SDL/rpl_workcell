@@ -12,6 +12,7 @@ git clone https://github.com/AD-SDL/hudson_module
 git clone https://github.com/AD-SDL/pf400_module
 git clone https://github.com/AD-SDl/ot2_module  #--recurse-submodules 
 git clone https://github.com/AD-SDl/ot2_driver 
+pip3 install -r ot2_driver/requirements.txt
 git clone https://github.com/AD-SDL/wei_ros
 git clone https://github.com/AD-SDL/rpl_wei
 cd ..

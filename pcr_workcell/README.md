@@ -16,14 +16,14 @@ git clone https://github.com/AD-SDL/rpl_workcell.git
 ## Installing the nodes
 
 ```
-bash $DEMO_PATH/demo/rpl_workcell/pcr_workcell/install.sh
+./$DEMO_PATH/demo/rpl_workcell/pcr_workcell/install.sh
 ```
 
 
 ## Running the example
 
 ```
-bash run_nodes.sh
+./$DEMO_PATH/demo/rpl_workcell/pcr_workcell/run_nodes.sh
 ```
 
 *This will consume your terminal with a running command. Open a new terminal and navigate to this folder again.*

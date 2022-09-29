@@ -15,13 +15,13 @@ modules:
   - name: sciclops
 
 flowdef:
-  - name: PCR Plate Exchange
-    module: sciclops
-    command: get_plate
-    args:
-      loc: "tower1"
-    checks: null
-    comment: Stage pcr plates
+  # - name: PCR Plate Exchange
+  #   module: sciclops
+  #   command: get_plate
+  #   args:
+  #     loc: "tower1"
+  #   checks: null
+  #   comment: Stage pcr plates
 
   - name: Move from Sciclops to OT2
     module: pf400
@@ -34,13 +34,13 @@ flowdef:
     checks: null
     comment: Place plate in ot2
 
-  - name: Mix OT2 reactions
-    module: ot2_pcr_alpha
-    command: run_protocol
-    args:
-      config_path: pcr_workcell/protocol_files/ot2_pcr_config.yaml
-    checks: RESOURCE_CHECK
-    comment: resource check not implemented, but will be
+  # - name: Mix OT2 reactions
+  #   module: ot2_pcr_alpha
+  #   command: run_protocol
+  #   args:
+  #     config_path: pcr_workcell/protocol_files/ot2_pcr_config.yaml
+  #   checks: RESOURCE_CHECK
+  #   comment: resource check not implemented, but will be
 
   - name: Move from OT2 to sealer
     module: pf400
@@ -65,20 +65,23 @@ flowdef:
     module: pf400
     command: transfer
     args:
-      target: [277.638, 39.029, 74.413, 602.159, 78.980, -910.338]
       source: [231.788, -27.154, 313.011, 342.317, 0.0, 683.702]
+      target: [277.638, 39.029, 74.413, 602.159, 78.980, -910.338]
       source_plate_rotation: 0
-      target_plate_rotation: 90
+      target_plate_rotation: 0
     checks: null
     comment: null
 
-  - name: Thermocycle
-    module: biometra
-    command: thermocycle
-    args:
-      protocol_file: pcr_workcell/protocol_files/biometra_protocol.yaml
-    checks: null
-    comment: null
+  # - name: Thermocycle
+  #   module: biometra  # - name: Seal PCR plate
+  #   command: seal
+  #   args:
+  #     time: 3
+  #     temperature: 175
+  #   checks: null
+  #     protocol_file: pcr_workcell/protocol_files/biometra_protocol.yaml
+  #   checks: null
+  #   comment: null
 
   - name: Move from Thermocycler to peeler
     module: pf400
@@ -86,14 +89,14 @@ flowdef:
     args:
       target: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
       source: [277.638, 39.029, 74.413, 602.159, 78.980, -910.338] 
-      source_plate_rotation: 90
+      source_plate_rotation: 0
       target_plate_rotation: 0
     checks: null
     comment: null
 
   - name: Peal
     module: peeler
-    command: peal
+    command: peel
     args: {}
     checks: null
     comment: null
