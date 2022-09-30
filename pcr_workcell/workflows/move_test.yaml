@@ -16,8 +16,8 @@ flowdef:
     args:
       source: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367]
       target: [197.185, 59.736, 90.509, 566.953, 82.069, -65.550]
-      source_plate_rotation: 0
-      target_plate_rotation: 90
+      source_plate_rotation: narrow
+      target_plate_rotation: wide
     checks: null
     comment: Place plate in ot2
 
@@ -27,8 +27,8 @@ flowdef:
     args:
       source: [197.185, 59.736, 90.509, 566.953, 82.069, -65.550]
       target: [235.788, -27.154, 313.011, 342.317, 0.0, 683.702]
-      source_plate_rotation: 90
-      target_plate_rotation: 0
+      source_plate_rotation: wide
+      target_plate_rotation: narrow
     checks: null
     comment: null
 
@@ -38,8 +38,8 @@ flowdef:
     args:
       source: [235.788, -27.154, 313.011, 342.317, 0.0, 683.702]
       target: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
-      source_plate_rotation: 0
-      target_plate_rotation: 0
+      source_plate_rotation: narrow
+      target_plate_rotation: narrow
     checks: null
     comment: null
 
@@ -49,7 +49,7 @@ flowdef:
     args:
       source: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
       target: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367]
-      source_plate_rotation: 0
-      target_plate_rotation: 0
+      source_plate_rotation: narrow
+      target_plate_rotation: narrow
     checks: null
     comments: null
