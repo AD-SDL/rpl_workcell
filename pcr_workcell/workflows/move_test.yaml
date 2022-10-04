@@ -32,13 +32,35 @@ flowdef:
     checks: null
     comment: null
 
-  - name: Sealer to peeler
+  # - name: Sealer to peeler
+  #   module: pf400
+  #   command: transfer
+  #   args:
+  #     source: [240.788, -27.154, 313.011, 342.317, 0.0, 683.702]
+  #     target: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
+  #     source_plate_rotation: narrow
+  #     target_plate_rotation: narrow
+  #   checks: null
+  #   comment: null
+
+  - name: Move from sealer to Thermocycler
     module: pf400
     command: transfer
     args:
       source: [240.788, -27.154, 313.011, 342.317, 0.0, 683.702]
-      target: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
+      target: [277.638, 39.029, 74.413, 602.159, 78.980, -910.338]
       source_plate_rotation: narrow
+      target_plate_rotation: wide
+    checks: null
+    comment: null
+
+  - name: Move from Thermocycler to peeler
+    module: pf400
+    command: transfer
+    args:
+      target: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
+      source: [277.638, 39.029, 74.413, 602.159, 78.980, -910.338] 
+      source_plate_rotation: wide
       target_plate_rotation: narrow
     checks: null
     comment: null
