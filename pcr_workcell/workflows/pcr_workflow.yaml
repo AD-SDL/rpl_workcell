@@ -34,13 +34,14 @@ flowdef:
     checks: null
     comment: Place plate in ot2
 
-  # - name: Mix OT2 reactions
-  #   module: ot2_pcr_alpha
-  #   command: run_protocol
-  #   args:
-  #     config_path: pcr_workcell/protocol_files/ot2_pcr_config.yaml
-  #   checks: RESOURCE_CHECK
-  #   comment: resource check not implemented, but will be
+  - name: Mix OT2 reactions
+    module: ot2_pcr_alpha
+    command: run_protocol
+    args:
+      # Currently needs to be hardcoded absolution paths... need to get relative paths configured
+      config_path: /Users/kyle/github/rpl_workcell/pcr_workcell/protocol_files/ot2_pcr_config.yaml
+    checks: RESOURCE_CHECK
+    comment: resource check not implemented, but will be
 
   - name: Move from OT2 to sealer
     module: pf400
@@ -66,7 +67,7 @@ flowdef:
     command: transfer
     args:
       source: [231.788, -27.154, 313.011, 342.317, 0.0, 683.702]
-      target: [279.948, 40.849, 75.130, 598.739, 79.208, -916.456] 
+      target: [279.948, 40.849, 75.130, 598.739, 79.208, -916.456]
       source_plate_rotation: narrow
       target_plate_rotation: narrow
     checks: null
@@ -87,8 +88,8 @@ flowdef:
     module: pf400
     command: transfer
     args:
-      target: [279.948, 40.849, 75.130, 598.739, 79.208, -916.456] 
-      source: [277.638, 39.029, 74.413, 602.159, 78.980, -910.338] 
+      target: [279.948, 40.849, 75.130, 598.739, 79.208, -916.456]
+      source: [277.638, 39.029, 74.413, 602.159, 78.980, -910.338]
       source_plate_rotation: narrow
       target_plate_rotation: narrow
     checks: null
