@@ -30,7 +30,7 @@ modules:
   - name: ot2_pcr_alpha                                                     ## correct? was ot2_alpha
     type: ot2
     config:
-      ros_node: "ot2_alpha/ot2Node/actions"                      ## ros node meaning ros service
+      ros_node: "ot2_pcr_alpha/ot2Node/actions"                      ## ros node meaning ros service
     positions:                                                    ## N/A
       deck2: [195.99, 60.21,  92.13,  565.41,   82.24,  -65.25]   ## N/A
 

@@ -7,7 +7,7 @@ metadata:
 workcell: ../pcr_workcell.yaml
 
 modules:
-  - name: ot2
+  - name: ot2_pcr_alpha
   - name: pf400
   - name: peeler
   - name: sealer
@@ -19,7 +19,7 @@ flowdef:
   #   module: sciclops
   #   command: get_plate
   #   args:
-  #     loc: "tower1"
+  #     pos: "tower1"
   #   checks: null
   #   comment: Stage pcr plates
 
@@ -27,8 +27,8 @@ flowdef:
     module: pf400
     command: transfer
     args:
-      source: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367]
-      target: [197.185, 59.736, 90.509, 566.953, 82.069, -65.550]
+      source: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367] ##SCI
+      target: [197.185, 59.736, 90.509, 566.953, 82.069, -65.550] ##OT2
       source_plate_rotation: narrow
       target_plate_rotation: wide
     checks: null
@@ -36,78 +36,79 @@ flowdef:
 
   # - name: Mix OT2 reactions
   #   module: ot2_pcr_alpha
-  #   command: run_protocol
+  #   command: execute
   #   args:
-  #     config_path: pcr_workcell/protocol_files/ot2_pcr_config.yaml
+  #       config: "{'equipment': [{'name': 'corning_96_wellplate_360ul_flat', 'location': '2', 'alias': 'source'}, {'name': 'corning_96_wellplate_360ul_flat', 'location': '3', 'alias': 'dest'}, {'name': 'opentrons_96_tiprack_300ul', 'location': '8'}, {'name': 'p300_multi_gen2', 'mount': 'right'}], 'commands': [{'name': 'example command', 'source': 'source:A1', 'destination': 'dest:A1', 'volume': 100}, {'name': 'other command', 'source': 'source:A2', 'destination': 'dest:A2', 'volume': 100}], 'metadata': {'protocolName': 'Example Name', 'author': 'Kyle khippe@anl.gov', 'description': 'some detailed description', 'apiLevel': '2.12'}}"
+  # #     config_path: pcr_workcell/protocol_files/ot2_pcr_config.yaml
   #   checks: RESOURCE_CHECK
   #   comment: resource check not implemented, but will be
 
-  - name: Move from OT2 to sealer
-    module: pf400
-    command: transfer
-    args:
-      source: [197.185, 59.736, 90.509, 566.953, 82.069, -65.550]
-      target: [231.788, -27.154, 313.011, 342.317, 0.0, 683.702]
-      source_plate_rotation: wide
-      target_plate_rotation: narrow
-    checks: null
-    comment: null
+  # - name: Move from OT2 to sealer
+  #   module: pf400
+  #   command: transfer
+  #   args:
+  #     source: [197.185, 59.736, 90.509, 566.953, 82.069, -65.550]
+  #     target: [238.788, -27.154, 313.011, 342.317, 0.0, 683.702]
+  #     source_plate_rotation: wide
+  #     target_plate_rotation: narrow
+  #   checks: null
+  #   comment: null
 
-  - name: Seal PCR plate
-    module: sealer
-    command: seal
-    args:
-      time: 3
-      temperature: 175
-    checks: null
-
-  - name: Move from sealer to Thermocycler
-    module: pf400
-    command: transfer
-    args:
-      source: [231.788, -27.154, 313.011, 342.317, 0.0, 683.702]
-      target: [279.948, 40.849, 75.130, 598.739, 79.208, -916.456] 
-      source_plate_rotation: narrow
-      target_plate_rotation: narrow
-    checks: null
-    comment: null
-
-  # - name: Thermocycle
-  #   module: biometra  # - name: Seal PCR plate
+  # - name: Seal PCR plate
+  #   module: sealer
   #   command: seal
   #   args:
   #     time: 3
   #     temperature: 175
   #   checks: null
-  #     protocol_file: pcr_workcell/protocol_files/biometra_protocol.yaml
+
+  # - name: Move from sealer to Thermocycler
+  #   module: pf400
+  #   command: transfer
+  #   args:
+  #     source: [238.788, -27.154, 313.011, 342.317, 0.0, 683.702]
+  #     target: [279.948, 40.849, 75.130, 598.739, 79.208, -916.456] 
+  #     source_plate_rotation: narrow
+  #     target_plate_rotation: narrow
   #   checks: null
   #   comment: null
 
-  - name: Move from Thermocycler to peeler
-    module: pf400
-    command: transfer
-    args:
-      target: [279.948, 40.849, 75.130, 598.739, 79.208, -916.456] 
-      source: [277.638, 39.029, 74.413, 602.159, 78.980, -910.338] 
-      source_plate_rotation: narrow
-      target_plate_rotation: narrow
-    checks: null
-    comment: null
+  # # - name: Thermocycle
+  # #   module: biometra  # - name: Seal PCR plate
+  # #   command: seal
+  # #   args:
+  # #     time: 3
+  # #     temperature: 175
+  # #   checks: null
+  # #     protocol_file: pcr_workcell/protocol_files/biometra_protocol.yaml
+  # #   checks: null
+  # #   comment: null
 
-  - name: Peal
-    module: peeler
-    command: peel
-    args: {}
-    checks: null
-    comment: null
+  # - name: Move from Therm5ocycler to peeler
+  #   module: pf400
+  #   command: transfer
+  #   args:
+  #     target: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621] 
+  #     source: [279.948, 40.849, 75.130, 598.739, 79.208, -916.456] 
+  #     source_plate_rotation: narrow
+  #     target_plate_rotation: narrow
+  #   checks: null
+  #   comment: null
 
-  - name: Move from pealer to final destination
-    module: pf400
-    command: transfer
-    args:
-      source: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
-      target: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367]
-      source_plate_rotation: narrow
-      target_plate_rotation: narrow
-    checks: null
-    comments: null
+  # - name: Peal
+  #   module: peeler
+  #   command: peel
+  #   args: {}
+  #   checks: null
+  #   comment: null
+
+  # - name: Move from pealer to final destination
+  #   module: pf400
+  #   command: transfer
+  #   args:
+  #     source: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
+  #     target: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367]
+  #     source_plate_rotation: narrow
+  #     target_plate_rotation: narrow
+  #   checks: null
+  #   comments: null
