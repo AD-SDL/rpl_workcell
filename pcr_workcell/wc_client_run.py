@@ -34,8 +34,6 @@ def wei_service_callback(step: Step, **kwargs):
 def parse_args():
     parser = ArgumentParser()
     parser.add_argument("-wf", "--workflow", help="Path to workflow file", type=Path, required=True)
-    parser.add_argument("-v", "--verbose", help="Extended printing options", action="store_true")
-
     return parser.parse_args()
 
 def main(args):
@@ -45,13 +43,24 @@ def main(args):
         wf_file_path,
         workcell_log_level=logging.DEBUG,
         workflow_log_level=logging.DEBUG,
-    )
+    ) #Make into globus native client, so it gets globusID of whoever is running it.
+
+
 
     # get the workflow id (currently defaulting to first one available)
     wf_id = list(wei_client.get_workflows().keys())[0]
 
-    wei_client.run_workflow(wf_id, [wei_service_callback])
-
+    run_class = wei_client.run_workflow(wf_id, [wei_service_callback])
+    #, publish=True)
+    #run_class.id
+    #run_class.wc_file
+    #run_class.wf_name
+    # ...
+    #run_class.run_folder
+    #search_index_uuid = get_from_wc_file
+    #run_class.publish(self, search_index_uuid)
+    #this is basically pointing at the folder and running globus-pilot with the correct search-index
+    
 
 if __name__ == "__main__":
     args = parse_args()

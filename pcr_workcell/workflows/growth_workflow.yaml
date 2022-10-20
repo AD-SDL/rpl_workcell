@@ -87,3 +87,11 @@ flowdef:
       source: peeler
     checks: null
     comments: null
+
+  # - name: Move to final destination
+  #   module: camera
+  #   command: take_picture
+  #   args:
+  #     f_name: 
+  #   checks: null
+  #   comments: null

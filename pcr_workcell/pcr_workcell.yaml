@@ -43,7 +43,7 @@ modules:
     type: wei_module_ros
     model: biometra
     config:
-      ros_node: biometra rosnode
+      ros_node: "biometra_module/biometraNode/action_handler"
     positions:
       default: [279.948, 40.849, 75.130, 598.739, 79.208, -916.456]
 
