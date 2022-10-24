@@ -21,7 +21,7 @@ modules:
     config:
       ros_node: "/sp_module/sealerNode/action_handler"
     positions:
-      default: [231.788, -27.154, 313.011, 342.317, 0.0, 683.702]
+      default: [236.788, -27.154, 313.011, 342.317, 0.0, 683.702]
       
   - name: peeler
     type: wei_ros_node
@@ -35,7 +35,7 @@ modules:
     type: wei_ros_node 
     model: ot2
     config:
-      ros_node: "ot2_alpha/ot2Node/actions"                      
+      ros_node: "ot2_pcr_alpha/ot2Node/actions"                      
     positions:                                                    
       deck2: [197.185, 59.736, 90.509, 566.953, 82.069, -65.550]  
 
@@ -43,7 +43,7 @@ modules:
     type: wei_ros_node
     model: biometra
     config:
-      ros_node: biometra rosnode
+      ros_node: "biometra_module/biometraNode/action_handler"
     positions:
       default: [279.948, 40.849, 75.130, 598.739, 79.208, -916.456]
 
