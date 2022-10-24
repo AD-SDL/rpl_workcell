@@ -69,23 +69,6 @@ flowdef:
   #   module: pf400
   #   command: transfer
   #   args:
-  #     source: sealer.positions.default
-  #     target: biometra.positions.default
-  #     source_plate_rotation: narrow
-  #     target_plate_rotation: narrow
-  #   checks: null
-  #   comment: null
-
-  - name: Thermocycle
-    module: biometra  
-    command: open_lid
-    args: {}
-    checks: null
-
-  # - name: Move from sealer to Thermocycler
-  #   module: pf400
-  #   command: transfer
-  #   args:
   #     source: [238.788, -27.154, 313.011, 342.317, 0.0, 683.702]
   #     target: [279.948, 40.849, 75.130, 598.739, 79.208, -916.456] 
   #     source_plate_rotation: narrow
