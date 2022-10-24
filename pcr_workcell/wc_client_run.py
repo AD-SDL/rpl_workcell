@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 from argparse import ArgumentParser
 
-from rpl_wei.wei_client_base import WEI
+from rpl_wei.wei_workcell_base import WEI
 from rpl_wei.data_classes import Module, Step
 
 import rclpy
@@ -40,11 +40,11 @@ def parse_args():
     return parser.parse_args()
 
 def main(args):
-    wc_file_path = args.workcell.resolve()
     wf_file_path = args.workflow.resolve()
+    if args.workcell is not None: 
+        wc_file_path = args.workcell.resolve()  
     
     wei_client = WEI(
-        wc_file_path,
         wf_file_path,
         workcell_log_level=logging.DEBUG,
         workflow_log_level=logging.DEBUG,
