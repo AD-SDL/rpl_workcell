@@ -1,5 +1,8 @@
 
-publish:
+ros_config:
+  namespace: rpl_workcell
+  
+globus_config:
   funcx_local_ep: "299edea0-db9a-4693-84ba-babfa655b1be"
   globus_local_ep: ""
   ##
