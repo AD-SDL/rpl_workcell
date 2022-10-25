@@ -59,8 +59,8 @@ flowdef:
     module: sealer
     command: seal
     args:
-      time: 3
-      temperature: 175
+      time: vars.seal.time
+      temperature: vars.seal.temp
     checks: null
     comment: null
 

@@ -42,14 +42,18 @@ def main(args):
         wc_file_path = args.workcell.resolve()  
     
     wei_client = WEI(
-        wf_file_path,
-        workcell_log_level=logging.DEBUG,
-        workflow_log_level=logging.DEBUG,
+        wf_file_path
     )
 
     wf_id = list(wei_client.get_workflows().keys())[0]
 
-    run_class = wei_client.run_workflow(wf_id, [wei_service_callback])
+    run_class = wei_client.run_workflow(wf_id, payload)
+    #wc
+    #wf
+    #protocols
+    #vars
+    #execution
+    #results
 
 
 if __name__ == "__main__":
