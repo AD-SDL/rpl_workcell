@@ -31,29 +31,30 @@ def wei_service_callback(step: Step, **kwargs):
         msg["node"], msg["action_handle"], msg["action_vars"]
     )
 
+
 def parse_args():
     parser = ArgumentParser()
-    parser.add_argument("-wf", "--workflow", help="Path to workflow file", type=Path, required=True)
+    parser.add_argument(
+        "-wf", "--workflow", help="Path to workflow file", type=Path, required=True
+    )
+    parser.add_argument("-wc", "--workcell", help="Just for backwards compatibility")
     return parser.parse_args()
+
 
 def main(args):
     wf_file_path = args.workflow.resolve()
-    if args.workcell is not None: 
-        wc_file_path = args.workcell.resolve()  
-    
+    if args.workcell is not None:
+        wc_file_path = args.workcell.resolve()
+
     wei_client = WEI(
-        wf_file_path
+        wf_file_path,
+        workcell_log_level=logging.DEBUG,
+        workflow_log_level=logging.DEBUG,
     )
 
     wf_id = list(wei_client.get_workflows().keys())[0]
 
-    run_class = wei_client.run_workflow(wf_id, payload)
-    #wc
-    #wf
-    #protocols
-    #vars
-    #execution
-    #results
+    wei_client.run_workflow(wf_id, [wei_service_callback])
 
 
 if __name__ == "__main__":
