@@ -40,7 +40,7 @@ flowdef:
     command: run_protocol
     args:
       # Currently needs to be hardcoded absolution paths... need to get relative paths configured
-      config_path: /home/wei_ws/demo/rpl_workcell/pcr_workcell/protocol_files/ot2_pcr_config.yaml
+      config_path: /home/rpl/wei_ws/demo/rpl_workcell/pcr_workcell/protocol_files/ot2_pcr_config.yaml
     checks: RESOURCE_CHECK
     comment: resource check not implemented, but will be
 
@@ -59,8 +59,8 @@ flowdef:
     module: sealer
     command: seal
     args:
-      time: vars.seal.time
-      temperature: vars.seal.temp
+      time: 3
+      temperature: 175
     checks: null
     comment: null
 

@@ -47,7 +47,7 @@ modules:
     type: wei_ros_node 
     model: ot2
     config:
-      ros_node: "ot2_pcr_alpha/ot2Node/action_handler"                      
+      ros_node: "/ot2Node/action_handler"                      
     positions:                                                    
       deck2: [197.185, 59.736, 90.509, 566.953, 82.069, -65.550]  
 
