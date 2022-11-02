@@ -25,7 +25,7 @@ modules:
     config:
       ros_node: "/sciclops_module/sciclopsNode/action_handler"
     positions:
-      exchange: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367]
+      exchange: [222.0, -38.068, 335.876, 325.434, 79.923, 995.062]
 
   - name: sealer
     type: wei_ros_node
@@ -33,7 +33,7 @@ modules:
     config:
       ros_node: "/sp_module/sealerNode/action_handler"
     positions:
-      default: [236.788, -27.154, 313.011, 342.317, 0.0, 683.702]
+      default: [202.389 ,-4.616, 260.005, 372.031, 79.841, 411.535]
       
   - name: peeler
     type: wei_ros_node
@@ -41,7 +41,7 @@ modules:
     config:
       ros_node: "/sp_module/peelerNode/action_handler"
     positions:
-      default: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
+      default: [225.123, -25.539, 244.391, 409.600, 79.138, 398.771]
 
   - name: ot2_pcr_alpha 
     type: wei_ros_node 
@@ -49,7 +49,7 @@ modules:
     config:
       ros_node: "/ot2Node/action_handler"                      
     positions:                                                    
-      deck2: [197.185, 59.736, 90.509, 566.953, 82.069, -65.550]  
+      deck2: [163.230, -59.032, 270.965, 415.013, 129.982, -951.510]  
 
   - name: biometra
     type: wei_ros_node
@@ -57,7 +57,7 @@ modules:
     config:
       ros_node: "biometra_module/biometraNode/action_handler"
     positions:
-      default: [279.948, 40.849, 75.130, 598.739, 79.208, -916.456]
+      default: [247.0, 40.698, 38.294, 728.332, 123.077, 301.082]
 
   - name: hidex
     type: wei_ros_node
