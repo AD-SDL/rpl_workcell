@@ -27,10 +27,10 @@ tmux send-keys -t $session:$window 'export robot_ip=192.168.50.197' C-m #this ne
 tmux send-keys -t $session:$window 'export robot_name=ot2_pcr_alpha' C-m #this need to become an arg on the roslaunch
 tmux send-keys -t $session:$window 'ros2 launch ot2_module_client ot2_module.launch.py' C-m
 
-# window=4
-# tmux new-window -t $session:$window -n 'biometra_module'
-# tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
-# tmux send-keys -t $session:$window 'ros2 launch biometra_module_client biometra_module.launch.py' C-m
+window=4
+tmux new-window -t $session:$window -n 'biometra'
+tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
+tmux send-keys -t $session:$window 'ros2 launch biometra_client biometra_client.launch.py' C-m
 
 window=5
 tmux new-window -t $session:$window -n 'protocol_window'

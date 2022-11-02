@@ -16,14 +16,14 @@ git clone https://github.com/AD-SDL/rpl_workcell.git
 ## Installing the nodes
 
 ```
-./$DEMO_PATH/demo/rpl_workcell/pcr_workcell/install.sh
+$DEMO_PATH/demo/rpl_workcell/pcr_workcell/install.sh
 ```
 
 
 ## Running the example
 
 ```
-./$DEMO_PATH/demo/rpl_workcell/pcr_workcell/run_nodes.sh
+$DEMO_PATH/demo/rpl_workcell/pcr_workcell/run_nodes.sh
 ```
 
 *This will consume your terminal with a running command. Open a new terminal and navigate to this folder again.*
@@ -36,19 +36,22 @@ And finally run the scripts with the steps you want to test (in the new terminal
 For the PCR campaign:
 
 ```
+DEMO_PATH=~/wei_ws
 source $DEMO_PATH/install/setup.bash
-python3 $DEMO_PATH/demo/rpl_workcell/pcr_workcell/wc_client_run.py -wc $DEMO_PATH/demo/rpl_workcell/pcr_workcell/pcr_workcell.yaml -wf $DEMO_PATH/demo/rpl_workcell/pcr_workcell/workflows/pcr_workflow.yaml
+python3 $DEMO_PATH/demo/rpl_workcell/pcr_workcell/wc_client_run.py -wf $DEMO_PATH/demo/rpl_workcell/pcr_workcell/workflows/pcr_workflow.yaml
 ```
 
 For the Growth campaign:
 
 ```
-python3 $DEMO_PATH/demo/rpl_workcell/pcr_workcell/wc_client_run.py -wc $DEMO_PATH/demo/rpl_workcell/pcr_workcell/pcr_workcell.yaml -wf $DEMO_PATH/demo/rpl_workcell/pcr_workcell/workflows/growth_workflow.yaml
+DEMO_PATH=~/wei_ws
+python3 $DEMO_PATH/demo/rpl_workcell/pcr_workcell/wc_client_run.py -wf $DEMO_PATH/demo/rpl_workcell/pcr_workcell/workflows/growth_workflow.yaml
 ```
 
 For the MoveTest campaign:
 ```
-python3 $DEMO_PATH/demo/rpl_workcell/pcr_workcell/wc_client_run.py -wc $DEMO_PATH/demo/rpl_workcell/pcr_workcell/pcr_workcell.yaml -wf $DEMO_PATH/demo/rpl_workcell/pcr_workcell/workflows/move_test.yaml
+DEMO_PATH=~/wei_ws
+python3 $DEMO_PATH/demo/rpl_workcell/pcr_workcell/wc_client_run.py -wf $DEMO_PATH/demo/rpl_workcell/pcr_workcell/workflows/move_test.yaml
 ```
 
 
