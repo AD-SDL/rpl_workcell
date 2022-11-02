@@ -15,13 +15,13 @@ modules:
   - name: sciclops
 
 flowdef:
-  - name: PCR Plate Exchange
-    module: sciclops
-    command: get_plate
-    args:
-      pos: "tower1"
-    checks: null
-    comment: Stage pcr plates
+  # - name: PCR Plate Exchange
+  #   module: sciclops
+  #   command: get_plate
+  #   args:
+  #     pos: "tower1"
+  #   checks: null
+  #   comment: Stage pcr plates
 
   - name: Move from Sciclops to OT2
     module: pf400
@@ -55,14 +55,14 @@ flowdef:
     checks: null
     comment: null
 
-  - name: Seal PCR plate
-    module: sealer
-    command: seal
-    args:
-      time: 3
-      temperature: 175
-    checks: null
-    comment: null
+  # - name: Seal PCR plate
+  #   module: sealer
+  #   command: seal
+  #   args:
+  #     time: 3
+  #     temperature: 175
+  #   checks: null
+  #   comment: null
 
 
   - name: Move from sealer to Thermocycler
@@ -70,9 +70,9 @@ flowdef:
     command: transfer
     args:
       source: sealer.positions.default
-      target: [279.948, 40.849, 75.130, 598.739, 79.208, -916.456] 
+      target: biometra.positions.default
       source_plate_rotation: narrow
-      target_plate_rotation: narrow
+      target_plate_rotation: wide
     checks: null
     comment: null
 
@@ -80,9 +80,9 @@ flowdef:
     module: pf400
     command: transfer
     args:
-      target: biometra.positions.default
-      source: peeler.positions.default
-      source_plate_rotation: narrow
+      source: biometra.positions.default
+      target: peeler.positions.default
+      source_plate_rotation: wide
       target_plate_rotation: narrow
     checks: null
     comment: null
