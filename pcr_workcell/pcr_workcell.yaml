@@ -33,7 +33,7 @@ modules:
     config:
       ros_node: "/sp_module/sealerNode/action_handler"
     positions:
-      default: [202.389 ,-4.616, 260.005, 372.031, 79.841, 411.535]
+      default: [201.128, -2.814, 264.373, 365.863, 79.144, 411.553]
       
   - name: peeler
     type: wei_ros_node
@@ -41,7 +41,7 @@ modules:
     config:
       ros_node: "/sp_module/peelerNode/action_handler"
     positions:
-      default: [225.123, -25.539, 244.391, 409.600, 79.138, 398.771]
+      default: [225.521, -25.970, 245.134, 409.291, 78.007, 398.769]
 
   - name: ot2_pcr_alpha 
     type: wei_ros_node 
