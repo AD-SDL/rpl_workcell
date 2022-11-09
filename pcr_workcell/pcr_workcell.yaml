@@ -43,7 +43,7 @@ modules:
     positions:
       default: [225.521, -25.970, 245.134, 409.291, 78.007, 398.769]
 
-  - name: ot2_pcr_alpha 
+  - name: ot2_pcr_betha 
     type: wei_ros_node 
     model: ot2
     config:
@@ -51,6 +51,14 @@ modules:
     positions:                                                    
       deck2: [163.230, -59.032, 270.965, 415.013, 129.982, -951.510]  
 
+  - name: ot2_pcr_alpha
+    type: wei_ros_node 
+    model: ot2
+    config:
+      ros_node: "/ot2Node/action_handler"                      
+    positions:                                                    
+      deck1_cooler: [243.034, -31.484, 276.021, 383.640, 124.807, -585.407]  
+  
   - name: biometra
     type: wei_ros_node
     model: biometra

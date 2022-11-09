@@ -28,7 +28,7 @@ flowdef:
     command: transfer
     args:
       source: sciclops.positions.exchange
-      target: ot2_pcr_alpha.positions.deck2
+      target: ot2_pcr_alpha.positions.deck1_cooler
       source_plate_rotation: narrow
       target_plate_rotation: wide
     checks: null
@@ -48,7 +48,7 @@ flowdef:
     module: pf400
     command: transfer
     args:
-      source: ot2_pcr_alpha.positions.deck2
+      source: ot2_pcr_alpha.positions.deck1_cooler
       target: sealer.positions.default
       source_plate_rotation: wide
       target_plate_rotation: narrow
