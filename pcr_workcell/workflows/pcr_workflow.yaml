@@ -4,7 +4,7 @@ metadata:
   info: Initial PCR workflow for RPL workcell
   version: 0.1
 
-workcell: /home/rpl/wei_ws/demo/rpl_workcell/pcr_workcell/pcr_workcell.yaml
+workcell: /home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_workcell.yaml
 
 modules:
   - name: ot2_pcr_alpha
@@ -15,13 +15,13 @@ modules:
   - name: sciclops
 
 flowdef:
-  # - name: PCR Plate Exchange
-  #   module: sciclops
-  #   command: get_plate
-  #   args:
-  #     pos: "tower1"
-  #   checks: null
-  #   comment: Stage pcr plates
+  - name: PCR Plate Exchange
+    module: sciclops
+    command: get_plate
+    args:
+      pos: "tower1"
+    checks: null
+    comment: Stage pcr plates
 
   - name: Move from Sciclops to OT2
     module: pf400
@@ -34,13 +34,11 @@ flowdef:
     checks: null
     comment: Place plate in ot2
 
-
   - name: Mix OT2 reactions
     module: ot2_pcr_alpha
     command: run_protocol
     args:
-      # Currently needs to be hardcoded absolution paths... need to get relative paths configured
-      config_path: /home/rpl/wei_ws/demo/rpl_workcell/pcr_workcell/protocol_files/ot2_pcr_config.yaml
+      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/ot2_pcr_config.yaml
     checks: RESOURCE_CHECK
     comment: resource check not implemented, but will be
 
@@ -55,15 +53,14 @@ flowdef:
     checks: null
     comment: null
 
-  # - name: Seal PCR plate
-  #   module: sealer
-  #   command: seal
-  #   args:
-  #     time: 3
-  #     temperature: 175
-  #   checks: null
-  #   comment: null
-
+  - name: Seal PCR plate
+    module: sealer
+    command: seal
+    args:
+      time: 3
+      temperature: 175
+    checks: null
+    comment: null
 
   - name: Move from sealer to Thermocycler
     module: pf400
@@ -84,6 +81,14 @@ flowdef:
       target: peeler.positions.default
       source_plate_rotation: wide
       target_plate_rotation: narrow
+    checks: null
+    comment: null
+
+  - name: Peel
+    module: peeler
+    command: peel
+    args:
+      test: null
     checks: null
     comment: null
 
