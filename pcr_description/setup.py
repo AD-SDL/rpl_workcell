@@ -2,7 +2,7 @@ from setuptools import setup
 import os
 from glob import glob
 
-package_name = 'pf400_description'
+package_name = 'pcr_description'
 
 setup(
     name=package_name,
@@ -27,7 +27,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'pf400_description_client = pf400_description.pf400_description_client:main'
+            'pcr_description_client = pcr_description.pcr_description_client:main'
         ],
     },
 )

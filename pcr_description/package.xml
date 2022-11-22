@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>pf400_description</name>
+  <name>rpl_description</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="ravescovi@anl.gov">Rafael Vescovi</maintainer>
+  <maintainer email="dozgulbas@anl.gov">Doga Ozgulbas</maintainer>
   <license>MIT</license>
 
 
