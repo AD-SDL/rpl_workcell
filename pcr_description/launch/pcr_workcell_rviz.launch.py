@@ -10,8 +10,12 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
  
 def generate_launch_description():
-
-  pkg_share = FindPackageShare(package='pf400_description').find('pf400_description')
+  # pf400_package = 
+  # ot2_package = 
+  # azenta_package = 
+  # hidex_package = 
+  # biometra_package = 
+  pkg_share = FindPackageShare(package='pcr_description').find('pcr_description')
   default_rviz_config_path = os.path.join(pkg_share, 'config/pcr_workcell_config.rviz') 
   default_urdf_model_path = os.path.join(pkg_share, 'urdf/pcr_workcell.urdf.xacro') 
  
@@ -78,12 +82,40 @@ def generate_launch_description():
     output='screen',
     arguments=['-d', rviz_config_file])
 
-  # Start RealHarware Joint State Publisher Client
+ 
+  # Start Real Harware PF400 Joint State Publisher Client
   start_pf400_description_client = Node(
     condition=UnlessCondition(fake_hardware),
     package = "pf400_description",
     executable = 'pf400_description_client',
     name = 'PF400DescriptionNode',
+    output = 'screen'
+  )
+
+  # Start Real Harware OT2 Joint State Publisher Client
+  start_ot2_description_client = Node(
+    condition=UnlessCondition(fake_hardware),
+    package = "ot2_description",
+    executable = 'ot2_description_client',
+    name = 'OT2DescriptionNode',
+    output = 'screen'
+  )
+
+  # Start Real Harware Azenta Joint State Publisher Client
+  start_azenta_description_client = Node(
+    condition=UnlessCondition(fake_hardware),
+    package = "azenta_description",
+    executable = 'azenta_description_client',
+    name = 'AzentaDescriptionNode',
+    output = 'screen'
+  )
+
+  # Start Real Harware Biometra Joint State Publisher Client
+  start_biometra_description_client = Node(
+    condition=UnlessCondition(fake_hardware),
+    package = "biometra_description",
+    executable = 'biometra_description_client',
+    name = 'BiometraDescriptionNode',
     output = 'screen'
   )
    
@@ -103,5 +135,9 @@ def generate_launch_description():
   ld.add_action(start_robot_state_publisher_cmd)
   ld.add_action(start_rviz_cmd)
   ld.add_action(start_pf400_description_client)
+  ld.add_action(start_ot2_description_client)
+  ld.add_action(start_azenta_description_client)
+  ld.add_action(start_biometra_description_client)
+
   
   return ld
