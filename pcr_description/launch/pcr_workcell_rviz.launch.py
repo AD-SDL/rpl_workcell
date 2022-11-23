@@ -10,15 +10,10 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
  
 def generate_launch_description():
-  # pf400_package = 
-  # ot2_package = 
-  # azenta_package = 
-  # hidex_package = 
-  # biometra_package = 
+
   pkg_share = FindPackageShare(package='pcr_description').find('pcr_description')
   default_rviz_config_path = os.path.join(pkg_share, 'config/pcr_workcell_config.rviz') 
   default_urdf_model_path = os.path.join(pkg_share, 'urdf/pcr_workcell.urdf.xacro') 
- 
   
   fake_hardware = LaunchConfiguration('fake_hardware')
   urdf_model = LaunchConfiguration('urdf_model')
@@ -57,7 +52,27 @@ def generate_launch_description():
     default_value='False',
     description='Use simulation (Gazebo) clock if true')
 
- 
+  #TODO: ADD launch parameters to enable and disable the robot description launch, considering the launch declaration 
+  declare_use_pf400_cmd = DeclareLaunchArgument(
+    name='use_pf400',
+    default_value='True',
+    description='Whether to start PF400')
+
+  declare_use_ot2_cmd = DeclareLaunchArgument(
+    name='use_ot2',
+    default_value='True',
+    description='Whether to start OT2')
+
+  declare_use_azenta_cmd = DeclareLaunchArgument(
+    name='use_azenta',
+    default_value='True',
+    description='Whether to start Azenta')
+
+  declare_use_biometra_cmd = DeclareLaunchArgument(
+    name='use_biometra',
+    default_value='True',
+    description='Whether to start Biometra') 
+
   # A fake_hardware to manipulate the joint state values
   start_joint_state_publisher_fake_hardware_node = Node(
     condition=IfCondition(fake_hardware),
@@ -82,7 +97,6 @@ def generate_launch_description():
     output='screen',
     arguments=['-d', rviz_config_file])
 
- 
   # Start Real Harware PF400 Joint State Publisher Client
   start_pf400_description_client = Node(
     condition=UnlessCondition(fake_hardware),
@@ -129,7 +143,11 @@ def generate_launch_description():
   ld.add_action(declare_use_robot_state_pub_cmd)  
   ld.add_action(declare_use_rviz_cmd) 
   ld.add_action(declare_use_sim_time_cmd)
- 
+  ld.add_action(declare_use_pf400_cmd)
+  ld.add_action(declare_use_ot2_cmd)
+  ld.add_action(declare_use_biometra_cmd)
+  ld.add_action(declare_use_azenta_cmd)
+
   # Add any actions
   ld.add_action(start_joint_state_publisher_fake_hardware_node)
   ld.add_action(start_robot_state_publisher_cmd)
