@@ -104,7 +104,7 @@ commands:
     volume: Primer Volume
     mix_cycles: 3
     mix_volume: 15
-    drop_tip: False
+    drop_tip: True
   - name: backward primer
     source: backward:Backward Primer
     aspirate_clearance: 0.1
@@ -113,7 +113,7 @@ commands:
     volume: Primer Volume
     mix_cycles: 3
     mix_volume: 15
-    drop_tip: False
+    drop_tip: True
   - name: template
     source: template:DNA
     aspirate_clearance: 0.1
@@ -122,7 +122,7 @@ commands:
     volume: Template Volume
     mix_cycles: 3
     mix_volume: 15
-    drop_tip: False
+    drop_tip: True
 
 metadata:
   protocolName: PCR Prep Full Plate
