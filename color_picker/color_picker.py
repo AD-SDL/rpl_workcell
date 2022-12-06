@@ -6,10 +6,13 @@ from argparse import ArgumentParser
 
 from rpl_wei.wei_workcell_base import WEI
 from rpl_wei.data_classes import Module, Step
+from evolutionary_solver import EvolutionaryColors
 
 import rclpy
 from wei_executor.weiExecutorNode import weiExecNode
 
+
+# Can this be an init to an executor callback?
 rclpy.init()
 wei_execution_node = weiExecNode()
 
@@ -40,6 +43,11 @@ def parse_args():
     return parser.parse_args()
 
 
+def run(wei_client: WEI, solver: EvolutionaryColors) -> None:
+
+    ...
+
+
 def main(args):
     wf_file_path = args.workflow.resolve()
 
@@ -48,6 +56,12 @@ def main(args):
         workcell_log_level=logging.DEBUG,
         workflow_log_level=logging.DEBUG,
     )
+
+    target_ratio = [237, 36, 36]
+    mixing_colors = [[255, 0, 0], [0, 255, 0], [0, 0, 255]]
+    solver = EvolutionaryColors(target=target_ratio, mixing_colors=mixing_colors)
+
+    run(wei_client, solver)
 
 
 if __name__ == "__main__":
