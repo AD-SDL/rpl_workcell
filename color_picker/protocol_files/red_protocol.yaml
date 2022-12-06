@@ -17,12 +17,15 @@ equipment:
     mount: right
 
 commands:
+  - name: add water
+    source: source:A2
+    destination: payload.destination_wells
+    volume: payload.water_volumes
+
   - name: Mix Red
     source: source:A1
-    destination: dest:Destinations
-    volume: Red Volumes
-    mix_cycles: 0
-    mix_volume: 10
+    destination: payload.destination_wells
+    volume: payload.red_volumes
 
 metadata:
   protocolName: Red Mixing

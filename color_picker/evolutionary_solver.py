@@ -1,6 +1,6 @@
 import string
-from random import sample, choice, seed
-from typing import List, Tuple
+from random import sample, choice
+from typing import List, Tuple, Union, Optional
 
 from pydantic import BaseModel
 
@@ -27,7 +27,6 @@ class EvolutionaryColors:
         starting_ratios=None,
         pop_size=96,
         color_diff_threshold=5.0,
-        num_experiments=96 * 3,
     ) -> None:
 
         self.target = sRGBColor(*target, is_upscaled=True if max(target) > 1 else False)
@@ -38,7 +37,6 @@ class EvolutionaryColors:
         self.starting_ratios = starting_ratios if starting_ratios else [0.5, 0.5, 0.5]
         self.pop_size = pop_size
         self.color_diff_threshold = color_diff_threshold
-        self.num_experiments = num_experiments
 
         self.population_history = []
         self.current_best_color: BestColor = BestColor(
@@ -46,8 +44,21 @@ class EvolutionaryColors:
         )
 
     def run_iteration(
-        self, experiment_colors: List[List[float]], return_volumes: bool = True
+        self,
+        experiment_colors: Optional[List[List[float]]] = None,
+        return_volumes: bool = True,
     ) -> List[List[float]]:
+
+        if experiment_colors is None and len(self.population_history) == 0:
+            c_ratios = make_random_plate(dim=(96, 3))
+            if return_volumes:
+                return self.convert_ratios_to_volumes(c_ratios)
+            else:
+                return c_ratios
+
+        assert (
+            experiment_colors is not None
+        ), "Experiment colors not provided for this iteration..."
         # Flatten if not already flattened
         experiment_colors = np.asarray(experiment_colors).reshape((-1, 3)).tolist()
         experiment_colors = [
@@ -72,16 +83,25 @@ class EvolutionaryColors:
         return [c.get_value_tuple() for c in new_population]
 
     def convert_ratios_to_volumes(
-        self, color_ratios: List[List[sRGBColor]], total_volume: float = 30.0
+        self,
+        color_ratios: List[List[Union[sRGBColor, float]]],
+        total_volume: float = 30.0,
     ) -> List[List[float]]:
+        sanitized_colors = []
+        for color in color_ratios:
+            if not isinstance(color, sRGBColor):
+                sanitized_colors.append(sRGBColor(*color))
+            else:
+                sanitized_colors.append(color)
+
         partial_volume = total_volume / 3
 
         volume_list = []
-        for color in color_ratios:
+        for color in sanitized_colors:
             color_ratio = color.get_value_tuple()
             volume_list.append([r * partial_volume for r in color_ratio])
 
-        return np.asarray(volume_list).reshape(8, 12, 3).tolist()
+        return volume_list
 
     def _find_best_color(
         self, experiment_colors: List[sRGBColor], population_grades: List[float]

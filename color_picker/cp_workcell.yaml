@@ -31,11 +31,27 @@ modules:
     positions:
       default: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
 
-  - name: ot2_pcr_alpha
+  - name: ot2_red
     type: wei_ros_node
     model: ot2
     config:
-      ros_node: "ot2_pcr_alpha/ot2Node/actions"
+      ros_node: "ot2_red/ot2Node/actions"
+    positions:
+      deck2: [197.185, 59.736, 90.509, 566.953, 82.069, -65.550]
+
+  - name: ot2_green
+    type: wei_ros_node
+    model: ot2
+    config:
+      ros_node: "ot2_green/ot2Node/actions"
+    positions:
+      deck2: [197.185, 59.736, 90.509, 566.953, 82.069, -65.550]
+
+  - name: ot2_blue
+    type: wei_ros_node
+    model: ot2
+    config:
+      ros_node: "ot2_blue/ot2Node/actions"
     positions:
       deck2: [197.185, 59.736, 90.509, 566.953, 82.069, -65.550]
 
@@ -52,5 +68,13 @@ modules:
     model: hidex
     config:
       ros_node: hidex rosnode
+    positions:
+      default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+  - name: camera
+    type: wei_ros_node
+    model: webcam
+    config:
+      ros_node: "camera_module/cameraNode/action_handler"
     positions:
       default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
