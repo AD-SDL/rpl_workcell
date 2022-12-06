@@ -1,0 +1,31 @@
+resources:
+  - location: /Users/kyle/github/rpl_workcell/color_picker/protocol_files/color_volumes.xlsx
+    name: color_file
+
+equipment:
+  - name: corning_96_wellplate_360ul_flat
+    location: "1"
+    alias: source
+  - name: corning_96_wellplate_360ul_flat
+    location: "4"
+    alias: dest
+  - name: opentrons_96_tiprack_1000ul
+    location: "8"
+  - name: opentrons_96_tiprack_1000ul
+    location: "9"
+  - name: p1000_single_gen2
+    mount: right
+
+commands:
+  - name: Mix Red
+    source: source:A1
+    destination: dest:Destinations
+    volume: Red Volumes
+    mix_cycles: 0
+    mix_volume: 10
+
+metadata:
+  protocolName: Red Mixing
+  author: Kyle khippe@anl.gov
+  description: Mixing red colors
+  apiLevel: "2.12"
