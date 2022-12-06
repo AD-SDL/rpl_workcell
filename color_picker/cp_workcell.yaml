@@ -1,0 +1,56 @@
+modules:
+  - name: pf400
+    type: wei_ros_node
+    model: pf400
+    config:
+      ros_node: "/pf400_client/PF400_Client_Node/action_handler"
+    positions:
+      final_destination: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+  - name: sciclops
+    type: wei_ros_node
+    model: sciclops
+    config:
+      ros_node: "/sciclops_module/sciclopsNode/action_handler"
+    positions:
+      exchange: [262.550, 20.608, 119.290, 662.570, 0.0, 574.367]
+
+  - name: sealer
+    type: wei_ros_node
+    model: sealer
+    config:
+      ros_node: "/sp_module/sealerNode/action_handler"
+    positions:
+      default: [236.788, -27.154, 313.011, 342.317, 0.0, 683.702]
+
+  - name: peeler
+    type: wei_ros_node
+    model: peeler
+    config:
+      ros_node: "/sp_module/peelerNode/action_handler"
+    positions:
+      default: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
+
+  - name: ot2_pcr_alpha
+    type: wei_ros_node
+    model: ot2
+    config:
+      ros_node: "ot2_pcr_alpha/ot2Node/actions"
+    positions:
+      deck2: [197.185, 59.736, 90.509, 566.953, 82.069, -65.550]
+
+  - name: biometra
+    type: wei_ros_node
+    model: biometra
+    config:
+      ros_node: "biometra_module/biometraNode/action_handler"
+    positions:
+      default: [279.948, 40.849, 75.130, 598.739, 79.208, -916.456]
+
+  - name: hidex
+    type: wei_ros_node
+    model: hidex
+    config:
+      ros_node: hidex rosnode
+    positions:
+      default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]

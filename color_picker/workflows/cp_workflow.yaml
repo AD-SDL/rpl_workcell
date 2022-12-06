@@ -1,0 +1,101 @@
+# TODO: add input vars to the ot2 command (csv col)
+
+metadata:
+  name: PCR - Workflow
+  author: Casey Stone, Rafael Vescovi
+  info: Initial PCR workflow for RPL workcell
+  version: 0.1
+
+workcell: /home/rpl/wei_ws/demo/rpl_workcell/pcr_workcell/pcr_workcell.yaml
+
+modules:
+  - name: ot2_red
+  - name: ot2_green
+  - name: ot2_blue
+  - name: pf400
+  - name: sciclops
+  - name: camera
+
+flowdef:
+  - name: Color Plate to Plate Exchange
+    module: sciclops
+    command: get_plate
+    args:
+      pos: "tower1"
+    comments: Move initial color plate from sciclops to plate exchange
+
+  - name: Move from Sciclops to OT2
+    module: pf400
+    command: transfer
+    args:
+      source: sciclops.positions.exchange
+      target: ot2_red.positions.deck2
+      source_plate_rotation: narrow
+      target_plate_rotation: wide
+    comment: Place plate in ot2
+
+  - name: Mix Red Colors
+    module: ot2_red
+    command: run_protocol
+    args:
+      # Currently needs to be hardcoded absolution paths... need to get relative paths configured
+      config_path: /home/rpl/wei_ws/demo/rpl_workcell/color_picker/protocol_files/red_protocol.yaml
+    comment: Mix the red portions according to input data
+
+  - name: Move to Green
+    module: pf400
+    command: transfer
+    args:
+      source: ot2_red.positions.deck2
+      target: ot2_green.positions.deck2
+      source_plate_rotation: wide
+      target_plate_rotation: wide
+
+  - name: Mix Green Colors
+    module: ot2_green
+    command: run_protocol
+    args:
+      # Currently needs to be hardcoded absolution paths... need to get relative paths configured
+      config_path: /home/rpl/wei_ws/demo/rpl_workcell/color_picker/protocol_files/green_protocol.yaml
+    comment: Mix the green portions according to input data
+
+  - name: Move to Blue
+    module: pf400
+    command: transfer
+    args:
+      source: ot2_green.positions.deck2
+      target: ot2_blue.positions.deck2
+      source_plate_rotation: wide
+      target_plate_rotation: wide
+
+  - name: Mix Blue Colors
+    module: ot2_blue
+    command: run_protocol
+    args:
+      # Currently needs to be hardcoded absolution paths... need to get relative paths configured
+      config_path: /home/rpl/wei_ws/demo/rpl_workcell/color_picker/protocol_files/blue_protocol.yaml
+    comment: Mix the blue portions according to input data
+
+  - name: Move to Picture
+    module: pf400
+    command: transfer
+    args:
+      source: ot2_blue.positions.deck2
+      target: camera_module.locations.plate_station
+      source_plate_rotation: wide
+      target_plate_rotation: narrow
+
+  - name: Take Picture
+    module: camera
+    command: take_picture
+    args:
+      save_location: /path/to/save
+
+  - name: Move to final location
+    module: pf400
+    command: transfer
+    args:
+      source: camera_module.locations.plate_station
+      target: storage
+      source_plate_rotation: narrow
+      target_plate_rotation: narrow
