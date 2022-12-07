@@ -31,7 +31,7 @@ modules:
     positions:
       default: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
 
-  - name: ot2_red
+  - name: ot2_gamma
     type: wei_ros_node
     model: ot2
     config:

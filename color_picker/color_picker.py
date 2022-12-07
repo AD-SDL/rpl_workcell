@@ -3,7 +3,7 @@
 import logging
 from pathlib import Path
 from argparse import ArgumentParser
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 from itertools import product
 from uuid import UUID
 
@@ -56,6 +56,12 @@ def parse_args():
     parser.add_argument(
         "-wf", "--workflow", help="Path to workflow file", type=Path, required=True
     )
+    parser.add_argument(
+        "--pop_size",
+        default=96,
+        type=int,
+        help="Population size (num wells to fill per iter)",
+    )
     return parser.parse_args()
 
 
@@ -91,6 +97,7 @@ def run(
     protocol_id: UUID,
     solver: EvolutionaryColors,
     exp_budget: int = 96 * 3,
+    solver_out_dim: Tuple[int] = (96, 3),
 ) -> None:
     """
     Steps
@@ -107,7 +114,9 @@ def run(
     num_exps = 0
     current_plate = None
     while num_exps + solver.pop_size <= exp_budget:
-        plate_volumes = solver.run_iteration(current_plate, return_volumes=True)
+        plate_volumes = solver.run_iteration(
+            current_plate, out_dim=(solver.pop_size, 3), return_volumes=True
+        )
         payload = convert_volumes_to_payload(plate_volumes)
         wei_client.run_workflow(
             workflow_id=protocol_id,
@@ -115,10 +124,10 @@ def run(
             callbacks=[silent_callback],
         )
         # need to return run_id from wei_client
-        # run_id = wei_client.run_workflow(workflow_id=protocol_id, payload=payload)
+        """run_id = wei_client.run_workflow(workflow_id=protocol_id, payload=payload)
         # Need info from camera something like this
-        # result = wei_client.get_workflow_results(run_id)
-        # plate_colors_ratios = solver.read_camera(result)
+        result = wei_client.get_workflow_results(run_id)
+        plate_colors_ratios = solver.read_camera(result)"""
         # going to convert back to ratios for now
         plate_color_ratios = [
             (np.asarray(elem) / 30).tolist() for elem in plate_volumes
@@ -131,13 +140,13 @@ def run(
 
             f, axarr = plt.subplots(1, 2)
             graph_vis = np.asarray(current_plate)
-            graph_vis = graph_vis.reshape(8, 12, 3)
+            graph_vis = graph_vis.reshape(*solver_out_dim)
             target_color = solver.target.get_value_tuple()
-            axarr[0].imshow(graph_vis)
+            axarr[0].imshow([graph_vis])
             axarr[0].set_title("Experiment plate")
             axarr[1].imshow([[target_color]])
             axarr[1].set_title("Target Color")
-
+            f.suptitle("PAUSING HERE TO MOVE THE PLATE")
             plt.show()
 
     if show_visuals:
@@ -167,10 +176,16 @@ def main(args):
     solver = EvolutionaryColors(
         target=target_ratio,
         mixing_colors=mixing_colors,
-        pop_size=96,
+        pop_size=args.pop_size,
     )
 
-    run(wei_client, protocol_id, solver)
+    run(
+        wei_client,
+        protocol_id,
+        solver,
+        solver_out_dim=(args.pop_size, 3),
+        exp_budget=24,
+    )
 
 
 if __name__ == "__main__":

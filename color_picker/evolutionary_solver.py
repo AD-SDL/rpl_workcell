@@ -47,10 +47,11 @@ class EvolutionaryColors:
         self,
         experiment_colors: Optional[List[List[float]]] = None,
         return_volumes: bool = True,
+        out_dim: Tuple[int] = (96, 3),
     ) -> List[List[float]]:
 
         if experiment_colors is None and len(self.population_history) == 0:
-            c_ratios = make_random_plate(dim=(96, 3))
+            c_ratios = make_random_plate(dim=out_dim)
             if return_volumes:
                 return self.convert_ratios_to_volumes(c_ratios)
             else:
