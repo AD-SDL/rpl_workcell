@@ -22,32 +22,31 @@ flowdef:
   #     pos: "tower1"
   #   comments: Move initial color plate from sciclops to plate exchange
 
-  - name: Move from Sciclops to OT2
-    module: pf400
-    command: transfer
-    args:
-      source: sciclops.positions.exchange
-      target: ot2_cp_gamma.positions.deck2
-      source_plate_rotation: narrow
-      target_plate_rotation: wide
-    comment: Place plate in ot2
-
-  # - name: Mix  Colors
-  #   module: ot2_cp_gamma
-  #   command: run_protocol
+  # - name: Move from Sciclops to OT2
+  #   module: pf400
+  #   command: transfer
   #   args:
-  #     config_path: /home/rpl/wei_ws/demo/rpl_workcell/color_picker/protocol_files/red_protocol.yaml
-  #   comment: Mix the red portions according to input data
+  #     source: sciclops.positions.exchange
+  #     target: ot2_cp_gamma.positions.deck2
+  #     source_plate_rotation: narrow
+  #     target_plate_rotation: wide
+  #   comment: Place plate in ot2
 
-  - name: Move to Picture
-    module: pf400
-    command: transfer
+  - name: Mix  Colors
+    module: ot2_cp_gamma
+    command: run_protocol
     args:
-      source: ot2_cp_gamma.positions.deck2
-      target: camera_module.positions.default
-      source_plate_rotation: wide
-      target_plate_rotation: wide
+      config_path: /home/rpl/wei_ws/demo/rpl_workcell/color_picker/protocol_files/red_protocol.yaml
+    comment: Mix the red portions according to input data
 
+  # - name: Move to Picture
+  #   module: pf400
+  #   command: transfer
+  #   args:
+  #     source: ot2_cp_gamma.positions.deck2
+  #     target: camera_module.positions.default
+  #     source_plate_rotation: wide
+  #     target_plate_rotation: wide
 
   # - name: Take Picture
   #   module: camera
