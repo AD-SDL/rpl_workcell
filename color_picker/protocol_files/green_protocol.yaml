@@ -1,7 +1,3 @@
-resources:
-  - location: /Users/kyle/github/rpl_workcell/color_picker/protocol_files/color_volumes.xlsx
-    name: color_file
-
 equipment:
   - name: corning_96_wellplate_360ul_flat
     location: "1"
@@ -19,10 +15,8 @@ equipment:
 commands:
   - name: Mix Green
     source: source:A1
-    destination: dest:Destinations
-    volume: Green Volumes
-    mix_cycles: 0
-    mix_volume: 10
+    destination: payload.destination_wells
+    volume: payload.green_volumes
 
 metadata:
   protocolName: Green Mixing

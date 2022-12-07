@@ -1,31 +1,39 @@
-resources:
-  - location: /Users/kyle/github/rpl_workcell/color_picker/protocol_files/color_volumes.xlsx
-    name: color_file
-
 equipment:
-  - name: corning_96_wellplate_360ul_flat
-    location: "1"
+  - name: opentrons_6_tuberack_nest_50ml_conical
+    location: "7"
     alias: source
   - name: corning_96_wellplate_360ul_flat
-    location: "4"
+    location: "1"
     alias: dest
   - name: opentrons_96_tiprack_1000ul
-    location: "8"
-  - name: opentrons_96_tiprack_1000ul
-    location: "9"
+    location: "10"
+  - name: opentrons_96_tiprack_200ul
+    location: "11"
   - name: p1000_single_gen2
+    mount: left
+  - name: p200_single_gen2
     mount: right
 
 commands:
   - name: add water
-    source: source:A2
+    source: source:B1
     destination: payload.destination_wells
     volume: payload.water_volumes
 
-  - name: Mix Red
+  - name: Mix Color 1
     source: source:A1
     destination: payload.destination_wells
     volume: payload.red_volumes
+
+  - name: Mix Green
+    source: source:A2
+    destination: payload.destination_wells
+    volume: payload.green_volumes
+
+  - name: Mix Blue
+    source: source:A3
+    destination: payload.destination_wells
+    volume: payload.blue_volumes
 
 metadata:
   protocolName: Red Mixing
