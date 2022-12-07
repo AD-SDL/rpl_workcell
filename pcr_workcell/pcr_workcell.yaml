@@ -64,7 +64,7 @@ modules:
     config:
       ros_node: "/std_ns/ot2_cp_gamma"                 
     positions:                                                    
-      deck2: [161.230, 62.513, 36.513, 797.347, 80.246, -1000.04]
+      deck2: [161.481, 60.986, 88.774, 657.358, 124.091, -951.510]
 
   - name: biometra
     type: wei_ros_node
@@ -74,10 +74,12 @@ modules:
     positions:
       default: [247.0, 40.698, 38.294, 728.332, 123.077, 301.082]
 
-  # - name: camera_module_1
-  #   type: wei_image_grab
-  #   config:
-  #     ros_node: "/std_ns/camera_module/camera0"
+  - name: camera_module
+    type: wei_ros_node
+    config:
+      ros_node: "/std_ns/camera_module/camera0"
+    positions:
+      default: [94.0, 29.226, 72.895, 705.537, 79.22, 985.122]
 
   - name: hidex
     type: wei_ros_node

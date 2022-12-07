@@ -32,56 +32,22 @@ flowdef:
       target_plate_rotation: wide
     comment: Place plate in ot2
 
-  # - name: Mix Red Colors
-  #   module: ot2_red
+  # - name: Mix  Colors
+  #   module: ot2_cp_gamma
   #   command: run_protocol
   #   args:
-  #     # Currently needs to be hardcoded absolution paths... need to get relative paths configured
   #     config_path: /home/rpl/wei_ws/demo/rpl_workcell/color_picker/protocol_files/red_protocol.yaml
   #   comment: Mix the red portions according to input data
 
-  # - name: Move to Green
-  #   module: pf400
-  #   command: transfer
-  #   args:
-  #     source: ot2_red.positions.deck2
-  #     target: ot2_green.positions.deck2
-  #     source_plate_rotation: wide
-  #     target_plate_rotation: wide
+  - name: Move to Picture
+    module: pf400
+    command: transfer
+    args:
+      source: ot2_cp_gamma.positions.deck2
+      target: camera_module.positions.default
+      source_plate_rotation: wide
+      target_plate_rotation: wide
 
-  # - name: Mix Green Colors
-  #   module: ot2_green
-  #   command: run_protocol
-  #   args:
-  #     # Currently needs to be hardcoded absolution paths... need to get relative paths configured
-  #     config_path: /home/rpl/wei_ws/demo/rpl_workcell/color_picker/protocol_files/green_protocol.yaml
-  #   comment: Mix the green portions according to input data
-
-  # - name: Move to Blue
-  #   module: pf400
-  #   command: transfer
-  #   args:
-  #     source: ot2_green.positions.deck2
-  #     target: ot2_blue.positions.deck2
-  #     source_plate_rotation: wide
-  #     target_plate_rotation: wide
-
-  # - name: Mix Blue Colors
-  #   module: ot2_blue
-  #   command: run_protocol
-  #   args:
-  #     # Currently needs to be hardcoded absolution paths... need to get relative paths configured
-  #     config_path: /home/rpl/wei_ws/demo/rpl_workcell/color_picker/protocol_files/blue_protocol.yaml
-  #   comment: Mix the blue portions according to input data
-
-  # - name: Move to Picture
-  #   module: pf400
-  #   command: transfer
-  #   args:
-  #     source: ot2_blue.positions.deck2
-  #     target: camera_module.locations.plate_station
-  #     source_plate_rotation: wide
-  #     target_plate_rotation: narrow
 
   # - name: Take Picture
   #   module: camera
