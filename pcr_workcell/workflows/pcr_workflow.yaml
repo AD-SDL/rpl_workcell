@@ -15,13 +15,6 @@ modules:
   - name: sciclops
 
 flowdef:
-  # - name: Explore modules
-  #   module: pf400
-  #   command: explore_workcell
-  #   args: {}
-  #   checks: null
-  #   comment: Exploring the modules in the workcell
-
   # - name: PCR Plate Exchange
   #   module: sciclops
   #   command: get_plate
