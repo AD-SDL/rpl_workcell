@@ -15,12 +15,12 @@ modules:
   - name: sciclops
 
 flowdef:
-  - name: Explore modules
-    module: pf400
-    command: explore_workcell
-    args: {}
-    checks: null
-    comment: Exploring the modules in the workcell
+  # - name: Explore modules
+  #   module: pf400
+  #   command: explore_workcell
+  #   args: {}
+  #   checks: null
+  #   comment: Exploring the modules in the workcell
 
   # - name: PCR Plate Exchange
   #   module: sciclops
@@ -30,16 +30,16 @@ flowdef:
   #   checks: null
   #   comment: Stage pcr plates
 
-  # - name: Move from Sciclops to OT2
-  #   module: pf400
-  #   command: transfer
-  #   args:
-  #     source: sciclops.positions.exchange
-  #     target: ot2_pcr_alpha.positions.deck1_cooler
-  #     source_plate_rotation: narrow
-  #     target_plate_rotation: wide
-  #   checks: null
-  #   comment: Place plate in ot2
+  - name: Move from Sciclops to OT2
+    module: pf400
+    command: transfer
+    args:
+      source: sciclops.positions.exchange
+      target: ot2_pcr_alpha.positions.deck1_cooler
+      source_plate_rotation: narrow
+      target_plate_rotation: wide
+    checks: null
+    comment: Place plate in ot2
 
   # - name: Mix OT2 reactions
   #   module: ot2_pcr_alpha

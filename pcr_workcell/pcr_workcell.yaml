@@ -14,7 +14,7 @@ modules:
     type: wei_ros_node
     model: pf400
     config:
-      ros_node: "/std_ns/PF400_Client_Node/action_handler"
+      ros_node: "/std_ns/PF400_Client_Node"
     positions:
       final_destination: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
@@ -22,7 +22,7 @@ modules:
     type: wei_ros_node
     model: sciclops
     config:
-      ros_node: "/std_ns/sciclopsNode/action_handler"
+      ros_node: "/std_ns/sciclopsNode"
     positions:
       exchange: [222.0, -38.068, 335.876, 325.434, 79.923, 995.062]
 
@@ -30,7 +30,7 @@ modules:
     type: wei_ros_node
     model: sealer
     config:
-      ros_node: "/std_ns/sealerNode/action_handler"
+      ros_node: "/std_ns/sealerNode"
     positions:
       default: [205.128, -2.814, 264.373, 365.863, 79.144, 411.553]
       
@@ -38,31 +38,39 @@ modules:
     type: wei_ros_node
     model: peeler
     config:
-      ros_node: "/std_ns/peelerNode/action_handler"
+      ros_node: "/std_ns/peelerNode"
     positions:
       default: [225.521, -25.970, 245.134, 409.291, 78.007, 398.769]
-
-  - name: ot2_growth_beta 
-    type: wei_ros_node 
-    model: ot2
-    config:
-      ros_node: "/std_ns/ot2_growth_beta/action_handler"                      
-    positions:                                                    
-      deck2: [163.230, -59.032, 270.965, 415.013, 129.982, -951.510]  
 
   - name: ot2_pcr_alpha
     type: wei_ros_node 
     model: ot2
     config:
-      ros_node: "/std_ns/ot2_pcr_alpha/action_handler"                      
+      ros_node: "/std_ns/ot2_pcr_alpha"                      
     positions:                                                    
       deck1_cooler: [243.034, -31.484, 276.021, 383.640, 124.807, -585.407]  
-  
+
+  - name: ot2_growth_beta 
+    type: wei_ros_node 
+    model: ot2
+    config:
+      ros_node: "/std_ns/ot2_growth_beta"                      
+    positions:                                                    
+      deck2: [163.230, -59.032, 270.965, 415.013, 129.982, -951.510]  
+
+  - name: ot2_cp_gamma
+    type: wei_ros_node 
+    model: ot2
+    config:
+      ros_node: "/std_ns/ot2_cp_gamma"                 
+    positions:                                                    
+      deck2: [161.230, 62.513, 36.513, 797.347, 80.246, -1000.04]
+
   - name: biometra
     type: wei_ros_node
     model: biometra
     config:
-      ros_node: "/std_ns/biometraNode/action_handler"
+      ros_node: "/std_ns/biometraNode"
     positions:
       default: [247.0, 40.698, 38.294, 728.332, 123.077, 301.082]
 
@@ -70,7 +78,6 @@ modules:
   #   type: wei_image_grab
   #   config:
   #     ros_node: "/std_ns/camera_module/camera0"
-
 
   - name: hidex
     type: wei_ros_node
