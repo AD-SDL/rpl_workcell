@@ -20,9 +20,9 @@
   <xacro:include filename="$(find ot2_description)/urdf/OT2.urdf.xacro" />
   <xacro:OT2 prefix="ot2/"/>
 
-  <!-- Thermocycler -->
-  <xacro:include filename="$(find biometra_description)/urdf/thermocycler.urdf.xacro" />
-  <xacro:Thermocycler prefix="thermocycler/"/>
+  <!-- Biometra -->
+  <xacro:include filename="$(find biometra_description)/urdf/biometra.urdf.xacro" />
+  <xacro:Biometra prefix="biometra/"/>
 
   <!-- Hidex -->
   <xacro:include filename="$(find hidex_description)/urdf/hidex.urdf.xacro" />
@@ -43,17 +43,17 @@
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
 
-  <joint name="Thermocycler_Base" type="fixed">
+  <joint name="Biometra_Base" type="fixed">
     <parent link="module_carts/cart_2"/>
-    <child link="thermocycler/thermocycler_base"/>
+    <child link="biometra/biometra_base"/>
     <axis xyz="0 0 0"/>
     <origin xyz="0.2 -0.62 0" rpy="0 0 0"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
 
-  <joint name="Thermocycler_Base2" type="fixed">
+  <joint name="Biometra_Base2" type="fixed">
     <parent link="module_carts/cart_2"/>
-    <child link="thermocycler/thermocycler_base2"/>
+    <child link="biometra/biometra_base2"/>
     <axis xyz="0 0 0"/>
     <origin xyz="-0.1 -0.62 0" rpy="0 0 0"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
