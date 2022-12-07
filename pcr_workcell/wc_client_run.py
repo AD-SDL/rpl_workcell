@@ -54,7 +54,11 @@ def main(args):
 
     wf_id = list(wei_client.get_workflows().keys())[0]
 
-    wei_client.run_workflow(wf_id, [wei_service_callback])
+    payload={
+        'temp':45,
+    }
+
+    wei_client.run_workflow(wf_id, payload=payload, callbacks=[wei_service_callback])
 
 
 if __name__ == "__main__":
