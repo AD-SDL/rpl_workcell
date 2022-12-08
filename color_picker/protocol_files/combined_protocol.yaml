@@ -19,21 +19,30 @@ commands:
     source: source:B1
     destination: payload.destination_wells
     volume: payload.water_volumes
+    dispense_clearance: 2
+    aspirate_clearance: 0.1
 
   - name: Mix Color 1
     source: source:A1
     destination: payload.destination_wells
     volume: payload.red_volumes
+    dispense_clearance: 2
+    aspirate_clearance: 0.1
+
 
   - name: Mix Green
     source: source:A2
     destination: payload.destination_wells
     volume: payload.green_volumes
+    dispense_clearance: 2
+    aspirate_clearance: 0.1
 
   - name: Mix Blue
     source: source:A3
     destination: payload.destination_wells
     volume: payload.blue_volumes
+    dispense_clearance: 2
+    aspirate_clearance: 0.1
 
 metadata:
   protocolName: All color mixing
