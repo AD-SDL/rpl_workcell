@@ -6,7 +6,7 @@ import numpy as np
 if TYPE_CHECKING:
     import numpy.typing as npt
 
-DEBUG = 2
+DEBUG = 0
 
 
 def _show_image(img: cv2.Mat) -> None:
