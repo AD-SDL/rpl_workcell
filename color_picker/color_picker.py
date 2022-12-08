@@ -121,7 +121,7 @@ def run(
         wei_client.run_workflow(
             workflow_id=protocol_id,
             payload=payload,
-            callbacks=[silent_callback],
+            callbacks=[wei_service_callback],
         )
         # need to return run_id from wei_client
         """run_id = wei_client.run_workflow(workflow_id=protocol_id, payload=payload)

@@ -6,10 +6,10 @@ metadata:
   info: Initial PCR workflow for RPL workcell
   version: 0.1
 
-workcell: /Users/kyle/github/rpl_workcell/color_picker/cp_workcell.yaml
+workcell: /home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_workcell.yaml
 
 modules:
-  - name: ot2_gamma
+  - name: ot2_cp_gamma
   - name: pf400
   - name: sciclops
   - name: camera
@@ -32,8 +32,8 @@ flowdef:
   #     target_plate_rotation: wide
   #   comment: Place plate in ot2
 
-  - name: Mix Red Colors
-    module: ot2_gamma
+  - name: Mix all colors
+    module: ot2_cp_gamma
     command: run_protocol
     args:
       # Currently needs to be hardcoded absolution paths... need to get relative paths configured
