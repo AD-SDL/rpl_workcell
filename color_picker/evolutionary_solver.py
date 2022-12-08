@@ -11,6 +11,8 @@ from colormath.color_objects import sRGBColor, LabColor
 from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie2000
 
+from plate_color_analysis import get_colors
+
 
 class BestColor(BaseModel):
     color: List[float]
@@ -175,7 +177,10 @@ class EvolutionaryColors:
         return new_pop
 
     def read_picture(self, pic):
-        pass
+        # get_colors(pic) returns 11 possible plates for use in an OT2
+        # This script assumes only 1 plate outside at OT2, so replace
+        # get_colors(pic) with get_colors(pic)[1]
+        return get_colors(pic)[1]
 
 
 def make_random_plate(dim: Tuple[int] = ()) -> List[List[List[float]]]:
