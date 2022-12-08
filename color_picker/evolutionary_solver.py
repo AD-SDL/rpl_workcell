@@ -95,12 +95,11 @@ class EvolutionaryColors:
             else:
                 sanitized_colors.append(color)
 
-        partial_volume = total_volume / 3
-
         volume_list = []
         for color in sanitized_colors:
-            color_ratio = color.get_value_tuple()
-            volume_list.append([r * partial_volume for r in color_ratio])
+            color_ratio = np.asarray(color.get_value_tuple())
+            color_ratio /= sum(color_ratio)
+            volume_list.append([r * total_volume for r in color_ratio])
 
         return volume_list
 
