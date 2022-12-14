@@ -2,6 +2,22 @@
 
   <!-- Materials -->
 
+  <material name="green">
+    <color rgba="0.0 0.8 0.0 1.0"/>
+  </material>
+
+  <material name="grey">
+    <color rgba="0.2 0.2 0.2 1.0"/>
+  </material>
+
+  <material name="orange">
+    <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+  </material>
+  
+  <material name="brown">
+    <color rgba="0.870588235294 0.811764705882 0.764705882353 1.0"/>
+  </material>
+
   <material name="white">
     <color rgba="1 1 1 1"/>
   </material>
@@ -43,12 +59,13 @@
   </material>
   
   <material name="darkbluegreen" >
-    <color rgba="0.0 0.1 0.13 1.0" />
+    <color rgba="0.0 0.2 0.23 1.0" />
   </material>
 
   <material name="aluminum">
     <color rgba="0.6 0.6 0.6 1"/>
   </material>
+  
 
   <!-- Links -->
   <!-- PF400 -->
@@ -1133,80 +1150,80 @@
   </joint>    
 
   <joint name="pf400_module" type="fixed">
-    <parent link="module_carts/pf400_cart"/>
-    <child link="pf400/rail_base"/>
+    <parent link="pf400_cart"/>
+    <child link="rail_base"/>
     <axis xyz="0 0 0"/>
     <origin xyz="-0.14 -0.0198 0.83" rpy="0 0 0"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
 
   <joint name="Biometra_Base" type="fixed">
-    <parent link="module_carts/cart_2"/>
-    <child link="biometra/biometra_base"/>
+    <parent link="cart_2"/>
+    <child link="biometra_base"/>
     <axis xyz="0 0 0"/>
     <origin xyz="0.2 -0.62 0.01" rpy="0 0 0"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
 
   <joint name="Biometra_Base2" type="fixed">
-    <parent link="module_carts/cart_2"/>
-    <child link="biometra/biometra_base2"/>
+    <parent link="cart_2"/>
+    <child link="biometra_base2"/>
     <axis xyz="0 0 0"/>
     <origin xyz="-0.1 -0.62 0.01" rpy="0 0 0"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
 
  <joint name="Sciclops_Base" type="fixed">
-    <parent link="module_carts/cart_5"/>
-    <child link="sciclops/sciclops_base"/>
+    <parent link="cart_5"/>
+    <child link="sciclops_base"/>
     <axis xyz="0 0 0"/>
     <origin xyz="0 -0.04 1.05" rpy="0 0 5.1"/> 
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
   
   <joint name="Peeler_Base" type="fixed">
-    <parent link="module_carts/cart_6"/>
-    <child link="peeler/peeler_base"/>
+    <parent link="cart_6"/>
+    <child link="peeler_base"/>
     <axis xyz="0 0 0"/>
     <origin xyz="-0.13 0.15 1.052" rpy="0 0 0"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
 
   <joint name="Sealer_Base" type="fixed">
-    <parent link="module_carts/cart_6"/>
-    <child link="sealer/sealer_base"/>
+    <parent link="cart_6"/>
+    <child link="sealer_base"/>
     <axis xyz="0 0 0"/>
     <origin xyz="0.27 -0.53 1.052" rpy="0 0 0"/> 
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
 
   <joint name="Hidex_Base" type="fixed">
-    <parent link="module_carts/cart_3"/>
-    <child link="hidex/hidex_body"/>
+    <parent link="cart_3"/>
+    <child link="hidex_body"/>
     <axis xyz="0 0 0"/>
     <origin xyz="0.2 -0.45 1.052" rpy="0 0 0"/> 
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
 
   <joint name="OT2_alpha" type="fixed">
-    <parent link="module_carts/cart_8"/>
-    <child link="ot2/OT2_alpha"/>
+    <parent link="cart_8"/>
+    <child link="OT2_alpha"/>
     <axis xyz="0 0 0"/>
     <origin xyz="0.825 0.47 0.01" rpy="0 0 3.1416"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
 
   <joint name="OT2_betha" type="fixed">
-    <parent link="module_carts/cart_7"/>
-    <child link="ot2/OT2_betha"/>
+    <parent link="cart_7"/>
+    <child link="OT2_betha"/>
     <axis xyz="0 0 0"/>
     <origin xyz="0.825 0.47 0.01" rpy="0 0 3.1416"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
 
   <joint name="OT2_gamma" type="fixed">
-    <parent link="module_carts/cart_4"/>
-    <child link="ot2/OT2_gamma"/>
+    <parent link="cart_4"/>
+    <child link="OT2_gamma"/>
     <axis xyz="0 0 0"/>
     <origin xyz="-0.52 -0.85 0.01" rpy="0 0 0"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
