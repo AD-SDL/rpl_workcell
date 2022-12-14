@@ -40,7 +40,7 @@ modules:
     config:
       ros_node: "/std_ns/peelerNode"
     positions:
-      default: [225.521, -25.970, 245.134, 409.291, 78.007, 398.769]
+      default: [225.521, -24.846, 244.836, 406.623, 80.967, 398.778]
 
   - name: ot2_pcr_alpha
     type: wei_ros_node 
@@ -48,7 +48,7 @@ modules:
     config:
       ros_node: "/std_ns/ot2_pcr_alpha"                      
     positions:                                                    
-      deck1_cooler: [243.034, -31.484, 276.021, 383.640, 124.807, -585.407]  
+      deck1_cooler: [247.999, -30.702, 275.835, 381.513, 124.830, -585.403] 
 
   - name: ot2_growth_beta 
     type: wei_ros_node 
