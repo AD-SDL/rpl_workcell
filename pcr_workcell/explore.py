@@ -18,7 +18,6 @@ def wei_service_callback(step: Step, **kwargs):
 
     module: Module = kwargs["step_module"]
 
-    
     msg = {
         "node": module.config["ros_node"],
         "action_handle": step.command,
@@ -32,33 +31,19 @@ def wei_service_callback(step: Step, **kwargs):
         msg["node"], msg["action_handle"], msg["action_vars"]
     )
 
-
-def parse_args():
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-wf", "--workflow", help="Path to workflow file", type=Path, required=True
-    )
-    return parser.parse_args()
-
-
-def main(args):
-    wf_file_path = args.workflow.resolve()
+def main():
+    wf_path = Path('/home/rpl/workspace/rpl_workcell/pcr_workcell/workflows/explore_wf.yaml')
 
     wei_client = WEI(
-        wf_file_path,
+        wf_path.resolve(),
         workcell_log_level=logging.DEBUG,
         workflow_log_level=logging.DEBUG,
     )
 
     wf_id = list(wei_client.get_workflows().keys())[0]
 
-    payload={
-        'temp':45,
-    }
-
+    payload={}
     wei_client.run_workflow(wf_id, payload=payload, callbacks=[wei_service_callback])
 
-
 if __name__ == "__main__":
-    args = parse_args()
-    main(args)
+    main()

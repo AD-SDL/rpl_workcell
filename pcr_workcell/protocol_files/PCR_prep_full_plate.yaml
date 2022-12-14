@@ -1,0 +1,142 @@
+resources:
+
+  - location: /home/rpl/wei_ws/src/ot2_driver/ot2_driver/protopiler/test_configs/PCR_test_full_plate.xlsx
+    name: primers_and_templates
+
+equipment:
+  - name: nest_96_wellplate_2ml_deep
+    location: "1"
+    alias: forward
+    offset: [0, 1.7, 3.9]
+  - name: nest_96_wellplate_2ml_deep
+    location: "2"
+    alias: backward
+    offset: [0, 1, 1.4]
+  - name: nest_96_wellplate_100ul_pcr_full_skirt 
+    location: "3"
+    alias: dest
+    module: Temperature Module
+    offset: [1, 1.6, 11]
+  - name: nest_96_wellplate_2ml_deep
+    location: "4"
+    alias: template
+    offset: [0, 0, 1]
+  - name: opentrons_96_tiprack_20ul
+    location: "8"
+    offset: [0.2, 0.4, 0]
+  - name: opentrons_96_tiprack_20ul
+    location: "7"
+    offset: [0.2, 0.4, 0]
+  - name: opentrons_96_tiprack_20ul
+    location: "10"
+    offset: [0.2, 0.4, 0]
+  - name: p20_single_gen2
+    mount: left
+  - name: opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap
+    location: "6"
+    offset: [0, 0, 0.5]
+  - name: opentrons_10_tuberack_nest_4x50ml_6x15ml_conical
+    location: "5"
+  - name: opentrons_96_tiprack_20ul
+    location: "11"
+    offset: [0.2, 0.4, 0]
+  - name: opentrons_96_tiprack_1000ul
+    location: "9"
+    offset: [0.5, 0.9, -0.3]
+  - name: p1000_single_gen2
+    mount: right
+
+commands:
+  - name: BioWater # FILL TO 10 ML SO PIPETTE DOESNT GET WET
+    source: 5:A1
+    aspirate_clearance: 50
+    destination: 5:C2
+    dispense_clearance: 2
+    volume: [676, 676, 676] # total: 2,028 uL
+    mix_cycles: 0
+    mix_volume: 0
+    drop_tip: [False, False, True]
+  - name: 5x Reaction Buffer
+    source: 6:A3
+    aspirate_clearance: 0.1
+    destination: 5:C2
+    dispense_clearance: 2
+    volume: 720  # total: 720 uL
+    mix_cycles: 3
+    mix_volume: 500
+    drop_tip: True
+  - name: DNA Polymerase
+    source: 6:A1
+    aspirate_clearance: 0.1
+    destination: 5:C2
+    dispense_clearance: 1
+    volume: [12, 12] # total: 24 uL
+    mix_cycles: 3
+    mix_volume: 20
+    drop_tip: [False, True]
+  - name: DNTPs
+    source: 6:A5
+    aspirate_clearance: 0.1
+    destination: 5:C2
+    dispense_clearance: 2
+    volume: 108 # total: 108 uL
+    mix_cycles: 3
+    mix_volume: 600
+    drop_tip: True
+  - name: GC Enhancer
+    source: 6:B3
+    aspirate_clearance: 0.1
+    destination: 5:C2
+    dispense_clearance: 2
+    volume: 720 # total: 720 uL
+    mix_cycles: 7
+    mix_volume: 700
+    drop_tip: True
+  - name: master mix distribute
+    source: 5:C2
+    aspirate_clearance: 1
+    destination: dest:Destination
+    dispense_clearance: 1
+    volume: 15
+    drop_tip: False
+  - name: master mix distribute 2
+    source: 5:C2
+    aspirate_clearance: 1
+    destination: dest:Destination
+    dispense_clearance: 1
+    volume: 15
+    drop_tip: False
+  - name: forward primer
+    source: forward:Forward Primer
+    aspirate_clearance: 0.1
+    destination: dest:Destination
+    dispense_clearance: 2
+    volume: Primer Volume
+    mix_cycles: 3
+    mix_volume: 15
+    drop_tip: True
+  - name: backward primer
+    source: backward:Backward Primer
+    aspirate_clearance: 0.1
+    destination: dest:Destination
+    dispense_clearance: 2
+    volume: Primer Volume
+    mix_cycles: 3
+    mix_volume: 15
+    drop_tip: True
+  - name: template
+    source: template:DNA
+    aspirate_clearance: 0.1
+    destination: dest:Destination
+    dispense_clearance: 2
+    volume: Template Volume
+    mix_cycles: 3
+    mix_volume: 15
+    drop_tip: True
+
+metadata:
+  protocolName: PCR Prep Full Plate
+  author: Abe astroka@anl.gov
+  description: mixing primers and templates with wells read in from file
+  apiLevel: "2.12"
+

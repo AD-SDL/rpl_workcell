@@ -1,0 +1,19 @@
+metadata:
+  name: Exploration Workflow Test
+  author: Doga Ozgubas, Rafael Vescov
+  info: Initial workflow for workcell validation
+  version: 0.1
+
+workcell: /home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_workcell.yaml
+
+modules:
+  - name: pf400
+
+flowdef:
+  - name: Explore modules
+    module: pf400
+    command: explore_workcell
+    args: 
+      test: null
+    checks: null
+    comment: Exploring the modules in the workcell
