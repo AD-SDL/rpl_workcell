@@ -15,12 +15,12 @@ equipment:
     mount: right
 
 commands:
-  - name: add water
-    source: source:B1
-    destination: payload.destination_wells
-    volume: payload.water_volumes
-    dispense_clearance: 2
-    aspirate_clearance: 0.1
+  # - name: add water
+  #   source: source:B1
+  #   destination: payload.destination_wells
+  #   volume: payload.water_volumes
+  #   dispense_clearance: 2
+  #   aspirate_clearance: 0.1
 
   - name: Mix Color 1
     source: source:A1

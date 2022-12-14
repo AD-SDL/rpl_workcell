@@ -15,13 +15,13 @@ modules:
   - name: sciclops
 
 flowdef:
-  - name: PCR Plate Exchange
-    module: sciclops
-    command: get_plate
-    args:
-      pos: "tower1"
-    checks: null
-    comment: Stage pcr plates
+  # - name: PCR Plate Exchange
+  #   module: sciclops
+  #   command: get_plate
+  #   args:
+  #     pos: "tower1"
+  #   checks: null
+  #   comment: Stage pcr plates
 
   - name: Move from Sciclops to OT2
     module: pf400

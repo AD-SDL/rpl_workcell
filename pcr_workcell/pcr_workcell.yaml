@@ -89,7 +89,8 @@ modules:
     positions:
       default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
-  # - name: compute
-  #   type: funcx
-  #   config:
-  #     endpoint:
+  - name: ur5
+    type: wei_ros_node
+    model: ur5
+    config:
+      ros_node: '/ur5_client/UR5_Client_Node'
