@@ -72,6 +72,11 @@ def generate_launch_description():
     name='use_biometra',
     default_value='True',
     description='Whether to start Biometra') 
+  
+  declare_use_biometra_cmd = DeclareLaunchArgument(
+    name='use_sciclops',
+    default_value='True',
+    description='Whether to start Sciclops') 
 
   # A fake_hardware to manipulate the joint state values
   start_joint_state_publisher_fake_hardware_node = Node(
@@ -132,12 +137,21 @@ def generate_launch_description():
     name = 'BiometraDescriptionNode',
     output = 'screen'
   )
+
   # Start Real Harware Hidex Joint State Publisher Client
   start_hidex_description_client = Node(
     condition=UnlessCondition(fake_hardware),
     package = "hidex_description",
     executable = 'hidex_description_client',
     name = 'HidexDescriptionNode',
+    output = 'screen'
+  )
+  # Start Real Harware Sciclops Joint State Publisher Client
+  start_sciclops_description_client = Node(
+    condition=UnlessCondition(fake_hardware),
+    package = "sciclops_description",
+    executable = 'sciclops_description_client',
+    name = 'SciclopsDescriptionNode',
     output = 'screen'
   )
    
@@ -165,6 +179,7 @@ def generate_launch_description():
   ld.add_action(start_azenta_description_client)
   ld.add_action(start_biometra_description_client)
   ld.add_action(start_hidex_description_client)
+  ld.add_action(start_sciclops_description_client)
 
 
   return ld
