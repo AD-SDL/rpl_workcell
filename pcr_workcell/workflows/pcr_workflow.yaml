@@ -92,13 +92,22 @@ flowdef:
     checks: null
     comment: null
 
-  - name: Move from pealer to final destination
+  - name: Move to final location
     module: pf400
     command: transfer
     args:
       source: peeler.positions.default
-      target: sciclops.positions.exchange
+      target: camera_module.positions.default
       source_plate_rotation: narrow
       target_plate_rotation: narrow
-    checks: null
-    comments: null
+
+  # - name: Move from pealer to final destination
+  #   module: pf400
+  #   command: transfer
+  #   args:
+  #     source: peeler.positions.default
+  #     target: sciclops.positions.exchange
+  #     source_plate_rotation: narrow
+  #     target_plate_rotation: narrow
+  #   checks: null
+  #   comments: null
