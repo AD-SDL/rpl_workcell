@@ -6,4 +6,4 @@
 ### Launch with fake robot hardware
 - `ros2 launch pf400_description pcr_workcell.launch.py fake_hardware:=True`
 
-![RViz PCR Workcell Visualization](https://github.com/AD-SDL/rpl_workcell/blob/doga_dev/resources/figures/pcr_workcell_rviz.png)
+![RViz PCR Workcell Visualization](https://github.com/AD-SDL/rpl_workcell/doga_dev/resources/figures/pcr_workcell_rviz.png)
