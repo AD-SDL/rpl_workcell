@@ -47,7 +47,7 @@ commands:
     mix_volume: 15
 
 metadata:
-  protocolName: All color mixing
+  protocolName: Color Mixing all
   author: Kyle khippe@anl.gov
   description: Mixing red colors
   apiLevel: "2.12"

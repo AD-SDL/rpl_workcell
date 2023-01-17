@@ -20,7 +20,8 @@ try:
     # Can this be an init to an executor callback?
     rclpy.init()
     wei_execution_node = weiExecNode()
-except ImportError:
+    print("Wei ros initialized")
+except ImportError as e:
     pass
 
 
@@ -83,13 +84,13 @@ def convert_volumes_to_payload(
         water_volumes.append(max_vol - (sum(color)))
         dest_wells.append(well)
 
-    return {
+    return {"ot2_payload": {
         "red_volumes": r_vol,
         "green_volumes": g_vol,
         "blue_volumes": b_vol,
         "water_volumes": water_volumes,
         "destination_wells": dest_wells,
-    }
+    }}
 
 
 def run(
@@ -118,6 +119,7 @@ def run(
             current_plate, out_dim=(solver.pop_size, 3), return_volumes=True
         )
         payload = convert_volumes_to_payload(plate_volumes)
+        print(payload)
         wei_client.run_workflow(
             workflow_id=protocol_id,
             payload=payload,
