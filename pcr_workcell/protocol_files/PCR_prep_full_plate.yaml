@@ -47,6 +47,8 @@ equipment:
     mount: right
 
 commands:
+  - name: Cool Block
+    change_temp: 4
   - name: BioWater # FILL TO 10 ML SO PIPETTE DOESNT GET WET
     source: 5:A1
     aspirate_clearance: 50
