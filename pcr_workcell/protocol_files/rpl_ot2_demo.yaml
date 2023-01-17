@@ -2,51 +2,58 @@ equipment:
   - name: nest_96_wellplate_2ml_deep
     location: "1"
     alias: forward
+    offset: [0, 1.7, 3.9]
   - name: nest_96_wellplate_2ml_deep
     location: "2"
     alias: backward
-  - name: nest_96_wellplate_100ul_pcr_full_skirt
+    offset: [0, 1, 1.4]
+  - name: nest_96_wellplate_100ul_pcr_full_skirt 
     location: "3"
-    alias: template
+    alias: dest
+    module: Temperature Module
+    offset: [1, 1.6, 11]
   - name: nest_96_wellplate_2ml_deep
     location: "4"
-    alias: dest
+    alias: template
+    offset: [0, 0, 1]
   - name: opentrons_96_tiprack_20ul
     location: "8"
-  - name: opentrons_96_tiprack_1000ul
+    offset: [0.2, 0.4, 0]
+  - name: opentrons_96_tiprack_20ul
     location: "7"
+    offset: [0.2, 0.4, 0]
+  - name: opentrons_96_tiprack_20ul
+    location: "10"
+    offset: [0.2, 0.4, 0]
+  - name: p20_single_gen2
+    mount: left
   - name: opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap
     location: "6"
+    offset: [0, 0, 0.5]
+  - name: opentrons_10_tuberack_nest_4x50ml_6x15ml_conical
+    location: "5"
+  - name: opentrons_96_tiprack_20ul
+    location: "11"
+    offset: [0.2, 0.4, 0]
+  - name: opentrons_96_tiprack_1000ul
+    location: "9"
+    offset: [0.5, 0.9, -0.3]
   - name: p1000_single_gen2
-    mount: left
-  - name: p20_single_gen2
     mount: right
+
 commands:
-  - name:  Step one
-    source: 4:[A1, A2, A3, A4, A5, A6, A7, A8]
-    aspirate_clearance: 1
-    destination: 2:[A1, A2, A3, A4, A5, A6, A7, A8]
-    dispense_clearance: 1
-    volume: [253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5,] # total: 2,028 uL
-  - name: Step two
-    source: 2:[A1, A2, A3, A4, A5, A6, A7, A8]
-    aspirate_clearance: 1
-    destination: 2:[A1, B1, C1, D1, E1, F1, G1, H1]
-    dispense_clearance: 1
-    volume: [20, 20, 20, 20, 20, 20, 20, 20]
-    mix_cycles: 3
-    mix_volume: 20
-  - name: step 3
-    source: 6:[A1, A3, A5]
-    aspirate_clearance: 1
-    destination: 4:[A1, C1, E1]
-    dispense_clearance: 1
-    volume: [20, 20, 20]
-    mix_cycles: 3
-    mix_volume: 20
+  - name: BioWater # FILL TO 10 ML SO PIPETTE DOESNT GET WET
+    source: 5:A1
+    aspirate_clearance: 50
+    destination: 5:C2
+    dispense_clearance: 2
+    volume: [676, 676, 676] # total: 2,028 uL
+    mix_cycles: 0
+    mix_volume: 0
+    drop_tip: [False, False, True]
 
 metadata:
-  protocolName: rpl demo
+  protocolName: PCR Prep Full Plate
   author: Abe astroka@anl.gov
-  description: demonstrates ot2 for rpl demo
+  description: mixing primers and templates with wells read in from file
   apiLevel: "2.12"
