@@ -47,6 +47,8 @@ equipment:
     mount: right
 
 commands:
+  - name: Cool Block
+    change_temp: 4
   - name: forward primer
     source: forward:Forward Primer
     aspirate_clearance: 0.1
