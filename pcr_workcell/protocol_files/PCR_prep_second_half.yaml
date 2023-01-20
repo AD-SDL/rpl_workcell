@@ -37,9 +37,6 @@ equipment:
     offset: [0, 0, 0.5]
   - name: opentrons_10_tuberack_nest_4x50ml_6x15ml_conical
     location: "5"
-  - name: opentrons_96_tiprack_20ul
-    location: "11"
-    offset: [0.2, 0.4, 0]
   - name: opentrons_96_tiprack_1000ul
     location: "9"
     offset: [0.5, 0.9, -0.3]
