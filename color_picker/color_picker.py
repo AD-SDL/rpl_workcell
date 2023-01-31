@@ -11,35 +11,44 @@ import numpy as np
 
 from evolutionary_solver import EvolutionaryColors
 from rpl_wei.wei_workcell_base import WEI
-
 from plate_color_analysis import get_colors_from_file
 
 
+def parse_args():
+    parser = ArgumentParser()
+    parser.add_argument(
+        "-wf", "--workflow", help="Path to workflow file", type=Path, required=True
+    )
+    parser.add_argument(
+        "--pop_size",
+        default=96,
+        type=int,
+        help="Population size (num wells to fill per iter)",
+    )
+    return parser.parse_args()
 
-def convert_volumes_to_payload(
-    volumes: List[List[float]], max_vol: float = 250.0
-) -> Dict[str, Any]:
+
+def convert_volumes_to_payload(volumes: List[List[float]]) -> Dict[str, Any]:
     well_rows = ["A", "B", "C", "D", "E", "F", "G", "H"]
     well_cols = [str(elem) for elem in range(1, 13)]
     well_names = ["".join(elem) for elem in product(well_rows, well_cols)]
     assert len(volumes) <= len(well_names)
     r_vol, g_vol, b_vol = [], [], []
-    water_volumes = []
     dest_wells = []
     for color, well in zip(volumes, well_names):
         r, g, b = color
         r_vol.append(r)
         g_vol.append(g)
         b_vol.append(b)
-        water_volumes.append(max_vol - (sum(color)))
         dest_wells.append(well)
 
     return {
-        "red_volumes": r_vol,
-        "green_volumes": g_vol,
-        "blue_volumes": b_vol,
-        "water_volumes": water_volumes,
-        "destination_wells": dest_wells,
+        "ot2_payload": {
+            "red_volumes": r_vol,
+            "green_volumes": g_vol,
+            "blue_volumes": b_vol,
+            "destination_wells": dest_wells,
+        }
     }
 
 
@@ -73,7 +82,7 @@ def run(
         print(payload)
         run_info = wei_client.run_workflow(
             workflow_id=protocol_id,
-            payload=payload
+            payload=payload,
         )
         
         #TODO: this will move to funcx
