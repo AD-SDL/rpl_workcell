@@ -18,6 +18,16 @@ modules:
     positions:
       final_destination: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
+  - name: pf400_camera_right
+    type: wei_ros_camera
+    config:
+      ros_node: "/std_ns/pf400_camera_right"
+
+  - name: pf400_camera_left
+    type: wei_ros_camera
+    config:
+      ros_node: "/std_ns/pf400_camera_left"
+
   - name: sciclops
     type: wei_ros_node
     model: sciclops
@@ -42,6 +52,12 @@ modules:
     positions:
       default: [225.521, -24.846, 244.836, 406.623, 80.967, 398.778]
 
+  - name: sp_module_camera
+    type: wei_ros_camera
+    config:
+      ros_node: "/std_ns/sp_module_camera"
+
+
   - name: ot2_pcr_alpha
     type: wei_ros_node 
     model: ot2
@@ -50,7 +66,7 @@ modules:
     positions:                                                    
       deck1_cooler: [247.999, -30.702, 275.835, 381.513, 124.830, -585.403] 
 
-  - name: ot2_growth_beta 
+  - name: ot2_pcr_beta 
     type: wei_ros_node 
     model: ot2
     config:
@@ -75,22 +91,23 @@ modules:
       default: [247.0, 40.698, 38.294, 728.332, 123.077, 301.082]
 
   - name: camera_module
-    type: wei_ros_node
+    type: wei_ros_camera
     config:
-      ros_node: "/std_ns/camera_module/camera0"
+      ros_node: "/std_ns/camera_module"
     positions:
-      default: [94.0, 29.226, 72.895, 705.537, 79.22, 985.122]
+      plate_station: [94.0, 29.226, 72.895, 705.537, 79.22, 985.122]
 
-  - name: hidex
-    type: wei_ros_node
-    model: hidex
-    config:
-      ros_node: hidex rosnode
-    positions:
-      default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
-  - name: ur5
-    type: wei_ros_node
-    model: ur5
-    config:
-      ros_node: '/ur5_client/UR5_Client_Node'
+  # - name: hidex
+  #   type: wei_ros_node
+  #   model: hidex
+  #   config:
+  #     ros_node: hidex rosnode
+  #   positions:
+  #     default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+  # - name: ur5
+  #   type: wei_ros_node
+  #   model: ur5
+  #   config:
+  #     ros_node: '/ur5_client/UR5_Client_Node'

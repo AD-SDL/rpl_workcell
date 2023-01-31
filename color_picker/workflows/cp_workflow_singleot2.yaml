@@ -27,38 +27,41 @@ flowdef:
   #   command: transfer
   #   args:
   #     source: sciclops.positions.exchange
-  #     target: ot2_gamma.positions.deck2
+  #     target: ot2_cp_gamma.positions.deck2
   #     source_plate_rotation: narrow
   #     target_plate_rotation: wide
   #   comment: Place plate in ot2
 
-  - name: Mix all colors
-    module: ot2_cp_gamma
-    command: run_protocol
-    args:
-      # Currently needs to be hardcoded absolution paths... need to get relative paths configured
-      config_path:  /home/rpl/workspace/rpl_workcell/color_picker/protocol_files/combined_protocol.yaml
-      red_volumes: payload.red_volumes
-      green_volumes: payload.green_volumes
-      blue_volumes: payload.blue_volumes
-      water_volumes: payload.water_volumes
-      destination_wells: payload.destination_wells
-    comment: Mix the red portions according to input data
+  # - name: Mix all colors
+  #   module: ot2_cp_gamma
+  #   command: run_protocol
+  #   args:
+  #     # Currently needs to be hardcoded absolution paths... need to get relative paths configured
+  #     config_path:  /home/rpl/workspace/rpl_workcell/color_picker/protocol_files/combined_protocol.yaml
+  #     red_volumes: payload.red_volumes
+  #     green_volumes: payload.green_volumes
+  #     blue_volumes: payload.blue_volumes
+  #     water_volumes: payload.water_volumes
+  #     destination_wells: payload.destination_wells
+  #   comment: Mix the red portions according to input data
 
   # - name: Move to Picture
   #   module: pf400
   #   command: transfer
   #   args:
-  #     source: ot2_gamma.positions.deck2
-  #     target: camera_module.locations.plate_station
+  #     source: ot2_cp_gamma.positions.deck2
+  #     target: camera_module.positions.plate_station
   #     source_plate_rotation: wide
   #     target_plate_rotation: narrow
 
-  # - name: Take Picture
-  #   module: camera
-  #   command: take_picture
-  #   args:
-  #     save_location: /path/to/save
+  - name: Take Picture
+    module: camera_module
+    command: take_picture
+    args:
+      save_location: local_run_results
+      file_name: "final_image.jpg"
+
+# local_run_results is a reserved word for now
 
   # - name: Move to final location
   #   module: pf400

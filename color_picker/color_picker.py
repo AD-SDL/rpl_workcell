@@ -11,62 +11,13 @@ import numpy as np
 
 from evolutionary_solver import EvolutionaryColors
 from rpl_wei.wei_workcell_base import WEI
-from rpl_wei.data_classes import Module, Step
 
-try:
-    import rclpy
-    from wei_executor.weiExecutorNode import weiExecNode
+from plate_color_analysis import get_colors_from_file
 
-    # Can this be an init to an executor callback?
-    rclpy.init()
-    wei_execution_node = weiExecNode()
-except ImportError:
-    pass
-
-
-def wei_service_callback(step: Step, **kwargs):
-
-    module: Module = kwargs["step_module"]
-
-    msg = {
-        "node": module.config["ros_node"],
-        "action_handle": step.command,
-        "action_vars": step.args,
-    }
-    print("\n Callback message:")
-    print(msg)
-    print()
-
-    wei_execution_node.send_wei_command(
-        msg["node"], msg["action_handle"], msg["action_vars"]
-    )
-
-
-def testing_callback(step: Step, **kwargs):
-    print(step)
-    print()
-
-
-def silent_callback(step: Step, **kwargs):
-    pass
-
-
-def parse_args():
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-wf", "--workflow", help="Path to workflow file", type=Path, required=True
-    )
-    parser.add_argument(
-        "--pop_size",
-        default=96,
-        type=int,
-        help="Population size (num wells to fill per iter)",
-    )
-    return parser.parse_args()
 
 
 def convert_volumes_to_payload(
-    volumes: List[List[float]], max_vol: float = 30.0
+    volumes: List[List[float]], max_vol: float = 250.0
 ) -> Dict[str, Any]:
     well_rows = ["A", "B", "C", "D", "E", "F", "G", "H"]
     well_cols = [str(elem) for elem in range(1, 13)]
@@ -110,24 +61,27 @@ def run(
         3. grade population
     while num_exps < threshhold and solution not found
     """
-    show_visuals = True
+    show_visuals = False
     num_exps = 0
     current_plate = None
+    print("Starting", num_exps + solver.pop_size <= exp_budget)
     while num_exps + solver.pop_size <= exp_budget:
         plate_volumes = solver.run_iteration(
             current_plate, out_dim=(solver.pop_size, 3), return_volumes=True
         )
         payload = convert_volumes_to_payload(plate_volumes)
-        wei_client.run_workflow(
+        print(payload)
+        run_info = wei_client.run_workflow(
             workflow_id=protocol_id,
-            payload=payload,
-            callbacks=[wei_service_callback],
+            payload=payload
         )
-        # need to return run_id from wei_client
-        """run_id = wei_client.run_workflow(workflow_id=protocol_id, payload=payload)
-        # Need info from camera something like this
-        result = wei_client.get_workflow_results(run_id)
-        plate_colors_ratios = solver.read_camera(result)"""
+        
+        #TODO: this will move to funcx
+        #analize image
+        img_path = run_info['run_dir'] / 'results' / 'final_image.jpg'
+        plate_colors_ratios = get_colors_from_file(img_path)
+        print(plate_colors_ratios)
+
         # going to convert back to ratios for now
         plate_color_ratios = [
             (np.asarray(elem) / 30).tolist() for elem in plate_volumes
@@ -150,6 +104,7 @@ def run(
             plt.show()
 
     if show_visuals:
+        import matplotlib.pyplot as plt
         f, axarr = plt.subplots(1, 2)
         best_color = solver.current_best_color.color
         target_color = solver.target.get_value_tuple()
@@ -160,8 +115,25 @@ def run(
 
         plt.show()
 
+def parse_args():
+    parser = ArgumentParser()
+    parser.add_argument(
+        "-wf", "--workflow", help="Path to workflow file", type=Path, required=True
+    )
+    parser.add_argument(
+        "--pop_size",
+        default=96,
+        type=int,
+        help="Population size (num wells to fill per iter)",
+    )
+    return parser.parse_args()
+
 
 def main(args):
+    
+    
+    
+    #workflows/cp_workflow_singleot2.yaml
     wf_file_path = args.workflow.resolve()
 
     wei_client = WEI(

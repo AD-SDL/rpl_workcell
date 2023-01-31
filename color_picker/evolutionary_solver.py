@@ -176,11 +176,6 @@ class EvolutionaryColors:
 
         return new_pop
 
-    def read_picture(self, pic):
-        # get_colors(pic) returns 11 possible plates for use in an OT2
-        # This script assumes only 1 plate outside at OT2, so replace
-        # get_colors(pic) with get_colors(pic)[1]
-        return get_colors(pic)[1]
 
 
 def make_random_plate(dim: Tuple[int] = ()) -> List[List[List[float]]]:

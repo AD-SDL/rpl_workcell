@@ -3,7 +3,7 @@ equipment:
     location: "7"
     alias: source
   - name: corning_96_wellplate_360ul_flat
-    location: "1"
+    location: "2"
     alias: dest
   - name: opentrons_96_tiprack_1000ul
     location: "10"
