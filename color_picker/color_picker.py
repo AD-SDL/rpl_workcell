@@ -11,45 +11,6 @@ import numpy as np
 
 from evolutionary_solver import EvolutionaryColors
 from rpl_wei.wei_workcell_base import WEI
-from rpl_wei.data_classes import Module, Step
-
-try:
-    import rclpy
-    from wei_executor.weiExecutorNode import weiExecNode
-
-    # Can this be an init to an executor callback?
-    rclpy.init()
-    wei_execution_node = weiExecNode()
-    print("Wei ros initialized")
-except ImportError as e:
-    pass
-
-
-def wei_service_callback(step: Step, **kwargs):
-
-    module: Module = kwargs["step_module"]
-
-    msg = {
-        "node": module.config["ros_node"],
-        "action_handle": step.command,
-        "action_vars": step.args,
-    }
-    print("\n Callback message:")
-    print(msg)
-    print()
-
-    wei_execution_node.send_wei_command(
-        msg["node"], msg["action_handle"], msg["action_vars"]
-    )
-
-
-def testing_callback(step: Step, **kwargs):
-    print(step)
-    print()
-
-
-def silent_callback(step: Step, **kwargs):
-    pass
 
 
 def parse_args():
@@ -66,31 +27,28 @@ def parse_args():
     return parser.parse_args()
 
 
-def convert_volumes_to_payload(
-    volumes: List[List[float]], max_vol: float = 30.0
-) -> Dict[str, Any]:
+def convert_volumes_to_payload(volumes: List[List[float]]) -> Dict[str, Any]:
     well_rows = ["A", "B", "C", "D", "E", "F", "G", "H"]
     well_cols = [str(elem) for elem in range(1, 13)]
     well_names = ["".join(elem) for elem in product(well_rows, well_cols)]
     assert len(volumes) <= len(well_names)
     r_vol, g_vol, b_vol = [], [], []
-    water_volumes = []
     dest_wells = []
     for color, well in zip(volumes, well_names):
         r, g, b = color
         r_vol.append(r)
         g_vol.append(g)
         b_vol.append(b)
-        water_volumes.append(max_vol - (sum(color)))
         dest_wells.append(well)
 
-    return {"ot2_payload": {
-        "red_volumes": r_vol,
-        "green_volumes": g_vol,
-        "blue_volumes": b_vol,
-        "water_volumes": water_volumes,
-        "destination_wells": dest_wells,
-    }}
+    return {
+        "ot2_payload": {
+            "red_volumes": r_vol,
+            "green_volumes": g_vol,
+            "blue_volumes": b_vol,
+            "destination_wells": dest_wells,
+        }
+    }
 
 
 def run(
@@ -123,7 +81,6 @@ def run(
         wei_client.run_workflow(
             workflow_id=protocol_id,
             payload=payload,
-            callbacks=[wei_service_callback],
         )
         # need to return run_id from wei_client
         """run_id = wei_client.run_workflow(workflow_id=protocol_id, payload=payload)

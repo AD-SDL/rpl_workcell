@@ -88,7 +88,7 @@ class EvolutionaryColors:
     def convert_ratios_to_volumes(
         self,
         color_ratios: List[List[Union[sRGBColor, float]]],
-        total_volume: float = 30.0,
+        total_volume: float = 275.0,
     ) -> List[List[float]]:
         sanitized_colors = []
         for color in color_ratios:
