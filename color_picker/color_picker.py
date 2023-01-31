@@ -47,7 +47,7 @@ def convert_volumes_to_payload(volumes: List[List[float]]) -> Dict[str, Any]:
             "red_volumes": r_vol,
             "green_volumes": g_vol,
             "blue_volumes": b_vol,
-            "destination_wells": dest_wells,
+            "destination_wells": f"dest:{dest_wells}",
         }
     }
 
@@ -84,10 +84,10 @@ def run(
             workflow_id=protocol_id,
             payload=payload,
         )
-        
-        #TODO: this will move to funcx
-        #analize image
-        img_path = run_info['run_dir'] / 'results' / 'final_image.jpg'
+
+        # TODO: this will move to funcx
+        # analize image
+        img_path = run_info["run_dir"] / "results" / "final_image.jpg"
         plate_colors_ratios = get_colors_from_file(img_path)
         print(plate_colors_ratios)
 
@@ -114,6 +114,7 @@ def run(
 
     if show_visuals:
         import matplotlib.pyplot as plt
+
         f, axarr = plt.subplots(1, 2)
         best_color = solver.current_best_color.color
         target_color = solver.target.get_value_tuple()
@@ -123,6 +124,7 @@ def run(
         axarr[1].set_title("Target Color")
 
         plt.show()
+
 
 def parse_args():
     parser = ArgumentParser()
@@ -139,10 +141,8 @@ def parse_args():
 
 
 def main(args):
-    
-    
-    
-    #workflows/cp_workflow_singleot2.yaml
+
+    # workflows/cp_workflow_singleot2.yaml
     wf_file_path = args.workflow.resolve()
 
     wei_client = WEI(
