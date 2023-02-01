@@ -1,0 +1,51 @@
+metadata:
+  name: PCR - Workflow
+  author: Casey Stone, Rafael Vescovi
+  info: Initial PCR workflow for RPL workcell
+  version: 0.1
+
+workcell: /home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_workcell.yaml
+
+modules:
+  - name: camera_module
+
+
+flowdef:
+
+  - name: Take Picture module1
+    module: camera_module
+    command: take_picture
+    args:
+      file_name: 'camera_test1.jpg'
+      save_location: local_run_results
+
+  - name: Take Picture module1
+    module: camera_module
+    command: take_picture
+    args:
+      file_name: 'camera_test1_90.jpg'
+      save_location: local_run_results
+      rotation: 90
+
+
+  - name: Take Picture SP module
+    module: sp_module_camera
+    command: take_picture
+    args:
+      file_name: 'sp_module.jpg'
+      save_location: local_run_results
+
+
+  - name: take Picture pf400 right
+    module: pf400_camera_right
+    command: take_picture
+    args:
+      file_name: 'pf400_right.jpg'
+      save_location: local_run_results
+
+  - name: take Picture pf400 right
+    module: pf400_camera_left
+    command: take_picture
+    args:
+      file_name: 'pf400_left.jpg'
+      save_location: local_run_results

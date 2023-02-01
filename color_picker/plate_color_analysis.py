@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING, Callable, Dict, List, Optional, Tuple
+from pathlib import Path
 
 import cv2
 import numpy as np
@@ -159,8 +160,8 @@ def _find_fiducials(
     "npt.NDArray[np.int32]"
         IDs of detected fiducials.
     """
-    aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_1000)
-    parameters = cv2.aruco.DetectorParameters_create()
+    aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_1000)
+    parameters = cv2.aruco.DetectorParameters()
     corners, ids, _ = cv2.aruco.detectMarkers(
         _any2gray(img), aruco_dict, parameters=parameters
     )
@@ -717,6 +718,60 @@ def _proximity_to_center(img: cv2.Mat, plate: "npt.NDArray[np.int64]") -> np.flo
 
     return np.linalg.norm([dx, dy])
 
+def match_size(img: cv2.Mat, shape: Tuple[int, int]) -> cv2.Mat:
+    """Resizes and crops the input image to match the desired resolution.
+
+    Parameters
+    ----------
+    img : cv2.Mat
+        Input image.
+    shape : Tuple[int, int]
+        The desired resolution.
+
+    Returns
+    -------
+    cv2.Mat
+        Output image that has the specified shape.
+
+    Note
+    ----
+    Only used for testing purposes.
+    """
+    min_img = min(img.shape[:2])
+    max_img = max(img.shape[:2])
+
+    min_out = min(shape)
+    max_out = max(shape)
+
+    ar_img = max_img / min_img
+    ar_out = max_out / min_out
+
+    if ar_img >= ar_out:
+        resize_amount = min_out / min_img
+        B = min_out
+        C = max_out
+    else:
+        resize_amount = max_out / max_img
+        B = max_out
+        C = min_out
+
+    img = cv2.resize(img, None, fx=resize_amount, fy=resize_amount)
+    if img.shape[0] == B:
+        diff = img.shape[1] - C
+        a = diff // 2
+        b = diff - a
+        img = img[:, a:-b]
+    else:
+        diff = img.shape[0] - C
+        a = diff // 2
+        b = diff - a
+        img = img[a:-b]
+
+    if shape != img.shape[:2]:
+        img = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
+
+    return img
+
 
 def get_colors(img: cv2.Mat) -> Dict[int, Dict[str, "npt.NDArray[np.int64]"]]:
     """Process :code:`img` matrix to get BGR colors.
@@ -780,56 +835,8 @@ def get_colors(img: cv2.Mat) -> Dict[int, Dict[str, "npt.NDArray[np.int64]"]]:
     return platesD
 
 
-def match_size(img: cv2.Mat, shape: Tuple[int, int]) -> cv2.Mat:
-    """Resizes and crops the input image to match the desired resolution.
-
-    Parameters
-    ----------
-    img : cv2.Mat
-        Input image.
-    shape : Tuple[int, int]
-        The desired resolution.
-
-    Returns
-    -------
-    cv2.Mat
-        Output image that has the specified shape.
-
-    Note
-    ----
-    Only used for testing purposes.
-    """
-    min_img = min(img.shape[:2])
-    max_img = max(img.shape[:2])
-
-    min_out = min(shape)
-    max_out = max(shape)
-
-    ar_img = max_img / min_img
-    ar_out = max_out / min_out
-
-    if ar_img >= ar_out:
-        resize_amount = min_out / min_img
-        B = min_out
-        C = max_out
-    else:
-        resize_amount = max_out / max_img
-        B = max_out
-        C = min_out
-
-    img = cv2.resize(img, None, fx=resize_amount, fy=resize_amount)
-    if img.shape[0] == B:
-        diff = img.shape[1] - C
-        a = diff // 2
-        b = diff - a
-        img = img[:, a:-b]
-    else:
-        diff = img.shape[0] - C
-        a = diff // 2
-        b = diff - a
-        img = img[a:-b]
-
-    if shape != img.shape[:2]:
-        img = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
-
-    return img
+def get_colors_from_file(img_path: Path) -> Dict[int, Dict[str, "npt.NDArray[np.int64]"]]:
+    print(img_path)
+    img = cv2.imread(str(img_path)) # Load image
+    img = match_size(img, (1280, 1920)) # Crop image
+    return get_colors(img) # Analyze image for colors
