@@ -106,9 +106,16 @@ def run(
 
             # TODO: this will move to funcx
             # analize image
-            # img_path = run_info["run_dir"] / "results" / "final_image.jpg"
-            # plate_colors_ratios = get_colors_from_file(img_path)
-            # print(plate_colors_ratios)
+            img_path = run_info["run_dir"] / "results" / "final_image.jpg"
+            # output should be list [pop_size, 3]
+            plate_colors_ratios = get_colors_from_file(img_path)
+            print(plate_colors_ratios)
+
+            # save the plate colors as csv
+            with open(run_info["run_dir"] / "results" / "plate_colors.csv", "w") as f:
+                for color in plate_colors_ratios:
+                    f.write("%s,%s,%s" % (color[0], color[1], color[2]))
+                    f.write("\n")
 
         else:
             # going to convert back to ratios for now
@@ -159,6 +166,8 @@ def run(
         axarr[1].set_title("Target Color")
 
         plt.show()
+        if not simulate:
+            plt.savefig(run_info["run_dir"] / "results" / "final_plot.png", dpi=300)
 
     print("This is our best color so far")
     print(cur_best_color)
