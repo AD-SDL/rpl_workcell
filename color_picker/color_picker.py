@@ -43,12 +43,10 @@ def convert_volumes_to_payload(volumes: List[List[float]]) -> Dict[str, Any]:
         dest_wells.append(well)
 
     return {
-        "ot2_payload": {
-            "red_volumes": r_vol,
-            "green_volumes": g_vol,
-            "blue_volumes": b_vol,
-            "destination_wells": f"dest:{dest_wells}",
-        }
+        "red_volumes": r_vol,
+        "green_volumes": g_vol,
+        "blue_volumes": b_vol,
+        "destination_wells": f"dest:{dest_wells}",
     }
 
 
