@@ -62,7 +62,7 @@ def run(
     solver: EvolutionaryColorSolver = EvolutionaryColorSolver,
     exp_budget: int = 96 * 3,
     pop_size: int = 96,
-    solver_out_dim: Tuple[int] = (96, 3),
+    solver_out_dim: Tuple[int, int] = (96, 3),
     plate_max_volume: float = 275.0,
     simulate: bool = False,
 ) -> None:
