@@ -41,16 +41,12 @@ def convert_volumes_to_payload(volumes: List[List[float]]) -> Dict[str, Any]:
         g_vol.append(g)
         b_vol.append(b)
         dest_wells.append(well)
-
     return {
-        "ot2_payload": {
             "red_volumes": r_vol,
             "green_volumes": g_vol,
             "blue_volumes": b_vol,
-            "destination_wells": f"dest:{dest_wells}",
+            "destination_wells": dest_wells
         }
-    }
-
 
 def run(
     wei_client: WEI,
@@ -79,7 +75,6 @@ def run(
             current_plate, out_dim=(solver.pop_size, 3), return_volumes=True
         )
         payload = convert_volumes_to_payload(plate_volumes)
-        print(payload)
         run_info = wei_client.run_workflow(
             workflow_id=protocol_id,
             payload=payload,
@@ -93,7 +88,7 @@ def run(
 
         # going to convert back to ratios for now
         plate_color_ratios = [
-            (np.asarray(elem) / 30).tolist() for elem in plate_volumes
+            (np.asarray(elem) / 275).tolist() for elem in plate_volumes
         ]
         current_plate = plate_color_ratios
         num_exps += solver.pop_size
@@ -125,6 +120,8 @@ def run(
 
         plt.show()
 
+    print('This is our best color so far')
+    print(solver.current_best_color)
 
 def parse_args():
     parser = ArgumentParser()
