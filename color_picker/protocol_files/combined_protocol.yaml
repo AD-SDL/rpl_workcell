@@ -1,15 +1,15 @@
 equipment:
-  - name: opentrons_6_tuberack_nest_50ml_conical
-    location: "7"
-    alias: source
   - name: corning_96_wellplate_360ul_flat
     location: "2"
     alias: dest
-  - name: opentrons_96_tiprack_1000ul
+  - name: opentrons_6_tuberack_nest_50ml_conical
+    location: "7"
+    alias: source
+  - name: opentrons_96_tiprack_300ul
     location: "10"
   - name: opentrons_96_tiprack_20ul
     location: "11"
-  - name: p1000_single_gen2
+  - name: p300_single_gen2
     mount: left
   - name: p20_single_gen2
     mount: right
