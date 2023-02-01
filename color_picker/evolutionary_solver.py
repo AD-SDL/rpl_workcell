@@ -11,8 +11,6 @@ from colormath.color_objects import sRGBColor, LabColor
 from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie2000
 
-from plate_color_analysis import get_colors
-
 
 class BestColor(BaseModel):
     color: List[float]
