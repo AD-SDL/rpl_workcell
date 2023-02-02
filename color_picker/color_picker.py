@@ -108,14 +108,16 @@ def run(
             # analize image
             img_path = run_info["run_dir"] / "results" / "final_image.jpg"
             # output should be list [pop_size, 3]
-            plate_colors_ratios = get_colors_from_file(img_path)
-            print(plate_colors_ratios)
-
-            # save the plate colors as csv
-            with open(run_info["run_dir"] / "results" / "plate_colors.csv", "w") as f:
-                for color in plate_colors_ratios:
-                    f.write("%s,%s,%s" % (color[0], color[1], color[2]))
+            plate_colors_ratios = get_colors_from_file(img_path)[1]
+            plate_colors_ratios = {a:b[::-1] for a,b in plate_colors_ratios.items()}  
+            current_plate = []
+            with open(run_info["run_dir"] / "results" / "plate_all_colors.csv", "w") as f:
+                for well, color in list(plate_colors_ratios.items())[:pop_size]:
+                    f.write("%s, %s,%s,%s" % (well, color[0], color[1], color[2]))
                     f.write("\n")
+                    if well in payload['destination_wells']:
+                        current_plate.append(color)
+            
 
         else:
             # going to convert back to ratios for now
@@ -123,15 +125,18 @@ def run(
                 (np.asarray(elem) / 275).tolist() for elem in plate_volumes
             ]
 
-        plate_best_color_ind = solver._find_best_color(plate_color_ratios, target_color)
-        plate_best_color = plate_color_ratios[plate_best_color_ind]
+        plate_color_ratios = [
+            (np.asarray(elem) / 275).tolist() for elem in plate_volumes
+        ]
+
+        plate_best_color_ind = solver._find_best_color(current_plate, target_color)
+        plate_best_color = current_plate[plate_best_color_ind]
         plate_best_diff = solver._color_diff(plate_best_color, target_color)
 
         if plate_best_diff < cur_best_diff:
             cur_best_diff = plate_best_diff
             cur_best_color = plate_best_color
 
-        current_plate = plate_color_ratios
         num_exps += pop_size
 
         if show_visuals:
@@ -141,17 +146,22 @@ def run(
             # set figure size to 10x10
             f.set_figheight(10)
             f.set_figwidth(10)
-            graph_vis = np.asarray(current_plate)
+            graph_vis = np.asarray(plate_color_ratios)
             graph_vis = graph_vis.reshape(*solver_out_dim)
+            plate_vis = np.asarray(current_plate)
+            plate_vis = plate_vis.reshape(*solver_out_dim)
             target_color = target_color
             axarr[0][0].imshow([graph_vis])
             axarr[0][0].set_title("Experiment plate")
+            axarr[1][0].imshow([plate_vis])
+            axarr[1][0].set_title("Real plate")
             axarr[0][1].imshow([[target_color]])
             axarr[0][1].set_title("Target Color")
             axarr[1][1].imshow([[cur_best_color]])
             axarr[1][1].set_title("Experiment best color")
             f.suptitle("PAUSING HERE TO MOVE THE PLATE")
             plt.show()
+            # plt.imsave(run_info["run_dir"] / "results" / "experiment_summary.jpg")
 
     if show_visuals:
         import matplotlib.pyplot as plt
@@ -175,8 +185,8 @@ def run(
 
 def main(args):
 
-    # target_ratio = [101, 173, 95]
-    target_ratio = [1, 93, 82]
+    target_ratio = [101, 148, 30]
+    #target_ratio = [1, 93, 82]
     # Not needed for now
     # mixing_colors = [[255, 0, 0], [0, 255, 0], [0, 0, 255]]
 
