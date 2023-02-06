@@ -7,6 +7,7 @@ from typing import List, Dict, Any, Tuple
 from itertools import product
 from uuid import UUID
 from typing import Optional
+from threading import Thread
 
 import numpy as np
 
@@ -33,6 +34,31 @@ def convert_volumes_to_payload(volumes: List[List[float]]) -> Dict[str, Any]:
         "destination_wells": dest_wells,
     }
 
+def wei_run_flow(payload):
+    wf_file_path = args.workflow.resolve()
+
+    wei_client = WEI(wf_file_path)
+    protocol_id = list(wei_client.get_workflows().keys())[0]          
+    run_info = wei_client.run_workflow(
+        workflow_id=protocol_id,
+        payload=payload,
+    )
+    return run_info
+
+class ThreadWithReturnValue(Thread):
+    
+    def __init__(self, group=None, target=None, name=None,
+                 args=(), kwargs={}, Verbose=None):
+        Thread.__init__(self, group, target, name, args, kwargs)
+        self._return = None
+
+    def run(self):
+        if self._target is not None:
+            self._return = self._target(*self._args,
+                                                **self._kwargs)
+    def join(self, *args):
+        Thread.join(self, *args)
+        return self._return
 
 def run(
     target_color: List[float],
@@ -59,6 +85,7 @@ def run(
     show_visuals = True
     num_exps = 0
     current_plate = None
+    plate_n=0
     print(
         "Starting experiment, can run at least one iteration:",
         num_exps + pop_size <= exp_budget,
@@ -76,19 +103,23 @@ def run(
             return_max_volume=plate_max_volume,
         )
 
+
         if not simulate:
             payload = convert_volumes_to_payload(plate_volumes)
-            run_info = wei_client.run_workflow(
-                workflow_id=protocol_id,
-                payload=payload,
-            )
+            if plate_n:
+                used_pip = plate_n*pop_size*3
+                payload
+            iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'payload':payload})
+            iter_thread.run()
+            # iter_thread.join()
+            run_info = iter_thread._return
 
-            # TODO: this will move to funcx
             # analize image
-            img_path = run_info["run_dir"] / "results" / "final_image.jpg"
             # output should be list [pop_size, 3]
+            img_path = run_info["run_dir"] / "results" / "final_image.jpg"
             plate_colors_ratios = get_colors_from_file(img_path)[1]
             plate_colors_ratios = {a:b[::-1] for a,b in plate_colors_ratios.items()}  
+           
             current_plate = []
             with open(run_info["run_dir"] / "results" / "plate_all_colors.csv", "w") as f:
                 for well, color in list(plate_colors_ratios.items())[:pop_size]:
@@ -96,8 +127,7 @@ def run(
                     f.write("\n")
                     if well in payload['destination_wells']:
                         current_plate.append(color)
-            
-
+            plate_n = plate_n + 1 
         else:
             # going to convert back to ratios for now
             plate_color_ratios = [
@@ -193,22 +223,6 @@ def main(args):
     # mixing_colors = [[255, 0, 0], [0, 255, 0], [0, 0, 255]]
 
     run_args = {}
-    if not args.simulate:
-        # workflows/cp_workflow_singleot2.yaml
-        wf_file_path = args.workflow.resolve()
-
-        wei_client = WEI(
-            wf_file_path,
-            workcell_log_level=logging.DEBUG,
-            workflow_log_level=logging.DEBUG,
-        )
-        protocol_id = list(wei_client.get_workflows().keys())[0]
-
-        run_args = {
-            "wei_client": wei_client,
-            "protocol_id": protocol_id,
-        }
-
     run_args["target_color"] = target_ratio
     run_args["solver"] = EvolutionaryColorSolver
     run_args["exp_budget"] = args.exp_budget
