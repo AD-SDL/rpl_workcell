@@ -11,8 +11,8 @@ equipment:
     location: "11"
   - name: p300_single_gen2
     mount: left
-  - name: p20_single_gen2
-    mount: right
+  # - name: p20_single_gen2
+  #   mount: right
 
 commands:
   # - name: add water
@@ -44,7 +44,7 @@ commands:
     dispense_clearance: 2
     aspirate_clearance: 0.1
     mix_cycles: 3
-    mix_volume: 15
+    mix_volume: 100
 
 metadata:
   protocolName: Color Mixing all

@@ -13,27 +13,6 @@ import numpy as np
 from evolutionary_solver import EvolutionaryColorSolver
 
 
-def parse_args():
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-wf", "--workflow", help="Path to workflow file", type=Path, required=True
-    )
-    parser.add_argument(
-        "--pop_size",
-        default=96,
-        type=int,
-        help="Population size (num wells to fill per iter)",
-    )
-    parser.add_argument(
-        "--exp_budget", default=96 * 3, type=int, help="Experiment budget"
-    )
-    parser.add_argument(
-        "--simulate", action="store_true", help="Simulate workflow, no WEI "
-    )
-    parser.add_argument("--plate_max_volume", default=275.0, type=float)
-    return parser.parse_args()
-
-
 def convert_volumes_to_payload(volumes: List[List[float]]) -> Dict[str, Any]:
     well_rows = ["A", "B", "C", "D", "E", "F", "G", "H"]
     well_cols = [str(elem) for elem in range(1, 13)]
@@ -182,10 +161,33 @@ def run(
     print("This is our best color so far")
     print(cur_best_color)
 
+def parse_args():
+    parser = ArgumentParser()
+    parser.add_argument(
+        "-wf", "--workflow", help="Path to workflow file", type=Path, required=True
+    )
+    parser.add_argument(
+        "--pop_size",
+        default=96,
+        type=int,
+        help="Population size (num wells to fill per iter)",
+    )
+    parser.add_argument(
+        "--exp_budget", default=96 * 3, type=int, help="Experiment budget"
+    )
+    parser.add_argument(
+        "--target","-t", default="[101, 148, 30]", help="Simulate workflow, no WEI "
+    )
+    parser.add_argument(
+        "--simulate", action="store_true", help="Simulate workflow, no WEI "
+    )
+    parser.add_argument("--plate_max_volume", default=275.0, type=float)
+    return parser.parse_args()
+
 
 def main(args):
 
-    target_ratio = [101, 148, 30]
+    target_ratio = eval(args.target)
     #target_ratio = [1, 93, 82]
     # Not needed for now
     # mixing_colors = [[255, 0, 0], [0, 255, 0], [0, 0, 255]]
