@@ -32,7 +32,7 @@ def wei_service_callback(step: Step, **kwargs):
     )
 
 def main():
-    wf_path = Path('/home/rpl/workspace/rpl_workcell/pcr_workcell/workflows/demo.yaml')
+    wf_path = Path('/home/rpl/rpl_ws/src/rpl_workcell/pcr_workcell/workflows/demo.yaml')
 
     wei_client = WEI(
         wf_path.resolve(),
