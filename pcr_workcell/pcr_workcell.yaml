@@ -16,7 +16,17 @@ modules:
     config:
       ros_node: "/std_ns/pf400Node"
     positions:
-      final_destination: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+      trash: [218.457, -2.408, 38.829, 683.518, 89.109, 995.074]
+
+  - name: pf400_camera_right
+    type: wei_ros_camera
+    config:
+      ros_node: "/std_ns/pf400_camera_right"
+
+  - name: pf400_camera_left
+    type: wei_ros_camera
+    config:
+      ros_node: "/std_ns/pf400_camera_left"
 
   - name: sciclops
     type: wei_ros_node
@@ -42,6 +52,12 @@ modules:
     positions:
       default: [225.521, -24.846, 244.836, 406.623, 80.967, 398.778]
 
+  - name: sp_module_camera
+    type: wei_ros_camera
+    config:
+      ros_node: "/std_ns/sp_module_camera"
+
+
   - name: ot2_pcr_alpha
     type: wei_ros_node 
     model: ot2
@@ -50,7 +66,7 @@ modules:
     positions:                                                    
       deck1_cooler: [247.999, -30.702, 275.835, 381.513, 124.830, -585.403] 
 
-  - name: ot2_growth_beta 
+  - name: ot2_pcr_beta 
     type: wei_ros_node 
     model: ot2
     config:
@@ -62,7 +78,7 @@ modules:
     type: wei_ros_node 
     model: ot2
     config:
-      ros_node: "/std_ns/ot2_cp_gamma"                 
+      ros_node: "/std_ns/ot2_cp_gamma"             
     positions:                                                    
       deck2: [161.481, 60.986, 88.774, 657.358, 124.091, -951.510]
 
@@ -75,21 +91,22 @@ modules:
       default: [247.0, 40.698, 38.294, 728.332, 123.077, 301.082]
 
   - name: camera_module
-    type: wei_ros_node
+    type: wei_ros_camera
     config:
-      ros_node: "/std_ns/camera_module/camera0"
+      ros_node: "/std_ns/camera_module"
     positions:
-      default: [94.0, 29.226, 72.895, 705.537, 79.22, 985.122]
+      plate_station: [90.597,26.416, 66.422, 714.811, 81.916, 995.074]
 
-  - name: hidex
-    type: wei_ros_node
-    model: hidex
-    config:
-      ros_node: hidex rosnode
-    positions:
-      default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-
-  # - name: compute
-  #   type: funcx
+  # - name: hidex
+  #   type: wei_ros_node
+  #   model: hidex
   #   config:
-  #     endpoint:
+  #     ros_node: hidex rosnode
+  #   positions:
+  #     default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+  # - name: ur5
+  #   type: wei_ros_node
+  #   model: ur5
+  #   config:
+  #     ros_node: '/ur5_client/UR5_Client_Node'

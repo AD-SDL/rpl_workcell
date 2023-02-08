@@ -1,0 +1,18 @@
+metadata:
+  name: Exploration Workflow Test
+  author: Doga Ozgubas, Rafael Vescov
+  info: Initial workflow for workcell validation
+  version: 0.1
+
+workcell: /home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_workcell.yaml
+
+modules:
+  - name: ur5
+
+flowdef:
+  - name: Explore modules
+    module: ur5
+    command: transfer
+    args: 
+      pos1: [-0.18, 0.79, 0.39, -0.01, -3.13, -0.01]
+      pos2: [-0.18, 0.79, 0.39, -0.01, -3.13, -0.01]

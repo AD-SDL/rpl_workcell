@@ -21,15 +21,6 @@ equipment:
     location: "4"
     alias: template
     offset: [0, 0, 1]
-  - name: opentrons_96_tiprack_20ul
-    location: "8"
-    offset: [0.2, 0.4, 0]
-  - name: opentrons_96_tiprack_20ul
-    location: "7"
-    offset: [0.2, 0.4, 0]
-  - name: opentrons_96_tiprack_20ul
-    location: "10"
-    offset: [0.2, 0.4, 0]
   - name: p20_single_gen2
     mount: left
   - name: opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap
@@ -108,37 +99,9 @@ commands:
     dispense_clearance: 1
     volume: 15
     drop_tip: False
-  - name: forward primer
-    source: forward:Forward Primer
-    aspirate_clearance: 0.1
-    destination: dest:Destination
-    dispense_clearance: 2
-    volume: Primer Volume
-    mix_cycles: 3
-    mix_volume: 15
-    drop_tip: True
-  - name: backward primer
-    source: backward:Backward Primer
-    aspirate_clearance: 0.1
-    destination: dest:Destination
-    dispense_clearance: 2
-    volume: Primer Volume
-    mix_cycles: 3
-    mix_volume: 15
-    drop_tip: True
-  - name: template
-    source: template:DNA
-    aspirate_clearance: 0.1
-    destination: dest:Destination
-    dispense_clearance: 2
-    volume: Template Volume
-    mix_cycles: 3
-    mix_volume: 15
-    drop_tip: True
 
 metadata:
   protocolName: PCR Prep Full Plate
   author: Abe astroka@anl.gov
   description: mixing primers and templates with wells read in from file
   apiLevel: "2.12"
-
