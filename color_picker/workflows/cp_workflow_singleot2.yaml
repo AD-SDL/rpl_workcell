@@ -44,28 +44,28 @@ flowdef:
       destination_wells: payload.destination_wells
     comment: Mix the red portions according to input data
 
-  - name: Move to Picture
-    module: pf400
-    command: transfer
-    args:
-      source: ot2_cp_gamma.positions.deck2
-      target: camera_module.positions.plate_station
-      source_plate_rotation: wide
-      target_plate_rotation: narrow
+  # - name: Move to Picture
+  #   module: pf400
+  #   command: transfer
+  #   args:
+  #     source: ot2_cp_gamma.positions.deck2
+  #     target: camera_module.positions.plate_station
+  #     source_plate_rotation: wide
+  #     target_plate_rotation: narrow
 
-  - name: Take Picture
-    module: camera_module
-    command: take_picture
-    args:
-      save_location: local_run_results
-      file_name: "final_image.jpg"
+  # - name: Take Picture
+  #   module: camera_module
+  #   command: take_picture
+  #   args:
+  #     save_location: local_run_results
+  #     file_name: "final_image.jpg"
 
 
-  - name: Move to final location
-    module: pf400
-    command: transfer
-    args:
-      source: camera_module.positions.plate_station
-      target: pf400.positions.trash
-      source_plate_rotation: narrow
-      target_plate_rotation: narrow
+  # - name: Move to final location
+  #   module: pf400
+  #   command: transfer
+  #   args:
+  #     source: camera_module.positions.plate_station
+  #     target: pf400.positions.trash
+  #     source_plate_rotation: narrow
+  #     target_plate_rotation: narrow

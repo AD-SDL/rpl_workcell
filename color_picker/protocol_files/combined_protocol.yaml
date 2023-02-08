@@ -7,12 +7,13 @@ equipment:
     alias: source
   - name: opentrons_96_tiprack_300ul
     location: "10"
-  - name: opentrons_96_tiprack_20ul
+  - name: opentrons_96_tiprack_1000ul
     location: "11"
-  - name: p300_single_gen2
-    mount: left
-  # - name: p20_single_gen2
-  #   mount: right
+  # - name: p300_single_gen2
+  #   mount: left
+
+  - name: p1000_single_gen2
+    mount: right
 
 commands:
   # - name: add water
