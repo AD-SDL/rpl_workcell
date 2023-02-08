@@ -32,14 +32,21 @@
   <xacro:include filename="$(find pcr_description)/urdf/module_carts.urdf.xacro" />
   <xacro:Module_Carts prefix="module_carts/"/>
 
+  <!-- Sciclops -->
+  <xacro:include filename="$(find sciclops_description)/urdf/sciclops.urdf.xacro" />
+  <xacro:Sciclops prefix="sciclops/"/>
 
+  <!-- Plate Exchange Deck -->
+  <xacro:include filename="$(find sciclops_description)/urdf/plate_exchange.xacro" />
+  <xacro:plate_exchange_deck prefix="exchange_deck/"/>
+  
   <!-- Wrokcell Setup -->
 
   <joint name="pf400_module" type="fixed">
     <parent link="module_carts/pf400_cart"/>
     <child link="pf400/rail_base"/>
     <axis xyz="0 0 0"/>
-    <origin xyz="-0.14 -0.0198 0.835" rpy="0 0 0"/>
+    <origin xyz="-0.14 -0.0198 0.83" rpy="0 0 0"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
 
@@ -47,7 +54,7 @@
     <parent link="module_carts/cart_2"/>
     <child link="biometra/biometra_base"/>
     <axis xyz="0 0 0"/>
-    <origin xyz="0.2 -0.62 0" rpy="0 0 0"/>
+    <origin xyz="0.2 -0.62 0.01" rpy="0 0 0"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
 
@@ -55,7 +62,15 @@
     <parent link="module_carts/cart_2"/>
     <child link="biometra/biometra_base2"/>
     <axis xyz="0 0 0"/>
-    <origin xyz="-0.1 -0.62 0" rpy="0 0 0"/>
+    <origin xyz="-0.1 -0.62 0.01" rpy="0 0 0"/>
+    <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
+  </joint>
+
+ <joint name="Sciclops_Base" type="fixed">
+    <parent link="module_carts/cart_5"/>
+    <child link="sciclops/sciclops_base"/>
+    <axis xyz="0 0 0"/>
+    <origin xyz="0 -0.04 1.05" rpy="0 0 5.1"/> 
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
   
@@ -63,7 +78,7 @@
     <parent link="module_carts/cart_6"/>
     <child link="peeler/peeler_base"/>
     <axis xyz="0 0 0"/>
-    <origin xyz="-0.13 0.15 1.042" rpy="0 0 0"/>
+    <origin xyz="-0.13 0.15 1.052" rpy="0 0 0"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
 
@@ -71,7 +86,7 @@
     <parent link="module_carts/cart_6"/>
     <child link="sealer/sealer_base"/>
     <axis xyz="0 0 0"/>
-    <origin xyz="0.27 -0.53 1.042" rpy="0 0 0"/> 
+    <origin xyz="0.27 -0.53 1.052" rpy="0 0 0"/> 
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
 
@@ -79,7 +94,7 @@
     <parent link="module_carts/cart_3"/>
     <child link="hidex/hidex_body"/>
     <axis xyz="0 0 0"/>
-    <origin xyz="0.2 -0.45 1.042" rpy="0 0 0"/> 
+    <origin xyz="0.2 -0.45 1.052" rpy="0 0 0"/> 
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
 
@@ -87,7 +102,7 @@
     <parent link="module_carts/cart_8"/>
     <child link="ot2/OT2_alpha"/>
     <axis xyz="0 0 0"/>
-    <origin xyz="0.825 0.47 0" rpy="0 0 3.1416"/>
+    <origin xyz="0.825 0.47 0.01" rpy="0 0 3.1416"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
 
@@ -95,8 +110,25 @@
     <parent link="module_carts/cart_7"/>
     <child link="ot2/OT2_betha"/>
     <axis xyz="0 0 0"/>
-    <origin xyz="0.825 0.47 0" rpy="0 0 3.1416"/>
+    <origin xyz="0.825 0.47 0.01" rpy="0 0 3.1416"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
+
+  <joint name="OT2_gamma" type="fixed">
+    <parent link="module_carts/cart_4"/>
+    <child link="ot2/OT2_gamma"/>
+    <axis xyz="0 0 0"/>
+    <origin xyz="-0.52 -0.85 0.01" rpy="0 0 0"/>
+    <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
+  </joint>
+
+  <joint name="Exchange_Deck_Base" type="fixed">
+    <parent link="module_carts/cart_1"/>
+    <child link="exchange_deck/plate_exchange"/>
+    <axis xyz="0 0 0"/>
+    <origin xyz="-0.078 -0.4 1.058" rpy="0 0 1.6"/> 
+    <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
+  </joint>
+  
 
 </robot>

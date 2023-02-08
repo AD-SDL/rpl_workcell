@@ -10,6 +10,8 @@ cd $ROS_WS/src
 
 ##Peeler/Sealer
 git clone https://github.com/AD-SDL/azenta_module
+cd azenta_module/azenta_driver
+pip install . 
 
 ##Sciclops
 git clone https://github.com/AD-SDL/sciclops_module

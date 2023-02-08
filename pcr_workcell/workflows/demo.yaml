@@ -34,13 +34,13 @@ flowdef:
   #   checks: null
   #   comment: Place plate in ot2
 
-  - name: Mix OT2 reactions
-    module: ot2_pcr_beta
-    command: run_protocol
-    args:
-      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/PCR_prep_full_plate.yaml
-    checks: RESOURCE_CHECK
-    comment: resource check not implemented, but will be
+  # - name: Mix OT2 reactions
+  #   module: ot2_pcr_alpha
+  #   command: run_protocol
+  #   args:
+  #     config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/rpl_ot2_demo.yaml
+  #   checks: RESOURCE_CHECK
+  #   comment: resource check not implemented, but will be
 
   # - name: Move from OT2 to sealer
   #   module: pf400
@@ -100,14 +100,3 @@ flowdef:
   #     target: camera_module.positions.default
   #     source_plate_rotation: narrow
   #     target_plate_rotation: narrow
-
-  # - name: Move from pealer to final destination
-  #   module: pf400
-  #   command: transfer
-  #   args:
-  #     source: peeler.positions.default
-  #     target: sciclops.positions.exchange
-  #     source_plate_rotation: narrow
-  #     target_plate_rotation: narrow
-  #   checks: null
-  #   comments: null
