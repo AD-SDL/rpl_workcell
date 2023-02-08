@@ -10,7 +10,7 @@ from rpl_wei.data_classes import Module, Step
 def main():
     wf_path = Path('/home/rpl/rpl_ws/src/rpl_workcell/pcr_workcell/workflows/demo.yaml')
 
-    wei_client = WEI(wf_configs = wf_path.resolve(), workcell_log_level= logging.ERROR, workflow_log_level=logging.ERROR)
+    wei_client = WEI(wf_config = wf_path.resolve(), workcell_log_level= logging.ERROR, workflow_log_level=logging.ERROR)
 
     # wei_client = WEI(
     #     wf_path.resolve(),
