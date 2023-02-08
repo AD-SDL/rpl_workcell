@@ -14,7 +14,7 @@ modules:
     type: wei_ros_node
     model: pf400
     config:
-      ros_node: "/std_ns/PF400_Client_Node"
+      ros_node: "/std_ns/pf400Node"
     positions:
       final_destination: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
@@ -22,7 +22,7 @@ modules:
     type: wei_ros_node
     model: sciclops
     config:
-      ros_node: "/std_ns/sciclopsNode"
+      ros_node: "/std_ns/SciclopsNode"
     positions:
       exchange: [222.0, -38.068, 335.876, 325.434, 79.923, 995.062]
 
