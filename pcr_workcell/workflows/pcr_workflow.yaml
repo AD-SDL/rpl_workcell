@@ -53,16 +53,6 @@ flowdef:
   #   checks: null
   #   comment: null
 
-<<<<<<< HEAD
-  # - name: Peel
-  #   module: peeler
-  #   command: peel
-  #   args:
-  #     test: null
-  #   checks: null
-  #   comment: null
-
-=======
   # - name: Seal PCR plate
   #   module: sealer
   #   command: seal
@@ -102,7 +92,6 @@ flowdef:
   #   checks: null
   #   comment: null
 
->>>>>>> 35d18526ffcc5f95c4dbb186ffca958f1053cee9
   # - name: Move to final location
   #   module: pf400
   #   command: transfer
