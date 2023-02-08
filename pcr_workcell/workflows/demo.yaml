@@ -23,80 +23,80 @@ flowdef:
     checks: null
     comment: Stage pcr plates
 
-  # - name: Move from Sciclops to OT2
-  #   module: pf400
-  #   command: transfer
-  #   args:
-  #     source: sciclops.positions.exchange
-  #     target: ot2_pcr_alpha.positions.deck1_cooler
-  #     source_plate_rotation: narrow
-  #     target_plate_rotation: wide
-  #   checks: null
-  #   comment: Place plate in ot2
+  - name: Move from Sciclops to OT2
+    module: pf400
+    command: transfer
+    args:
+      source: sciclops.positions.exchange
+      target: ot2_pcr_alpha.positions.deck1_cooler
+      source_plate_rotation: narrow
+      target_plate_rotation: wide
+    checks: null
+    comment: Place plate in ot2
 
-  # - name: Mix OT2 reactions
-  #   module: ot2_pcr_alpha
-  #   command: run_protocol
-  #   args:
-  #     config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/rpl_ot2_demo.yaml
-  #   checks: RESOURCE_CHECK
-  #   comment: resource check not implemented, but will be
+  - name: Mix OT2 reactions
+    module: ot2_pcr_alpha
+    command: run_protocol
+    args:
+      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/rpl_ot2_demo.yaml
+    checks: RESOURCE_CHECK
+    comment: resource check not implemented, but will be
 
-  # - name: Move from OT2 to sealer
-  #   module: pf400
-  #   command: transfer
-  #   args:
-  #     source: ot2_pcr_alpha.positions.deck1_cooler
-  #     target: sealer.positions.default
-  #     source_plate_rotation: wide
-  #     target_plate_rotation: narrow
-  #   checks: null
-  #   comment: null
+  - name: Move from OT2 to sealer
+    module: pf400
+    command: transfer
+    args:
+      source: ot2_pcr_alpha.positions.deck1_cooler
+      target: sealer.positions.default
+      source_plate_rotation: wide
+      target_plate_rotation: narrow
+    checks: null
+    comment: null
 
-  # - name: Seal PCR plate
-  #   module: sealer
-  #   command: seal
-  #   args:
-  #     time: payload:seal.time
-  #     temperature: 175
-  #   checks: null
-  #   comment: null
+  - name: Seal PCR plate
+    module: sealer
+    command: seal
+    args:
+      time: payload:seal.time
+      temperature: 175
+    checks: null
+    comment: null
 
-  # - name: Move from sealer to Thermocycler
-  #   module: pf400
-  #   command: transfer
-  #   args:
-  #     source: sealer.positions.default
-  #     target: biometra.positions.default
-  #     source_plate_rotation: narrow
-  #     target_plate_rotation: wide
-  #   checks: null
-  #   comment: null
+  - name: Move from sealer to Thermocycler
+    module: pf400
+    command: transfer
+    args:
+      source: sealer.positions.default
+      target: biometra.positions.default
+      source_plate_rotation: narrow
+      target_plate_rotation: wide
+    checks: null
+    comment: null
 
-  # - name: Move from Thermocycler to peeler
-  #   module: pf400
-  #   command: transfer
-  #   args:
-  #     source: biometra.positions.default
-  #     target: peeler.positions.default
-  #     source_plate_rotation: wide
-  #     target_plate_rotation: narrow
-  #   checks: null
-  #   comment: null
+  - name: Move from Thermocycler to peeler
+    module: pf400
+    command: transfer
+    args:
+      source: biometra.positions.default
+      target: peeler.positions.default
+      source_plate_rotation: wide
+      target_plate_rotation: narrow
+    checks: null
+    comment: null
 
-  # - name: Peel
-  #   module: peeler
-  #   command: peel
-  #   args:
-  #     test: null
-  #   checks: null
-  #   comment: null
+  - name: Peel
+    module: peeler
+    command: peel
+    args:
+      test: null
+    checks: null
+    comment: null
 
-  # - name: Move to final location
-  #   module: pf400
-  #   command: transfer
-  #   args:
-  #     source: peeler.positions.default
-  #     target: camera_module.positions.default
-  #     source_plate_rotation: narrow
-  #     target_plate_rotation: narrow
+  - name: Move to final location
+    module: pf400
+    command: transfer
+    args:
+      source: peeler.positions.default
+      target: camera_module.positions.default
+      source_plate_rotation: narrow
+      target_plate_rotation: narrow
