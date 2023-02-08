@@ -4,7 +4,7 @@ metadata:
   info: Initial PCR workflow for RPL workcell
   version: 0.1
 
-workcell: /home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_workcell.yaml
+workcell: /home/rpl/rpl_ws/src/rpl_workcell/pcr_workcell/pcr_workcell.yaml
 
 modules:
   - name: ot2_pcr_alpha
