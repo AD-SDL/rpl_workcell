@@ -7,7 +7,7 @@ equipment:
     alias: source
   - name: opentrons_96_tiprack_300ul
     location: "10"
-  - name: opentrons_96_tiprack_1000ul
+  - name: opentrons_96_tiprack_20ul
     location: "11"
   - name: p300_single_gen2
     mount: left
