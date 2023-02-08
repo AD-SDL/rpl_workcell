@@ -10,7 +10,7 @@ from rpl_wei.data_classes import Module, Step
 import rclpy
 from wei_executor.weiExecutorNode import weiExecNode
 
-rclpy.init()
+# rclpy.init()
 wei_execution_node = weiExecNode()
 
 
