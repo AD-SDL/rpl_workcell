@@ -102,7 +102,7 @@ flowdef:
     module: pf400
     command: transfer
     args:
-      source: camera_module.locations.plate_station
+      source: pf400.locations.trash
       target: storage
       source_plate_rotation: narrow
       target_plate_rotation: narrow

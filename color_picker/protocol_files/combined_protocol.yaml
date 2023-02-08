@@ -1,18 +1,18 @@
 equipment:
+  - name: corning_96_wellplate_360ul_flat
+    location: "2"
+    alias: dest
   - name: opentrons_6_tuberack_nest_50ml_conical
     location: "7"
     alias: source
-  - name: corning_96_wellplate_360ul_flat
-    location: "1"
-    alias: dest
-  - name: opentrons_96_tiprack_1000ul
+  - name: opentrons_96_tiprack_300ul
     location: "10"
   - name: opentrons_96_tiprack_20ul
     location: "11"
-  - name: p1000_single_gen2
+  - name: p300_single_gen2
     mount: left
-  - name: p20_single_gen2
-    mount: right
+  # - name: p20_single_gen2
+  #   mount: right
 
 commands:
   # - name: add water
@@ -44,10 +44,10 @@ commands:
     dispense_clearance: 2
     aspirate_clearance: 0.1
     mix_cycles: 3
-    mix_volume: 15
+    mix_volume: 100
 
 metadata:
-  protocolName: All color mixing
+  protocolName: Color Mixing all
   author: Kyle khippe@anl.gov
   description: Mixing red colors
   apiLevel: "2.12"

@@ -15,30 +15,30 @@ modules:
   - name: sciclops
 
 flowdef:
-#   - name: PCR Plate Exchange
-#     module: sciclops
-#     command: get_plate
-#     args:
-#       pos: "tower1"
-#     checks: null
-#     comment: Stage pcr plates
+  # - name: PCR Plate Exchange
+  #   module: sciclops
+  #   command: get_plate
+  #   args:
+  #     pos: "tower1"
+  #   checks: null
+  #   comment: Stage pcr plates
 
-#   - name: Move from Sciclops to OT2
-#     module: pf400
-#     command: transfer
-#     args:
-#       source: sciclops.positions.exchange
-#       target: ot2_pcr_alpha.positions.deck1_cooler
-#       source_plate_rotation: narrow
-#       target_plate_rotation: wide
-#     checks: null
-#     comment: Place plate in ot2
+  # - name: Move from Sciclops to OT2
+  #   module: pf400
+  #   command: transfer
+  #   args:
+  #     source: sciclops.positions.exchange
+  #     target: ot2_pcr_alpha.positions.deck1_cooler
+  #     source_plate_rotation: narrow
+  #     target_plate_rotation: wide
+  #   checks: null
+  #   comment: Place plate in ot2
 
   - name: Mix OT2 reactions
-    module: ot2_pcr_alpha
+    module: ot2_pcr_beta
     command: run_protocol
     args:
-      config_path: /home/rpl/wei_ws/demo/rpl_workcell/pcr_workcell/protocol_files/PCR_prep_full_plate.yaml
+      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/PCR_prep_full_plate.yaml
     checks: RESOURCE_CHECK
     comment: resource check not implemented, but will be
 
@@ -53,6 +53,16 @@ flowdef:
   #   checks: null
   #   comment: null
 
+<<<<<<< HEAD
+  # - name: Peel
+  #   module: peeler
+  #   command: peel
+  #   args:
+  #     test: null
+  #   checks: null
+  #   comment: null
+
+=======
   # - name: Seal PCR plate
   #   module: sealer
   #   command: seal
@@ -92,6 +102,7 @@ flowdef:
   #   checks: null
   #   comment: null
 
+>>>>>>> 35d18526ffcc5f95c4dbb186ffca958f1053cee9
   # - name: Move to final location
   #   module: pf400
   #   command: transfer
