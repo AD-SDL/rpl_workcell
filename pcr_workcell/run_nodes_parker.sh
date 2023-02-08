@@ -29,22 +29,16 @@ tmux send-keys -t $session:$window 'ros2 launch sciclops_module_client sciclops_
 window=4
 tmux new-window -t $session:$window -n 'ot2_alpha'
 tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
-tmux send-keys -t $session:$window 'export robot_ip=146.137.240.100' C-m #this need to become an arg on the roslaunch
-tmux send-keys -t $session:$window 'export robot_name=ot2_pcr_alpha' C-m #this need to become an arg on the roslaunch
 tmux send-keys -t $session:$window 'ros2 launch ot2_module_client ot2_module.launch.py ip:=146.137.240.100 robot_name:=ot2_pcr_alpha' C-m
 
 window=5
 tmux new-window -t $session:$window -n 'ot2_beta'
 tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
-tmux send-keys -t $session:$window 'export robot_ip=146.137.240.101' C-m #this need to become an arg on the roslaunch
-tmux send-keys -t $session:$window 'export robot_name=ot2_growth_beta' C-m #this need to become an arg on the roslaunch
 tmux send-keys -t $session:$window 'ros2 launch ot2_module_client ot2_module.launch.py ip:=146.137.240.101 robot_name:=ot2_growth_beta' C-m
 
 window=7
 tmux new-window -t $session:$window -n 'ot2_gamma'
 tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
-tmux send-keys -t $session:$window 'export robot_ip=146.137.240.102' C-m #this need to become an arg on the roslaunch
-tmux send-keys -t $session:$window 'export robot_name=ot2_cp_gamma' C-m #this need to become an arg on the roslaunch
 tmux send-keys -t $session:$window 'ros2 launch ot2_module_client ot2_module.launch.py ip:=146.137.240.102 robot_name:=ot2_cp_gamma' C-m
 
 tmux attach-session -t $session
