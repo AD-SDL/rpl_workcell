@@ -1,0 +1,39 @@
+{
+  "7": {
+    "name": "opentrons_6_tuberack_nest_50ml_conical",
+    "used": 3,
+    "depleted": false,
+    "wells_used": [
+      "A1",
+      "A3",
+      "A2"
+    ]
+  },
+  "2": {
+    "name": "corning_96_wellplate_360ul_flat",
+    "used": 8,
+    "depleted": false,
+    "wells_used": [
+      "A2",
+      "A4",
+      "A7",
+      "A5",
+      "A3",
+      "A1",
+      "A8",
+      "A6"
+    ]
+  },
+  "10": {
+    "name": "opentrons_96_tiprack_1000ul",
+    "used": 0,
+    "depleted": false,
+    "wells_used": []
+  },
+  "11": {
+    "name": "opentrons_96_tiprack_20ul",
+    "used": 24,
+    "depleted": false,
+    "wells_used": []
+  }
+}
