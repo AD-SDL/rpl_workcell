@@ -19,7 +19,7 @@ flowdef:
     module: sciclops
     command: get_plate
     args:
-      pos: "tower4"
+      pos: "tower1"
     checks: null
     comment: Stage pcr plates
 
