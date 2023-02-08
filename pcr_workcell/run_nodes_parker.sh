@@ -21,9 +21,9 @@ tmux set -g mouse on
 # tmux send-keys -t $session:$window 'ros2 launch sp_module_client peeler.launch.py' C-m
 
 window=1
-tmux new-window -t $session:$window -n 'sealer'
+tmux new-window -t $session:$window -n 'sealerpeeler'
 tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
-tmux send-keys -t $session:$window 'ros2 launch sp_module_client sealer.launch.py' C-m
+tmux send-keys -t $session:$window 'ros2 launch sp_module_client sp_module_client.launch.py' C-m
 
 window=3
 tmux new-window -t $session:$window -n 'sciclops'
