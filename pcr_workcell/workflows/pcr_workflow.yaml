@@ -4,24 +4,51 @@ metadata:
   info: Initial PCR workflow for RPL workcell
   version: 0.1
 
-workcell: /home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_workcell.yaml
+workcell: /home/rpl/rpl_ws/src/rpl_workcell/pcr_workcell/pcr_workcell.yaml
 
 modules:
-  - name: ot2_pcr_alpha
-  - name: pf400
-  - name: peeler
-  - name: sealer
-  - name: biometra
+  # - name: ot2_pcr_alpha
+  # - name: pf400
+  # - name: peeler
+  # - name: sealer
+  # - name: biometra
   - name: sciclops
 
 flowdef:
-  - name: PCR Plate Exchange
-    module: sciclops
-    command: get_plate
-    args:
-      pos: "tower2"
-    checks: null
-    comment: Stage pcr plates
+  # - name: PCR Plate Exchange
+  #   module: sciclops
+  #   command: get_plate
+  #   args:
+  #     pos: "tower2"
+  #   checks: null
+  #   comment: Stage pcr plates
+
+  # - name: Move from Sciclops to OT2
+  #   module: pf400
+  #   command: transfer
+  #   args:
+  #     source: sciclops.positions.exchange
+  #     target: ot2_pcr_alpha.positions.deck1_cooler
+  #     source_plate_rotation: narrow
+  #     target_plate_rotation: wide
+  #   checks: null
+  #   comment: Place plate in ot2
+
+  # - name: Mix OT2 reactions
+  #   module: ot2_pcr_beta
+  #   command: run_protocol
+  #   args:
+  #     config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/PCR_prep_first_half.yaml
+  #   checks: RESOURCE_CHECK
+  #   comment: resource check not implemented, but will be
+
+  # - name: Mix OT2 reactions
+  #   module: ot2_pcr_beta
+  #   command: run_protocol
+  #   args:
+  #     config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/PCR_prep_second_half.yaml
+  #   checks: RESOURCE_CHECK
+  #   comment: resource check not implemented, but will be
 
   - name: Move from Sciclops to OT2
     module: pf400

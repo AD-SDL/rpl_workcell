@@ -140,5 +140,5 @@ metadata:
   protocolName: PCR Prep Full Plate
   author: Abe astroka@anl.gov
   description: mixing primers and templates with wells read in from file
-  apiLevel: "2.12"
+  apiLevel: 2.12
 
