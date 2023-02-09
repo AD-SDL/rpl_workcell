@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import rclpy
+
 import logging
 from pathlib import Path
 from argparse import ArgumentParser

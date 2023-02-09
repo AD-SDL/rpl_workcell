@@ -7,7 +7,7 @@ metadata:
 workcell: /home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_workcell.yaml
 
 modules:
-  - name: ot2_pcr_alpha
+  - name: ot2_pcr_beta
   - name: pf400
   - name: peeler
   - name: sealer
