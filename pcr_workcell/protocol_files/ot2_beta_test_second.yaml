@@ -1,0 +1,66 @@
+resources:
+
+  - location: /Users/abestroka/Argonne/ot2_driver/ot2_driver/protopiler/test_configs/PCR_test_full_plate.xlsx
+    name: primers_and_templates
+
+equipment:
+  - name: nest_96_wellplate_2ml_deep
+    location: "1"
+    alias: forward
+    offset: [0, 1.7, 3.9]
+  - name: nest_96_wellplate_2ml_deep
+    location: "2"
+    alias: backward
+    offset: [0, 1, 1.4]
+  - name: nest_96_wellplate_100ul_pcr_full_skirt 
+    location: "3"
+    alias: dest
+    module: Temperature Module
+    offset: [1, 1.6, 11]
+  - name: nest_96_wellplate_2ml_deep
+    location: "4"
+    alias: template
+    offset: [0, 0, 1]
+  - name: opentrons_96_tiprack_20ul
+    location: "8"
+    offset: [0.2, 0.4, 0]
+  - name: opentrons_96_tiprack_20ul
+    location: "7"
+    offset: [0.2, 0.4, 0]
+  - name: opentrons_96_tiprack_20ul
+    location: "10"
+    offset: [0.2, 0.4, 0]
+  - name: p20_single_gen2
+    mount: left
+  - name: opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap
+    location: "6"
+    offset: [0, 0, 0.5]
+  - name: opentrons_10_tuberack_nest_4x50ml_6x15ml_conical
+    location: "5"
+  - name: opentrons_96_tiprack_20ul
+    location: "11"
+    offset: [0.2, 0.4, 0]
+  - name: opentrons_96_tiprack_1000ul
+    location: "9"
+    offset: [0.5, 0.9, -0.3]
+  - name: p1000_single_gen2
+    mount: right
+
+commands:
+  - name: temp test
+    change_temp: 4
+  - name: test
+    source: 6:[A1]
+    aspirate_clearance: 1
+    destination: 6:[A3]
+    dispense_clearance: 1
+    volume: 300
+    mix_cycles: 0
+    mix_volume: 0
+
+
+metadata:
+  protocolName: PCR Prep Full Plate
+  author: Abe astroka@anl.gov
+  description: mixing primers and templates with wells read in from file
+  apiLevel: "2.12"
