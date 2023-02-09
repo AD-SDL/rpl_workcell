@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import rclpy
 import logging
 from pathlib import Path
 from argparse import ArgumentParser
@@ -10,7 +10,7 @@ from rpl_wei.data_classes import Module, Step
 import rclpy
 from wei_executor.weiExecutorNode import weiExecNode
 
-# rclpy.init()
+rclpy.init()
 wei_execution_node = weiExecNode()
 
 

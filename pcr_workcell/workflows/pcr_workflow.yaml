@@ -88,14 +88,14 @@ flowdef:
     checks: null
     comment: null
 
-  - name: Seal PCR plate
-    module: sealer
-    command: seal
-    args:
-      time: payload:seal.time
-      temperature: 175
-    checks: null
-    comment: null
+  # - name: Seal PCR plate
+  #   module: sealer
+  #   command: seal
+  #   args:
+  #     time: payload:seal.time
+  #     temperature: 175
+  #   checks: null
+  #   comment: null
 
   - name: Move from sealer to Thermocycler
     module: pf400
@@ -119,13 +119,13 @@ flowdef:
     checks: null
     comment: null
 
-  - name: Peel
-    module: peeler
-    command: peel
-    args:
-      test: null
-    checks: null
-    comment: null
+  # - name: Peel
+  #   module: peeler
+  #   command: peel
+  #   args:
+  #     test: null
+  #   checks: null
+  #   comment: null
 
   - name: Move to final location
     module: pf400
