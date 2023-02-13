@@ -89,6 +89,7 @@ def run(
 
     cur_best_color = None
     cur_best_diff = float("inf")
+    current_iter = 0 
     while num_exps + pop_size <= exp_budget:
         plate_volumes = solver.run_iteration(
             target_color,
@@ -127,6 +128,10 @@ def run(
                     if well in payload['destination_wells']:
                         current_plate.append(color)
             plate_n = plate_n + 1 
+            if current_iter == 0: 
+                payload['use_existing_resources'] = False
+            else: 
+                payload['use_existing_resources'] = True 
         else:
             # going to convert back to ratios for now
             plate_colors_ratios = [
@@ -135,7 +140,7 @@ def run(
             current_plate = plate_colors_ratios
 
 
-
+        current_iter += 1
         plate_best_color_ind = solver._find_best_color(current_plate, target_color)
         plate_best_color = current_plate[plate_best_color_ind]
         plate_best_diff = solver._color_diff(plate_best_color, target_color)

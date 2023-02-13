@@ -446,7 +446,7 @@ def get_colors_from_file(img_path, offset=None):
 
 
     img = cv2.imread(str(img_path)) # Load image
-    assert img, f'Image "{img_path}" not loaded. Check file name.'
+    assert img is not None, f'Image "{img_path}" not loaded. Check file name.'
 
     img = match_size(img, (1280, 1920)) # Crop image
     platesD, plate_img, plate_only, plate_colors = get_colors(img) # Analyze image for colors
