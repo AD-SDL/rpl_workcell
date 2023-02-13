@@ -106,6 +106,10 @@ def run(
 
         if not simulate:
             payload = convert_volumes_to_payload(plate_volumes)
+            if current_iter == 0: 
+                payload['use_existing_resources'] = False
+            else: 
+                payload['use_existing_resources'] = True 
             # if plate_n:
             #     used_tips = plate_n*pop_size*3
             #     payload['used_tips'] = used_tips
@@ -128,10 +132,7 @@ def run(
                     if well in payload['destination_wells']:
                         current_plate.append(color)
             plate_n = plate_n + 1 
-            if current_iter == 0: 
-                payload['use_existing_resources'] = False
-            else: 
-                payload['use_existing_resources'] = True 
+
         else:
             # going to convert back to ratios for now
             plate_colors_ratios = [
