@@ -1,0 +1,134 @@
+
+equipment:
+  - name: nest_96_wellplate_2ml_deep
+    location: "1"
+    alias: forward
+    offset: [0, 1.7, 3.9]
+  - name: nest_96_wellplate_2ml_deep
+    location: "2"
+    alias: backward
+    offset: [0, 1, 1.4]
+  - name: nest_96_wellplate_100ul_pcr_full_skirt 
+    location: "3"
+    alias: dest
+    module: Temperature Module
+    offset: [1, 1.6, 11]
+  - name: nest_96_wellplate_2ml_deep
+    location: "4"
+    alias: template
+    offset: [0, 0, 1]
+  - name: opentrons_96_tiprack_20ul
+    location: "8"
+    offset: [0.2, 0.4, 0]
+  - name: opentrons_96_tiprack_20ul
+    location: "7"
+    offset: [0.2, 0.4, 0]
+  - name: opentrons_96_tiprack_20ul
+    location: "10"
+    offset: [0.2, 0.4, 0]
+  - name: p20_multi_gen2
+    mount: left
+  - name: opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap
+    location: "6"
+    offset: [0, 0, 0.5]
+  - name: opentrons_10_tuberack_nest_4x50ml_6x15ml_conical
+    location: "5"
+  - name: opentrons_96_tiprack_20ul
+    location: "11"
+    offset: [0.2, 0.4, 0]
+  - name: opentrons_96_tiprack_300ul
+    location: "9"
+    offset: [0.5, 0.9, -0.3]
+  - name: p300_single_gen2
+    mount: right
+
+commands:
+  - name: Cool Block
+    change_temp: 4
+  - name: BioWater # FILL TO 10 ML SO PIPETTE DOESNT GET WET
+    source: 5:A1
+    aspirate_clearance: 50
+    destination: 5:C2
+    dispense_clearance: 2
+    volume: [253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5] # total: 2,028 uL
+    mix_cycles: 0
+    mix_volume: 0
+    drop_tip: [False, False, False, False, False, False, False, True]
+  - name: 5x Reaction Buffer
+    source: 6:A3
+    aspirate_clearance: 0.1
+    destination: 5:C2
+    dispense_clearance: 2
+    volume: [240, 240, 240]  # total: 720 uL
+    mix_cycles: 3
+    mix_volume: 250
+    drop_tip: [False, False, True]
+  - name: DNA Polymerase
+    source: 6:A1
+    aspirate_clearance: 0.1
+    destination: 5:C2
+    dispense_clearance: 1
+    volume: 24 # total: 24 uL
+    mix_cycles: 3
+    mix_volume: 20
+    drop_tip: [False, True]
+  - name: DNTPs
+    source: 6:A5
+    aspirate_clearance: 0.1
+    destination: 5:C2
+    dispense_clearance: 2
+    volume: 108 # total: 108 uL
+    mix_cycles: 3
+    mix_volume: 250
+    drop_tip: True
+  - name: GC Enhancer
+    source: 6:B3
+    aspirate_clearance: 0.1
+    destination: 5:C2
+    dispense_clearance: 2
+    volume: [240, 240, 240] # total: 720 uL
+    mix_cycles: 7
+    mix_volume: 250
+    drop_tip: [False, False, True]
+  - name: master mix distribute
+    source: 5:C2
+    aspirate_clearance: 1
+    destination: dest:[A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2, D2, E2, F2, G2, H2, A3, B3, C3, D3, E3, F3, G3, H3, A4, B4, C4, D4, E4, F4, G4, H4, A5, B5, C5, D5, E5, F5, G5, H5, A6, B6, C6, D6, E6, F6, G6, H6, A7, B7, C7, D7, E7, F7, G7, H7, A8, B8, C8, D8, E8, F8, G8, H8, A9, B9, C9, D9, E9, F9, G9, H9, A10, B10, C10, D10, E10, F10, G10, H10, A11, B11, C11, D11, E11, F11, G11, H11, A12, B12, C12, D12, E12, F12, G12, H12]
+    dispense_clearance: 1
+    volume: 30
+    drop_tip: False
+  # - name: drop master mix tip
+  #   clear: True
+  - name: forward primer
+    multi_source: forward:[[A1, B1, C1, D1, E1, F1, G1, H1], [A2, B2, C2, D2, E2, F2, G2, H2], [A3, B3, C3, D3, E3, F3, G3, H3], [A4, B4, C4, D4, E4, F4, G4, H4], [A5, B5, C5, D5, E5, F5, G5, H5], [A6, B6, C6, D6, E6, F6, G6, H6], [A7, B7, C7, D7, E7, F7, G7, H7], [A8, B8, C8, D8, E8, F8, G8, H8], [A9, B9, C9, D9, E9, F9, G9, H9], [A10, B10, C10, D10, E10, F10, G10, H10], [A11, B11, C11, D11, E11, F11, G11, H11], [A12, B12, C12, D12, E12, F12, G12, H12]]
+    multi_aspirate_clearance: 0.1
+    multi_destination: dest:[[A1, B1, C1, D1, E1, F1, G1, H1], [A2, B2, C2, D2, E2, F2, G2, H2], [A3, B3, C3, D3, E3, F3, G3, H3], [A4, B4, C4, D4, E4, F4, G4, H4], [A5, B5, C5, D5, E5, F5, G5, H5], [A6, B6, C6, D6, E6, F6, G6, H6], [A7, B7, C7, D7, E7, F7, G7, H7], [A8, B8, C8, D8, E8, F8, G8, H8], [A9, B9, C9, D9, E9, F9, G9, H9], [A10, B10, C10, D10, E10, F10, G10, H10], [A11, B11, C11, D11, E11, F11, G11, H11], [A12, B12, C12, D12, E12, F12, G12, H12]]
+    multi_dispense_clearance: 2
+    multi_volume: 4.8
+    multi_mix_cycles: 3
+    multi_mix_volume: 15
+    multi_drop_tip: True
+  - name: backward primer
+    multi_source: backward:[[A1, B1, C1, D1, E1, F1, G1, H1], [A2, B2, C2, D2, E2, F2, G2, H2], [A3, B3, C3, D3, E3, F3, G3, H3], [A4, B4, C4, D4, E4, F4, G4, H4], [A5, B5, C5, D5, E5, F5, G5, H5], [A6, B6, C6, D6, E6, F6, G6, H6], [A7, B7, C7, D7, E7, F7, G7, H7], [A8, B8, C8, D8, E8, F8, G8, H8], [A9, B9, C9, D9, E9, F9, G9, H9], [A10, B10, C10, D10, E10, F10, G10, H10], [A11, B11, C11, D11, E11, F11, G11, H11], [A12, B12, C12, D12, E12, F12, G12, H12]]
+    multi_aspirate_clearance: 0.1
+    multi_destination: dest:[[A1, B1, C1, D1, E1, F1, G1, H1], [A2, B2, C2, D2, E2, F2, G2, H2], [A3, B3, C3, D3, E3, F3, G3, H3], [A4, B4, C4, D4, E4, F4, G4, H4], [A5, B5, C5, D5, E5, F5, G5, H5], [A6, B6, C6, D6, E6, F6, G6, H6], [A7, B7, C7, D7, E7, F7, G7, H7], [A8, B8, C8, D8, E8, F8, G8, H8], [A9, B9, C9, D9, E9, F9, G9, H9], [A10, B10, C10, D10, E10, F10, G10, H10], [A11, B11, C11, D11, E11, F11, G11, H11], [A12, B12, C12, D12, E12, F12, G12, H12]]
+    multi_dispense_clearance: 2
+    multi_volume: 4.8
+    multi_mix_cycles: 3
+    multi_mix_volume: 15
+    multi_drop_tip: True
+  - name: template
+    multi_source: template:[[A1, B1, C1, D1, E1, F1, G1, H1], [A2, B2, C2, D2, E2, F2, G2, H2], [A3, B3, C3, D3, E3, F3, G3, H3], [A4, B4, C4, D4, E4, F4, G4, H4], [A5, B5, C5, D5, E5, F5, G5, H5], [A6, B6, C6, D6, E6, F6, G6, H6], [A7, B7, C7, D7, E7, F7, G7, H7], [A8, B8, C8, D8, E8, F8, G8, H8], [A9, B9, C9, D9, E9, F9, G9, H9], [A10, B10, C10, D10, E10, F10, G10, H10], [A11, B11, C11, D11, E11, F11, G11, H11], [A12, B12, C12, D12, E12, F12, G12, H12]]
+    multi_aspirate_clearance: 0.1
+    multi_destination: dest:[[A1, B1, C1, D1, E1, F1, G1, H1], [A2, B2, C2, D2, E2, F2, G2, H2], [A3, B3, C3, D3, E3, F3, G3, H3], [A4, B4, C4, D4, E4, F4, G4, H4], [A5, B5, C5, D5, E5, F5, G5, H5], [A6, B6, C6, D6, E6, F6, G6, H6], [A7, B7, C7, D7, E7, F7, G7, H7], [A8, B8, C8, D8, E8, F8, G8, H8], [A9, B9, C9, D9, E9, F9, G9, H9], [A10, B10, C10, D10, E10, F10, G10, H10], [A11, B11, C11, D11, E11, F11, G11, H11], [A12, B12, C12, D12, E12, F12, G12, H12]]
+    multi_dispense_clearance: 2
+    multi_volume: 4
+    multi_mix_cycles: 3
+    multi_mix_volume: 15
+    multi_drop_tip: True
+
+metadata:
+  protocolName: PCR Prep Full Plate
+  author: Abe astroka@anl.gov
+  description: mixing primers and templates with wells read in from file
+  apiLevel: "2.12"
