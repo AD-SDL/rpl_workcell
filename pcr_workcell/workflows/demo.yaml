@@ -38,15 +38,7 @@ flowdef:
     module: ot2_pcr_beta
     command: run_protocol
     args:
-      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/PCR_prep_first_half.yaml
-    checks: RESOURCE_CHECK
-    comment: resource check not implemented, but will be
-
-  - name: Mix OT2 reactions
-    module: ot2_pcr_beta
-    command: run_protocol
-    args:
-      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/PCR_prep_second_half.yaml
+      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/PCR_prep_full_plate_multi_noresource.yaml
     checks: RESOURCE_CHECK
     comment: resource check not implemented, but will be
 

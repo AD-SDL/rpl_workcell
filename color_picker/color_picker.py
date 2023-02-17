@@ -122,6 +122,7 @@ def run(
             # output should be list [pop_size, 3]
             img_path = run_info["run_dir"] / "results" / "final_image.jpg"
             plate_colors_ratios = get_colors_from_file(img_path)[1]
+            # Swap BGR to RGB
             plate_colors_ratios = {a:b[::-1] for a,b in plate_colors_ratios.items()}  
            
             current_plate = []
