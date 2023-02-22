@@ -102,7 +102,7 @@ def run(
     cur_best_color = None
     cur_best_diff = float("inf")
     runs_list = []
-
+    ot2_iter = 0
     new_plate=True
     payload={}
     
@@ -135,7 +135,7 @@ def run(
             new_plate = False
 
         #resets OT2 resources (or not)
-        if current_iter == 0: 
+        if ot2_iter == 0: 
             payload['use_existing_resources'] = False # This assumes the whole plate was reset and all tips are new
         else: 
             payload['use_existing_resources'] = True 
@@ -159,6 +159,7 @@ def run(
         iter_thread.run()
         run_info = iter_thread._return
         runs_list.append(run_info)
+        ot2_iter += 1
 
         used_wells = current_iter*pop_size 
         if used_wells + pop_size > 96: #if we have used all wells or not enough for next iter (thrash plate, start from scratch)
@@ -175,12 +176,14 @@ def run(
         plate_colors_ratios = {a:b[::-1] for a,b in plate_colors_ratios.items()}  
         
         current_plate = []
+        wells_used = []
         with open(run_info["run_dir"] / "results" / "plate_all_colors.csv", "w") as f:
             for well in payload["destination_wells"]:
                 color = plate_colors_ratios[well]
             # for well, color in list(plate_colors_ratios.items())[:pop_size]:
                 f.write("%s, %s,%s,%s" % (well, color[0], color[1], color[2]))
                 f.write("\n")
+                wells_used.append(well)
                 if well in payload['destination_wells']:
                     current_plate.append(color)
         
@@ -226,6 +229,21 @@ def run(
             f.canvas.flush_events()
             plt.pause(0.001)
             # plt.imsave(run_info["run_dir"] / "results" / "experiment_summary.jpg")
+        
+        
+        report={
+            "plate_N": plate_n,
+            "target_color": target_color,
+            "wells": wells_used,
+            "tried_values": target_plate,
+            "exp_volumes": plate_volumes,
+            "results":current_plate,
+            "differences": 4,
+            "best_on_plate": plate_best_color,
+            "pos_on_plate": plate_best_color_ind,
+            "best_so_far": cur_best_color,
+            "experiments_so_far":runs_list,
+        }
     iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':final_protocol,'payload':payload})
     iter_thread.run()
     if show_visuals:
