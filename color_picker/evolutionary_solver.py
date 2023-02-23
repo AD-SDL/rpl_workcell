@@ -53,7 +53,7 @@ class EvolutionaryColorSolver:
         ]
 
         # Find population best color
-        best_color_position = EvolutionaryColorSolver._find_best_color(
+        (best_color_position, t) = EvolutionaryColorSolver._find_best_color(
             previous_experiment_colors, target_color
         )
 
@@ -94,7 +94,7 @@ class EvolutionaryColorSolver:
     def _find_best_color(
         experiment_colors: List[Union[sRGBColor, List[float]]],
         target_color: List[Union[sRGBColor, List[float]]],
-    ) -> int:
+    ) -> Tuple[int, List[float]]:
         """returns index of best color in population
 
         Parameters
@@ -108,6 +108,8 @@ class EvolutionaryColorSolver:
         -------
         int
             Index of best color in population
+        List[float]:
+            Difference scores for all colors
         """
 
         if not isinstance(target_color, sRGBColor):
@@ -125,14 +127,13 @@ class EvolutionaryColorSolver:
                 )
                 for exp_color in experiment_colors
             ]
-
-        return np.argmin(
-            np.array(
+        plate_diffs = np.array(
                 EvolutionaryColorSolver._grade_population(
                     experiment_colors, target_color
                 )
-            )
         )
+        return np.argmin(plate_diffs), plate_diffs
+        
 
     @staticmethod
     def _grade_population(
