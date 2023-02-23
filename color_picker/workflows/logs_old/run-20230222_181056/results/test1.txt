@@ -1,1 +1,0 @@
-{"plate_N": 1, "target_color": [101, 148, 30], "wells": ["A1", "A2"]}
