@@ -7,7 +7,7 @@ from typing import List, Dict, Any, Tuple
 from itertools import product
 from typing import Optional
 from threading import Thread
-
+import json
 import copy
 import numpy as np
 
@@ -52,6 +52,7 @@ def convert_volumes_to_payload(volumes: List[List[float]]) -> Dict[str, Any]:
 def wei_run_flow(wf_file_path, payload):
     wei_client = WEI(wf_file_path)
     run_info = wei_client.run_workflow(payload=payload)
+    print(run_info)
     return run_info
 
 class ThreadWithReturnValue(Thread):
@@ -102,25 +103,13 @@ def run(
     cur_best_color = None
     cur_best_diff = float("inf")
     runs_list = []
-
+    ot2_iter = 0
     new_plate=True
     payload={}
     
 
     while num_exps + pop_size <= exp_budget:
-        report={
-            "plate_N": plate_n,
-            "target_color":'',
-            "wells":'',
-            "tried_values":'',
-            "exp_volumes":'',
-            "results":'',
-            "differences":'',
-            "best_on_plate":'',
-            "pos_on_plate":'',
-            "best_so_far":'',
-            "experiments_so_far":runs_list,
-        }
+        
         print(
             "Starting experiment, can run at least one iteration:",
             num_exps + pop_size <= exp_budget,
@@ -129,16 +118,12 @@ def run(
         #grab new plate if experiment starting or current plate is full
         if new_plate or current_iter==0:
             print('Grabbing New Plate')
-            iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':init_protocol,'payload':payload})
-            iter_thread.run()
+            #iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':init_protocol,'payload':payload})
+            #iter_thread.run()
             curr_wells_used = []
             new_plate = False
 
-        #resets OT2 resources (or not)
-        if current_iter == 0: 
-            payload['use_existing_resources'] = False # This assumes the whole plate was reset and all tips are new
-        else: 
-            payload['use_existing_resources'] = True 
+       
 
         # Calculate volumes and current wells for creating the OT2 protocol
         ## FUNCX
@@ -155,10 +140,17 @@ def run(
             ]
         payload = convert_volumes_to_payload(plate_volumes)
         
+        #resets OT2 resources (or not)
+        if ot2_iter == 0: 
+            payload['use_existing_resources'] = False # This assumes the whole plate was reset and all tips are new
+        else: 
+            payload['use_existing_resources'] = True 
+        
         iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path': loop_protocol, 'payload':payload})
         iter_thread.run()
         run_info = iter_thread._return
         runs_list.append(run_info)
+        ot2_iter += 1
 
         used_wells = current_iter*pop_size 
         if used_wells + pop_size > 96: #if we have used all wells or not enough for next iter (thrash plate, start from scratch)
@@ -168,25 +160,28 @@ def run(
             new_plate = True
 
         # analize image
-        # output should be list [pop_size, 3]
-        img_path = run_info["run_dir"] / "results" / "final_image.jpg"
+        # output should be list [pop_size, 3]   
+        fname = "final_image.jpg" #image"+str(ot2_iter) +".jpg"
+        img_path = run_info["run_dir"] / "results" / fname
         plate_colors_ratios = get_colors_from_file(img_path)[1] ##FUNCX
         # Swap BGR to RGB
         plate_colors_ratios = {a:b[::-1] for a,b in plate_colors_ratios.items()}  
         
         current_plate = []
+        wells_used = []
         with open(run_info["run_dir"] / "results" / "plate_all_colors.csv", "w") as f:
             for well in payload["destination_wells"]:
                 color = plate_colors_ratios[well]
             # for well, color in list(plate_colors_ratios.items())[:pop_size]:
                 f.write("%s, %s,%s,%s" % (well, color[0], color[1], color[2]))
                 f.write("\n")
+                wells_used.append(well)
                 if well in payload['destination_wells']:
                     current_plate.append(color)
         
         
         ## save those and the initial colors, etc
-        plate_best_color_ind = solver._find_best_color(current_plate, target_color)
+        plate_best_color_ind, plate_diffs = solver._find_best_color(current_plate, target_color)
         plate_best_color = current_plate[plate_best_color_ind]
         plate_best_diff = solver._color_diff(plate_best_color, target_color)
 
@@ -226,6 +221,32 @@ def run(
             f.canvas.flush_events()
             plt.pause(0.001)
             # plt.imsave(run_info["run_dir"] / "results" / "experiment_summary.jpg")
+
+        report={
+            "plate_N": plate_n,
+            "target_color": target_color,
+            "wells": wells_used,
+            "tried_values": target_plate,
+            "exp_volumes": plate_volumes,
+            "results": list(map(lambda x: x.tolist(), current_plate)),
+            "differences": plate_diffs.tolist(),
+            "best_on_plate": plate_best_color.tolist(),
+            "pos_on_plate": plate_best_color_ind.tolist(),
+            "best_so_far": cur_best_color.tolist()
+            
+            
+        }
+       
+        for key in report:
+            print(str(type(report[key])))
+        #"experiments_so_far":runs_list,
+        loglabel = "run" + str(ot2_iter) + '.txt'
+        print(str(report))
+        with open(run_info["run_dir"] / "results" / loglabel, "w") as f:
+            report_js = json.dumps(report)
+            print(str(report_js))
+            print("saved")
+            f.write(report_js)
     iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':final_protocol,'payload':payload})
     iter_thread.run()
     if show_visuals:
