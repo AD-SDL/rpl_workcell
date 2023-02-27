@@ -10,11 +10,12 @@ from threading import Thread
 import json
 import copy
 import numpy as np
-
+import os, shutil
 from rpl_wei import WEI
 from plate_color_analysis import get_colors_from_file
 from evolutionary_solver import EvolutionaryColorSolver
-
+from funcx import FuncXExecutor
+from plate_color_analysis import get_colors_from_file
 curr_wells_used = []
 
 def new_plate():
@@ -81,6 +82,8 @@ def run(
     final_protocol = None,
     solver_out_dim: Tuple[int, int] = (96, 3),
     plate_max_volume: float = 275.0,
+    exp_label: str = "",
+    exp_path: str = ""
 ) -> None:
     """
     Steps
@@ -97,16 +100,35 @@ def run(
     show_visuals = True 
     num_exps = 0
     current_plate = None
-    plate_n=0
+    plate_n=1
     plate_total = int(exp_budget/96)
     current_iter = 0 
     cur_best_color = None
     cur_best_diff = float("inf")
     runs_list = []
-    ot2_iter = 0
     new_plate=True
     payload={}
+    img_path = None
+    #home = Path(os.path.expanduser('~'))
+    #print(home)
+    print(exp_path)
+    exp_path =  Path(exp_path)
+    #exp_path = home/exp_path
+    print(exp_path)
+    exp_label = Path(exp_label)
+    exp_folder = exp_path / exp_label
     
+    if not (os.path.isdir(exp_path)):
+        os.makedirs(exp_path)
+        print("makingdir")
+    if not (os.path.isdir(exp_folder)):
+        os.mkdir(exp_folder)
+    if not (os.path.isdir(exp_folder/"results")):
+        os.mkdir(exp_folder/"results") 
+
+    def publish_iter():
+        #gather some shit and transfer it to the exp
+        pass
 
     while num_exps + pop_size <= exp_budget:
         
@@ -115,15 +137,22 @@ def run(
             num_exps + pop_size <= exp_budget,
         )
 
+        print('Starting iteration ' + str(current_iter))
+        publish_iter()
+
         #grab new plate if experiment starting or current plate is full
         if new_plate or current_iter==0:
             print('Grabbing New Plate')
-            #iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':init_protocol,'payload':payload})
-            #iter_thread.run()
+            iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':init_protocol,'payload':payload})
+            iter_thread.run()
+            
+            if current_iter > 0:
+               filename = "plate_"+ str(plate_n)
+               shutil.copy2(run_info["run_dir"]/ "results"/"final_image.jpg",  (exp_folder/"results"/filename))
+               print("incrementing plate n!!!!")
+               plate_n = plate_n + 1
             curr_wells_used = []
             new_plate = False
-
-       
 
         # Calculate volumes and current wells for creating the OT2 protocol
         ## FUNCX
@@ -141,7 +170,7 @@ def run(
         payload = convert_volumes_to_payload(plate_volumes)
         
         #resets OT2 resources (or not)
-        if ot2_iter == 0: 
+        if current_iter == 0: 
             payload['use_existing_resources'] = False # This assumes the whole plate was reset and all tips are new
         else: 
             payload['use_existing_resources'] = True 
@@ -149,12 +178,17 @@ def run(
         iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path': loop_protocol, 'payload':payload})
         iter_thread.run()
         run_info = iter_thread._return
+        run_path =  run_info["run_dir"].parts[-1]
+        if not (os.path.isdir(exp_folder / run_path)):
+            os.mkdir(exp_folder / run_path)
+        
         runs_list.append(run_info)
-        ot2_iter += 1
+        
 
         used_wells = current_iter*pop_size 
         if used_wells + pop_size > 96: #if we have used all wells or not enough for next iter (thrash plate, start from scratch)
             print('Thrasing Used Plate')
+            
             iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':final_protocol,'payload':payload})
             iter_thread.run()
             new_plate = True
@@ -162,22 +196,27 @@ def run(
         # analize image
         # output should be list [pop_size, 3]   
         fname = "final_image.jpg" #image"+str(ot2_iter) +".jpg"
-        img_path = run_info["run_dir"] / "results" / fname
-        plate_colors_ratios = get_colors_from_file(img_path)[1] ##FUNCX
+        img_path = run_info["run_dir"]/ "results" / fname
+        #plate_colors_ratios = get_colors_from_file(img_path)[1] ##FUNCX
+        ##To be transplanted
+       
+
+        ep = '299edea0-db9a-4693-84ba-babfa655b1be' # local
+
+        fx = FuncXExecutor(endpoint_id=ep)
+        fxresult = fx.submit(get_colors_from_file, img_path,endpoint_id=ep)
+        plate_colors_ratios = fxresult.result()[1]
+        print(plate_colors_ratios)
+        
         # Swap BGR to RGB
         plate_colors_ratios = {a:b[::-1] for a,b in plate_colors_ratios.items()}  
         
         current_plate = []
         wells_used = []
-        with open(run_info["run_dir"] / "results" / "plate_all_colors.csv", "w") as f:
-            for well in payload["destination_wells"]:
-                color = plate_colors_ratios[well]
-            # for well, color in list(plate_colors_ratios.items())[:pop_size]:
-                f.write("%s, %s,%s,%s" % (well, color[0], color[1], color[2]))
-                f.write("\n")
-                wells_used.append(well)
-                if well in payload['destination_wells']:
-                    current_plate.append(color)
+        for well in payload["destination_wells"]:
+            color = plate_colors_ratios[well]
+            wells_used.append(well)
+            current_plate.append(color)
         
         
         ## save those and the initial colors, etc
@@ -190,8 +229,12 @@ def run(
             cur_best_diff = plate_best_diff
             cur_best_color = plate_best_color
 
+
+        publish_iter() #again
+
+
         ##update numbers (seems redundant)
-        plate_n = plate_n + 1 
+        
         current_iter += 1
         num_exps += pop_size
 
@@ -236,19 +279,16 @@ def run(
             
             
         }
-       
-        for key in report:
-            print(str(type(report[key])))
-        #"experiments_so_far":runs_list,
-        loglabel = "run" + str(ot2_iter) + '.txt'
-        print(str(report))
-        with open(run_info["run_dir"] / "results" / loglabel, "w") as f:
-            report_js = json.dumps(report)
-            print(str(report_js))
-            print("saved")
+        #Save experiment data=
+        with open(exp_folder/run_path/ "exp_data.txt", "w") as f:
+            report_js = json.dumps(report, indent=4)
             f.write(report_js)
+        for filename in os.listdir(run_info["run_dir"]/ "results"):
+            shutil.copy2(run_info["run_dir"]/ "results"/filename,  (exp_folder/run_path/filename))
+    #Trash plate after experiment
     iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':final_protocol,'payload':payload})
     iter_thread.run()
+    shutil.copy2(run_info["run_dir"]/ "results"/"final_image.jpg",  (exp_folder/"results"/"final_image.jpg"))
     if show_visuals:
         import matplotlib.pyplot as plt
 
@@ -262,9 +302,12 @@ def run(
         axarr[1].set_title("Target Color")
 
         plt.show()
-
-        plt.savefig(run_info["run_dir"] / "results" / "final_plot.png", dpi=300)
-
+        plt.savefig(exp_folder/"results" / "final_plot.png", dpi=300)
+    
+    report = {"target_color" : target_color, "best_color" :cur_best_color.tolist(), "best_diff": cur_best_diff, "total_iterations": current_iter, "pop_size": pop_size, "exp_budget": exp_budget, "total_plates": plate_n}
+    with open(exp_folder/"results"/ "exp_data.txt", "w") as f:
+            report_js = json.dumps(report, indent=4)
+            f.write(report_js)
     print("This is our best color so far")
     print(cur_best_color)
     print("Runs on this experiment")
@@ -274,12 +317,12 @@ def parse_args():
     parser = ArgumentParser()
     parser.add_argument(
         "--pop_size",
-        default=96,
+        default=4,
         type=int,
         help="Population size (num wells to fill per iter)",
     )
     parser.add_argument(
-        "--exp_budget", default=96 * 3, type=int, help="Experiment budget"
+        "--exp_budget", default=8, type=int, help="Experiment budget"
     )
     parser.add_argument(
         "--target","-t", default="[101, 148, 30]", help="Color Target"
@@ -288,13 +331,22 @@ def parse_args():
     return parser.parse_args()
 
 
-def main(args):
-    
+if __name__ == "__main__":
+
+    #parser
+    args = parse_args()
+
+    #target color
     target_ratio = eval(args.target)
+
+    #workflows used
     wf_dir = Path('/home/rpl/workspace/rpl_workcell/color_picker/workflows')
     wf_get_plate = wf_dir / 'cp_wf_newplate.yaml'
     wf_trash_plate = wf_dir / 'cp_wf_trashplate.yaml'
     wf_mix_colors = wf_dir / 'cp_wf_mixcolor.yaml'
+
+    exp_label = 'feb24416'
+    exp_path = '/home/rpl/experiments'
 
     run_args = {}
     run_args["target_color"] = target_ratio
@@ -306,10 +358,6 @@ def main(args):
     run_args["pop_size"] = args.pop_size
     run_args["solver_out_dim"] = (args.pop_size, 3)
     run_args["plate_max_volume"] = args.plate_max_volume
-
+    run_args["exp_label"] = exp_label
+    run_args["exp_path"] = exp_path
     run(**run_args)
-
-
-if __name__ == "__main__":
-    args = parse_args()
-    main(args)
