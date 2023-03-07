@@ -7,12 +7,10 @@ equipment:
     alias: source
   - name: opentrons_96_tiprack_300ul
     location: "10"
-  - name: opentrons_96_tiprack_20ul
+  - name: opentrons_96_tiprack_300ul
     location: "11"
   - name: p300_single_gen2
     mount: left
-  # - name: p20_single_gen2
-  #   mount: right
 
 commands:
   # - name: add water
@@ -27,7 +25,7 @@ commands:
     destination: payload.destination_wells
     volume: payload.red_volumes
     dispense_clearance: 2
-    aspirate_clearance: 0.1
+    aspirate_clearance: 1
 
 
   - name: Mix color 2
@@ -35,14 +33,14 @@ commands:
     destination: payload.destination_wells
     volume: payload.green_volumes
     dispense_clearance: 2
-    aspirate_clearance: 0.1
+    aspirate_clearance: 1
 
   - name: Mix color 3
     source: source:A3
     destination: payload.destination_wells
     volume: payload.blue_volumes
     dispense_clearance: 2
-    aspirate_clearance: 0.1
+    aspirate_clearance: 1
     mix_cycles: 3
     mix_volume: 100
 

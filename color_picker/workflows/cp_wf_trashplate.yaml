@@ -1,0 +1,26 @@
+# TODO: add input vars to the ot2 command (csv col)
+
+metadata:
+  name: PCR - Workflow
+  author: Casey Stone, Rafael Vescovi
+  info: Initial PCR workflow for RPL workcell
+  version: 0.1
+
+workcell: /home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_workcell.yaml
+
+modules:
+  - name: ot2_cp_gamma
+  - name: pf400
+  - name: sciclops
+  - name: camera
+
+flowdef:
+
+  - name: Move to final location
+    module: pf400
+    command: transfer
+    args:
+      source: camera_module.positions.plate_station
+      target: pf400.positions.trash
+      source_plate_rotation: narrow
+      target_plate_rotation: narrow

@@ -10,16 +10,18 @@ from rpl_wei.data_classes import Module, Step
 def main():
     wf_path = Path('/home/rpl/workspace/rpl_workcell/pcr_workcell/workflows/demo.yaml')
 
-    wei_client = WEI(
-        wf_path.resolve(),
-        workcell_log_level=logging.DEBUG,
-        workflow_log_level=logging.DEBUG,
-    )
+    wei_client = WEI(wf_config = wf_path.resolve(), workcell_log_level= logging.ERROR, workflow_log_level=logging.ERROR)
 
-    wf_id = list(wei_client.get_workflows().keys())[0]
+    # wei_client = WEI(
+    #     wf_path.resolve(),
+    #     workcell_log_level=logging.DEBUG,
+    #     workflow_log_level=logging.DEBUG,
+    # )
+
+    # wf_id = list(wei_client.get_workflows().keys())[0]
 
     payload={}
-    wei_client.run_workflow(wf_id, payload=payload)
+    run_info = wei_client.run_workflow(payload=payload)
 
 if __name__ == "__main__":
     main()

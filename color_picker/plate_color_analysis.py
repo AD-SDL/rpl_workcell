@@ -50,35 +50,6 @@ def get_colors_from_file(img_path, offset=None):
         return corners, ids
 
 
-    def _draw_fiducials(
-        img: cv2.Mat,
-        corners: Tuple[
-            "npt.NDArray[np.float32]",
-            "npt.NDArray[np.float32]",
-            "npt.NDArray[np.float32]",
-            "npt.NDArray[np.float32]",
-        ],
-        ids: "npt.NDArray[np.int32]",
-    ) -> None:
-        if len(corners) <= 0:
-            return None
-
-        img = cv2.aruco.drawDetectedMarkers(img, corners, ids)
-
-        # Made by hand. Should be calculated by calibration for better results
-        cameraMatrix = np.array(
-            [[1000, 0, img.shape[0] / 2], [0, 1000, img.shape[1] / 2], [0, 0, 1]]
-        )
-        # Distortion coefficients as 0 unless known from calibration
-        distCoeffs = np.zeros((4, 1))
-
-        rvecs, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(
-            corners, 0.1, cameraMatrix, distCoeffs
-        )
-        for rvec, tvec in zip(rvecs, tvecs):
-            cv2.drawFrameAxes(img, cameraMatrix, distCoeffs, rvec, tvec, 0.05)
-
-
     def _plate_size(p: "npt.NDArray[np.int64]") -> np.float64:
         # Get a rough idea of how large a plate is (corner2corner)
         return np.linalg.norm([[p[0] - p[2]], [p[1] - p[3]]])
@@ -88,6 +59,8 @@ def get_colors_from_file(img_path, offset=None):
         """Finds the corners in image coordinate space of the largest fiducial."""
         # Find all of the fiducials
         corners, ids = _find_fiducials(img)
+        assert corners, 'Fiducial not found. Check if the image is in the image and not mirrored.'
+
         corners = np.concatenate(corners, axis=0)
 
         # Keep the largest fiducial and ignore all others
@@ -355,22 +328,6 @@ def get_colors_from_file(img_path, offset=None):
         return np.array(color)
 
 
-    def _proximity_to_center(img: cv2.Mat, plate: "npt.NDArray[np.int64]") -> np.float64:
-        # Find plate center
-        px = (plate[0] + plate[2]) / 2
-        py = (plate[1] + plate[3]) / 2
-
-        # Find image center
-        ix = img.shape[1] / 2
-        iy = img.shape[0] / 2
-
-        # Find distance between centers normalized by image size
-        dx = abs(px - ix) / img.shape[1]
-        dy = abs(py - iy) / img.shape[1]
-
-        return np.linalg.norm([dx, dy])
-
-
     def match_size(img: cv2.Mat, shape: Tuple[int, int]) -> cv2.Mat:
         min_img = min(img.shape[:2])
         max_img = max(img.shape[:2])
@@ -463,7 +420,14 @@ def get_colors_from_file(img_path, offset=None):
             # Use circle detection to find the orientation of the wells in the plate
             plateM = _refine_plate(img, plate)
             if plateM is None:
-                continue
+                print('WARNING: NO PLATE DETECTED, FALLING BACK TO DEFAULT LOCATION')
+                plateM = np.array(
+                    [
+                        [45.54750043, 0, 637.66500602],
+                        [0, 46.00297543, 414.02677891],
+                        [0, 0, 1],
+                    ]
+                )
 
             # Find all of the well's pixel positions, and get the color there
             wells = _find_wells(img, plateM)
@@ -481,22 +445,24 @@ def get_colors_from_file(img_path, offset=None):
                 color = _get_well_color(img, well)
                 wells[wellname] = color
 
-            # Report how close the plate is to the center of the image
-            # wells["proximity"] = _proximity_to_center(img, plate)
             platesD[plate_idx + 1] = wells
+
+        assert platesD, 'Plate not detected at the expected location'
 
         return platesD, plate_img, plate_only, plate_colors
 
 
     img = cv2.imread(str(img_path)) # Load image
+    assert img is not None, f'Image "{img_path}" not loaded. Check file name.'
+
     img = match_size(img, (1280, 1920)) # Crop image
     platesD, plate_img, plate_only, plate_colors = get_colors(img) # Analyze image for colors
-    
+
     base_path = img_path.parent
     cv2.imwrite(str(base_path / 'plate_img.jpg'), plate_img)
     cv2.imwrite(str(base_path / 'plate_only.jpg'), plate_only)
     cv2.imwrite(str(base_path / 'plate_colors.jpg'), plate_colors)
     ##save side images
-    
+
     return platesD
 

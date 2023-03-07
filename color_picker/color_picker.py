@@ -38,11 +38,7 @@ def wei_run_flow(payload):
     wf_file_path = args.workflow.resolve()
 
     wei_client = WEI(wf_file_path)
-    protocol_id = list(wei_client.get_workflows().keys())[0]          
-    run_info = wei_client.run_workflow(
-        workflow_id=protocol_id,
-        payload=payload,
-    )
+    run_info = wei_client.run_workflow(payload=payload)
     return run_info
 
 class ThreadWithReturnValue(Thread):
@@ -93,6 +89,7 @@ def run(
 
     cur_best_color = None
     cur_best_diff = float("inf")
+    current_iter = 0 
     while num_exps + pop_size <= exp_budget:
         plate_volumes = solver.run_iteration(
             target_color,
@@ -103,12 +100,19 @@ def run(
             return_max_volume=plate_max_volume,
         )
 
+        target_plate = [
+                (np.asarray(elem) / 275).tolist() for elem in plate_volumes
+            ]
 
         if not simulate:
             payload = convert_volumes_to_payload(plate_volumes)
-            if plate_n:
-                used_pip = plate_n*pop_size*3
-                payload
+            if current_iter == 0: 
+                payload['use_existing_resources'] = False
+            else: 
+                payload['use_existing_resources'] = True 
+            # if plate_n:
+            #     used_tips = plate_n*pop_size*3
+            #     payload['used_tips'] = used_tips
             iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'payload':payload})
             iter_thread.run()
             # iter_thread.join()
@@ -118,6 +122,7 @@ def run(
             # output should be list [pop_size, 3]
             img_path = run_info["run_dir"] / "results" / "final_image.jpg"
             plate_colors_ratios = get_colors_from_file(img_path)[1]
+            # Swap BGR to RGB
             plate_colors_ratios = {a:b[::-1] for a,b in plate_colors_ratios.items()}  
            
             current_plate = []
@@ -128,16 +133,16 @@ def run(
                     if well in payload['destination_wells']:
                         current_plate.append(color)
             plate_n = plate_n + 1 
+
         else:
             # going to convert back to ratios for now
-            plate_color_ratios = [
+            plate_colors_ratios = [
                 (np.asarray(elem) / 275).tolist() for elem in plate_volumes
             ]
+            current_plate = plate_colors_ratios
 
-        plate_color_ratios = [
-            (np.asarray(elem) / 275).tolist() for elem in plate_volumes
-        ]
 
+        current_iter += 1
         plate_best_color_ind = solver._find_best_color(current_plate, target_color)
         plate_best_color = current_plate[plate_best_color_ind]
         plate_best_diff = solver._color_diff(plate_best_color, target_color)
@@ -155,7 +160,7 @@ def run(
             # set figure size to 10x10
             f.set_figheight(10)
             f.set_figwidth(10)
-            graph_vis = np.asarray(plate_color_ratios)
+            graph_vis = np.asarray(target_plate)
             graph_vis = graph_vis.reshape(*solver_out_dim)
             plate_vis = np.asarray(current_plate)
             plate_vis = plate_vis.reshape(*solver_out_dim)
