@@ -2,20 +2,25 @@
 
 import logging
 from pathlib import Path
+import re
 from argparse import ArgumentParser
 from typing import List, Dict, Any, Tuple
 from itertools import product
 from typing import Optional
 from threading import Thread
+from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
 import json
 import copy
+import yaml
 import numpy as np
 import os, shutil
 from rpl_wei import WEI
 from plate_color_analysis import get_colors_from_file
 from evolutionary_solver import EvolutionaryColorSolver
 from funcx import FuncXExecutor
+from datetime import datetime
 from plate_color_analysis import get_colors_from_file
+from publish import publish_iter
 curr_wells_used = []
 
 def new_plate():
@@ -50,6 +55,11 @@ def convert_volumes_to_payload(volumes: List[List[float]]) -> Dict[str, Any]:
         "destination_wells": dest_wells,
     }
 
+
+
+
+
+
 def wei_run_flow(wf_file_path, payload):
     wei_client = WEI(wf_file_path)
     run_info = wei_client.run_workflow(payload=payload)
@@ -67,10 +77,44 @@ class ThreadWithReturnValue(Thread):
         if self._target is not None:
             self._return = self._target(*self._args,
                                                 **self._kwargs)
+        
     def join(self, *args):
         Thread.join(self, *args)
         return self._return
-
+def get_log_info(run_path, steps_run, lineiter):
+        print("starting")
+        while not(os.path.isfile(run_path / "runLogger.log")):
+           
+            pass
+        with open(run_path/ "runLogger.log") as log:
+            lines = log.read().splitlines()
+            log.close()
+            for i, step in enumerate(steps_run):
+                starttime = []
+                while starttime == [] and lineiter < len(lines):
+                    line = lines[lineiter]
+                    columns = [col.strip() for col in line.split(':') if col]
+                    if columns[-2] == 'Started running step with name' and columns[-1] == step["name"]:
+                        starttime = datetime.strptime(line[0:23], '%Y-%m-%d %H:%M:%S,%f')
+                    lineiter += 1
+                endtime = []
+                while endtime == [] and lineiter < len(lines):
+                    line = lines[lineiter]
+                    columns = [col.strip() for col in line.split(':') if col]
+                    if columns[-2] == 'Finished running step with name' and columns[-1] == step["name"]:
+                        endtime = datetime.strptime(line[0:23], '%Y-%m-%d %H:%M:%S,%f')
+                    lineiter += 1
+                steps_run[i]["start_time"] = str(starttime)
+                steps_run[i]["end_time"] = str(endtime)
+                steps_run[i]["duration"] = str(endtime-starttime)
+        return steps_run, lineiter
+def get_wf_info(ptcl):
+    steps_run = []
+    with open(ptcl, 'r') as stream:
+            wf = yaml.safe_load(stream)
+            for test in wf["flowdef"]:
+                steps_run.append(test)
+    return steps_run
 def run(
     target_color: List[float],
     wei_client: Optional["WEI"] = None,
@@ -109,12 +153,13 @@ def run(
     new_plate=True
     payload={}
     img_path = None
+    
     #home = Path(os.path.expanduser('~'))
     #print(home)
     print(exp_path)
     exp_path =  Path(exp_path)
     #exp_path = home/exp_path
-    print(exp_path)
+    #print(exp_path)
     exp_label = Path(exp_label)
     exp_folder = exp_path / exp_label
     
@@ -126,26 +171,29 @@ def run(
     if not (os.path.isdir(exp_folder/"results")):
         os.mkdir(exp_folder/"results") 
 
-    def publish_iter():
-        #gather some shit and transfer it to the exp
-        pass
-
+    
     while num_exps + pop_size <= exp_budget:
-        
+        steps_run = []
+        log_line = 0
+        run_dir = ""
         print(
             "Starting experiment, can run at least one iteration:",
             num_exps + pop_size <= exp_budget,
         )
 
         print('Starting iteration ' + str(current_iter))
-        publish_iter()
+        #publish_iter()
 
         #grab new plate if experiment starting or current plate is full
         if new_plate or current_iter==0:
-            print('Grabbing New Plate')
-            iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':init_protocol,'payload':payload})
-            iter_thread.run()
-            
+            # print('Grabbing New Plate')
+            # iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':init_protocol,'payload':payload})
+            # iter_thread.run()
+            # print(iter_thread._return)
+            # t_steps_run = get_wf_info(init_protocol)
+            # run_dir = iter_thread._return["run_dir"]
+            # t_steps_run, log_line = get_log_info(run_dir, t_steps_run, log_line)
+            # steps_run.append(t_steps_run)
             if current_iter > 0:
                filename = "plate_"+ str(plate_n)
                shutil.copy2(run_info["run_dir"]/ "results"/"final_image.jpg",  (exp_folder/"results"/filename))
@@ -178,6 +226,18 @@ def run(
         iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path': loop_protocol, 'payload':payload})
         iter_thread.run()
         run_info = iter_thread._return
+        t_steps_run = get_wf_info(loop_protocol)
+        if run_dir == "":
+                run_dir = run_info["run_dir"]
+                t_steps_run, log_line = get_log_info(run_dir,  t_steps_run, log_line)
+               
+        else:
+                t_steps_run, log_line = get_log_info(run_dir, t_steps_run, log_line)
+        steps_run.append(t_steps_run)
+        
+        
+        #with open(run_info["run_dir"]/ "runLogger.log") as f:
+        #        print(f.read())
         run_path =  run_info["run_dir"].parts[-1]
         if not (os.path.isdir(exp_folder / run_path)):
             os.mkdir(exp_folder / run_path)
@@ -186,11 +246,14 @@ def run(
         
 
         used_wells = current_iter*pop_size 
-        if used_wells + pop_size > 96: #if we have used all wells or not enough for next iter (thrash plate, start from scratch)
+        if used_wells + pop_size > 1: #if we have used all wells or not enough for next iter (thrash plate, start from scratch)
             print('Thrasing Used Plate')
             
-            iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':final_protocol,'payload':payload})
-            iter_thread.run()
+            #iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':final_protocol,'payload':payload})
+            #iter_thread.run()
+            t_steps_run = get_wf_info(final_protocol)
+            t_steps_run, log_line = get_log_info(run_dir,  t_steps_run, log_line)
+            steps_run.append(t_steps_run)
             new_plate = True
 
         # analize image
@@ -200,13 +263,15 @@ def run(
         #plate_colors_ratios = get_colors_from_file(img_path)[1] ##FUNCX
         ##To be transplanted
        
-
+        #print("funcx started")
         ep = '299edea0-db9a-4693-84ba-babfa655b1be' # local
 
         fx = FuncXExecutor(endpoint_id=ep)
         fxresult = fx.submit(get_colors_from_file, img_path,endpoint_id=ep)
         plate_colors_ratios = fxresult.result()[1]
         print(plate_colors_ratios)
+        print("funcx finished")
+        #plate_colors_ratios = get_colors_from_file(img_path)[1]
         
         # Swap BGR to RGB
         plate_colors_ratios = {a:b[::-1] for a,b in plate_colors_ratios.items()}  
@@ -230,14 +295,14 @@ def run(
             cur_best_color = plate_best_color
 
 
-        publish_iter() #again
+        #again
 
 
         ##update numbers (seems redundant)
         
         current_iter += 1
         num_exps += pop_size
-
+        print(num_exps)
         ##Plot review
         if show_visuals:
             import matplotlib.pyplot as plt
@@ -263,8 +328,9 @@ def run(
             f.canvas.draw()
             f.canvas.flush_events()
             plt.pause(0.001)
+            #plt.savefig(exp_folder/run_path/"run_summary.png", dpi=300)
             # plt.imsave(run_info["run_dir"] / "results" / "experiment_summary.jpg")
-
+        #print("novis")
         report={
             "plate_N": plate_n,
             "target_color": target_color,
@@ -275,19 +341,29 @@ def run(
             "differences": plate_diffs.tolist(),
             "best_on_plate": plate_best_color.tolist(),
             "pos_on_plate": plate_best_color_ind.tolist(),
-            "best_so_far": cur_best_color.tolist()
+            "best_so_far": cur_best_color.tolist(),
+            "wf_steps": steps_run
             
             
         }
-        #Save experiment data=
+        #Save run report
         with open(exp_folder/run_path/ "exp_data.txt", "w") as f:
+            report_js = json.dumps(report, indent=4)
+            f.write(report_js)
+        #Save overall results
+        report = {"target_color" : target_color, "best_color" : cur_best_color.tolist(), "best_diff": cur_best_diff, "total_iterations": current_iter, "pop_size": pop_size, "exp_budget": exp_budget, "total_plates": plate_n}
+        with open(exp_folder/"results"/ "exp_data.txt", "w") as f:
             report_js = json.dumps(report, indent=4)
             f.write(report_js)
         for filename in os.listdir(run_info["run_dir"]/ "results"):
             shutil.copy2(run_info["run_dir"]/ "results"/filename,  (exp_folder/run_path/filename))
+        img_name = "plate_"+str(plate_n)+".jpg"
+        shutil.copy2(run_info["run_dir"]/ "results"/"final_image.jpg",  (exp_folder/"results"/img_name))
+        print("publishing:")
+        publish_iter(exp_folder/run_path, exp_folder)
     #Trash plate after experiment
-    iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':final_protocol,'payload':payload})
-    iter_thread.run()
+    #iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':final_protocol,'payload':payload})
+    #iter_thread.run()
     shutil.copy2(run_info["run_dir"]/ "results"/"final_image.jpg",  (exp_folder/"results"/"final_image.jpg"))
     if show_visuals:
         import matplotlib.pyplot as plt
@@ -304,10 +380,7 @@ def run(
         plt.show()
         plt.savefig(exp_folder/"results" / "final_plot.png", dpi=300)
     
-    report = {"target_color" : target_color, "best_color" :cur_best_color.tolist(), "best_diff": cur_best_diff, "total_iterations": current_iter, "pop_size": pop_size, "exp_budget": exp_budget, "total_plates": plate_n}
-    with open(exp_folder/"results"/ "exp_data.txt", "w") as f:
-            report_js = json.dumps(report, indent=4)
-            f.write(report_js)
+    
     print("This is our best color so far")
     print(cur_best_color)
     print("Runs on this experiment")
