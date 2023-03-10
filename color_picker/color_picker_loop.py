@@ -81,7 +81,8 @@ class ThreadWithReturnValue(Thread):
     def join(self, *args):
         Thread.join(self, *args)
         return self._return
-def get_log_info(run_path, steps_run, lineiter):
+def get_log_info(run_path, steps_run):
+        lineiter=0
         print("starting")
         while not(os.path.isfile(run_path / "runLogger.log")):
            
@@ -186,16 +187,16 @@ def run(
 
         #grab new plate if experiment starting or current plate is full
         if new_plate or current_iter==0:
-            # print('Grabbing New Plate')
-            # iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':init_protocol,'payload':payload})
-            # iter_thread.run()
-            # print(iter_thread._return)
-            # t_steps_run = get_wf_info(init_protocol)
-            # run_dir = iter_thread._return["run_dir"]
-            # t_steps_run, log_line = get_log_info(run_dir, t_steps_run, log_line)
-            # steps_run.append(t_steps_run)
+            print('Grabbing New Plate')
+            iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':init_protocol,'payload':payload})
+            iter_thread.run()
+            print(iter_thread._return)
+            t_steps_run = get_wf_info(init_protocol)
+            run_dir = iter_thread._return["run_dir"]
+            t_steps_run, log_line = get_log_info(run_dir, t_steps_run)
+            steps_run.append(t_steps_run)
             if current_iter > 0:
-               filename = "plate_"+ str(plate_n)
+               filename = "plate_"+ str(plate_n)+".jpg"
                shutil.copy2(run_info["run_dir"]/ "results"/"final_image.jpg",  (exp_folder/"results"/filename))
                print("incrementing plate n!!!!")
                plate_n = plate_n + 1
@@ -227,12 +228,8 @@ def run(
         iter_thread.run()
         run_info = iter_thread._return
         t_steps_run = get_wf_info(loop_protocol)
-        if run_dir == "":
-                run_dir = run_info["run_dir"]
-                t_steps_run, log_line = get_log_info(run_dir,  t_steps_run, log_line)
-               
-        else:
-                t_steps_run, log_line = get_log_info(run_dir, t_steps_run, log_line)
+        run_dir = run_info["run_dir"]
+        t_steps_run, log_line = get_log_info(run_dir, t_steps_run)
         steps_run.append(t_steps_run)
         
         
@@ -249,10 +246,11 @@ def run(
         if used_wells + pop_size > 1: #if we have used all wells or not enough for next iter (thrash plate, start from scratch)
             print('Thrasing Used Plate')
             
-            #iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':final_protocol,'payload':payload})
-            #iter_thread.run()
+            iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':final_protocol,'payload':payload})
+            iter_thread.run()
+            run_dir =  iter_thread._return["run_dir"]
             t_steps_run = get_wf_info(final_protocol)
-            t_steps_run, log_line = get_log_info(run_dir,  t_steps_run, log_line)
+            t_steps_run, log_line = get_log_info(run_dir,  t_steps_run)
             steps_run.append(t_steps_run)
             new_plate = True
 
@@ -358,13 +356,16 @@ def run(
         for filename in os.listdir(run_info["run_dir"]/ "results"):
             shutil.copy2(run_info["run_dir"]/ "results"/filename,  (exp_folder/run_path/filename))
         img_name = "plate_"+str(plate_n)+".jpg"
-        shutil.copy2(run_info["run_dir"]/ "results"/"final_image.jpg",  (exp_folder/"results"/img_name))
+        shutil.copy2(run_info["run_dir"]/ "results"/"final_image.jpg",  (exp_folder/run_path/img_name))
+        for filename in os.listdir(exp_folder/ "results"):
+            if "plate_" in filename:
+               shutil.copy2(exp_folder/ "results"/filename,  (exp_folder/run_path/filename))
         print("publishing:")
         publish_iter(exp_folder/run_path, exp_folder)
     #Trash plate after experiment
     #iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':final_protocol,'payload':payload})
     #iter_thread.run()
-    shutil.copy2(run_info["run_dir"]/ "results"/"final_image.jpg",  (exp_folder/"results"/"final_image.jpg"))
+    shutil.copy2(run_info["run_dir"]/ "results"/"final_image.jpg",  (exp_folder/"results"/f"plate_{plate_n}.jpg"))
     if show_visuals:
         import matplotlib.pyplot as plt
 

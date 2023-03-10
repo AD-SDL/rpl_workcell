@@ -13,12 +13,12 @@ modules:
   - name: sciclops
 
 flowdef:
-  - name: Color Plate to Plate Exchange
-    module: sciclops
-    command: get_plate
-    args:
-      pos: "tower1"
-    comments: Move initial color plate from sciclops to plate exchange
+  # - name: Color Plate to Plate Exchange
+  #   module: sciclops
+  #   command: get_plate
+  #   args:
+  #     pos: "tower1"
+  #   comments: Move initial color plate from sciclops to plate exchange
 
   - name: Move to final location
     module: pf400
