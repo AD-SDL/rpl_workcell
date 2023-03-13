@@ -22,8 +22,8 @@ pip install .
 ##Sciclops
 git clone https://github.com/AD-SDL/sciclops_module
 
-##PF400
-git clone https://github.com/AD-SDL/pf400_module
+##Cameras
+git clone https://github.com/AD-SDL/camera_module
 
 ##OT2
 git clone https://github.com/AD-SDl/ot2_module
@@ -42,10 +42,4 @@ git clone https://github.com/AD-SDL/rpl_wei
 cd ..
 rosdep install --from-paths src --ignore-src --rosdistro humble -y
 colcon build
-
-
-# cd $ROS_WS/src/rpl_wei
-# pip3 install -r requirements/requirements.txt
-# pip3 install -e .
-# cd $ROS_WS
 
