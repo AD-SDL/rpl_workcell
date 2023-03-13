@@ -40,7 +40,7 @@ modules:
     type: wei_ros_node
     model: sealer
     config:
-      ros_node: "/std_ns/sealerNode"
+      ros_node: "/std_ns/SealerNode"
     positions:
       default: [205.128, -2.814, 264.373, 365.863, 79.144, 411.553]
       
@@ -48,7 +48,7 @@ modules:
     type: wei_ros_node
     model: peeler
     config:
-      ros_node: "/std_ns/peelerNode"
+      ros_node: "/std_ns/PeelerNode"
     positions:
       default: [225.521, -24.846, 244.836, 406.623, 80.967, 398.778]
 
