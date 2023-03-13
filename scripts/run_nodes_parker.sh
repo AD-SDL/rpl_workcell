@@ -4,21 +4,21 @@ session="nodes"
 tmux new-session -d -s $session
 tmux set -g mouse on
 
-# window=0
-# tmux new-window -t $session:$window -n 'sealerpeeler_camera'
-# tmux rename-window -t $session:$window 'sealerpeeler_camera'
-# tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
-# tmux send-keys -t $session:$window 'ros2 launch camera_module sp_module.launch.py' C-m
+window=0
+tmux new-window -t $session:$window -n 'sealerpeeler_camera'
+tmux rename-window -t $session:$window 'sealerpeeler_camera'
+tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
+tmux send-keys -t $session:$window 'ros2 launch camera_module sp_module.launch.py' C-m
 
 window=1
 tmux new-window -t $session:$window -n 'sealer'
 tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
-tmux send-keys -t $session:$window 'ros2 launch sealer_module_client sealer_module.launch.py' C-m
+tmux send-keys -t $session:$window 'ros2 launch a4s_sealer_client a4s_sealer_client.launch.py' C-m
 
 window=2
 tmux new-window -t $session:$window -n 'peeler'
 tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
-tmux send-keys -t $session:$window 'ros2 launch peeler_module_client peeler_module.launch.py' C-m
+tmux send-keys -t $session:$window 'ros2 launch brooks_peeler_client brooks_peeler_client.launch.py' C-m
 
 window=3
 tmux new-window -t $session:$window -n 'sciclops'
