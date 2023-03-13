@@ -6,6 +6,10 @@ equipment:
     location: "7"
     alias: source
   - name: opentrons_96_tiprack_300ul
+    location: "8"
+  - name: opentrons_96_tiprack_300ul
+    location: "9"
+  - name: opentrons_96_tiprack_300ul
     location: "10"
   - name: opentrons_96_tiprack_300ul
     location: "11"

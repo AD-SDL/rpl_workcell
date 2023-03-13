@@ -21,7 +21,7 @@ from funcx import FuncXExecutor
 from datetime import datetime
 from plate_color_analysis import get_colors_from_file
 from publish import publish_iter
-curr_wells_used = []
+MAX_PLATE_SIZE = 1
 
 def new_plate():
     well_rows = ["A", "B", "C", "D", "E", "F", "G", "H"]
@@ -29,15 +29,14 @@ def new_plate():
     well_names = ["".join(elem) for elem in product(well_rows, well_cols)]
     return well_names
 
-def convert_volumes_to_payload(volumes: List[List[float]]) -> Dict[str, Any]:
+def convert_volumes_to_payload(volumes: List[List[float]], curr_wells_used: List[Any]) -> Tuple[Dict[str, Any], List[Any]]:
  
     well_names = new_plate()
- 
-    if len(volumes) <= len(well_names) and len(volumes) <= 96 - len(curr_wells_used):
-        curr_wells_available = copy.copy(well_names)
+    curr_wells_available = copy.copy(well_names)
+    if len(volumes) <= len(well_names) and len(volumes) <= MAX_PLATE_SIZE - len(curr_wells_used):
         for i in curr_wells_used:
             curr_wells_available.remove(i)
-
+        
     r_vol, g_vol, b_vol = [], [], []
     dest_wells = []
     for color, well in zip(volumes, curr_wells_available):
@@ -53,7 +52,7 @@ def convert_volumes_to_payload(volumes: List[List[float]]) -> Dict[str, Any]:
         "green_volumes": g_vol,
         "blue_volumes": b_vol,
         "destination_wells": dest_wells,
-    }
+    }, curr_wells_used
 
 
 
@@ -120,12 +119,12 @@ def run(
     target_color: List[float],
     wei_client: Optional["WEI"] = None,
     solver: EvolutionaryColorSolver = EvolutionaryColorSolver,
-    exp_budget: int = 96 * 3,
-    pop_size: int = 96,
+    exp_budget: int = MAX_PLATE_SIZE * 3,
+    pop_size: int = MAX_PLATE_SIZE,
     init_protocol = None,
     loop_protocol = None,
     final_protocol = None,
-    solver_out_dim: Tuple[int, int] = (96, 3),
+    solver_out_dim: Tuple[int, int] = (MAX_PLATE_SIZE, 3),
     plate_max_volume: float = 275.0,
     exp_label: str = "",
     exp_path: str = ""
@@ -146,7 +145,7 @@ def run(
     num_exps = 0
     current_plate = None
     plate_n=1
-    plate_total = int(exp_budget/96)
+    plate_total = int(exp_budget/MAX_PLATE_SIZE)
     current_iter = 0 
     cur_best_color = None
     cur_best_diff = float("inf")
@@ -172,11 +171,12 @@ def run(
     if not (os.path.isdir(exp_folder/"results")):
         os.mkdir(exp_folder/"results") 
 
-    
+    curr_wells_used = []
     while num_exps + pop_size <= exp_budget:
         steps_run = []
         log_line = 0
         run_dir = ""
+       
         print(
             "Starting experiment, can run at least one iteration:",
             num_exps + pop_size <= exp_budget,
@@ -216,7 +216,7 @@ def run(
         target_plate = [
                 (np.asarray(elem) / 275).tolist() for elem in plate_volumes
             ]
-        payload = convert_volumes_to_payload(plate_volumes)
+        payload, curr_wells_used = convert_volumes_to_payload(plate_volumes, curr_wells_used)
         
         #resets OT2 resources (or not)
         if current_iter == 0: 
@@ -243,7 +243,7 @@ def run(
         
 
         used_wells = current_iter*pop_size 
-        if used_wells + pop_size > 1: #if we have used all wells or not enough for next iter (thrash plate, start from scratch)
+        if used_wells + pop_size > MAX_PLATE_SIZE: #if we have used all wells or not enough for next iter (thrash plate, start from scratch)
             print('Thrasing Used Plate')
             
             iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':final_protocol,'payload':payload})
@@ -253,6 +253,7 @@ def run(
             t_steps_run, log_line = get_log_info(run_dir,  t_steps_run)
             steps_run.append(t_steps_run)
             new_plate = True
+            curr_wells_used = []
 
         # analize image
         # output should be list [pop_size, 3]   
@@ -330,6 +331,7 @@ def run(
             # plt.imsave(run_info["run_dir"] / "results" / "experiment_summary.jpg")
         #print("novis")
         report={
+            "experiment ": str(exp_label),
             "plate_N": plate_n,
             "target_color": target_color,
             "wells": wells_used,
@@ -411,7 +413,7 @@ if __name__ == "__main__":
     args = parse_args()
 
     #target color
-    target_ratio = eval(args.target)
+    target_ratio = np.random.randint(0, 255, 3).tolist() #eval(args.target)
 
     #workflows used
     wf_dir = Path('/home/rpl/workspace/rpl_workcell/color_picker/workflows')
@@ -419,7 +421,7 @@ if __name__ == "__main__":
     wf_trash_plate = wf_dir / 'cp_wf_trashplate.yaml'
     wf_mix_colors = wf_dir / 'cp_wf_mixcolor.yaml'
 
-    exp_label = 'feb24416'
+    exp_label = 'Mar13morningtests'
     exp_path = '/home/rpl/experiments'
 
     run_args = {}
