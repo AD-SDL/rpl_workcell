@@ -1,11 +1,13 @@
 #!/bin/bash
-
+echo asdkfasjdfkljasdf
 source /opt/ros/humble/install.bash
 ROS_WS=~/wei_ws
 
 mkdir -p $ROS_WS
 mkdir -p $ROS_WS/src
 cd $ROS_WS/src
+
+echo test
 
 ##Peeler
 git clone https://github.com/AD-SDL/a4s_sealer_module
