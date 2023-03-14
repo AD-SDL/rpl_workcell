@@ -13,6 +13,7 @@ modules:
   - name: sealer
   - name: biometra
   - name: sciclops
+  - name: camera
 
 flowdef:
   - name: PCR Plate Exchange
@@ -38,7 +39,15 @@ flowdef:
     module: ot2_pcr_beta
     command: run_protocol
     args:
-      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/PCR_prep_full_plate_multi_noresource.yaml
+      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/ot2_beta_test_first.yaml
+    checks: RESOURCE_CHECK
+    comment: resource check not implemented, but will be
+
+  - name: Mix OT2 reactions
+    module: ot2_pcr_beta
+    command: run_protocol
+    args:
+      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/ot2_beta_test_second.yaml
     checks: RESOURCE_CHECK
     comment: resource check not implemented, but will be
 
@@ -92,11 +101,27 @@ flowdef:
     checks: null
     comment: null
 
-  - name: Move to final location
+  - name: Move to camera_module
     module: pf400
     command: transfer
     args:
       source: peeler.positions.default
       target: camera_module.positions.plate_station
+      source_plate_rotation: narrow
+      target_plate_rotation: narrow
+
+  - name: Take Picture
+    module: camera_module
+    command: take_picture
+    args:
+      save_location: local_run_results
+      file_name: "final_image.jpg"
+
+  - name: Trash Plate
+    module: pf400
+    command: transfer
+    args:
+      source: camera_module.positions.plate_station
+      target: pf400.positions.trash
       source_plate_rotation: narrow
       target_plate_rotation: narrow

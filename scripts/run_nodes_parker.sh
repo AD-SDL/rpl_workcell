@@ -4,26 +4,21 @@ session="nodes"
 tmux new-session -d -s $session
 tmux set -g mouse on
 
-# window=0
-# tmux new-window -t $session:$window -n 'sealerpeeler_camera'
-# tmux rename-window -t $session:$window 'sealerpeeler_camera'
-# tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
-# tmux send-keys -t $session:$window 'ros2 launch camera_module sp_module.launch.py' C-m
-
-# window=1
-# tmux new-window -t $session:$window -n 'sealer'
-# tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
-# tmux send-keys -t $session:$window 'ros2 launch sp_module_client sealer.launch.py' C-m
-
-# window=2
-# tmux new-window -t $session:$window -n 'peeler'
-# tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
-# tmux send-keys -t $session:$window 'ros2 launch sp_module_client peeler.launch.py' C-m
+window=0
+tmux new-window -t $session:$window -n 'sealerpeeler_camera'
+tmux rename-window -t $session:$window 'sealerpeeler_camera'
+tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
+tmux send-keys -t $session:$window 'ros2 launch camera_module_client camera_publisher.launch.py camera_name:=camera_sp camera_number:=1' C-m
 
 window=1
-tmux new-window -t $session:$window -n 'sealerpeeler'
+tmux new-window -t $session:$window -n 'sealer'
 tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
-tmux send-keys -t $session:$window 'ros2 launch sp_module_client sp_module_client.launch.py' C-m
+tmux send-keys -t $session:$window 'ros2 launch a4s_sealer_client a4s_sealer_client.launch.py' C-m
+
+window=2
+tmux new-window -t $session:$window -n 'peeler'
+tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
+tmux send-keys -t $session:$window 'ros2 launch brooks_peeler_client brooks_peeler_client.launch.py' C-m
 
 window=3
 tmux new-window -t $session:$window -n 'sciclops'
@@ -40,7 +35,7 @@ tmux new-window -t $session:$window -n 'ot2_beta'
 tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
 tmux send-keys -t $session:$window 'ros2 launch ot2_module_client ot2_module.launch.py ip:=146.137.240.101 robot_name:=ot2_growth_beta' C-m
 
-window=7
+window=6
 tmux new-window -t $session:$window -n 'ot2_gamma'
 tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
 tmux send-keys -t $session:$window 'ros2 launch ot2_module_client ot2_module.launch.py ip:=146.137.240.102 robot_name:=ot2_cp_gamma' C-m

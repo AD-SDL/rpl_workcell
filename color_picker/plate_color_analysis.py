@@ -420,7 +420,14 @@ def get_colors_from_file(img_path, offset=None):
             # Use circle detection to find the orientation of the wells in the plate
             plateM = _refine_plate(img, plate)
             if plateM is None:
-                continue
+                print('WARNING: NO PLATE DETECTED, FALLING BACK TO DEFAULT LOCATION')
+                plateM = np.array(
+                    [
+                        [45.54750043, 0, 637.66500602],
+                        [0, 46.00297543, 414.02677891],
+                        [0, 0, 1],
+                    ]
+                )
 
             # Find all of the well's pixel positions, and get the color there
             wells = _find_wells(img, plateM)
