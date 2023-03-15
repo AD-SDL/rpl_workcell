@@ -1,0 +1,52 @@
+
+config:
+  ros_namespace: bio_workcell
+  funcx_local_ep: ""
+  globus_local_ep: ""
+  ##
+  globus_search_index: "aefcecc6-e554-4f8c-a25b-147f23091944"
+  globus_portal_ep: "bb8d048a-2cad-4029-a9c7-671ec5d1f84d"
+  ##
+  globus_group: "dda56f31-53d1-11ed-bd8b-0db7472df7d6"
+
+modules:
+  - name: plateEX
+    type: wei_ros_node
+    model: hudson_plate_ex
+    config:
+      ros_node: "/std_ns/PlateEXNode"
+    positions:
+
+  - name: sealer
+    type: wei_ros_node
+    model: sealer
+    config:
+      ros_node: "/std_ns/SealerNode"
+    positions:
+      default: []
+      
+  - name: peeler
+    type: wei_ros_node
+    model: peeler
+    config:
+      ros_node: "/std_ns/PeelerNode"
+    positions:
+      default: []
+
+  - name: biometra
+    type: wei_ros_node
+    model: biometra
+    config:
+      ros_node: "/std_ns/biometraNode"
+    positions:
+      default: []
+
+  - name: liconic
+    type: wei_ros_node
+    model: liconic
+    config:
+      ros_node: "/std_ns/liconicNode"
+    positions:
+      default: []
+
+

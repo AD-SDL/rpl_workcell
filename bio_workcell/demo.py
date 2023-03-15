@@ -10,8 +10,10 @@ def main():
     wei_client = WEI(wf_config = wf_path.resolve(), workcell_log_level= logging.ERROR, workflow_log_level=logging.ERROR)
 
 
-    payload={}
+    payload={'temp':39.6}
+
     run_info = wei_client.run_workflow(payload=payload)
+    print(run_info)
     ## ADD PUBLISH HERE!!
 
 if __name__ == "__main__":

@@ -1,0 +1,27 @@
+metadata:
+  name: Liconic Test - Workflow
+  author: Casey Stone, Rafael Vescovi
+  info: Initial Tests for the Liconic Driver at BIO.
+  version: 0.1
+
+workcell: /home/rpl/workspace/rpl_workcell/bio_workcell/bio_workcell.yaml
+
+modules:
+  - name: liconic
+
+flowdef:
+  - name: Get Liconic Temp
+    module: liconic
+    command: get_current_temp
+    args: 
+      foo: foo
+    checks: null
+    comment: Stage pcr plates
+
+  - name: Get Liconic Temp
+    module: liconic
+    command: set_target_temp
+    args: 
+      temp: payload.temp
+    checks: null
+    comment: Stage pcr plates
