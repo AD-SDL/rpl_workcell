@@ -16,11 +16,12 @@ import numpy as np
 import os, shutil
 from rpl_wei import WEI
 from plate_color_analysis import get_colors_from_file
-from evolutionary_solver import EvolutionaryColorSolver
+from bayes_solver import BayesColorSolver
 from funcx import FuncXExecutor
 from datetime import datetime
 from plate_color_analysis import get_colors_from_file
 from publish import publish_iter
+from skopt import Optimizer
 MAX_PLATE_SIZE = 96
 
 def new_plate():
@@ -119,7 +120,7 @@ def run(
     exp_type: str,
     target_color: List[float],
     wei_client: Optional["WEI"] = None,
-    solver: EvolutionaryColorSolver = EvolutionaryColorSolver,
+    solver: BayesColorSolver = BayesColorSolver,
     exp_budget: int = MAX_PLATE_SIZE * 3,
     pop_size: int = MAX_PLATE_SIZE,
     init_protocol = None,
@@ -171,7 +172,7 @@ def run(
         os.mkdir(exp_folder)
     if not (os.path.isdir(exp_folder/"results")):
         os.mkdir(exp_folder/"results") 
-
+    
     curr_wells_used = []
     while num_exps + pop_size <= exp_budget:
         steps_run = []
@@ -207,7 +208,6 @@ def run(
         # Calculate volumes and current wells for creating the OT2 protocol
         ## FUNCX
         plate_volumes = solver.run_iteration( 
-            target_color,
             current_plate,
             out_dim=(pop_size, 3),
             pop_size=pop_size,
@@ -449,7 +449,7 @@ if __name__ == "__main__":
     wf_trash_plate = wf_dir / 'cp_wf_trashplate.yaml'
     wf_mix_colors = wf_dir / 'cp_wf_mixcolor.yaml'
 
-    exp_label = "March15thOvernightRun"
+    exp_label = "March16thOvernightRun"
     exp_path = '/home/rpl/experiments'
     exp_type = 'color_picker'
 
@@ -458,7 +458,7 @@ if __name__ == "__main__":
     run_args["init_protocol"] = wf_get_plate
     run_args["loop_protocol"] = wf_mix_colors
     run_args["final_protocol"] = wf_trash_plate
-    run_args["solver"] = EvolutionaryColorSolver
+    run_args["solver"] = BayesColorSolver
     run_args["exp_budget"] = args.exp_budget
     run_args["pop_size"] = args.pop_size
     run_args["solver_out_dim"] = (args.pop_size, 3)

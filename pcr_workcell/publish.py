@@ -3,7 +3,7 @@ from gather_data import GatherMetaData
 from pathlib import Path
 @generate_flow_definition(modifiers={'publish_gather_metadata': {'payload': '$.GatherMetadata.details.result[0]'}})
 class PublishRun(GladierBaseClient):
-    globus_group = 'dda56f31-53d1-11ed-bd8b-0db7472df7d6'
+    # globus_group = 'dda56f31-53d1-11ed-bd8b-0db7472df7d6'
     gladier_tools = [
         GatherMetaData,
         'gladier_tools.publish.Publish'
@@ -11,7 +11,7 @@ class PublishRun(GladierBaseClient):
 
 def publish_iter(folder_path, dest_path):
         #gather some shit and transfer it to the exp\
-        print(str(folder_path.expanduser()))
+        print(str(folder_path))
         print(str(dest_path ))    
         flow_input = {
             'input': {
@@ -31,6 +31,7 @@ def publish_iter(folder_path, dest_path):
                 }
                 }
             }
+         
 
 
         # Create the Client
@@ -39,7 +40,7 @@ def publish_iter(folder_path, dest_path):
         # Run the flow
         flow = publishFlow.run_flow(flow_input=flow_input,label=label)
         # Track progress
-        # action_id = flow['action_id']
-        # publishFlow.progress(action_id)
+        action_id = flow['action_id']
+        publishFlow.progress(action_id)
      
         

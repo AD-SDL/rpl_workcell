@@ -10,20 +10,26 @@ def gather_metadata(**data):
         "resourceType": "Dataset",
         "resourceTypeGeneral": "Dataset"
     },
-    "subjects": [{"subject": "SDL"}],
-    "exp_type": "color_picker"
-
+    "exp_type": "pcr",
+    "exp_label": "first_image_test",
+    "subjects": [{"subject": "SDL"}]
     }
     print("break here")
     print(data['make_input'])
     input_path = Path(data['make_input']).expanduser()
-    with open(input_path / "exp_data.txt") as f:
-        datal = json.loads(f.read())
- 
+    with open(input_path / "wf_steps.txt") as f:
+       datal = {"wf_steps": [json.loads(f.read())]}
+
+    
+    
     datal.update(GENERAL_METADATA)
+
     pilot = data["pilot"]
     pilot['metadata'] = datal
-    return pilot
+    return data["pilot"]
+   # data["pilot"]["metadata"].update({"wf_steps": datal})
+    #pilot['metadata'] = datal
+    return data["pilot"]
 @generate_flow_definition
 class GatherMetaData(GladierBaseTool):
     funcx_functions = [gather_metadata]

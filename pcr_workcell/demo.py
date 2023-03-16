@@ -3,12 +3,12 @@
 import logging
 from pathlib import Path
 from argparse import ArgumentParser
-
+from publish import publish_iter
 from rpl_wei.wei_workcell_base import WEI
 from rpl_wei.data_classes import Module, Step
 
 def main():
-    wf_path = Path('/home/rpl/workspace/rpl_workcell/pcr_workcell/workflows/demo.yaml')
+    wf_path = Path('/home/rpl/workspace/rpl_workcell/pcr_workcell/workflows/demo_pic.yaml')
 
     wei_client = WEI(wf_config = wf_path.resolve(), workcell_log_level= logging.ERROR, workflow_log_level=logging.ERROR)
 
@@ -22,6 +22,6 @@ def main():
 
     payload={}
     run_info = wei_client.run_workflow(payload=payload)
-
+    publish_iter(run_info["run_dir"], run_info["run_dir"])
 if __name__ == "__main__":
     main()
