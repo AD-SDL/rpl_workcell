@@ -17,6 +17,8 @@ import os, shutil
 from rpl_wei import WEI
 from plate_color_analysis import get_colors_from_file
 from bayes_solver import BayesColorSolver
+from evolutionary_solver import EvolutionaryColorSolver
+from aggressive_genetic_solver import AggroColorSolver
 from funcx import FuncXExecutor
 from datetime import datetime
 from plate_color_analysis import get_colors_from_file
@@ -452,13 +454,21 @@ if __name__ == "__main__":
     exp_label = "March16thOvernightRun"
     exp_path = '/home/rpl/experiments'
     exp_type = 'color_picker'
-
+    if args.solver:
+            if args.solver = "Bay":
+                solver = BayesColorSolver
+            elif args.solver = "Evo":
+                solver = EvolutionaryColorSolver
+            elif args.solver = "Agg":
+                solver = AggroColorSolver
+    else:
+        solver = EvolutionaryColorSolver
     run_args = {}
     run_args["target_color"] = target_ratio
     run_args["init_protocol"] = wf_get_plate
     run_args["loop_protocol"] = wf_mix_colors
     run_args["final_protocol"] = wf_trash_plate
-    run_args["solver"] = BayesColorSolver
+    run_args["solver"] = solver
     run_args["exp_budget"] = args.exp_budget
     run_args["pop_size"] = args.pop_size
     run_args["solver_out_dim"] = (args.pop_size, 3)
