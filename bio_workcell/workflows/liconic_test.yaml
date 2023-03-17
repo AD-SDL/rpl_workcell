@@ -10,7 +10,7 @@ modules:
   - name: liconic
 
 flowdef:
-  - name: Get Liconic Temp
+  - name: Get Liconic Current Temp
     module: liconic
     command: get_current_temp
     args: 
@@ -18,10 +18,42 @@ flowdef:
     checks: null
     comment: Stage pcr plates
 
-  - name: Get Liconic Temp
+  - name: Set Liconic Target Temp
     module: liconic
     command: set_target_temp
     args: 
       temp: payload.temp
+    checks: null
+    comment: Stage pcr plates
+
+  - name: Get Liconic Target Temp
+    module: liconic
+    command: get_target_temp
+    args: 
+      foo: foo
+    checks: null
+    comment: Stage pcr plates
+
+  - name: Get Liconic Current Humidity 
+    module: liconic
+    command: get_current_humidity
+    args: 
+      foo: foo
+    checks: null
+    comment: Stage pcr plates
+
+  - name: Set Liconic Target Humidity
+    module: liconic
+    command: set_target_humidity
+    args: 
+      temp: payload.humidity
+    checks: null
+    comment: Stage pcr plates
+
+  - name: Get Liconic Target Humidity
+    module: liconic
+    command: get_target_humidity
+    args: 
+      foo: foo
     checks: null
     comment: Stage pcr plates
