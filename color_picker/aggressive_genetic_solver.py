@@ -19,7 +19,7 @@ class BestColor(BaseModel):
     diff_to_target: float = float("inf")
 
 
-class EvolutionaryColorSolver:
+class AggroColorSolver:
     @staticmethod
     def run_iteration(
         target_color: List[float],
