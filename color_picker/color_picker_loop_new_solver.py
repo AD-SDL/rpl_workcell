@@ -176,6 +176,7 @@ def run(
         os.mkdir(exp_folder/"results") 
     
     curr_wells_used = []
+    start = datetime.now()
     while num_exps + pop_size <= exp_budget:
         steps_run = []
         log_line = 0
@@ -388,12 +389,18 @@ def run(
             
         }
         #Save run report
+        if cur_best_diff < 5:
+            test = datetime.now()
+            report["time_to_solution"] = str(start-test)
+            
         with open(exp_folder/"results"/ "exp_data.txt", "w") as f:
             report_js = json.dumps(report, indent=4)
             f.write(report_js)
         #Save overall results
         print("publishing:")
         publish_iter(exp_folder/"results", exp_folder)
+        if cur_best_diff < 5:
+            break
     #Trash plate after experiment
     iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':final_protocol,'payload':payload})
     iter_thread.run()
@@ -455,11 +462,11 @@ if __name__ == "__main__":
     exp_path = '/home/rpl/experiments'
     exp_type = 'color_picker'
     if args.solver:
-            if args.solver = "Bay":
+            if args.solver == "Bay":
                 solver = BayesColorSolver
-            elif args.solver = "Evo":
+            elif args.solver == "Evo":
                 solver = EvolutionaryColorSolver
-            elif args.solver = "Agg":
+            elif args.solver == "Agg":
                 solver = AggroColorSolver
     else:
         solver = EvolutionaryColorSolver
