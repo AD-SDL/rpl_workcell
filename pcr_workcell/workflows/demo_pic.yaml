@@ -48,8 +48,7 @@ flowdef:
   #   command: run_protocol
   #   args:
   #     config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/ot2_beta_test_second.yaml
-  #   checks: RESOURCE_CHECK
-  #   comment: resource check not implemented, but will be
+      #   comment: resource check not implemented, but will be
 
   # - name: Move from OT2 to sealer
   #   module: pf400
