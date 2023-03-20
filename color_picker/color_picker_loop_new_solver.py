@@ -332,6 +332,10 @@ def run(
             f.canvas.flush_events()
             plt.pause(0.001)
             plt.savefig(exp_folder/"results"/"run_summary.png", dpi=300)
+            plt.imsave(exp_folder/"results"/"exp_vis.png", [graph_vis])
+            plt.imsave(exp_folder/"results"/"plate_vis.png", [plate_vis])
+            plt.imsave(exp_folder/"results"/"target_color.png", [[target_color]])
+            plt.imsave(exp_folder/"results"/"best_color.png", [[cur_best_color]])
             # plt.imsave(run_info["run_dir"] / "results" / "experiment_summary.jpg")
         #print("novis")
         
