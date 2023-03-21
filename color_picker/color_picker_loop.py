@@ -6,70 +6,23 @@ from argparse import ArgumentParser
 from typing import List, Dict, Any, Tuple
 from itertools import product
 from typing import Optional
-from threading import Thread
 import json
-import copy
 import numpy as np
 import os, shutil
 from rpl_wei import WEI
-from plate_color_analysis import get_colors_from_file
+
+from tools.plate_color_analysis import get_colors_from_file
+from tools.threadReturn import ThreadWithReturnValue
 from evolutionary_solver import EvolutionaryColorSolver
 from funcx import FuncXExecutor
-from plate_color_analysis import get_colors_from_file
+
 curr_wells_used = []
-
-def new_plate():
-    well_rows = ["A", "B", "C", "D", "E", "F", "G", "H"]
-    well_cols = [str(elem) for elem in range(1, 13)]
-    well_names = ["".join(elem) for elem in product(well_rows, well_cols)]
-    return well_names
-
-def convert_volumes_to_payload(volumes: List[List[float]]) -> Dict[str, Any]:
- 
-    well_names = new_plate()
- 
-    if len(volumes) <= len(well_names) and len(volumes) <= 96 - len(curr_wells_used):
-        curr_wells_available = copy.copy(well_names)
-        for i in curr_wells_used:
-            curr_wells_available.remove(i)
-
-    r_vol, g_vol, b_vol = [], [], []
-    dest_wells = []
-    for color, well in zip(volumes, curr_wells_available):
-    # for color, well in zip(volumes, well_names):
-        r, g, b = color
-        r_vol.append(r)
-        g_vol.append(g)
-        b_vol.append(b)
-        dest_wells.append(well)
-        curr_wells_used.append(well)
-    return {
-        "red_volumes": r_vol,
-        "green_volumes": g_vol,
-        "blue_volumes": b_vol,
-        "destination_wells": dest_wells,
-    }
 
 def wei_run_flow(wf_file_path, payload):
     wei_client = WEI(wf_file_path)
     run_info = wei_client.run_workflow(payload=payload)
     print(run_info)
     return run_info
-
-class ThreadWithReturnValue(Thread):
-    
-    def __init__(self, group=None, target=None, name=None,
-                 args=(), kwargs={}, Verbose=None):
-        Thread.__init__(self, group, target, name, args, kwargs)
-        self._return = None
-
-    def run(self):
-        if self._target is not None:
-            self._return = self._target(*self._args,
-                                                **self._kwargs)
-    def join(self, *args):
-        Thread.join(self, *args)
-        return self._return
 
 def run(
     target_color: List[float],

@@ -49,4 +49,16 @@ modules:
     positions:
       default: []
 
+  - name: solo
+    type: wei_tcp_node
+    model: SoloSoft
+    config:
+      tcp_address: "/std_ns/liconicNode"
+      tcp_port: "/std_ns/liconicNode"
+    positions:
+      default: []
+
+
+
+
 
