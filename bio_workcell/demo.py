@@ -11,8 +11,11 @@ def main():
 
 
     payload={
-        'temp':37.0, 
-        'humidity': 90.0,
+        'temp': 37.0, 
+        'humidity': 95.0,
+        'shaker_speed': 30,
+        "stacker": 1, 
+        "slot": 1,
         }
 
     run_info = wei_client.run_workflow(payload=payload)
