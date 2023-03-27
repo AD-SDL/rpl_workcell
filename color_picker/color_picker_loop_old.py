@@ -16,14 +16,11 @@ import numpy as np
 import os, shutil
 from rpl_wei import WEI
 from plate_color_analysis import get_colors_from_file
-from bayes_solver import BayesColorSolver
 from evolutionary_solver import EvolutionaryColorSolver
-from aggressive_genetic_solver import AggroColorSolver
 from funcx import FuncXExecutor
 from datetime import datetime
 from plate_color_analysis import get_colors_from_file
 from publish import publish_iter
-from skopt import Optimizer
 MAX_PLATE_SIZE = 96
 
 def new_plate():
@@ -122,7 +119,7 @@ def run(
     exp_type: str,
     target_color: List[float],
     wei_client: Optional["WEI"] = None,
-    solver: BayesColorSolver = BayesColorSolver,
+    solver: EvolutionaryColorSolver = EvolutionaryColorSolver,
     exp_budget: int = MAX_PLATE_SIZE * 3,
     pop_size: int = MAX_PLATE_SIZE,
     init_protocol = None,
@@ -174,9 +171,8 @@ def run(
         os.mkdir(exp_folder)
     if not (os.path.isdir(exp_folder/"results")):
         os.mkdir(exp_folder/"results") 
-    
+
     curr_wells_used = []
-    start = datetime.now()
     while num_exps + pop_size <= exp_budget:
         steps_run = []
         log_line = 0
@@ -211,6 +207,7 @@ def run(
         # Calculate volumes and current wells for creating the OT2 protocol
         ## FUNCX
         plate_volumes = solver.run_iteration( 
+            target_color,
             current_plate,
             out_dim=(pop_size, 3),
             pop_size=pop_size,
@@ -332,10 +329,6 @@ def run(
             f.canvas.flush_events()
             plt.pause(0.001)
             plt.savefig(exp_folder/"results"/"run_summary.png", dpi=300)
-            plt.imsave(exp_folder/"results"/"exp_vis.png", [graph_vis])
-            plt.imsave(exp_folder/"results"/"plate_vis.png", [plate_vis])
-            plt.imsave(exp_folder/"results"/"target_color.png", [[target_color]])
-            plt.imsave(exp_folder/"results"/"best_color.png", [[cur_best_color]])
             # plt.imsave(run_info["run_dir"] / "results" / "experiment_summary.jpg")
         #print("novis")
         
@@ -393,18 +386,12 @@ def run(
             
         }
         #Save run report
-        if cur_best_diff < 5:
-            test = datetime.now()
-            report["time_to_solution"] = str(start-test)
-            
         with open(exp_folder/"results"/ "exp_data.txt", "w") as f:
             report_js = json.dumps(report, indent=4)
             f.write(report_js)
         #Save overall results
         print("publishing:")
         publish_iter(exp_folder/"results", exp_folder)
-        if cur_best_diff < 5:
-            break
     #Trash plate after experiment
     iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':final_protocol,'payload':payload})
     iter_thread.run()
@@ -462,24 +449,16 @@ if __name__ == "__main__":
     wf_trash_plate = wf_dir / 'cp_wf_trashplate.yaml'
     wf_mix_colors = wf_dir / 'cp_wf_mixcolor.yaml'
 
-    exp_label = "March16thOvernightRun"
+    exp_label = "March15thOvernightRun"
     exp_path = '/home/rpl/experiments'
     exp_type = 'color_picker'
-    if args.solver:
-            if args.solver == "Bay":
-                solver = BayesColorSolver
-            elif args.solver == "Evo":
-                solver = EvolutionaryColorSolver
-            elif args.solver == "Agg":
-                solver = AggroColorSolver
-    else:
-        solver = EvolutionaryColorSolver
+
     run_args = {}
     run_args["target_color"] = target_ratio
     run_args["init_protocol"] = wf_get_plate
     run_args["loop_protocol"] = wf_mix_colors
     run_args["final_protocol"] = wf_trash_plate
-    run_args["solver"] = solver
+    run_args["solver"] = EvolutionaryColorSolver
     run_args["exp_budget"] = args.exp_budget
     run_args["pop_size"] = args.pop_size
     run_args["solver_out_dim"] = (args.pop_size, 3)
