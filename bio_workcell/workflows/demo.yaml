@@ -4,58 +4,48 @@ metadata:
   info: Initial PCR workflow for RPL workcell
   version: 0.1
 
-workcell: /home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_workcell.yaml
+workcell: /home/rpl/workspace/rpl_workcell/bio_workcell/bio_workcell.yaml
 
 modules:
-  - name: ot2_pcr_beta
-  - name: pf400
+  - name: solo
   - name: peeler
   - name: sealer
-  - name: biometra
-  - name: sciclops
+  - name: plateEx
   - name: camera
 
 flowdef:
   - name: PCR Plate Exchange
-    module: sciclops
+    module: plateEx
     command: get_plate
     args:
       pos: "tower2"
     checks: null
     comment: Stage pcr plates
 
-  - name: Move from Sciclops to OT2
-    module: pf400
+  - name: Move from plateEx to solo
+    module: plateEx
     command: transfer
     args:
-      source: sciclops.positions.exchange
-      target: ot2_pcr_alpha.positions.deck1_cooler
+      source: plateEx.positions.exchange
+      target: solo_pcr_alpha.positions.deck1_cooler
       source_plate_rotation: narrow
       target_plate_rotation: wide
     checks: null
-    comment: Place plate in ot2
+    comment: Place plate in solo
 
-  - name: Mix OT2 reactions
-    module: ot2_pcr_beta
+  - name: Mix Reactions
+    module: solo
     command: run_protocol
     args:
-      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/ot2_beta_test_first.yaml
+      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/solo_beta_test_first.yaml
     checks: RESOURCE_CHECK
     comment: resource check not implemented, but will be
 
-  - name: Mix OT2 reactions
-    module: ot2_pcr_beta
-    command: run_protocol
-    args:
-      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/ot2_beta_test_second.yaml
-    checks: RESOURCE_CHECK
-    comment: resource check not implemented, but will be
-
-  - name: Move from OT2 to sealer
-    module: pf400
+  - name: Move from solo to sealer
+    module: plateEx
     command: transfer
     args:
-      source: ot2_pcr_alpha.positions.deck1_cooler
+      source: solo_pcr_alpha.positions.deck1_cooler
       target: sealer.positions.default
       source_plate_rotation: wide
       target_plate_rotation: narrow
@@ -72,7 +62,7 @@ flowdef:
     comment: null
 
   - name: Move from sealer to Thermocycler
-    module: pf400
+    module: plateEx
     command: transfer
     args:
       source: sealer.positions.default
@@ -83,7 +73,7 @@ flowdef:
     comment: null
 
   - name: Move from Thermocycler to peeler
-    module: pf400
+    module: plateEx
     command: transfer
     args:
       source: biometra.positions.default
@@ -102,7 +92,7 @@ flowdef:
     comment: null
 
   - name: Move to camera_module
-    module: pf400
+    module: plateEx
     command: transfer
     args:
       source: peeler.positions.default
@@ -116,12 +106,3 @@ flowdef:
     args:
       save_location: local_run_results
       file_name: "final_image.jpg"
-
-  - name: Trash Plate
-    module: pf400
-    command: transfer
-    args:
-      source: camera_module.positions.plate_station
-      target: pf400.positions.trash
-      source_plate_rotation: narrow
-      target_plate_rotation: narrow

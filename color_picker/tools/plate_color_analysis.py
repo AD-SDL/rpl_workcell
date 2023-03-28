@@ -59,7 +59,7 @@ def get_colors_from_file(img_path, offset=None):
         """Finds the corners in image coordinate space of the largest fiducial."""
         # Find all of the fiducials
         corners, ids = _find_fiducials(img)
-        assert corners, 'Fiducial not found. Check if the image is in the image and not mirrored.'
+        assert corners, 'Fiducial not found. Check if the ArUco tag is in the image and not mirrored.'
 
         corners = np.concatenate(corners, axis=0)
 

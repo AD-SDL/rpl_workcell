@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 source /opt/ros/humble/install.bash
 ROS_WS=~/wei_ws
 

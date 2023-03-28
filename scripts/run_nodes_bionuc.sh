@@ -35,6 +35,10 @@ tmux new-window -t $session:$window -n 'liconic'
 tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
 tmux send-keys -t $session:$window 'ros2 launch liconic_client liconic_client.launch.py' C-m
 
+window=6
+tmux new-window -t $session:$window -n 'biometra'
+tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
+tmux send-keys -t $session:$window 'ros2 launch biometra_client biometra_client.launch.py' C-m
 
 tmux attach-session -t $session
 

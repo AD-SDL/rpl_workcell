@@ -15,7 +15,9 @@ import yaml
 import numpy as np
 import os, shutil
 from rpl_wei import WEI
-from plate_color_analysis import get_colors_from_file
+
+from tools.plate_color_analysis import get_colors_from_file
+from tools.threadReturn import ThreadWithReturnValue
 from evolutionary_solver import EvolutionaryColorSolver
 from funcx import FuncXExecutor
 from datetime import datetime
