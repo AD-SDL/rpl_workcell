@@ -38,6 +38,9 @@ class EvolutionaryColorSolver:
 
         if previous_experiment_colors is None:
             c_ratios = make_random_plate(dim=out_dim)
+            c_ratios[0] = sRGBColor(0.98, 0.01, 0.01)
+            c_ratios[1] = sRGBColor(0.01, 0.98, 0.01)
+            c_ratios[2] = sRGBColor(0.01, 0.01, 0.98)
             if return_volumes:
                 return EvolutionaryColorSolver.convert_ratios_to_volumes(c_ratios)
             else:
@@ -214,14 +217,17 @@ class EvolutionaryColorSolver:
 
                 new_color_ratio.append(round(r + delta, 3))
             new_pop.append(sRGBColor(*new_color_ratio))
-
+        
         # generate new randoms
         def _random_init():
             return sRGBColor(*np.random.rand(3).round(3).tolist())
 
         for _ in range(len(new_pop), new_pop_size):
             new_pop.append(_random_init())
-
+        if previos_best_index is None:
+            new_pop[0] = sRGBColor(0.98, 0.01, 0.01)
+            new_pop[1] = sRGBColor(0.01, 0.98, 0.01)
+            new_pop[2] = sRGBColor(0.01, 0.01, 0.98)
         return new_pop
 
 

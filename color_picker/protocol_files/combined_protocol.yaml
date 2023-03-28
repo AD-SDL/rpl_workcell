@@ -30,7 +30,10 @@ commands:
     volume: payload.red_volumes
     dispense_clearance: 2
     aspirate_clearance: 1
-
+    drop_tip: False
+    
+  - name: test1
+    replace_tip: True
 
   - name: Mix color 2
     source: source:A2
@@ -38,6 +41,11 @@ commands:
     volume: payload.green_volumes
     dispense_clearance: 2
     aspirate_clearance: 1
+    drop_tip: False
+    
+  
+  - name: test2
+    replace_tip: True
 
   - name: Mix color 3
     source: source:A3
@@ -47,6 +55,10 @@ commands:
     aspirate_clearance: 1
     mix_cycles: 3
     mix_volume: 100
+    drop_tip: False
+
+  - name: test3
+    replace_tip: True
 
 metadata:
   protocolName: Color Mixing all

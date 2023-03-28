@@ -31,7 +31,7 @@ class AggroColorSolver:
     ) -> List[List[float]]:
 
         assert pop_size == out_dim[0], "Population size must equal out_dim[0]"
-
+        print(target_color)
         target_color = sRGBColor(
             *target_color, is_upscaled=True if max(target_color) > 1 else False
         )
@@ -39,7 +39,7 @@ class AggroColorSolver:
         if previous_experiment_colors is None:
             c_ratios = make_random_plate(dim=out_dim)
             if return_volumes:
-                return EvolutionaryColorSolver.convert_ratios_to_volumes(c_ratios)
+                return AggroColorSolver.convert_ratios_to_volumes(c_ratios)
             else:
                 return c_ratios
 
@@ -53,18 +53,19 @@ class AggroColorSolver:
         ]
 
         # Find population best color
-        (best_color_position, t) = EvolutionaryColorSolver._find_best_color(
+        (best_color_position, t) = AggroColorSolver._find_best_color(
             previous_experiment_colors, target_color
         )
 
         # Augment
-        new_population = EvolutionaryColorSolver._augment(
+        new_population = AggroColorSolver._augment(
             previous_experiment_colors, pop_size, best_color_position, t[best_color_position]
         )
-
+        print("lengthof newpop")
+        print(len(new_population))
         # Convert to volumes
         if return_volumes:
-            return EvolutionaryColorSolver.convert_ratios_to_volumes(
+            return AggroColorSolver.convert_ratios_to_volumes(
                 new_population, return_max_volume
             )
 
@@ -126,7 +127,7 @@ class AggroColorSolver:
                 for exp_color in experiment_colors
             ]
         plate_diffs = np.array(
-                EvolutionaryColorSolver._grade_population(
+                AggroColorSolver._grade_population(
                     experiment_colors, target_color
                 )
         )
@@ -152,7 +153,7 @@ class AggroColorSolver:
 
         diffs = []
         for color in pop_colors:
-            diff = EvolutionaryColorSolver._color_diff(target, color)
+            diff = AggroColorSolver._color_diff(target, color)
             diffs.append(diff)
 
         return diffs
@@ -185,33 +186,40 @@ class AggroColorSolver:
         prev_best_diff: Optional[float] = None,
     ) -> List[sRGBColor]:
         new_pop = []
+        
         n = new_pop_size
         if previos_best_index is not None:
-            new_pop = (pop[previos_best_index] for x in range(n))
+            sample_pop = [pop[previos_best_index] for x in range(n)]
+            print("prevbest")
         else:
-            new_pop = (choice(pop, n))
+            sample_pop = (choice(pop, n))
+            
         # combine colors towards average
       
         # shift some values up or down
-        for color in new_pop:
+        
+        for color in sample_pop:
             t_color_ratios =  color.get_value_tuple()   
            
 
             new_color_ratio = []
             # randomly shift some of the values up or down
             for r in t_color_ratios:
-                lim = np.min(prev_best_diff/100, 0.2)
-                delta = np.random.normal(0, lim)
-                new_color_ratio.append(round(r + delta, 3))
+                lim = min(prev_best_diff/200, 0.2)
+                delta = np.random.uniform(-lim, lim)
+                new_color_ratio.append(round(np.clip(r + delta, 0, 1), 3))
+                
             new_pop.append(sRGBColor(*new_color_ratio))
-
+        
         # generate new randoms
+        
         def _random_init():
             return sRGBColor(*np.random.rand(3).round(3).tolist())
 
         for _ in range(len(new_pop), new_pop_size):
             new_pop.append(_random_init())
-
+            print("runninghere")
+       
         return new_pop
 
 
@@ -228,7 +236,7 @@ if __name__ == "__main__":
 
     target_ratio = [237, 36, 36]
     mixing_colors = [[255, 0, 0], [0, 255, 0], [0, 0, 255]]
-    solver = EvolutionaryColorSolver
+    solver = AggroColorSolver
 
     init_guesses = make_random_plate(dim=(8, 12, 3))
     if show_visual:
