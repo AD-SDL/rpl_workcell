@@ -1,30 +1,32 @@
 #!/usr/bin/env python3
 
-import logging
 from pathlib import Path
-import re
 from argparse import ArgumentParser
 from typing import List, Dict, Any, Tuple
 from itertools import product
 from typing import Optional
 from threading import Thread
-from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
 import json
 import copy
 import yaml
 import numpy as np
 import os, shutil
 from rpl_wei import WEI
-from plate_color_analysis import get_colors_from_file
-from bayes_solver import BayesColorSolver
-from evolutionary_solver import EvolutionaryColorSolver
-from aggressive_genetic_solver import AggroColorSolver
+
+#tools imports
+from tools.plate_color_analysis import get_colors_from_file
+
+#solver imports
+from solvers.bayes_solver import BayesColorSolver
+from solvers.evolutionary_solver import EvolutionaryColorSolver
+from solvers.aggressive_genetic_solver import AggroColorSolver
+from skopt import Optimizer
+
 from funcx import FuncXExecutor
 from datetime import datetime
-from plate_color_analysis import get_colors_from_file
-from publish import publish_iter
-from skopt import Optimizer
-from datetime import datetime
+from tools.publish import publish_iter
+from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
+
 MAX_PLATE_SIZE = 96
 
 def new_plate():
@@ -57,9 +59,6 @@ def convert_volumes_to_payload(volumes: List[List[float]], curr_wells_used: List
         "blue_volumes": b_vol,
         "destination_wells": dest_wells,
     }, curr_wells_used
-
-
-
 
 
 
