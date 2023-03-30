@@ -1,0 +1,21 @@
+metadata:
+  name: Platecrane - Workflow
+  author: Doga Ozgulbas
+  info: Platecrane movements
+  version: 0.1
+
+workcell: /home/rpl/workspace/rpl_workcell/bio_workcell/bio_workcell.yaml
+
+modules:
+  - name: plateCrane
+
+flowdef:
+  - name: Move plate from Stack1 to Sealer
+    module: plateCrane
+    command: transfer
+    args:
+      source: "Stack1"
+      target: "SealerNest"
+      transfer_type: "stack_transfer"
+    checks: null
+    comment: Place plate in ot2

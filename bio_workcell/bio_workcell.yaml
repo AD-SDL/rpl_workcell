@@ -10,13 +10,14 @@ config:
   globus_group: "dda56f31-53d1-11ed-bd8b-0db7472df7d6"
 
 modules:
-  - name: plateEX
+  - name: plateCrane
     type: wei_ros_node
     model: hudson_plate_ex
     config:
-      ros_node: "/std_ns/PlateEXNode"
+      ros_node: "/std_ns/PlateCraneNode"
     positions:
-
+      stack1: "Stack1"
+      
   - name: sealer
     type: wei_ros_node
     model: sealer

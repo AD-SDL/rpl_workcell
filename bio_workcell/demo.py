@@ -5,10 +5,9 @@ from pathlib import Path
 from rpl_wei.wei_workcell_base import WEI
 
 def main():
-    wf_path = Path('/home/rpl/workspace/rpl_workcell/bio_workcell/workflows/liconic_test.yaml')
+    wf_path = Path('/home/rpl/workspace/rpl_workcell/bio_workcell/workflows/platecrane_test.yaml')
 
     wei_client = WEI(wf_config = wf_path.resolve(), workcell_log_level= logging.ERROR, workflow_log_level=logging.ERROR)
-
 
     payload={
         'temp': 37.0, 
