@@ -10,7 +10,7 @@ import numpy as np
 from colormath.color_objects import sRGBColor, LabColor
 from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie2000
-
+from skopt import Optimizer
 
 class BestColor(BaseModel):
     color: List[float]
@@ -19,7 +19,7 @@ class BestColor(BaseModel):
     diff_to_target: float = float("inf")
 
 
-class EvolutionaryColorSolver:
+class BayesColorSolver:
     @staticmethod
     def run_iteration(
         target_color: List[float],
@@ -29,42 +29,31 @@ class EvolutionaryColorSolver:
         out_dim: Tuple[int] = (96, 3),
         pop_size: int = 96,
     ) -> List[List[float]]:
-
-        assert pop_size == out_dim[0], "Population size must equal out_dim[0]"
-
-        target_color = sRGBColor(
-            *target_color, is_upscaled=True if max(target_color) > 1 else False
+        opt = Optimizer(dimensions=[(0.0, 1.0), (0.0, 1.0), (0.0, 1.0)],
+                        # base_estimator='GP',
+                        n_initial_points=4,
+                        initial_point_generator='random',
+                        # acq_func='EI',
+                        # acq_optimizer='sampling',
         )
-
+        assert pop_size == out_dim[0], "Population size must equal out_dim[0]"
         if previous_experiment_colors is None:
             c_ratios = make_random_plate(dim=out_dim)
             if return_volumes:
-                return EvolutionaryColorSolver.convert_ratios_to_volumes(c_ratios)
-            else:
-                return c_ratios
-
-        # Flatten if not already flattened
-        previous_experiment_colors = (
-            np.asarray(previous_experiment_colors).reshape((-1, 3)).tolist()
+                return BayesColorSolver.convert_ratios_to_volumes(c_ratios)
+        target_color = sRGBColor(
+            *target_color, is_upscaled=True if max(target_color) > 1 else False
         )
-        previous_experiment_colors = [
-            sRGBColor(*color_ratio, is_upscaled=True if max(color_ratio) > 1 else False)
-            for color_ratio in previous_experiment_colors
-        ]
-
-        # Find population best color
-        (best_color_position, t) = EvolutionaryColorSolver._find_best_color(
-            previous_experiment_colors, target_color
-        )
-
+        opt.tell(previous_experiment_colors, BayesColorSolver._grade_population(previous_experiment_colors))
+        new_population = opt.ask(pop_size)
         # Augment
-        new_population = EvolutionaryColorSolver._augment(
-            previous_experiment_colors, pop_size, best_color_position
-        )
+        
+       
+        
 
         # Convert to volumes
         if return_volumes:
-            return EvolutionaryColorSolver.convert_ratios_to_volumes(
+            return BayesColorSolver.convert_ratios_to_volumes(
                 new_population, return_max_volume
             )
 
@@ -128,7 +117,7 @@ class EvolutionaryColorSolver:
                 for exp_color in experiment_colors
             ]
         plate_diffs = np.array(
-                EvolutionaryColorSolver._grade_population(
+                BayesColorSolver._grade_population(
                     experiment_colors, target_color
                 )
         )
@@ -154,7 +143,7 @@ class EvolutionaryColorSolver:
 
         diffs = []
         for color in pop_colors:
-            diff = EvolutionaryColorSolver._color_diff(target, color)
+            diff = BayesColorSolver._color_diff(target, color)
             diffs.append(diff)
 
         return diffs
@@ -238,7 +227,7 @@ if __name__ == "__main__":
 
     target_ratio = [237, 36, 36]
     mixing_colors = [[255, 0, 0], [0, 255, 0], [0, 0, 255]]
-    solver = EvolutionaryColorSolver
+    solver = BayesColorSolver
 
     init_guesses = make_random_plate(dim=(8, 12, 3))
     if show_visual:

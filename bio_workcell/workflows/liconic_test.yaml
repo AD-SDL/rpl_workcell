@@ -1,0 +1,99 @@
+metadata:
+  name: Liconic Test - Workflow
+  author: Casey Stone, Rafael Vescovi
+  info: Initial Tests for the Liconic Driver at BIO.
+  version: 0.1
+
+workcell: /home/rpl/workspace/rpl_workcell/bio_workcell/bio_workcell.yaml
+
+modules:
+  - name: liconic
+
+flowdef:
+
+  # # Temperature actions - ALL WORKING
+  # - name: Get Liconic Current Temp
+  #   module: liconic
+  #   command: get_current_temp
+  #   args: 
+  #     foo: foo
+  #   checks: null
+  #   comment: Stage pcr plates
+
+  # - name: Set Liconic Target Temp
+  #   module: liconic
+  #   command: set_target_temp
+  #   args: 
+  #     temp: payload.temp
+  #   checks: null
+  #   comment: Stage pcr plates
+
+  # - name: Get Liconic Target Temp
+  #   module: liconic
+  #   command: get_target_temp
+  #   args: 
+  #     foo: foo
+  #   checks: null
+  #   comment: Stage pcr plates
+
+  # # Humidity actions - ALL WORKING
+  # - name: Get Liconic Current Humidity 
+  #   module: liconic
+  #   command: get_current_humidity
+  #   args: 
+  #     foo: foo
+  #   checks: null
+  #   comment: Stage pcr plates
+
+  # - name: Set Liconic Target Humidity
+  #   module: liconic
+  #   command: set_target_humidity
+  #   args: 
+  #     humidity: payload.humidity
+  #   checks: null
+  #   comment: Stage pcr plates
+
+  # - name: Get Liconic Target Humidity
+  #   module: liconic
+  #   command: get_target_humidity
+  #   args: 
+  #     foo: foo
+  #   checks: null
+  #   comment: Stage pcr plates
+
+  # Shaking actions - ALL WORKING
+  # - name: Start shaker at set speed
+  #   module: liconic
+  #   command: begin_shake
+  #   args: 
+  #     shaker_speed: payload.shaker_speed
+  #   checks: null
+  #   comment: Stage pcr plates
+
+  # - name: Stop Liconic shaker
+  #   module: liconic
+  #   command: end_shake
+  #   args: 
+  #     foo: foo
+  #   checks: null
+  #   comment: Stage pcr plates
+  
+  # Plate handling actions - ALL WORKING
+  # - name: Load Liconic
+  #   module: liconic
+  #   command: load_plate
+  #   args: 
+  #     stacker: payload.stacker
+  #     slot: payload.slot
+  #   checks: null
+  #   comment: Stage pcr plates
+  
+  - name: Unload Liconic
+    module: liconic
+    command: unload_plate
+    args: 
+      stacker: payload.stacker
+      slot: payload.slot
+    checks: null
+    comment: Stage pcr plates
+  
