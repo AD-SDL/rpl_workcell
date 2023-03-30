@@ -33,9 +33,10 @@ git clone https://github.com/AD-SDL/wei_ros
 git clone https://github.com/AD-SDL/rpl_wei
 
 ##Thermocicler
-# sudo apt install mono-devel
-# pip3 install pythonnet
-# git clone https://github.com/AD-SDL/biometra_module
+sudo apt install mono-devel
+pip3 install pythonnet
+git clone https://github.com/AD-SDL/biometra_module
+pip install biometra_module/biometra_driver
 
 cd ..
 rosdep install --from-paths src --ignore-src --rosdistro humble -y
