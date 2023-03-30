@@ -12,12 +12,12 @@ config:
 modules:
   - name: plateCrane
     type: wei_ros_node
-    model: hudson_plate_ex
+    model: plateCrane
     config:
       ros_node: "/std_ns/PlateCraneNode"
     positions:
       stack1: "Stack1"
-      
+
   - name: sealer
     type: wei_ros_node
     model: sealer
