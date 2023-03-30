@@ -86,7 +86,7 @@ modules:
     type: wei_ros_node
     model: biometra
     config:
-      ros_node: "/std_ns/biometraNode"
+      ros_node: "/std_ns/biometra_client"
     positions:
       default: [247.0, 40.698, 38.294, 728.332, 123.077, 301.082]
 

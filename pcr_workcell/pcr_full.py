@@ -3,7 +3,7 @@
 import logging
 from pathlib import Path
 from argparse import ArgumentParser
-from publish import publish_iter
+from tools.publish import publish_iter
 from rpl_wei.wei_workcell_base import WEI
 
 def main():
