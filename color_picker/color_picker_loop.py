@@ -131,7 +131,7 @@ def run(
     loop_protocol = None,
     final_protocol = None,
     solver_out_dim: Tuple[int, int] = (MAX_PLATE_SIZE, 3),
-    plate_max_volume: float = 80.0,
+    plate_max_volume: float = 275.0,
     exp_label: str = "",
     exp_path: str = ""
 ) -> None:
@@ -214,15 +214,25 @@ def run(
 
         # Calculate volumes and current wells for creating the OT2 protocol
         ## FUNCX
-       
-        plate_volumes = solver.run_iteration(
-            target_color, 
-            current_plate,
-            out_dim=(pop_size, 3),
-            pop_size=pop_size,
-            return_volumes=True,
-            return_max_volume=plate_max_volume,
-        )
+        if solver_name == "Aggressive Genetic Solver":
+            plate_volumes = solver.run_iteration(
+                target_color, 
+                current_plate,
+                out_dim=(pop_size, 3),
+                pop_size=pop_size,
+                return_volumes=True,
+                return_max_volume=plate_max_volume,
+                prev_best_color=cur_best_color
+            )
+        else:
+            plate_volumes = solver.run_iteration(
+                target_color, 
+                current_plate,
+                out_dim=(pop_size, 3),
+                pop_size=pop_size,
+                return_volumes=True,
+                return_max_volume=plate_max_volume,
+            )
         print(plate_volumes)
         target_plate = [
                 (np.asarray(elem) / plate_max_volume).tolist() for elem in plate_volumes
@@ -277,7 +287,7 @@ def run(
         filename = "plate_"+ str(plate_n)+".jpg"
         shutil.copy2(run_info["run_dir"]/ "results"/"final_image.jpg",  (exp_folder/"results"/filename))
         fx = FuncXExecutor(endpoint_id=ep)
-        fxresult = fx.submit(get_colors_from_file, img_path,endpoint_id=ep)
+        fxresult = fx.submit(get_colors_from_file, img_path)
         plate_colors_ratios = fxresult.result()[1]
        
         print("funcx finished")
@@ -295,7 +305,10 @@ def run(
         
         
         ## save those and the initial colors, etc
-        plate_best_color_ind, plate_diffs = solver._find_best_color(current_plate, target_color)
+        if solver_name == "Aggressive Genetic Solver":
+            plate_best_color_ind, plate_diffs = solver._find_best_color(current_plate, target_color, cur_best_color)
+        else:
+             plate_best_color_ind, plate_diffs = solver._find_best_color(current_plate, target_color)
         plate_best_color = current_plate[plate_best_color_ind]
         plate_best_diff = solver._color_diff(plate_best_color, target_color)
 
@@ -303,7 +316,7 @@ def run(
         if plate_best_diff < cur_best_diff:
             cur_best_diff = plate_best_diff
             cur_best_color = plate_best_color
-            time_to_best = str(datetime.now - start)
+            time_to_best = str(datetime.now() - start)
         
 
 
@@ -341,10 +354,10 @@ def run(
             f.canvas.flush_events()
             plt.pause(0.001)
             plt.savefig(exp_folder/"results"/"run_summary.png", dpi=300)
-            plt.imsave(exp_folder/"results"/"exp_vis.png", [graph_vis])
-            plt.imsave(exp_folder/"results"/"plate_vis.png", [plate_vis])
-            plt.imsave(exp_folder/"results"/"target_color.png", [[target_color]])
-            plt.imsave(exp_folder/"results"/"best_color.png", [[cur_best_color]])
+            plt.imsave(exp_folder/"results"/str("exp_plate" + str(current_iter) + ".png"), np.asarray([graph_vis]))
+            plt.imsave(exp_folder/"results"/("real_plate" + str(current_iter) + ".png"), np.asarray([plate_vis])/255)
+            plt.imsave(exp_folder/"results"/"target_color.png", np.asarray([[target_color]])/255),
+            plt.imsave(exp_folder/"results"/"best_color.png", np.asarray([[cur_best_color ]])/255)
             # plt.imsave(run_info["run_dir"] / "results" / "experiment_summary.jpg")
         #print("novis")
         
@@ -378,6 +391,7 @@ def run(
                 "pop_size": pop_size, 
                 "exp_budget": exp_budget,
                 "wf_steps": steps_run,
+                "total_time": str(datetime.now() - start),
                 "runs": c
                 
             })
@@ -392,7 +406,8 @@ def run(
                 "total_iterations": current_iter, 
                 "pop_size": pop_size, 
                 "exp_budget": exp_budget,
-                "time_to_best": time_to_best,         
+                "time_to_best": time_to_best,     
+                "total_time": str(datetime.now() - start),    
                 "runs": [{
                 "run_number": current_iter, 
                 "run_label": str(run_path),
@@ -408,7 +423,7 @@ def run(
                 
               
                 }]
-                   
+                
                 }
         #Save run report
         # if cur_best_diff < 15:
@@ -465,7 +480,7 @@ def parse_args():
     parser.add_argument(
         "--solver", default="Evo", help="Bay = Bayes, Evo = Evolutionary, Agg = Aggro"
     )
-    parser.add_argument("--plate_max_volume", default=80.0, type=float)
+    parser.add_argument("--plate_max_volume", default=275.0, type=float)
     return parser.parse_args()
 
 
