@@ -14,8 +14,80 @@ flowdef:
     module: plateCrane
     command: transfer
     args:
-      source: "Stack1"
+      source: "Stack5"
+      target: "Solo.Position4"
+      source_type: "stack"
+      target_type: "module"
+    checks: null
+    comment: Place plate in ot2
+
+  - name: Move plate from Stack1 to Sealer
+    module: plateCrane
+    command: transfer
+    args:
+      source: "Solo.Position4"
+      target: "Hidex.Nest"
+      source_type: "module"
+      target_type: "module"      
+      height_offset: "350"
+    checks: null
+    comment: Place plate in ot2
+
+  - name: Move plate from Stack1 to Sealer
+    module: plateCrane
+    command: transfer
+    args:
+      source: "Hidex.Nest"
       target: "SealerNest"
-      transfer_type: "stack_transfer"
+      source_type: "module"
+      target_type: "module"  
+      height_offset: "350"
+    checks: null
+    comment: Place plate 
+
+  - name: Move plate from Stack1 to Sealer
+    module: plateCrane
+    command: transfer
+    args:
+      source: "SealerNest"
+      target: "Liconic.Nest"
+      source_type: "module"
+      target_type: "stack"   
+    checks: null
+    comment: Place plate in ot2
+
+  - name: Move plate from Stack1 to Sealer
+    module: plateCrane
+    command: transfer
+    args:
+      source: "Liconic.Nest"
+      target: "PeelerNest"
+      source_type: "stack"
+      target_type: "module"   
+
+    checks: null
+    comment: Place plate in ot2  
+  
+  - name: Move plate from Stack1 to Sealer
+    module: plateCrane
+    command: transfer
+    args:
+      source: "PeelerNest"
+      target: "Hidex.Nest"
+      source_type: "module"
+      target_type: "module"  
+      height_offset: "350"
+    checks: null
+    comment: Place plate in ot2
+
+  - name: Move plate from Stack1 to Sealer
+    module: plateCrane
+    command: transfer
+    args:
+      source: "Hidex.Nest"
+      target: "Stack1"
+      source_type: "module"
+      target_type: "stack"   
+      height_offset: "350"
     checks: null
     comment: Place plate in ot2
