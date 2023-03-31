@@ -87,7 +87,7 @@ This file specifies a sequence of steps to be performed on the hardware.
 
 ## Protocols
 
-As just noted, the file [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/protocol_files/ot2_pcr_config.yaml) defines what we call a protocol, which describe the device-specific instructions to be executed on a piece of hardware to implement an intended action. A protocol file specifies first a list of **equipment** within the hardware component, and then a sequence of **commands** to be executed on the equipment. For example, the following shows the equipment section and the first element in the commands section of [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/protocol_files/ot2_pcr_config.yaml):
+A protocol file gives the device-specific instructions to be executed on a specific piece of hardware to implement an intended action. For example, [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/protocol_files/ot2_pcr_config.yaml) gives instructions for an OpenTrons OT2. A protocol file specifies a list of **equipment** within the hardware component; a sequence of **commands** to be executed on the equipment; and some describptive **metadata**. For example, the following shows the equipment section, first command, and metadata section of [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/protocol_files/ot2_pcr_config.yaml):
 
 
 ```
@@ -108,6 +108,14 @@ commands:
     volume: [15, 100, 250, 300]
     mix_cycles: 1 
     mix_volume: 0
+    
+  ... two more commands follow ...
+    
+metadata:
+  protocolName: PCR example template
+  author: Kyle khippe@anl.gov
+  description: Demonstration of PCR protocol for OT2
+  apiLevel: "2.12"
 ```
 
 
