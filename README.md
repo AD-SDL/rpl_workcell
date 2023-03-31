@@ -1,10 +1,11 @@
-# Background on Workcells, XXXXs, and Workflows
+# Background on Workcells, Carts, Modules, and Workflows
 
-**Note**: We need to decide what to call an XXXX (formerly, "module"), as the word "module" is used for something different in the code.
+**Note**: I use the term Cart (formerly, "module"), as the word "module" is used for something different in the code.
 
 In RPL we define standardized hardware and software configurations for robotic equipment and control software in order to simplify the assembly, modification, and scaling of experimental systems:
-* A **XXX** is a cart with one or more hardware components (e.g., Pealer, Sealer, OT2 liquid handling robot, plate handler, plate mover)
-* A **workcell**, as show on the left of the image, is formed from multiple (8 in the photo on the left) XXXXs.
+* A **cart** is a cart with zero or more modules 
+* A **module** is an hardware component with a name, type, position, etc. (e.g., Pealer, Sealer, OT2 liquid handling robot, plate handler, plate mover, camera)
+* A **workcell**, as show on the left of the image, is formed from multiple (8 in the photo on the left) carts that typically hold multiple modules (12 in the example, as described below).
 * Multiple workcells and other components can be linked via mobile robots
 
 ![Screenshot of a comment on a GitHub issue showing an image, added in the Markdown, of an Octocat smiling and raising a tentacle.](assets/AD_Fig.jpg)
