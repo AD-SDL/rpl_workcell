@@ -30,7 +30,15 @@ This is specified by a YAML file that defines the robots and associated static i
   globus_group: "dda56f31-53d1-11ed-bd8b-0db7472df7d6"        # ???
 ```
 
-* The **modules** section lists the *modules* that are included in the workcell. Here is an example module specification:
+* The **modules** section lists the *modules* that are included in the workcell. For example, in the example just listed, there are 12 modules in total: 
+  * a [pf400 sample handler](https://preciseautomation.com/SampleHandler.html) (**pf400**) and two associated cameras, **pf400_camera_right** and **pf400_camera_left**; 
+  * a [SciClops plate stacker](https://hudsonrobotics.com/microplate-handling-2/platecrane-sciclops-3/) (**sciclops**)
+  * a XX (**sealer**) and a XX (**peeler**), with an associated camera, **sp_module_camera**
+  * three OpenTrons OT2 liquid handlers, **ot2_pcr_alpha**, **ot2_pcr_beta**, and **ot2_cp_gamma**;
+  * a [Biometra thermal cycler](https://www.analytik-jena.com/products/life-science/pcr-qpcr-thermal-cycler/thermal-cycler-pcr/biometra-trio-series/) (**biometra**)
+  * a XXX (**camera_module**)
+           
+* Here is an example module specification:
 
 **NOTE**: What do the defaults mean?
 
