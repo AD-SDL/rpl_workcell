@@ -4,13 +4,16 @@ Ian is writing some notes here that could eventually become useful documtnation-
 
 ## Background on Workcells, Modules, and Workflows
 
-In RPL we co
+In RPL we define standardized hardware and software configurations for robotic equipment and control software in order to simplify the assembly, modification, and scaling of experimental systems:
+* A **module** is a cart with one or more hardware components (e.g., Pealer, Sealer, OT2 liquid handling robot, plate handler, plate mover)
+* A **workcell**, as show on the left of the image, is formed from multiple (8 in the photo on the left) modules
+* Multiple workcells and other components can be linked via mobile robots
 
-![Screenshot of a comment on a GitHub issue showing an image, added in the Markdown, of an Octocat smiling and raising a tentacle.](assets/workcells.jpg)
+![Screenshot of a comment on a GitHub issue showing an image, added in the Markdown, of an Octocat smiling and raising a tentacle.](assets/AD_Fig.jpg)
 
-An RPL "workflow" is a program to cause one or more actions to be performed on OT2 robots. It comprises two components:
-* The *workcell definition* defines the robots and associated static infrastructure that are to be used by the workflow
-* The  *workflow definition* defines the sequence of actions that are to be executed in order on the robots.
+An RPL "workflow" is a program to cause one or more actions to be performed on equipment within a workcell. It comprises two components:
+* The **workcell definition** defines the modules that comprise a workcell, and associated static infrastructure that are to be used by the workflow
+* The **workflow definition** defines the sequence of actions that are to be executed in order on the robots.
 
 ### Workcell definition
 
@@ -27,18 +30,54 @@ This is specified by a YAML file that defines the robots and associated static i
   globus_group: "dda56f31-53d1-11ed-bd8b-0db7472df7d6"        # ???
 ```
 
-* The **modules** section lists the *modules* that are included in the workcell.  
+* The **modules** section lists the *modules* that are included in the workcell. Here is an example module specification:
 
+**NOTE**: What do the defaults mean?
 
-Each robot defines its own protocols (ROS2, EPICS, TCP/IP, etc) and the variables necessary to interact with it (IP, PORT, NAME, ETC)
+```
+  - name: sealer                     # A name used for the module in the workflow
+    type: wei_ros_node               # Indicates that module uses ROS2
+    model: sealer                    # ??
+    config:
+      ros_node: "/std_ns/SealerNode" # ??
+    positions:                       # ??
+      default: [205.128, -2.814, 264.373, 365.863, 79.144, 411.553]
+```
+
+**NOTE**: Raf says "Each robot defines its own protocols (ROS2, EPICS, TCP/IP, etc) and the variables necessary to interact with it (IP, PORT, NAME, ETC)" -- does anyone of that come up here? 
 
 
 ### Workflow definition
 
-There are essentially 2 files necessary for a workflow
-1 workcell.yaml : This defines the robots and all the static infrastructure.
+This is specified by a YAML file that defines the sequence of actions that will be executed in order on the robots E.g., see [this example](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/workflows/ot2_test.yaml), shown also in the following, and comprising four sections:
+* **metadata**: Descriptive metadata for the workflow
+* **workcell**: The location of the workcell that the workflow is designed for
+* **modules**: A list of the modules included in the workcell--just one here.
+* **flowdef**: A list of steps, each with a name, module, command, and arguments.
 
-2 - workflow.yaml : This defines the sequence of actions that will be executed in order on the robots. This file uses the "alias" defined for each robot above and a funcx style message:
+```
+metadata:
+  name: PCR - Workflow
+  author: Casey Stone, Rafael Vescovi
+  info: Initial PCR workflow for RPL workcell
+  version: 0.1
+
+workcell: /home/rpl/wei_ws/demo/rpl_workcell/pcr_workcell/pcr_workcell.yaml
+
+modules:
+  - name: ot2_pcr_alpha
+
+flowdef:
+  - name: Mix OT2 reactions
+    module: ot2_pcr_alpha
+    command: run_protocol
+    args:
+      config_path: /home/rpl/wei_ws/demo/rpl_workcell/pcr_workcell/protocol_files/ot2_pcr_config.yaml
+```
+
+**NOTE**: Raf writes as follows.  None of these are clear to me, as I do not see any of the words that Raf lists in the followibg.
+
+This file uses the "alias" defined for each robot above and a funcx style message:
 Step Name: Name on the workflow
 Robot: Target Robot
 Action name: Action to be executed on the robot
