@@ -11,14 +11,14 @@ In RPL we define standardized hardware and software configurations for robotic e
 ![Screenshot of a comment on a GitHub issue showing an image, added in the Markdown, of an Octocat smiling and raising a tentacle.](assets/AD_Fig.jpg)
 
 An RPL "workflow" is a program to cause one or more actions to be performed on equipment within a workcell. It comprises two components:
-* The **workcell definition** defines the XXXXs that comprise a workcell, and associated static infrastructure that are to be used by the workflow
-* The **workflow definition** defines the sequence of actions that are to be executed in order on the nodes.
+* The **workcell definition** defines the modules that comprise a workcell, and associated static infrastructure that are to be used by the workflow
+* The **workflow definition** defines the sequence of actions that are to be executed in order on the modules.
 
 ## Workcell definition
 
-This is specified by a YAML file that defines the nodes and associated static infrastructure that are to be used by the workflow. E.g., see [this example](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/pcr_workcell.yaml). The file comprises two sections, *config* and *modules*:
+This is specified by a YAML file (e.g., [pcr_workcell.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/pcr_workcell.yaml)) comprising two sections, *config* and *modules*:
 
-* The **config** section defines various variables that may be used elsewhere in the workcell. For example, here is the config from the example just listed.
+The **config** section defines various infrastructure services that may be used elsewhere in the workcell. For example, here is the config from the example just listed.
 
 ```
   ros_namespace: rpl_workcell                                 # ???
@@ -29,15 +29,15 @@ This is specified by a YAML file that defines the nodes and associated static in
   globus_group: "dda56f31-53d1-11ed-bd8b-0db7472df7d6"        # ???
 ```
 
-* The **modules** section lists the *modules* that are included in the workcell. For example, in the example just listed, there are 12 in total: 
-  * a [pf400 sample handler](https://preciseautomation.com/SampleHandler.html) (**pf400**) and two associated cameras, **pf400_camera_right** and **pf400_camera_left**; 
-  * a [SciClops plate stacker](https://hudsonrobotics.com/microplate-handling-2/platecrane-sciclops-3/) (**sciclops**)
-  * a XX (**sealer**) and a XX (**peeler**), with an associated camera, **sp_module_camera**
-  * three OpenTrons OT2 liquid handlers, **ot2_pcr_alpha**, **ot2_pcr_beta**, and **ot2_cp_gamma**;
-  * a [Biometra thermal cycler](https://www.analytik-jena.com/products/life-science/pcr-qpcr-thermal-cycler/thermal-cycler-pcr/biometra-trio-series/) (**biometra**)
-  * a XXX (**camera_module**)
+The **modules** section lists the *modules* that are included in the workcell. In the example just listed, there are 12 in total: 
+* a [pf400 sample handler](https://preciseautomation.com/SampleHandler.html) (**pf400**) and two associated cameras, **pf400_camera_right** and **pf400_camera_left**; 
+* a [SciClops plate stacker](https://hudsonrobotics.com/microplate-handling-2/platecrane-sciclops-3/) (**sciclops**)
+* a XX (**sealer**) and a XX (**peeler**), with an associated camera, **sp_module_camera**
+* three OpenTrons OT2 liquid handlers, **ot2_pcr_alpha**, **ot2_pcr_beta**, and **ot2_cp_gamma**;
+* a [Biometra thermal cycler](https://www.analytik-jena.com/products/life-science/pcr-qpcr-thermal-cycler/thermal-cycler-pcr/biometra-trio-series/) (**biometra**)
+* a XXX (**camera_module**)
            
-* Here is an example module specification:
+Here is one of the 12 module specifications included in our example:
 
 ```
   - name: sealer                     # A name used for the module in the workflow: its "alias"
@@ -81,9 +81,9 @@ flowdef:
 ```
 
 This workflow uses just one of the 12 modules defined in the workcell definition earlier, **ot2_pcr_alpha**, and comprises a single step, namely to run the "protocol" defined by the file [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/protocol_files/ot2_pcr_config.yaml). 
-This file specifies a sequence of steps to be performed on an OT2.
+This file specifies a sequence of steps to be performed on the hardware.
 
-<!-- Note: You might ask why seque "workflow" contains a single step that involve running a "protocol", itself a sequence of steps, but that is a mystery to me. It  perhaps reflects that the technology described here was developed by a partnership of biologists ("protocol") and computer scientists ("module", "workflow") . But in any case, let us examine that file in the next section. -->
+> While a workflow and a protocol both specify a sequence of actions to be performed, they are quite different in role and syntax. A **workflow** uses a hardware-independent notation to specify actions to perform on one or more modules (e.g., action A1 on module M1, action A2 on module M2); a **protocol** uses a hardware-specific notation to specify steps to be performed on a single module (e.g., OT2). Why *workflow* and *protocol*? Perhaps because this technology was developed by a partnership of biologists ("protocol") and computer scientists ("module", "workflow").
 
 ## Protocols
 
