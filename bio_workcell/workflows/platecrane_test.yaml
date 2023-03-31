@@ -10,7 +10,7 @@ modules:
   - name: plateCrane
 
 flowdef:
-  - name: Move plate from Stack1 to Sealer
+  - name: Move plate from Stack5 to Solo Position4
     module: plateCrane
     command: transfer
     args:
@@ -19,9 +19,9 @@ flowdef:
       source_type: "stack"
       target_type: "module"
     checks: null
-    comment: Place plate in ot2
+    comment: Place plate in Solo Position4
 
-  - name: Move plate from Stack1 to Sealer
+  - name: Move plate from Solo Position4 to Hidex Nest
     module: plateCrane
     command: transfer
     args:
@@ -31,9 +31,9 @@ flowdef:
       target_type: "module"      
       height_offset: "350"
     checks: null
-    comment: Place plate in ot2
+    comment: Place plate to Hidex Nest
 
-  - name: Move plate from Stack1 to Sealer
+  - name: Move plate from HidexNest to Sealer
     module: plateCrane
     command: transfer
     args:
@@ -43,9 +43,9 @@ flowdef:
       target_type: "module"  
       height_offset: "350"
     checks: null
-    comment: Place plate 
+    comment: Place plate to Sealer
 
-  - name: Move plate from Stack1 to Sealer
+  - name: Move plate from Sealer to Liconic
     module: plateCrane
     command: transfer
     args:
@@ -54,9 +54,9 @@ flowdef:
       source_type: "module"
       target_type: "stack"   
     checks: null
-    comment: Place plate in ot2
+    comment: Place plate onto Liconic
 
-  - name: Move plate from Stack1 to Sealer
+  - name: Move plate from Liconic to Peeler
     module: plateCrane
     command: transfer
     args:
@@ -64,11 +64,10 @@ flowdef:
       target: "PeelerNest"
       source_type: "stack"
       target_type: "module"   
-
     checks: null
-    comment: Place plate in ot2  
+    comment: Place plate onto PeelerNest
   
-  - name: Move plate from Stack1 to Sealer
+  - name: Move plate from PeelerNest to HidexNest
     module: plateCrane
     command: transfer
     args:
@@ -78,9 +77,9 @@ flowdef:
       target_type: "module"  
       height_offset: "350"
     checks: null
-    comment: Place plate in ot2
+    comment: Place plate in Hidex Nest
 
-  - name: Move plate from Stack1 to Sealer
+  - name: Move plate from HidexNest to Stack1
     module: plateCrane
     command: transfer
     args:
@@ -90,4 +89,4 @@ flowdef:
       target_type: "stack"   
       height_offset: "350"
     checks: null
-    comment: Place plate in ot2
+    comment: Place plate into trash stack
