@@ -44,7 +44,7 @@ This is specified by a YAML file that defines the robots and associated static i
       default: [205.128, -2.814, 264.373, 365.863, 79.144, 411.553]
 ```
 
-**NOTE**: Raf says "Each robot defines its own protocols (ROS2, EPICS, TCP/IP, etc) and the variables necessary to interact with it (IP, PORT, NAME, ETC)" -- does anyone of that come up here? 
+**NOTE**: Raf says "Each robot defines its own protocols (ROS2, EPICS, TCP/IP, etc) and the variables necessary to interact with it (IP, PORT, NAME, ETC)" -- does any of that come up here? Is it the "type" that indicates ROS2?
 
 
 ### Workflow definition
@@ -75,7 +75,7 @@ flowdef:
       config_path: /home/rpl/wei_ws/demo/rpl_workcell/pcr_workcell/protocol_files/ot2_pcr_config.yaml
 ```
 
-**NOTE**: Raf writes as follows.  None of these are clear to me, as I do not see any of the words that Raf lists in the followibg.
+**NOTE**: Raf writes as follows.  This is not clear to me, as I do not see any of the words that he lists  (step name, robot, action name, vars) in the example:
 
 This file uses the "alias" defined for each robot above and a funcx style message:
 Step Name: Name on the workflow
