@@ -80,7 +80,36 @@ flowdef:
       config_path: /home/rpl/wei_ws/demo/rpl_workcell/pcr_workcell/protocol_files/ot2_pcr_config.yaml
 ```
 
-This workflow uses just one of the 12 modules defines in the 
+This workflow uses just one of the 12 modules defined in the workcell definition earlier, **ot2_pcr_alpha**, and comprises a single step, namely to run the "protocol" defined by the file [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/protocol_files/ot2_pcr_config.yaml). You might well ask why a "workflow" contains a single step that involve running a "protocol", but that is a mystery to me also, although it perhaps reflects that the technology described here was developed by a partnership of biologists ("protocol") and computer scientists ("module", "workflow") . But in any case, let us examine that file in the next section.
+
+## Protocols
+
+As just noted, the file [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/protocol_files/ot2_pcr_config.yaml) defines what we call a **protocol**.
+
+
+```
+equipment:
+  - name: corning_96_wellplate_360ul_flat
+    location: "1"
+  - name: opentrons_96_tiprack_20ul #opentrons_96_tiprack_1000ul
+    location: "8"
+  - name: opentrons_96_tiprack_300ul
+    location: "9"
+  - name: p300_multi_gen2 #p1000_single_gen2
+    mount: right
+```    
+
+And:
+```
+commands:
+  - name: Make Master mix
+    source: 1:[A1, A2, A3, A4]
+    destination: 1:B1
+    volume: [15, 100, 250, 300]
+    mix_cycles: 1 
+    mix_volume: 0
+```
+
 
 **NOTE**: Raf writes as follows.  This is not clear to me, as I do not see any of the words that he lists  (step name, robot, action name, vars) in the example:
 
