@@ -1,23 +1,21 @@
-# rpl-workcell
+# Background on Workcells, XXXXs, and Workflows
 
-Ian is writing some notes here that could eventually become useful documtnation--or not :-)
-
-## Background on Workcells, Modules, and Workflows
+**Note**: We need to decide what to call an XXXX (formerly, "module"), as the word "module" is used for something different in the code.
 
 In RPL we define standardized hardware and software configurations for robotic equipment and control software in order to simplify the assembly, modification, and scaling of experimental systems:
-* A **module** is a cart with one or more hardware components (e.g., Pealer, Sealer, OT2 liquid handling robot, plate handler, plate mover)
-* A **workcell**, as show on the left of the image, is formed from multiple (8 in the photo on the left) modules
+* A **XXX** is a cart with one or more hardware components (e.g., Pealer, Sealer, OT2 liquid handling robot, plate handler, plate mover)
+* A **workcell**, as show on the left of the image, is formed from multiple (8 in the photo on the left) XXXXs.
 * Multiple workcells and other components can be linked via mobile robots
 
 ![Screenshot of a comment on a GitHub issue showing an image, added in the Markdown, of an Octocat smiling and raising a tentacle.](assets/AD_Fig.jpg)
 
 An RPL "workflow" is a program to cause one or more actions to be performed on equipment within a workcell. It comprises two components:
-* The **workcell definition** defines the modules that comprise a workcell, and associated static infrastructure that are to be used by the workflow
-* The **workflow definition** defines the sequence of actions that are to be executed in order on the robots.
+* The **workcell definition** defines the XXXXs that comprise a workcell, and associated static infrastructure that are to be used by the workflow
+* The **workflow definition** defines the sequence of actions that are to be executed in order on the nodes.
 
-### Workcell definition
+## Workcell definition
 
-This is specified by a YAML file that defines the robots and associated static infrastructure that are to be used by the workflow. E.g., see [this example](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/pcr_workcell.yaml). The file comprises two sections, *config* and *modules*:
+This is specified by a YAML file that defines the nodes and associated static infrastructure that are to be used by the workflow. E.g., see [this example](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/pcr_workcell.yaml). The file comprises two sections, *config* and *modules*:
 
 * The **config** section defines various variables that may be used elsewhere in the workcell. For example, here is the config from the example just listed.
 
@@ -30,7 +28,7 @@ This is specified by a YAML file that defines the robots and associated static i
   globus_group: "dda56f31-53d1-11ed-bd8b-0db7472df7d6"        # ???
 ```
 
-* The **modules** section lists the *modules* that are included in the workcell. For example, in the example just listed, there are 12 modules in total: 
+* The **modules** section lists the *modules* that are included in the workcell. For example, in the example just listed, there are 12 in total: 
   * a [pf400 sample handler](https://preciseautomation.com/SampleHandler.html) (**pf400**) and two associated cameras, **pf400_camera_right** and **pf400_camera_left**; 
   * a [SciClops plate stacker](https://hudsonrobotics.com/microplate-handling-2/platecrane-sciclops-3/) (**sciclops**)
   * a XX (**sealer**) and a XX (**peeler**), with an associated camera, **sp_module_camera**
@@ -40,24 +38,22 @@ This is specified by a YAML file that defines the robots and associated static i
            
 * Here is an example module specification:
 
-**NOTE**: What do the defaults mean?
-
 ```
-  - name: sealer                     # A name used for the module in the workflow
+  - name: sealer                     # A name used for the module in the workflow: its "alias"
     type: wei_ros_node               # Indicates that module uses ROS2
     model: sealer                    # ??
     config:
       ros_node: "/std_ns/SealerNode" # ??
-    positions:                       # ??
+    positions:                       # One or more spatial locations, with name 
       default: [205.128, -2.814, 264.373, 365.863, 79.144, 411.553]
 ```
 
-**NOTE**: Raf says "Each robot defines its own protocols (ROS2, EPICS, TCP/IP, etc) and the variables necessary to interact with it (IP, PORT, NAME, ETC)" -- does any of that come up here? Is it the "type" that indicates ROS2?
+**NOTE**: Raf says "Each node defines its own protocols (ROS2, EPICS, TCP/IP, etc) and the variables necessary to interact with it (IP, PORT, NAME, ETC)" -- does any of that come up here? Is it the "type" that indicates ROS2?
 
 
-### Workflow definition
+## Workflow definition
 
-This is specified by a YAML file that defines the sequence of actions that will be executed in order on the robots E.g., see [this example](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/workflows/ot2_test.yaml), shown also in the following, and comprising four sections:
+This is specified by a YAML file that defines the sequence of actions that will be executed in order on the hardware. E.g., see [this example](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/workflows/ot2_test.yaml), shown also in the following, and comprising four sections:
 * **metadata**: Descriptive metadata for the workflow
 * **workcell**: The location of the workcell that the workflow is designed for
 * **modules**: A list of the modules included in the workcell--just one here.
@@ -82,6 +78,8 @@ flowdef:
     args:
       config_path: /home/rpl/wei_ws/demo/rpl_workcell/pcr_workcell/protocol_files/ot2_pcr_config.yaml
 ```
+
+This workflow uses just one of the 12 modules defines in the 
 
 **NOTE**: Raf writes as follows.  This is not clear to me, as I do not see any of the words that he lists  (step name, robot, action name, vars) in the example:
 
