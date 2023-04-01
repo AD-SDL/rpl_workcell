@@ -1,6 +1,12 @@
-# Background on Workcells, Carts, Modules, and Workflows
+&#x1F34E;**Note for Raf**&#x1F34E;: There are some XXs below that would be good to fill in.
 
-**Note**: I use the term Cart (formerly, "module"), as the word "module" is used for something different in the code.
+&#x1F34E;**Note for Raf**&#x1F34E;: We need an example that makes much clearer how we might do something. Maybe start with a simple example, like:
+* Assume that we have an OT2 with red color in a well at position X and pure water in a well at position Y. We want to take 10 ml from each of X and Y and put it in a well in position Z. How do we specify this? I assume by writing a protocol file. Does the programmer generate the file and then call the WEI command?
+
+&#x1F34E;**Note for Raf**&#x1F34E;: I use the term Cart (formerly, "module"), as the word "module" is used for something different in the code. Ok?
+
+
+# Background on Workcells, Carts, Modules, and Workflows
 
 In RPL we define standardized hardware and software configurations for robotic equipment and control software in order to simplify the assembly, modification, and scaling of experimental systems:
 * A **cart** is a cart with zero or more modules 
@@ -137,15 +143,13 @@ metadata:
 ```
 
 
-**NOTE**: Raf writes as follows.  However, this is not clear to me, as I do not see any of the words that he lists  (step name, robot, action name, vars) in the example, or anything that looks like a "funcx style message."
+&#x1F34E;**Note for Raf**&#x1F34E;: You write as follows, about the protocol file I think (?).  However, this is not clear to me, as I do not see any of the words that you list  (step name, robot, action name, vars) in the example, or anything that looks like a "funcx style message." (What is a "funcx style message"?)
 
 This file uses the "alias" defined for each robot above and a funcx style message:
-Step Name: Name on the workflow
-Robot: Target Robot
-Action name: Action to be executed on the robot
-Vars: variable dictionary for that particular action
+* Step Name: Name on the workflow
+* Robot: Target Robot
+* Action name: Action to be executed on the robot
+* Vars: variable dictionary for that particular action
 
-**NOTE**: To know how to generate these files, we need to understand what they mean. Some questions:
-* What do the commands mean? E.g., what are C1, F1, etc. What does volume: [13] mean, what is a mix_cycle, etc.
-
-
+&#x1F34E;**Note for Raf**&#x1F34E;: To know how to generate these files, we need to understand what they mean. Some questions:
+* What do the commands mean? E.g., what are C1, F1, etc. What does volume: [13] mean, what is a mix_cycle, etc. Is that documented anywhere?
