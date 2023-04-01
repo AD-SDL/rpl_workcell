@@ -87,8 +87,7 @@ This file specifies a sequence of steps to be performed on the hardware.
 
 ## Protocols
 
-A protocol file gives the device-specific instructions to be executed on a specific piece of hardware to implement an intended action. For example, [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/protocol_files/ot2_pcr_config.yaml) gives instructions for an OpenTrons OT2. A protocol file specifies a list of **equipment** within the hardware component; a sequence of **commands** to be executed on the equipment; and some describptive **metadata**. For example, the following shows the equipment section, first command, and metadata section of [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/protocol_files/ot2_pcr_config.yaml):
-
+A protocol file gives the device-specific instructions to be executed on a specific piece of hardware to implement an intended action. For example, [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/protocol_files/ot2_pcr_config.yaml) gives instructions for an OpenTrons OT2. A protocol file specifies a list of **equipment** within the hardware component; a sequence of **commands** to be executed on the equipment; and some describptive **metadata**. For example, the following shows the contents of [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/protocol_files/ot2_pcr_config.yaml), which comprise the equipment section, four commands, and the metadata section. 
 
 ```
 equipment:
@@ -109,7 +108,26 @@ commands:
     mix_cycles: 1 
     mix_volume: 0
     
-  ... two more commands follow ...
+  - name: Combine forward primers
+    source: 1:[D1]
+    destination: 1:[C1]
+    volume: [13]
+    mix_cycles: 1 
+    mix_volume: 0
+
+  - name: Combine backward primers
+    source: 1:[E1]
+    destination: 1:[C1]
+    volume: [13]
+    mix_cycles: 1 
+    mix_volume: 0
+
+  - name: Combine DNA
+    source: 1:[F1]
+    destination: 1:[C1]
+    volume: [13]
+    mix_cycles: 1 
+    mix_volume: 0
     
 metadata:
   protocolName: PCR example template
@@ -119,10 +137,15 @@ metadata:
 ```
 
 
-**NOTE**: Raf writes as follows.  This is not clear to me, as I do not see any of the words that he lists  (step name, robot, action name, vars) in the example:
+**NOTE**: Raf writes as follows.  However, this is not clear to me, as I do not see any of the words that he lists  (step name, robot, action name, vars) in the example, or anything that looks like a "funcx style message."
 
 This file uses the "alias" defined for each robot above and a funcx style message:
 Step Name: Name on the workflow
 Robot: Target Robot
 Action name: Action to be executed on the robot
 Vars: variable dictionary for that particular action
+
+**NOTE**: To know how to generate these files, we need to understand what they mean. Some questions:
+* What do the commands mean? E.g., what are C1, F1, etc. What does volume: [13] mean, what is a mix_cycle, etc.
+
+
