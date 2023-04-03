@@ -3,9 +3,6 @@
 &#x1F34E;**Note for Raf**&#x1F34E;: We need an example that makes much clearer how we might do something. Maybe start with a simple example, like:
 * Assume that we have an OT2 with red color in a well at position X and pure water in a well at position Y. We want to take 10 ml from each of X and Y and put it in a well in position Z. How do we specify this? I assume by writing a protocol file. Does the programmer generate the file and then call the WEI command?
 
-&#x1F34E;**Note for Raf**&#x1F34E;: I use the term Cart (formerly, "module"), as the word "module" is used for something different in the code. Ok?
-
-
 # Background on Workcells, Carts, Modules, and Workflows
 
 In RPL we define standardized hardware and software configurations for robotic equipment and control software in order to simplify the assembly, modification, and scaling of experimental systems:
@@ -27,8 +24,8 @@ This is specified by a YAML file (e.g., [pcr_workcell.yaml](https://github.com/A
 The **config** section defines various infrastructure services that may be used elsewhere in the workcell. For example, here is the config from the example just listed.
 
 ```
-  ros_namespace: rpl_workcell                                 # ???
-  funcx_local_ep: "299edea0-db9a-4693-84ba-babfa655b1be"      # UUID used for local computations
+  ros_namespace: rpl_workcell                                 # ROS variable namespace name
+  funcx_local_ep: "299edea0-db9a-4693-84ba-babfa655b1be"      # UUID for funcX endpoint used for local computations
   globus_local_ep: ""                                         # 
   globus_search_index: "aefcecc6-e554-4f8c-a25b-147f23091944" # UUID for the Globus Search instance
   globus_portal_ep: "bb8d048a-2cad-4029-a9c7-671ec5d1f84d"    # ???
@@ -38,10 +35,10 @@ The **config** section defines various infrastructure services that may be used 
 The **modules** section lists the *modules* that are included in the workcell. In the example just listed, there are 12 in total: 
 * a [pf400 sample handler](https://preciseautomation.com/SampleHandler.html) (**pf400**) and two associated cameras, **pf400_camera_right** and **pf400_camera_left**; 
 * a [SciClops plate stacker](https://hudsonrobotics.com/microplate-handling-2/platecrane-sciclops-3/) (**sciclops**)
-* a XX (**sealer**) and a XX (**peeler**), with an associated camera, **sp_module_camera**
+* a A4S (**sealer**) and a Brooks XPeel (**peeler**), with an associated camera, **sp_module_camera**
 * three OpenTrons OT2 liquid handlers, **ot2_pcr_alpha**, **ot2_pcr_beta**, and **ot2_cp_gamma**;
 * a [Biometra thermal cycler](https://www.analytik-jena.com/products/life-science/pcr-qpcr-thermal-cycler/thermal-cycler-pcr/biometra-trio-series/) (**biometra**)
-* a ??? (**camera_module**)
+* another camera module **camera_module**
            
 Here is one of the 12 module specifications included in our example:
 
