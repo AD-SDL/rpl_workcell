@@ -3,9 +3,6 @@
 &#x1F34E;**Note for Raf**&#x1F34E;: We need an example that makes much clearer how we might do something. Maybe start with a simple example, like:
 * Assume that we have an OT2 with red color in a well at position X and pure water in a well at position Y. We want to take 10 ml from each of X and Y and put it in a well in position Z. How do we specify this? I assume by writing a protocol file. Does the programmer generate the file and then call the WEI command?
 
-&#x1F34E;**Note for Raf**&#x1F34E;: I use the term Cart (formerly, "module"), as the word "module" is used for something different in the code. Ok?
-
-
 # Background on Workcells, Carts, Modules, and Workflows
 
 In RPL we define standardized hardware and software configurations for robotic equipment and control software in order to simplify the assembly, modification, and scaling of experimental systems:
@@ -27,8 +24,8 @@ This is specified by a YAML file (e.g., [pcr_workcell.yaml](https://github.com/A
 The **config** section defines various infrastructure services that may be used elsewhere in the workcell. For example, here is the config from the example just listed.
 
 ```
-  ros_namespace: rpl_workcell                                 # ???
-  funcx_local_ep: "299edea0-db9a-4693-84ba-babfa655b1be"      # UUID used for local computations
+  ros_namespace: rpl_workcell                                 # ROS variable namespace name
+  funcx_local_ep: "299edea0-db9a-4693-84ba-babfa655b1be"      # UUID for funcX endpoint used for local computations
   globus_local_ep: ""                                         # 
   globus_search_index: "aefcecc6-e554-4f8c-a25b-147f23091944" # UUID for the Globus Search instance
   globus_portal_ep: "bb8d048a-2cad-4029-a9c7-671ec5d1f84d"    # ???
@@ -38,24 +35,26 @@ The **config** section defines various infrastructure services that may be used 
 The **modules** section lists the *modules* that are included in the workcell. In the example just listed, there are 12 in total: 
 * a [pf400 sample handler](https://preciseautomation.com/SampleHandler.html) (**pf400**) and two associated cameras, **pf400_camera_right** and **pf400_camera_left**; 
 * a [SciClops plate stacker](https://hudsonrobotics.com/microplate-handling-2/platecrane-sciclops-3/) (**sciclops**)
-* a XX (**sealer**) and a XX (**peeler**), with an associated camera, **sp_module_camera**
+* a A4S (**sealer**) and a Brooks XPeel (**peeler**), with an associated camera, **sp_module_camera**
 * three OpenTrons OT2 liquid handlers, **ot2_pcr_alpha**, **ot2_pcr_beta**, and **ot2_cp_gamma**;
 * a [Biometra thermal cycler](https://www.analytik-jena.com/products/life-science/pcr-qpcr-thermal-cycler/thermal-cycler-pcr/biometra-trio-series/) (**biometra**)
-* a ??? (**camera_module**)
+* another camera module **camera_module**
            
 Here is one of the 12 module specifications included in our example:
 
 ```
   - name: sealer                     # A name used for the module in the workflow: its "alias"
     type: wei_ros_node               # Indicates that module uses ROS2
-    model: sealer                    # ???
+    model: sealer                    # Not used at present
     config:
-      ros_node: "/std_ns/SealerNode" # ???
+      ros_node: "/std_ns/SealerNode" # ROS2 network name (in name space)
     positions:                       # One or more spatial locations, with name 
       default: [205.128, -2.814, 264.373, 365.863, 79.144, 411.553]
 ```
 
-**NOTE**: Raf says "Each node defines its own protocols (ROS2, EPICS, TCP/IP, etc) and the variables necessary to interact with it (IP, PORT, NAME, ETC)" -- does any of that come up here? Is it the "type" that indicates ROS2?
+The positions here are specific to the PF400: they give joint angles.
+
+For other apparatus, the spec could include things like protocol, IP port, etc.
 
 
 ## Workflow definition
@@ -75,13 +74,13 @@ metadata:
 
 workcell: /home/rpl/wei_ws/demo/rpl_workcell/pcr_workcell/pcr_workcell.yaml
 
-modules:
+modules: # The modules from workcell that are to be used
   - name: ot2_pcr_alpha
 
 flowdef:
-  - name: Mix OT2 reactions
-    module: ot2_pcr_alpha
-    command: run_protocol
+  - name: Mix OT2 reactions  # Human readable name
+    module: ot2_pcr_alpha    # Module that is target of the action
+    command: run_protocol    # Here on is module specific, e.g., run_protocol for OT2
     args:
       config_path: /home/rpl/wei_ws/demo/rpl_workcell/pcr_workcell/protocol_files/ot2_pcr_config.yaml
 ```
@@ -95,22 +94,27 @@ This file specifies a sequence of steps to be performed on the hardware.
 
 A protocol file gives the device-specific instructions to be executed on a specific piece of hardware to implement an intended action. For example, [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/protocol_files/ot2_pcr_config.yaml) gives instructions for an OpenTrons OT2. A protocol file specifies a list of **equipment** within the hardware component; a sequence of **commands** to be executed on the equipment; and some describptive **metadata**. For example, the following shows the contents of [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/protocol_files/ot2_pcr_config.yaml), which comprise the equipment section, four commands, and the metadata section. 
 
+This is OT2-specific. The plate locations are numbered 1..11.
+
+A 96-well plate has its wells labeled A..G and 1..16 
+
+
 ```
-equipment:
-  - name: corning_96_wellplate_360ul_flat
-    location: "1"
-  - name: opentrons_96_tiprack_20ul #opentrons_96_tiprack_1000ul
+equipment: # The equipment that is expected to be there.
+  - name: corning_96_wellplate_360ul_flat # Hard-coded OT2 name
+    location: "1"                         # Location
+  - name: opentrons_96_tiprack_20ul       # 
     location: "8"
   - name: opentrons_96_tiprack_300ul
     location: "9"
-  - name: p300_multi_gen2 #p1000_single_gen2
+  - name: p300_multi_gen2                 # The pipette location: left or right
     mount: right
 
 commands:
-  - name: Make Master mix
-    source: 1:[A1, A2, A3, A4]
-    destination: 1:B1
-    volume: [15, 100, 250, 300]
+  - name: Make Master mix                 # Human-readable name
+    source: 1:[A1, A2, A3, A4]            # <location>:[<list of wells>] 
+    destination: 1:B1                     # 
+    volume: [15, 100, 250, 300]           # Volume in uL
     mix_cycles: 1 
     mix_volume: 0
     

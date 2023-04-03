@@ -14,7 +14,7 @@ modules:
   - name: camera
 
 flowdef:
-  - name: Move from Sciclops to OT2
+  - name: Move from Camera Module to OT2
     module: pf400
     command: transfer
     args:
@@ -28,7 +28,7 @@ flowdef:
     module: ot2_cp_gamma
     command: run_protocol
     args:
-      # Currently needs to be hardcoded absolution paths... need to get relative paths configured
+      # Currently needs to be hardcoded absolute paths... need to get relative paths configured
       config_path:  /home/rpl/workspace/rpl_workcell/color_picker/protocol_files/combined_protocol.yaml
       red_volumes: payload.red_volumes
       green_volumes: payload.green_volumes
@@ -52,5 +52,3 @@ flowdef:
     args:
       save_location: local_run_results
       file_name: "final_image.jpg"
-
-
