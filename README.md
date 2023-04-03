@@ -1,4 +1,4 @@
-&#x1F34E;**Note for Raf**&#x1F34E;: There are some XXs below that would be good to fill in.
+&#x1F34E;**Note for Raf**&#x1F34E;: There are some ???s below that would be good to fill in.
 
 &#x1F34E;**Note for Raf**&#x1F34E;: We need an example that makes much clearer how we might do something. Maybe start with a simple example, like:
 * Assume that we have an OT2 with red color in a well at position X and pure water in a well at position Y. We want to take 10 ml from each of X and Y and put it in a well in position Z. How do we specify this? I assume by writing a protocol file. Does the programmer generate the file and then call the WEI command?
@@ -41,16 +41,16 @@ The **modules** section lists the *modules* that are included in the workcell. I
 * a XX (**sealer**) and a XX (**peeler**), with an associated camera, **sp_module_camera**
 * three OpenTrons OT2 liquid handlers, **ot2_pcr_alpha**, **ot2_pcr_beta**, and **ot2_cp_gamma**;
 * a [Biometra thermal cycler](https://www.analytik-jena.com/products/life-science/pcr-qpcr-thermal-cycler/thermal-cycler-pcr/biometra-trio-series/) (**biometra**)
-* a XXX (**camera_module**)
+* a ??? (**camera_module**)
            
 Here is one of the 12 module specifications included in our example:
 
 ```
   - name: sealer                     # A name used for the module in the workflow: its "alias"
     type: wei_ros_node               # Indicates that module uses ROS2
-    model: sealer                    # ??
+    model: sealer                    # ???
     config:
-      ros_node: "/std_ns/SealerNode" # ??
+      ros_node: "/std_ns/SealerNode" # ???
     positions:                       # One or more spatial locations, with name 
       default: [205.128, -2.814, 264.373, 365.863, 79.144, 411.553]
 ```
