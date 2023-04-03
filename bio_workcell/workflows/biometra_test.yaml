@@ -1,0 +1,27 @@
+metadata:
+  name: Biometra test - Workflow
+  author: Casey Stone, Rafael Vescovi
+  info: Initial Tests for the Biometra at BIO.
+  version: 0.1
+
+workcell: /home/rpl/workspace/rpl_workcell/bio_workcell/bio_workcell.yaml
+
+modules:
+  - name: biometra
+
+flowdef:
+  - name: close lid
+    module: biometra
+    command: close_lid
+    # args?
+    checks: null
+    comment: opens lid to biometra
+
+  flowdef:
+  - name: run quick program
+    module: biometra
+    command: run_program
+    args:
+      program_n: payload.program
+    checks: null
+    comment: opens lid to biometra

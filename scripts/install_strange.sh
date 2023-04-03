@@ -11,14 +11,22 @@ cd $ROS_WS/src
 ##PF400
 git clone https://github.com/AD-SDL/pf400_module
 
-##Cameras
-git clone https://github.com/AD-SDL/camera_module
-
 ##WEI
 git clone https://github.com/AD-SDL/wei_ros
 git clone https://github.com/AD-SDL/rpl_wei
+
+## Camera Module
+git clone https://github.com/AD-SDL/camera_module.git
+cd camera_module/camera_module_client
+pip install . 
 
 
 cd ..
 rosdep install --from-paths src --ignore-src --rosdistro humble -y
 colcon build
+
+
+cd $ROS_WS/src/rpl_wei
+pip3 install -r requirements/requirements.txt
+pip3 install -e .
+cd $ROS_WS
