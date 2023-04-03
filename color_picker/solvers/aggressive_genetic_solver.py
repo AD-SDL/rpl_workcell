@@ -28,6 +28,7 @@ class AggroColorSolver:
         return_max_volume: float = 275.0,
         out_dim: Tuple[int] = (96, 3),
         pop_size: int = 96,
+        prev_best_color: Optional[List[float]] = None
     ) -> List[List[float]]:
 
         assert pop_size == out_dim[0], "Population size must equal out_dim[0]"
@@ -35,9 +36,12 @@ class AggroColorSolver:
         target_color = sRGBColor(
             *target_color, is_upscaled=True if max(target_color) > 1 else False
         )
-
+        first = False
         if previous_experiment_colors is None:
             c_ratios = make_random_plate(dim=out_dim)
+            c_ratios[0] = sRGBColor(0.98, 0.01, 0.01)
+            c_ratios[1] = sRGBColor(0.01, 0.98, 0.01)
+            c_ratios[2] = sRGBColor(0.01, 0.01, 0.98)
             if return_volumes:
                 return AggroColorSolver.convert_ratios_to_volumes(c_ratios)
             else:
@@ -47,14 +51,16 @@ class AggroColorSolver:
         previous_experiment_colors = (
             np.asarray(previous_experiment_colors).reshape((-1, 3)).tolist()
         )
+        print("colors_here")
+        print(previous_experiment_colors)
         previous_experiment_colors = [
             sRGBColor(*color_ratio, is_upscaled=True if max(color_ratio) > 1 else False)
             for color_ratio in previous_experiment_colors
         ]
-
+        prev_best_color = sRGBColor(*prev_best_color,is_upscaled=True if max(prev_best_color) > 1 else False)
         # Find population best color
         (best_color_position, t) = AggroColorSolver._find_best_color(
-            previous_experiment_colors, target_color
+            previous_experiment_colors, target_color, prev_best_color
         )
 
         # Augment
@@ -95,6 +101,7 @@ class AggroColorSolver:
     def _find_best_color(
         experiment_colors: List[Union[sRGBColor, List[float]]],
         target_color: List[Union[sRGBColor, List[float]]],
+        best_color: Optional[List[Union[sRGBColor, List[float]]]] = None
     ) -> Tuple[int, List[float]]:
         """returns index of best color in population
         Parameters
@@ -110,12 +117,17 @@ class AggroColorSolver:
         List[float]:
             Difference scores for all colors
         """
-
+        
         if not isinstance(target_color, sRGBColor):
             target_color = sRGBColor(
                 *target_color, is_upscaled=True if max(target_color) > 1 else False
             )
-
+        if isinstance(best_color, List):
+            if not isinstance(best_color, sRGBColor):
+                best_color = sRGBColor(
+                    *best_color, is_upscaled=True if max(best_color) > 1 else False
+                )
+            experiment_colors = experiment_colors + [best_color]
         if not all(
             [isinstance(exp_color, sRGBColor) for exp_color in experiment_colors]
         ):
@@ -204,10 +216,17 @@ class AggroColorSolver:
 
             new_color_ratio = []
             # randomly shift some of the values up or down
+            lim = min(prev_best_diff/200, 0.2)
+            vals = np.random.rand(3)
+            vals = vals/sum(vals)
+
+
+            i = 0
             for r in t_color_ratios:
-                lim = min(prev_best_diff/200, 0.2)
-                delta = np.random.uniform(-lim, lim)
-                new_color_ratio.append(round(np.clip(r + delta, 0, 1), 3))
+                
+                delta = vals[i]*np.random.choice([-1, 1])*lim
+                new_color_ratio.append(round(np.clip(r + delta, 0.01, 1), 3))
+                i += 1
                 
             new_pop.append(sRGBColor(*new_color_ratio))
         
@@ -219,7 +238,10 @@ class AggroColorSolver:
         for _ in range(len(new_pop), new_pop_size):
             new_pop.append(_random_init())
             print("runninghere")
-       
+        if previos_best_index is None:
+            new_pop[0] = sRGBColor(0.98, 0.01, 0.01)
+            new_pop[1] = sRGBColor(0.01, 0.98, 0.01)
+            new_pop[2] = sRGBColor(0.01, 0.01, 0.98)
         return new_pop
 
 
