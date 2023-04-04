@@ -30,8 +30,8 @@ The **config** section defines various infrastructure services that may be used 
 The **modules** section lists the *modules* that are included in the workcell. In the example just listed, there are 12 in total: 
 * a [pf400 sample handler](https://preciseautomation.com/SampleHandler.html) (**pf400**) and two associated cameras, **pf400_camera_right** and **pf400_camera_left**; 
 * a [SciClops plate stacker](https://hudsonrobotics.com/microplate-handling-2/platecrane-sciclops-3/) (**sciclops**)
-* a A4S (**sealer**) and a Brooks XPeel (**peeler**), with an associated camera, **sp_module_camera**
-* three OpenTrons OT2 liquid handlers, **ot2_pcr_alpha**, **ot2_pcr_beta**, and **ot2_cp_gamma**;
+* a [A4S](https://www.azenta.com/products/automated-roll-heat-sealer-formerly-a4s) (**sealer**) and a [Brooks XPeel](https://www.azenta.com/products/automated-plate-seal-remover-formerly-xpeel) (**peeler**), with an associated camera, **sp_module_camera**
+* three [OpenTrons OT2](https://opentrons.com/products/robots/ot-2/) liquid handlers, **ot2_pcr_alpha**, **ot2_pcr_beta**, and **ot2_cp_gamma**;
 * a [Biometra thermal cycler](https://www.analytik-jena.com/products/life-science/pcr-qpcr-thermal-cycler/thermal-cycler-pcr/biometra-trio-series/) (**biometra**)
 * another camera module, **camera_module**
            
@@ -123,11 +123,13 @@ This file specifies a sequence of steps to be performed on the hardware.
 * Transfer the plate to the camera
 * Take a picture of the plate
 
-> While a workflow and a protocol both specify a sequence of actions to be performed, they are quite different in role and syntax. A **workflow** uses a hardware-independent notation to specify actions to perform on one or more modules (e.g., action A1 on module M1, action A2 on module M2); a **protocol** uses a hardware-specific notation to specify steps to be performed on a single module (e.g., OT2). Why *workflow* and *protocol*? Perhaps because this technology was developed by a partnership of computer scientists ("module", "workflow") and biologists ("protocol") :-)
+> While a workflow and a protocol both specify a sequence of actions to be performed, they are quite different in role and syntax. A **workflow** uses a hardware-independent notation to specify actions to perform on one or more modules (e.g., action A1 on module M1, action A2 on module M2); a **protocol** uses a hardware-specific notation to specify steps to be performed on a single module (e.g., OT2). Why *workflow* and *protocol*? Perhaps because this technology was developed by a partnership of computer scientists ("module", "workflow") and biologists ("protocol") :grinning:
 
 ## Protocols
 
 A protocol file gives the device-specific instructions to be executed on a specific piece of hardware to implement an intended action. For example, [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/protocol_files/ot2_pcr_config.yaml) gives instructions for an OpenTrons OT2. A protocol file specifies a list of **equipment** within the hardware component; a sequence of **commands** to be executed on the equipment; and some describptive **metadata**. For example, the following shows the contents of [combined_protocol.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/color_picker/protocol_files/combined_protocol.yaml), which comprise the equipment section, three commands, and the metadata section. 
+
+Strings of the form *payload.VARIABLE* (e.g., `payload.destination_wells`) refer to arguments passed to the protocol.
 
 The "location" argument here is OT2-specific: it indicates one of 11 plate locations, numbered 1..11. Similarly, the "mount" argument indicates one of two  locations, *left* or *right*. An "alias" argument defines a string that can be used to refer to a position later in the specifrication: e.g., location "2" can be referred to as "dest". 
 
@@ -189,3 +191,8 @@ metadata:
   description: Mixing all colors
   apiLevel: "2.12"
 ```
+
+## Command file
+
+A Python program defines the process required to run an experiment. E.g., see [color_picker_loop.py](https://github.com/AD-SDL/rpl_workcell/blob/main/color_picker/color_picker_loop.py) for a color picker program. Details TBD.
+
