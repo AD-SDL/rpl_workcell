@@ -122,7 +122,7 @@ flowdef:
     checks: null
     comment: null
 
-- name: Move plate from PeelerNest to HidexNest
+  - name: Move plate from PeelerNest to HidexNest
     module: plateCrane
     command: transfer
     args:
