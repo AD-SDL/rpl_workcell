@@ -1,12 +1,12 @@
 from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
 from tools.gather_data import GatherMetaData
 from pathlib import Path
-@generate_flow_definition(modifiers={'publish_gather_metadata': {'payload': '$.GatherMetadata.details.result[0]'}})
+@generate_flow_definition(modifiers={'publishv2' : {'payload': '$.GatherMetadata.details.result[0]'}})
 class PublishRun(GladierBaseClient):
     globus_group = 'dda56f31-53d1-11ed-bd8b-0db7472df7d6'
     gladier_tools = [
         GatherMetaData,
-        'gladier_tools.publish.Publish'
+        'gladier_tools.publish.Publishv2'
     ]
 
 def publish_iter(folder_path, dest_path):
@@ -20,15 +20,17 @@ def publish_iter(folder_path, dest_path):
                 'funcx_endpoint_non_compute':'95038e17-339b-4462-9c9f-a8473809af25',
 
                 
-                'pilot': {
+                'publishv2': {
                     'dataset': str(folder_path.expanduser()),
                     'index': 'aefcecc6-e554-4f8c-a25b-147f23091944',
                     'project': 'reports',
-                    'source_globus_endpoint': 'eeabbb24-b47d-11ed-a504-1f2a3a60e896',
-                    'source_collection_basepath': '/home/rpl/',
+                    'source_collection': '95038e17-339b-4462-9c9f-a8473809af25',
+                    'source_collection_basepath': '/home/tginsbu/',
+                    'destination_collection': 'bb8d048a-2cad-4029-a9c7-671ec5d1f84d',
                     'metadata': {},
-                    'destination':str(dest_path)
-                }
+                    'destination':str(dest_path),
+                    'visible_to' : ['public']
+                   }
                 }
             }
 
