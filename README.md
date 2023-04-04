@@ -129,10 +129,13 @@ This file specifies a sequence of steps to be performed on the hardware.
 
 A protocol file gives the device-specific instructions to be executed on a specific piece of hardware to implement an intended action. For example, [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/protocol_files/ot2_pcr_config.yaml) gives instructions for an OpenTrons OT2. A protocol file specifies a list of **equipment** within the hardware component; a sequence of **commands** to be executed on the equipment; and some describptive **metadata**. For example, the following shows the contents of [combined_protocol.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/color_picker/protocol_files/combined_protocol.yaml), which comprise the equipment section, three commands, and the metadata section. 
 
-This is OT2-specific. The plate locations are numbered 1..11.
+The "location" argument here is OT2-specific: it indicates one of 11 plate locations, numbered 1..11. Similarly, the "mount" argument indicates one of two  locations, *left* or *right*. An "alias" argument defines a string that can be used to refer to a position later in the specifrication: e.g., location "2" can be referred to as "dest". 
 
-A 96-well plate has its wells labeled A..G and 1..16 
+The wells within a plate are referred to via theur column and row, e.g., A1. 
 
+The following specification describes an OT2 with the following components:
+* In location 7: A 6-well rack of 50 ml tubes. (These are used to contain the different colors that are to be mixed, in wells A1, A2, and A3.
+* In each of locations 8, 9, 10, and 11: A 96-well rack of 300 ul wells.
 
 ```
 equipment:
@@ -154,10 +157,10 @@ equipment:
     mount: left
 
 commands:
-  - name: Mix Color 1
+  - name: Mix Color 1                       # Transfer fluid from A1 to specified locations 
     source: source:A1
-    destination: payload.destination_wells  # Argument provided (a dictionary)
-    volume: payload.red_volumes             # Argument
+    destination: payload.destination_wells  # Destination wells for transfers
+    volume: payload.red_volumes             # Volumes to be transferred 
     dispense_clearance: 2
     aspirate_clearance: 1
     drop_tip: False
@@ -186,14 +189,3 @@ metadata:
   description: Mixing all colors
   apiLevel: "2.12"
 ```
-
-&#x1F34E;**Note for Raf**&#x1F34E;: You write as follows, about the protocol file I think (?).  However, this is not clear to me, as I do not see any of the words that you list  (step name, robot, action name, vars) in the example, or anything that looks like a "funcx style message." (What is a "funcx style message"?)
-
-This file uses the "alias" defined for each robot above and a funcx style message:
-* Step Name: Name on the workflow
-* Robot: Target Robot
-* Action name: Action to be executed on the robot
-* Vars: variable dictionary for that particular action
-
-&#x1F34E;**Note for Raf**&#x1F34E;: To know how to generate these files, we need to understand what they mean. Some questions:
-* What do the commands mean? E.g., what are C1, F1, etc. What does volume: [13] mean, what is a mix_cycle, etc. Is that documented anywhere?
