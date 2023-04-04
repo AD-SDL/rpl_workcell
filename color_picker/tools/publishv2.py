@@ -1,7 +1,8 @@
+
 from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
 from tools.gather_data import GatherMetaData
 from pathlib import Path
-@generate_flow_definition(modifiers={'publishv2' : {'payload': '$.GatherMetadata.details.result[0]'}})
+@generate_flow_definition(modifiers={'publish_gather_metadata' : {'payload': '$.GatherMetadata.details.result[0]'}})
 class PublishRun(GladierBaseClient):
     globus_group = 'dda56f31-53d1-11ed-bd8b-0db7472df7d6'
     gladier_tools = [
