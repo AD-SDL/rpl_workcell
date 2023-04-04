@@ -19,13 +19,12 @@ def publish_iter(folder_path, dest_path):
                 'funcx_endpoint_compute':'95038e17-339b-4462-9c9f-a8473809af25',
                 'funcx_endpoint_non_compute':'95038e17-339b-4462-9c9f-a8473809af25',
 
-                
                 'publishv2': {
                     'dataset': str(folder_path.expanduser()),
                     'index': 'aefcecc6-e554-4f8c-a25b-147f23091944',
                     'project': 'reports',
                     'source_collection': '95038e17-339b-4462-9c9f-a8473809af25',
-                    'source_collection_basepath': '/home/tginsbu/',
+                    'source_collection_basepath': '/',
                     'destination_collection': 'bb8d048a-2cad-4029-a9c7-671ec5d1f84d',
                     'metadata': {},
                     'destination':str(dest_path),
@@ -37,7 +36,7 @@ def publish_iter(folder_path, dest_path):
 
         # Create the Client
         publishFlow = PublishRun()
-        label = 'testPublishTobias'
+        label = 'ColorPickerTestPublish'
         # Run the flow
         flow = publishFlow.run_flow(flow_input=flow_input,label=label)
         # Track progress
