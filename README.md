@@ -147,15 +147,11 @@ The "mount" argument indicates one of two  locations, *left* or *right*.
 The wells within a plate are referred to via their column and row, e.g., A1. 
 
 The following specification describes an OT2 with the following components:
-* In location 2, a 96-well plate (???)--does not appear to be used (???)
 * In location 7: A 6-well rack of 50 ml tubes. (These are used to contain the different colors that are to be mixed, in wells A1, A2, and A3.
 * In each of locations 8, 9, 10, and 11: A 96-well rack of 300 ul wells.
 
 ```
 equipment:
-  - name: corning_96_wellplate_360ul_flat # ??? Does not appear to be used?
-    location: "2"
-    alias: dest
   - name: opentrons_6_tuberack_nest_50ml_conical
     location: "7"
     alias: source  # Define "source" as an alias for location 7
@@ -171,10 +167,10 @@ equipment:
     mount: left
 
 commands:
-  - name: Mix Color 1                       # Transfer fluid from A1 to specified locations 
+  - name: Mix Color 1                       # Transfer fluid: A1 -> specified locations 
     source: source:A1
-    destination: payload.destination_wells  # Destination wells for transfers
-    volume: payload.red_volumes             # Volumes to be transferred 
+    destination: payload.destination_wells  # Destination wells for transfers (argument)
+    volume: payload.red_volumes             # Volumes to be transferred  (argument)
     dispense_clearance: 2
     aspirate_clearance: 1
     drop_tip: False
