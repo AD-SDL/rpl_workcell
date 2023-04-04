@@ -35,7 +35,7 @@ flowdef:
       blue_volumes: payload.blue_volumes
       destination_wells: payload.destination_wells
       use_existing_resources: payload.use_existing_resources
-    comment: Mix the red portions according to input data
+    comment: Mix R, G, and B portions according to input data
 
   - name: Move to Picture
     module: pf400
