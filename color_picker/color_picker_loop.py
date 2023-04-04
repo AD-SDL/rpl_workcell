@@ -246,6 +246,7 @@ def run(
         #with open(run_info["run_dir"]/ "runLogger.log") as f:
         #        print(f.read())
         run_path =  run_info["run_dir"].parts[-1]
+
         if not (os.path.isdir(exp_folder / run_path)):
             os.mkdir(exp_folder / run_path)
         
@@ -276,7 +277,7 @@ def run(
         filename = "plate_"+ str(plate_n)+".jpg"
         shutil.copy2(run_info["run_dir"]/ "results"/"final_image.jpg",  (exp_folder/"results"/filename))
         fx = FuncXExecutor(endpoint_id=ep)
-        fxresult = fx.submit(get_colors_from_file, img_path,endpoint_id=ep)
+        fxresult = fx.submit(get_colors_from_file, img_path)
         plate_colors_ratios = fxresult.result()[1]
        
         print("funcx finished")
@@ -302,7 +303,7 @@ def run(
         if plate_best_diff < cur_best_diff:
             cur_best_diff = plate_best_diff
             cur_best_color = plate_best_color
-            time_to_best = str(datetime.now - start)
+            time_to_best = str(datetime.now() - start)
         
 
 

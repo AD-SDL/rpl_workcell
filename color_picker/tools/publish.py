@@ -1,5 +1,5 @@
 from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
-from gather_data import GatherMetaData
+from tools.gather_data import GatherMetaData
 from pathlib import Path
 @generate_flow_definition(modifiers={'publish_gather_metadata': {'payload': '$.GatherMetadata.details.result[0]'}})
 class PublishRun(GladierBaseClient):
