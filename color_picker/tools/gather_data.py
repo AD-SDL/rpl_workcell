@@ -1,5 +1,6 @@
 from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
 def gather_metadata(**data):
+
     from pathlib import Path
     import json
     GENERAL_METADATA = {
@@ -21,7 +22,7 @@ def gather_metadata(**data):
         datal = json.loads(f.read())
  
     datal.update(GENERAL_METADATA)
-    pilot = data["pilot"]
+    pilot = data["publishv2"]
     pilot['metadata'] = datal
     return pilot
 @generate_flow_definition
@@ -29,8 +30,7 @@ class GatherMetaData(GladierBaseTool):
     funcx_functions = [gather_metadata]
     required_input = [
         'make_input',
-        'funcx_endpoint_compute',
-        'pilot'
+        'funcx_endpoint_compute'
         
     ]
 
