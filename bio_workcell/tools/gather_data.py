@@ -4,20 +4,20 @@ def gather_metadata(**data):
     from pathlib import Path
     import json
     GENERAL_METADATA = {
-    "creators": [{"creatorName": "RPL Team"}],
-    "publicationYear": "2023",
+    "creators": [{"creatorName": "BIO Team"}],
+    "publicationYear": "2023", 
     "publisher": "Argonne National Lab",
     "resourceType": {
         "resourceType": "Dataset",
         "resourceTypeGeneral": "Dataset"
     },
     "subjects": [{"subject": "SDL"}],
-    "exp_type": "color_picker"
+    "exp_type": "Campaign2"
 
     }
 
     input_path = Path(data['make_input']).expanduser()
-    with open(input_path / "exp_data.txt") as f:
+    with open(input_path / "info.txt") as f:
         datal = json.loads(f.read())
  
     datal.update(GENERAL_METADATA)
