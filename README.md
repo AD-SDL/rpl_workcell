@@ -34,13 +34,13 @@ The **config** section defines various infrastructure services that may be used 
 
 The **modules** section lists the *modules* that are included in the workcell. In the example just listed, there are 12 in total: 
 * a [pf400 sample handler](https://preciseautomation.com/SampleHandler.html) (**pf400**) and two associated cameras, **pf400_camera_right** and **pf400_camera_left**; 
-* a [SciClops plate stacker](https://hudsonrobotics.com/microplate-handling-2/platecrane-sciclops-3/) (**sciclops**)
+* a [SciClops plate handler](https://hudsonrobotics.com/microplate-handling-2/platecrane-sciclops-3/) (**sciclops**)
 * a [A4S](https://www.azenta.com/products/automated-roll-heat-sealer-formerly-a4s) (**sealer**) and a [Brooks XPeel](https://www.azenta.com/products/automated-plate-seal-remover-formerly-xpeel) (**peeler**), with an associated camera, **sp_module_camera**
 * three [OpenTrons OT2](https://opentrons.com/products/robots/ot-2/) liquid handlers, **ot2_pcr_alpha**, **ot2_pcr_beta**, and **ot2_cp_gamma**;
 * a [Biometra thermal cycler](https://www.analytik-jena.com/products/life-science/pcr-qpcr-thermal-cycler/thermal-cycler-pcr/biometra-trio-series/) (**biometra**)
 * another camera module, **camera_module**
            
-Here is one of the 12 module specifications included in our example:
+For example, this module specification included in [pcr_workcell.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/pcr_workcell.yaml) described the Sealer module:
 
 ```
   - name: sealer                     # A name used for the module in the workflow: its "alias"
@@ -52,9 +52,9 @@ Here is one of the 12 module specifications included in our example:
       default: [205.128, -2.814, 264.373, 365.863, 79.144, 411.553]
 ```
 
-The positions here are specific to the PF400: they give joint angles.
+The positions here are specific to the PF400: they give joint angles. ???Why does the Sealer have PF400 angles???
 
-For other apparatus, the specification could include things like protocol and IP port.
+For other modules, a module specification could include things like protocol and IP port.
 
 ## Workflow definition
 
