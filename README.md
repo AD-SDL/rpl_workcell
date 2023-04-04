@@ -140,15 +140,13 @@ The "location" argument here is OT2-specific: it indicates one of 11 plate locat
 
 <img src="assets/DeckMapEmpty.jpg"  width="200">
 
-An "alias" argument defines a string that can be used to refer to a position later in the specifrication: e.g., the fourth line in the YAML below specifies that location "7" can be referred to as "dest". 
-
-The "mount" argument indicates one of two  locations, *left* or *right*. 
+An "alias" argument defines a string that can be used to refer to a position later in the specifrication: e.g., the fourth line in the YAML below specifies that location "7" can be referred to as "source". 
 
 The wells within a plate are referred to via their column and row, e.g., A1. 
 
 The following specification describes an OT2 with the following components:
 * In location 7: A 6-well rack of 50 ml tubes. (These are used to contain the different colors that are to be mixed, in wells A1, A2, and A3.
-* In each of locations 8, 9, 10, and 11: A 96-well rack of 300 ul wells.
+* In each of locations 8 and 9: A 96-well rack of 300 ul wells.
 
 ```
 equipment:
@@ -159,12 +157,6 @@ equipment:
     location: "8"
   - name: opentrons_96_tiprack_300ul
     location: "9"
-  - name: opentrons_96_tiprack_300ul
-    location: "10"
-  - name: opentrons_96_tiprack_300ul
-    location: "11"
-  - name: p300_single_gen2 # What is that???
-    mount: left
 
 commands:
   - name: Mix Color 1                       # Transfer fluid: A1 -> specified locations 
