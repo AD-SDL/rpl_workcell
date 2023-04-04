@@ -1,16 +1,21 @@
 # Background on Workcells, Carts, Modules, and Workflows
 
-In RPL we define standardized hardware and software configurations for robotic equipment and control software in order to simplify the assembly, modification, and scaling of experimental systems:
+We define conventional hardware and software configurations for robotic equipment and control software in order to simplify the assembly, modification, and scaling of experimental systems. The following figure shows our hardware conventions:
 * A **cart** is a cart with zero or more modules 
 * A **module** is an hardware component with a name, type, position, etc. (e.g., Pealer, Sealer, OT2 liquid handling robot, plate handler, plate mover, camera)
 * A **workcell**, as show on the left of the image, is formed from multiple (8 in the photo on the left) carts that typically hold multiple modules (12 in the example, as described below).
 * Multiple workcells and other components can be linked via mobile robots
 
-![Image of a workcell with four carts, connected via mobile robots to other workcells; on the far right, a workflow definition.](assets/AD_Fig.jpg)
+![Image of a workcell with eight carts, connected via mobile robots to other workcells; on the far right, a workflow definition.](assets/AD_Fig.jpg)
 
-An RPL "workflow" is a program to cause one or more actions to be performed on equipment within a workcell. It comprises two components:
-* The **workcell definition** defines the modules that comprise a workcell, and associated static infrastructure that are to be used by the workflow
-* The **workflow definition** defines the sequence of actions that are to be executed in order on the modules.
+A **workcell definition** (a YAML file, see below) defines the modules that comprise a workcell, and associated static infrastructure that are to be used by the workflow.
+
+The software associated with a workflow is then defined by three types of files (see figure):
+* A **driver program**, in Python, sets up to call one or more workflows
+* A **workflow definition**, in YAML, define a set of **actions** to be executed, in order, on one or more of the modules in the workcell
+* A **protocol definition**, in YAML, defines a set of steps to be performed, in order, on a specified OpenTrons OT2
+
+![Software involved in Color Picker.](assets/ColorPicker.jpg)
 
 ## Workcell definition
 
@@ -125,28 +130,35 @@ This file specifies a sequence of steps to be performed on the hardware.
 
 > While a workflow and a protocol both specify a sequence of actions to be performed, they are quite different in role and syntax. A **workflow** uses a hardware-independent notation to specify actions to perform on one or more modules (e.g., action A1 on module M1, action A2 on module M2); a **protocol** uses a hardware-specific notation to specify steps to be performed on a single module (e.g., OT2). Why *workflow* and *protocol*? Perhaps because this technology was developed by a partnership of computer scientists ("module", "workflow") and biologists ("protocol") :grinning:
 
-## Protocols
+## Protocol definition
 
 A protocol file gives the device-specific instructions to be executed on a specific piece of hardware to implement an intended action. For example, [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/protocol_files/ot2_pcr_config.yaml) gives instructions for an OpenTrons OT2. A protocol file specifies a list of **equipment** within the hardware component; a sequence of **commands** to be executed on the equipment; and some describptive **metadata**. For example, the following shows the contents of [combined_protocol.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/color_picker/protocol_files/combined_protocol.yaml), which comprise the equipment section, three commands, and the metadata section. 
 
 Strings of the form *payload.VARIABLE* (e.g., `payload.destination_wells`) refer to arguments passed to the protocol.
 
-The "location" argument here is OT2-specific: it indicates one of 11 plate locations, numbered 1..11. Similarly, the "mount" argument indicates one of two  locations, *left* or *right*. An "alias" argument defines a string that can be used to refer to a position later in the specifrication: e.g., location "2" can be referred to as "dest". 
+The "location" argument here is OT2-specific: it indicates one of 11 plate locations, numbered 1..11:
 
-The wells within a plate are referred to via theur column and row, e.g., A1. 
+<img src="assets/DeckMapEmpty.jpg"  width="200">
+
+An "alias" argument defines a string that can be used to refer to a position later in the specifrication: e.g., the fourth line in the YAML below specifies that location "7" can be referred to as "dest". 
+
+The "mount" argument indicates one of two  locations, *left* or *right*. 
+
+The wells within a plate are referred to via their column and row, e.g., A1. 
 
 The following specification describes an OT2 with the following components:
+* In location 2, a 96-well plate (???)--does not appear to be used (???)
 * In location 7: A 6-well rack of 50 ml tubes. (These are used to contain the different colors that are to be mixed, in wells A1, A2, and A3.
 * In each of locations 8, 9, 10, and 11: A 96-well rack of 300 ul wells.
 
 ```
 equipment:
-  - name: corning_96_wellplate_360ul_flat
+  - name: corning_96_wellplate_360ul_flat # ??? Does not appear to be used?
     location: "2"
     alias: dest
   - name: opentrons_6_tuberack_nest_50ml_conical
     location: "7"
-    alias: source
+    alias: source  # Define "source" as an alias for location 7
   - name: opentrons_96_tiprack_300ul
     location: "8"
   - name: opentrons_96_tiprack_300ul
@@ -155,7 +167,7 @@ equipment:
     location: "10"
   - name: opentrons_96_tiprack_300ul
     location: "11"
-  - name: p300_single_gen2
+  - name: p300_single_gen2 # What is that???
     mount: left
 
 commands:
@@ -194,5 +206,7 @@ metadata:
 
 ## Command file
 
-A Python program defines the process required to run an experiment. E.g., see [color_picker_loop.py](https://github.com/AD-SDL/rpl_workcell/blob/main/color_picker/color_picker_loop.py) for a color picker program. Details TBD.
-
+A Python program defines the process required to run an experiment. E.g., see [color_picker_loop.py](https://github.com/AD-SDL/rpl_workcell/blob/main/color_picker/color_picker_loop.py) for a color picker program, which calls three workflows: 
+* First, if needed, `cp_wf_newplate.yaml`
+* Then, the workflow given above, `cp_wf_mixcolor.yaml`
+* Finally, as needed, `cp_wf_trashplate.yaml`
