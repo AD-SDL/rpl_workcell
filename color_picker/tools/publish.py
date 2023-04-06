@@ -11,7 +11,7 @@ class PublishRun(GladierBaseClient):
     ]
 
 def publish_iter(folder_path, dest_path):
-        #gather some shit and transfer it to the exp\
+        # Gather some information and transfer it to the endpoint
         print(str(folder_path.expanduser()))
         print(str(dest_path ))    
         flow_input = {
@@ -19,8 +19,7 @@ def publish_iter(folder_path, dest_path):
                 'make_input': str(folder_path.expanduser()),
                 'funcx_endpoint_compute':'95038e17-339b-4462-9c9f-a8473809af25',
                 'funcx_endpoint_non_compute':'95038e17-339b-4462-9c9f-a8473809af25',
-
-                
+     
                 'pilot': {
                     'dataset': str(folder_path.expanduser()),
                     'index': 'aefcecc6-e554-4f8c-a25b-147f23091944',
@@ -30,9 +29,8 @@ def publish_iter(folder_path, dest_path):
                     'metadata': {},
                     'destination':str(dest_path)
                 }
-                }
             }
-
+        }
 
         # Create the Client
         publishFlow = PublishRun()
