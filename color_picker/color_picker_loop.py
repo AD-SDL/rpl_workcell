@@ -250,7 +250,6 @@ def run(
         t_steps_run, log_line = get_log_info(run_dir, t_steps_run)
         steps_run.append(t_steps_run)
         
-        
         #with open(run_info["run_dir"]/ "runLogger.log") as f:
         #        print(f.read())
         run_path =  run_info["run_dir"].parts[-1]
@@ -272,7 +271,7 @@ def run(
             new_plate = True
             curr_wells_used = []
 
-        # analize image
+        # Analyze image
         # output should be list [pop_size, 3]   
         fname = "final_image.jpg" #image"+str(ot2_iter) +".jpg"
         img_path = run_info["run_dir"]/ "results" / fname
