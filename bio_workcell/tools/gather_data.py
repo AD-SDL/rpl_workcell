@@ -3,6 +3,9 @@ def gather_metadata(**data):
 
     from pathlib import Path
     import json
+    import os
+    import csv
+    import re
     GENERAL_METADATA = {
     "creators": [{"creatorName": "BIO Team"}],
     "publicationYear": "2023", 
@@ -17,12 +20,22 @@ def gather_metadata(**data):
     }
 
     input_path = Path(data['make_input']).expanduser()
-    with open(input_path / "info.txt") as f:
-        datal = json.loads(f.read())
- 
-    datal.update(GENERAL_METADATA)
+    datal = {}
+    for file in os.listdir(input_path):
+     if re.match(".*csv", file):
+       with open(input_path / file) as f:
+          reader = csv.reader(f)
+          vals = []
+          for row in reader:
+             vals.append(row)
+          datal["csvdata"] = vals
+     else:
+       with open(input_path / file) as f:
+         datal[file] =  f.read()
+
+    GENERAL_METADATA.update(datal)
     final_data = data["publishv2"]
-    final_data['metadata'] = datal
+    final_data['metadata'] = GENERAL_METADATA
     return final_data
 
 @generate_flow_definition
@@ -32,5 +45,3 @@ class GatherMetaData(GladierBaseTool):
         'make_input',
         'funcx_endpoint_compute'
     ]
-
-
