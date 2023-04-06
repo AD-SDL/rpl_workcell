@@ -45,5 +45,3 @@ class GatherMetaData(GladierBaseTool):
         'make_input',
         'funcx_endpoint_compute'
     ]
-
-
