@@ -1,3 +1,4 @@
+
 from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
 from tools.gather_data import GatherMetaData
 @generate_flow_definition(modifiers={'publishv2' : {'payload': '$.GatherMetadata.details.result[0]'}})
