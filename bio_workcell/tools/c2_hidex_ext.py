@@ -1,4 +1,8 @@
-def c2_hidex_ext(file_name):
+from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
+
+
+
+def c2_hidex_ext(**data):
     import pandas as pd
     import csv
     import os
@@ -15,6 +19,7 @@ def c2_hidex_ext(file_name):
 
 
     """
+    file_name = data.get('csv_name')
     df = pd.DataFrame()
 
     # extract the reading date, time, and data (into dataframe)
@@ -48,3 +53,10 @@ def c2_hidex_ext(file_name):
     
     return blob #df, timestamp_list, reading_date, reading_time, basename 
 
+@generate_flow_definition
+class C2_read_hidex(GladierBaseTool):
+    funcx_functions = [c2_hidex_ext]
+    required_input = [
+        'make_input',
+        'funcx_endpoint_compute'
+    ]

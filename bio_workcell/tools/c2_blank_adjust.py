@@ -1,5 +1,8 @@
-def c2_blank_adjust(data):
-    data_frame=
+from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
+
+def c2_blank_adjust(**data):
+    data_frame = data['data_file']
+
     def calculate_avg(list):
         """calculate_avg
 
@@ -56,3 +59,12 @@ def c2_blank_adjust(data):
             index+=1
     
     return blank_adj_data_frame, adjusted_values_list
+
+
+@generate_flow_definition
+class C2_blank_adjust(GladierBaseTool):
+    funcx_functions = [c2_blank_adjust]
+    required_input = [
+        'make_input',
+        'funcx_endpoint_compute'
+    ]

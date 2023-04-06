@@ -1,5 +1,8 @@
-def c2_gen_graphs(blank_adj_df, data_filename, plot_directory_path): #TODO: check graph format
+from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
+
+def c2_gen_graphs(**data):
     import matplotlib.pyplot as plt
+    import os
     """generate_graphs
 
     Description: Received a blank adjusted data frame and produces one graph per data timepoint
@@ -13,6 +16,8 @@ def c2_gen_graphs(blank_adj_df, data_filename, plot_directory_path): #TODO: chec
         plot_paths: a list of file paths to newly saved graphs in order of increasing data timepoint
     
     """
+    csv_file = data.get('csv_file')
+#    blank_adj_df, data_filename, plot_directory_path
     plot_paths = []
 
     # define x-axis and x-axis ticks
@@ -77,3 +82,12 @@ def c2_gen_graphs(blank_adj_df, data_filename, plot_directory_path): #TODO: chec
         plt.close() 
 
     return plot_paths
+
+
+@generate_flow_definition
+class C2_gen_graphs(GladierBaseTool):
+    funcx_functions = [c2_gen_graphs]
+    required_input = [
+        'make_input',
+        'funcx_endpoint_compute'
+    ]

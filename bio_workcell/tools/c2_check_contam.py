@@ -1,4 +1,7 @@
-def c2_check_contam(data):  # TODO
+from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
+
+
+def c2_check_contam(**data):
     import pandas as pd
     import json
     """check_for_contaminaton
@@ -29,4 +32,15 @@ def c2_check_contam(data):  # TODO
             print(f"FAIL control sample {blank_raw_OD} has Raw OD value greater than 0.07")
             # TODO: improve transparency about which sample failed at what timepoint
     data["ret_val"] = ret_val
-    return json.dumps(data)
+    #save json.dumps(data)
+    return 
+
+
+
+@generate_flow_definition
+class C2_check_contam(GladierBaseTool):
+    funcx_functions = [c2_check_contam]
+    required_input = [
+        'make_input',
+        'funcx_endpoint_compute'
+    ]
