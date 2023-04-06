@@ -10,10 +10,12 @@ We define conventional hardware and software configurations for robotic equipmen
 
 A **workcell definition** (a YAML file, see below) defines the modules that comprise a workcell, and associated static infrastructure that are to be used by the workflow.
 
-The software associated with a workflow is then defined by three types of files (see figure):
+The software associated with a workflow is then defined by three types of files:
 * A **driver program**, in Python, sets up to call one or more workflows
 * A **workflow definition**, in YAML, define a set of **actions** to be executed, in order, on one or more of the modules in the workcell
 * A **protocol definition**, in YAML, defines a set of steps to be performed, in order, on a specified OpenTrons OT2
+
+The figure illustrates the three components for a simple "Color Picker" application that we use to illustrate the use of the technology. 
 
 ![Software involved in Color Picker.](assets/ColorPicker.jpg)
 
@@ -140,22 +142,16 @@ The "location" argument here is OT2-specific: it indicates one of 11 plate locat
 
 <img src="assets/DeckMapEmpty.jpg"  width="200">
 
-An "alias" argument defines a string that can be used to refer to a position later in the specifrication: e.g., the fourth line in the YAML below specifies that location "7" can be referred to as "dest". 
-
-The "mount" argument indicates one of two  locations, *left* or *right*. 
+An "alias" argument defines a string that can be used to refer to a position later in the specifrication: e.g., the fourth line in the YAML below specifies that location "7" can be referred to as "source". 
 
 The wells within a plate are referred to via their column and row, e.g., A1. 
 
 The following specification describes an OT2 with the following components:
-* In location 2, a 96-well plate (???)--does not appear to be used (???)
 * In location 7: A 6-well rack of 50 ml tubes. (These are used to contain the different colors that are to be mixed, in wells A1, A2, and A3.
-* In each of locations 8, 9, 10, and 11: A 96-well rack of 300 ul wells.
+* In each of locations 8 and 9: A 96-well rack of 300 ul wells.
 
 ```
 equipment:
-  - name: corning_96_wellplate_360ul_flat # ??? Does not appear to be used?
-    location: "2"
-    alias: dest
   - name: opentrons_6_tuberack_nest_50ml_conical
     location: "7"
     alias: source  # Define "source" as an alias for location 7
@@ -163,18 +159,12 @@ equipment:
     location: "8"
   - name: opentrons_96_tiprack_300ul
     location: "9"
-  - name: opentrons_96_tiprack_300ul
-    location: "10"
-  - name: opentrons_96_tiprack_300ul
-    location: "11"
-  - name: p300_single_gen2 # What is that???
-    mount: left
 
 commands:
-  - name: Mix Color 1                       # Transfer fluid from A1 to specified locations 
+  - name: Mix Color 1                       # Transfer fluid: A1 -> specified locations 
     source: source:A1
-    destination: payload.destination_wells  # Destination wells for transfers
-    volume: payload.red_volumes             # Volumes to be transferred 
+    destination: payload.destination_wells  # Destination wells for transfers (argument)
+    volume: payload.red_volumes             # Volumes to be transferred  (argument)
     dispense_clearance: 2
     aspirate_clearance: 1
     drop_tip: False
