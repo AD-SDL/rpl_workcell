@@ -10,10 +10,12 @@ We define conventional hardware and software configurations for robotic equipmen
 
 A **workcell definition** (a YAML file, see below) defines the modules that comprise a workcell, and associated static infrastructure that are to be used by the workflow.
 
-The software associated with a workflow is then defined by three types of files (see figure):
+The software associated with a workflow is then defined by three types of files:
 * A **driver program**, in Python, sets up to call one or more workflows
 * A **workflow definition**, in YAML, define a set of **actions** to be executed, in order, on one or more of the modules in the workcell
 * A **protocol definition**, in YAML, defines a set of steps to be performed, in order, on a specified OpenTrons OT2
+
+The figure illustrates the three components for a simple "Color Picker" application that we use to illustrate the use of the technology. 
 
 ![Software involved in Color Picker.](assets/ColorPicker.jpg)
 
