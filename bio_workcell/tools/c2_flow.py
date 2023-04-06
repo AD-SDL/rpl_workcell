@@ -19,30 +19,31 @@ class C2Flow(GladierBaseClient):
         'gladier_tools.publish.Publish'
     ]
 
-def c2_flow(folder_path, dest_path):
+def c2_flow(exp_name,plate_n,time):
         flow_input = {
             'input': {
-                'source_globus_endpoint':'',
-                'destination_globus_endpoint':'',
-                ''
-                'funcx_endpoint_compute':'95038e17-339b-4462-9c9f-a8473809af25',
-                'funcx_endpoint_non_compute':'95038e17-339b-4462-9c9f-a8473809af25',
-
-                'pilot': {
-                    'dataset': str(folder_path.expanduser()),
-                    'index': '4e2884b0-e585-4913-8a33-4be155ebb06c',
-                    'project': 'bio',
-                    'source_globus_endpoint': '95038e17-339b-4462-9c9f-a8473809af25',
-                    'source_collection_basepath': '/',
-                    'metadata': {},
-                    'destination':str(dest_path)
-                   }
+                'source_globus_endpoint':'c819ce5c-d3e4-11ed-a9ce-63ca5f6c6821', #hudson ep
+                'destination_globus_endpoint':'f9726362-96a7-11ed-b310-55098fa75e99', #ripchip ep
+                'funcx_endpoint_compute':'95038e17-339b-4462-9c9f-a8473809af25', #ripchip funcx
+                'funcx_endpoint_non_compute':'95038e17-339b-4462-9c9f-a8473809af25', #ripchip funcx
+                'exp_name':exp_name,
+                'plate_n':plate_n,
+                'time':time,
+                # 'pilot': {
+                #     'dataset': str(folder_path.expanduser()),
+                #     'index': '4e2884b0-e585-4913-8a33-4be155ebb06c',
+                #     'project': 'bio',
+                #     'source_globus_endpoint': '95038e17-339b-4462-9c9f-a8473809af25',
+                #     'source_collection_basepath': '/',
+                #     'metadata': {},
+                #     'destination':str(dest_path)
+                #    }
                 }
             }
 
         # Create the Client
         publishFlow = C2Flow()
-        label = 'ColorPickerTestPublish'
+        label = 'BioTestFlow'
         # Run the flow
         flow = publishFlow.run_flow(flow_input=flow_input,label=label)
         # Track progress
