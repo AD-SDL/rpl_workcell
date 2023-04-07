@@ -57,6 +57,5 @@ def c2_hidex_ext(**data):
 class C2_read_hidex(GladierBaseTool):
     funcx_functions = [c2_hidex_ext]
     required_input = [
-        'make_input',
         'funcx_endpoint_compute'
     ]

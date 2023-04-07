@@ -88,6 +88,6 @@ def c2_gen_graphs(**data):
 class C2_gen_graphs(GladierBaseTool):
     funcx_functions = [c2_gen_graphs]
     required_input = [
-        'make_input',
+        
         'funcx_endpoint_compute'
     ]

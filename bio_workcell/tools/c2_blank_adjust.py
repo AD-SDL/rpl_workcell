@@ -65,6 +65,6 @@ def c2_blank_adjust(**data):
 class C2_blank_adjust(GladierBaseTool):
     funcx_functions = [c2_blank_adjust]
     required_input = [
-        'make_input',
+        
         'funcx_endpoint_compute'
     ]

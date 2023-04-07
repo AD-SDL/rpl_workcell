@@ -41,6 +41,6 @@ def c2_check_contam(**data):
 class C2_check_contam(GladierBaseTool):
     funcx_functions = [c2_check_contam]
     required_input = [
-        'make_input',
+       
         'funcx_endpoint_compute'
     ]
