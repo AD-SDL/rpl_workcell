@@ -20,8 +20,9 @@ def c2_check_contam(**data):
     
     ret_val = "PASS"
     print("TODO: reformat campaign2 qc check")  #TEST
-    raw_df = pd.Dataframe.from_dict(data["pandas"])
-    timepoint_list = data["timestamp_list"]
+    csv_file = data.get("proc_folder") + "/" + data.get('csv_file')
+    raw_df = pd.read_csv(csv_file)
+    
     blanks = raw_df.iloc[84:,3:]
     numpy_blanks = blanks.to_numpy()
     flat_numpy_blanks = numpy_blanks.ravel().tolist()
@@ -32,6 +33,8 @@ def c2_check_contam(**data):
             print(f"FAIL control sample {blank_raw_OD} has Raw OD value greater than 0.07")
             # TODO: improve transparency about which sample failed at what timepoint
     data["ret_val"] = ret_val
+    with open(csv_file.split('.')[0] + "contam.txt", 'w') as f:
+        f.write(ret_val)
     #save json.dumps(data)
     return 
 

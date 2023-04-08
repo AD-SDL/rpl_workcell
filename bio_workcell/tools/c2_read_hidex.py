@@ -16,7 +16,7 @@ def excel_to_csv(**data):
     import csv
 
     filepath = data.get('local_path')
-    filename = data.get('proc_folder')
+    filename = data.get('proc_folder') + "/" +  data.get("remote_file")
     sheet_name = "Raw OD(590)"
     csv_filename = None
     if os.path.exists(filename):
@@ -26,6 +26,8 @@ def excel_to_csv(**data):
 
     # convert Raw OD(590) excel sheet to new csv file
     excel_OD_data = pd.read_excel(filename, sheet_name=sheet_name, index_col=None)
+    excel_OD_data.columns = excel_OD_data.iloc[7][:]
+    excel_OD_data = excel_OD_data[8:]
     excel_OD_data.to_csv(csv_filepath, encoding="utf-8", index=False)
     return csv_filepath
 

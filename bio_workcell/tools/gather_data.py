@@ -30,9 +30,9 @@ def gather_metadata(**data):
           for row in reader:
              vals.append(row)
           datal["csvdata"] = vals
-     else:
+     elif re.match(".*contam.txt", file):
        with open(input_path / file) as f:
-         datal[file] =  f.read()
+         datal["contam"] =  f.read()
 
     GENERAL_METADATA.update(datal)
     final_data = data["publishv2"]

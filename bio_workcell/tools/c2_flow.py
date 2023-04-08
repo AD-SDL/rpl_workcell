@@ -6,17 +6,17 @@ from c2_blank_adjust import C2_blank_adjust
 from c2_gen_graphs import C2_gen_graphs
 from gather_data import GatherMetaData
 from pathlib import Path
-@generate_flow_definition() #modifiers={'publish_gather_metadata' : {'payload': '$.GatherMetadata.details.result[0]'}})
+@generate_flow_definition(modifiers={'publishv2_gather_metadata' : {'payload': '$.GatherMetadata.details.result[0]'}})
 class C2Flow(GladierBaseClient):
     globus_group = 'dda56f31-53d1-11ed-bd8b-0db7472df7d6'
     gladier_tools = [
-   #     'gladier_tools.transfer.Transfer',
+       # 'gladier_tools.transfer.Transfer',
         C2_read_hidex,
         C2_check_contam,
         C2_blank_adjust,
         C2_gen_graphs,
         GatherMetaData,
-##        'gladier_tools.publish.Publish'
+       'gladier_tools.publish.Publishv2'
     ]
 
 def c2_flow(exp_name,plate_n,time, local_path, fname):
@@ -33,8 +33,21 @@ def c2_flow(exp_name,plate_n,time, local_path, fname):
                 'remote_file': fname,
                 'csv_file': fname.split('.')[0] +".csv",
                 'csv_file_corr': fname +"_corr.csv",
-                'proc_folder': str(Path(local_path) / fname),
+                'proc_folder': str(Path(local_path) ),
                 'time':time,
+                'publishv2': {
+                    'dataset': local_path,
+                    'index': '4e2884b0-e585-4913-8a33-4be155ebb06c',
+                    'project': 'bio',
+                    'source_collection': '1a11369a-d3eb-11ed-a9ce-63ca5f6c6821',
+                    'source_collection_basepath': '/',
+                    'destination_collection': 'bb8d048a-2cad-4029-a9c7-671ec5d1f84d',
+                    'metadata': {},
+                    'ingest_enabled': True,
+                    'transfer_enabled':True,
+                    'destination':str("/portal/bio"),
+                    'visible_to' : ['public']
+                   }
                 # 'pilot': {
                 #     'dataset': str(folder_path.expanduser()),
                 #     'index': '4e2884b0-e585-4913-8a33-4be155ebb06c',
@@ -58,6 +71,7 @@ def c2_flow(exp_name,plate_n,time, local_path, fname):
      
         
 if __name__ == "__main__":
-  local_path = "/mnt/c/Users/tgins/rpl_workcell/bio_workcell/demo_data"
-  fname = "Plate_map_5.xlsx"
+  local_path = "/home/tginsbu/workspace/rpl_workcell/bio_workcell/demo_data/example_report"
+  fname = "Campaign1_noIncubate2_20221201_160907.xlsx"
+
   c2_flow("test_exp", 1, "time", local_path, fname)

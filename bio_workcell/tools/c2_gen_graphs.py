@@ -3,6 +3,7 @@ from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
 def c2_gen_graphs(**data):
     import matplotlib.pyplot as plt
     import os
+    import pandas as pd
     """generate_graphs
 
     Description: Received a blank adjusted data frame and produces one graph per data timepoint
@@ -16,7 +17,10 @@ def c2_gen_graphs(**data):
         plot_paths: a list of file paths to newly saved graphs in order of increasing data timepoint
     
     """
-    csv_file = data.get('csv_file')
+    csv_file = data.get("proc_folder") +"/" + data.get('csv_file')
+    plot_directory_path = data.get("proc_folder")
+    ba_csv_file =  data.get("proc_folder") + "/blank_adj_" + data.get('csv_file')
+    data_filename = data.get('csv_file').split('.')[0]
 #    blank_adj_df, data_filename, plot_directory_path
     plot_paths = []
 
@@ -35,7 +39,7 @@ def c2_gen_graphs(**data):
     
     # define plot colors and figure dimensions
     colors = ["b","g","r","c","m","y",'tab:brown', "k"]
-
+    blank_adj_df = pd.read_csv(ba_csv_file)
     # Graph data from each timepoint
     for timepoint in blank_adj_df.columns[3:]:
         data_list = blank_adj_df[timepoint].tolist()
