@@ -69,4 +69,6 @@ source ~/wei_ws/install/setup.bash
 - `ros2 launch brooks_peeler_client brooks_peeler_client.launch.py peeler_port:={Your Port Name}`
 #### OT2 issues
 #### Sciclops issues
+#### Camera Module issues
+
 #### Other issues
