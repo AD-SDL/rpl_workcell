@@ -48,7 +48,7 @@ If you know that TMUX sessions are running in the background, you reopen the ses
 - Open a new shell on the local computer.
 ```
 source /opt/ros/humble/setup.bash  
-source wei_ws/install/setup.bash
+source ~/wei_ws/install/setup.bash
 ./home/rpl/workspace/rpl_workcell/pcr_workcell/demo.py
 ```
 
@@ -56,11 +56,11 @@ source wei_ws/install/setup.bash
 
 #### PF400 issues
 #### Sealer issues
-If there is a connection problem because of the wrong port name
--
+- If there is a connection problem because of the wrong port name. Run the following command to find the correct port numbers
+- ``
 #### Peeler issues
-If there is a connection problem because of the wrong port name. Run the 
-- 
+- If there is a connection problem because of the wrong port name. Run the following command to find the correct port numbers
+- ``
 #### OT2 issues
 #### Sciclops issues
 #### Other issues
