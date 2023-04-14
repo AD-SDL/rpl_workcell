@@ -30,6 +30,11 @@ ssh rpl@146.137.240.64
 ```
 
 ### Navigate in between TMUX shells
+If TMUX session is already running, you can navigate in between windows to check all the nodes. Number that correstponse to the nodes listed along bottum of the shell.
+- `Ctrl+B` 
+- `Desired number`
+- On Strange, available window numbers are: 0 and 1 
+- On Parker, available window numbers are: 0 to 6 
 
 ### Run PCR protocol on your local computer
 
