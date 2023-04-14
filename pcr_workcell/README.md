@@ -36,21 +36,4 @@ If TMUX session is already running, you can navigate in between windows to check
 - On Strange, available window numbers are: 0 and 1 
 - On Parker, available window numbers are: 0 to 6 
 
-### Run PCR protocol on your local computer
-
-## Running the Campaigns
-
-For the PCR campaign:
-
-```
-source ~/wei_ws/install/setup.bash
-./wc_client_run.py -wf workflows/pcr_workflow.yaml
-```
-
-For the MoveTest campaign:
-```
-source ~/wei_ws/install/setup.bash
-./wc_client_run.py -wf /workflows/move_test.yaml
-```
-
-
+### Run PCR Campaign on your local computer
