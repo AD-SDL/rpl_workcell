@@ -56,13 +56,13 @@ source ~/wei_ws/install/setup.bash
 
 #### PF400 issues
 #### Sealer issues
-- If there is a connection problem because of the wrong port name. Run the following command to find the correct port names.
+- If there is a connection problem because of the wrong port. Run the following commands to find the correct port name.
 - Kill the Sealer node with `Ctrl+C`.
 - `sudo dmesg | grep tty`
 - Restart the Sealer node.
 - `ros2 launch a4s_sealer_client a4s_sealer_client.launch.py sealer_port:={Your Port Name}` 
 #### Peeler issues
-- If there is a connection problem because of the wrong port name. Run the following command to find the correct port names.
+- If there is a connection problem because of the wrong port. Run the following commands to find the correct port name.
 - Kill the Sealer node with Ctrl+C.
 - `sudo dmesg | grep tty`
 - Restart the Peeler node.
