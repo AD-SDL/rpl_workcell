@@ -56,11 +56,11 @@ source ~/wei_ws/install/setup.bash
 
 #### PF400 issues
 #### Sealer issues
-- If there is a connection problem because of the wrong port name. Run the following command to find the correct port numbers
-- ``
+- If there is a connection problem because of the wrong port name. Run the following command to find the correct port names.
+- `sudo dmesg | grep tty`
 #### Peeler issues
-- If there is a connection problem because of the wrong port name. Run the following command to find the correct port numbers
-- ``
+- If there is a connection problem because of the wrong port name. Run the following command to find the correct port names.
+- `sudo dmesg | grep tty`
 #### OT2 issues
 #### Sciclops issues
 #### Other issues
