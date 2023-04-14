@@ -14,17 +14,21 @@ Peeler check tape
 ### Running ROS2 NODES
 In order start the PCR Workflow, you should start ROS2 Nodes on "Parker" and "Strange" computers. Currently, Parker is assigned to run the nodes for OT2, Sealer, Pealer, Biometra and Sciclops robots and "Strange" is assigned to run the nodes for PF400 robot and Camera Module. To start the node follow the steps below.
 ### Start ROS2 Nodes on Strange
+
+Note: Password to Strange is ....
+
 ```
 ssh rpl@146.137.240.63
-Note: Password is ....
 ./wei_ws/demo/rpl_workcell/scripts/run_nodes_strange.sh
 ```
 ### Start ROS2 Nodes on Parker
+Note: Password to Parker is ....
+
 ```
 ssh rpl@146.137.240.64
-Note: Password is ....
 ./wei_ws/demo/rpl_workcell/scripts/run_nodes_parker.sh
 ```
+
 ### Navigate in between TMUX shells
 
 ### Run PCR protocol on your local computer
