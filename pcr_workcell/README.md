@@ -1,13 +1,13 @@
 
 ## Initial setup 
-Make sure all the devices are turned on
-pipette tips
-correct pipettes for PCR
-deck the deck OT2
-Biometra lid
-Sealer check seal if have enough
-Sealer check seal type
-Peeler check tape
+- Make sure all the devices are turned on
+- pipette tips
+- correct pipettes for PCR
+- deck the deck OT2
+- Biometra lid
+- Sealer check seal if have enough
+- Sealer check seal type
+- Peeler check tape
 
 ## Running the PCR Workflow
 
