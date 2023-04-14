@@ -4,27 +4,30 @@ The RPL Color picker system is designed as a test system for integrating machine
 
 <h1>Workcell</h1>
 The color picker workflow integrates a number of different modules in the overall RPL system. Please refer to the RPL workcell documentation for the terminology around different levels of functioning. 
-Modules (in order of use in workflow):
-Hudson Sciclops:  This module stores and provides the well plates used in the color picking protocol. It consists of a crane capable of moving standard size well plates, and a set of storage towers with different plates in them. 96-well plates are kept in tower 1 of the system. When the workflow is started, the arm will move to tower 1, lower itself until it makes contact with the first available well plate, and then transfer this well plate from the storage racks onto  the exchange position on the module. (Link to Sciclops Repo)
+<h2>Modules (in order of use in workflow):</h2>
+<h3>Hudson Sciclops:</h3>  This module stores and provides the well plates used in the color picking protocol. It consists of a crane capable of moving standard size well plates, and a set of storage towers with different plates in them. 96-well plates are kept in tower 1 of the system. When the workflow is started, the arm will move to tower 1, lower itself until it makes contact with the first available well plate, and then transfer this well plate from the storage racks onto  the exchange position on the module. 
+<br>Repo: https://github.com/AD-SDL/ot2_module
 
-PF400: This module moves the well plate between other modules. It consists of a 5-DOF robotic arm that moves along a rail placed in the center of the other modules. Its first action is to pick up the well plate from the Sciclops exchange location, and transfer it to the Camera Module, described below. During each iteration of the color picker it will transfer the plate from the Camera Module to the OT2 Module, and then back to the Camera once the OT2 has completed its protocol. When the well plate is full, the arm will transfer it to a trash bin located at the end of the rail. The 
+<h3>PF400:</h3> This module moves the well plate between other modules. It consists of a 5-DOF robotic arm that moves along a rail placed in the center of the other modules. Its first action is to pick up the well plate from the Sciclops exchange location, and transfer it to the Camera Module, described below. During each iteration of the color picker it will transfer the plate from the Camera Module to the OT2 Module, and then back to the Camera once the OT2 has completed its protocol. When the well plate is full, the arm will transfer it to a trash bin located at the end of the rail. The 
 
 
 <h1>Running Instructions:</h1>
 <h2>Basic steps:</h2>
-	<br>1. Turn  on Strange, Parker and Logan NUCS 
-	<br>Strange:
-	![image](https://user-images.githubusercontent.com/73187720/232096218-127fba12-eebf-4bdb-8cdc-f3e4d3059723.png)
-	![image](https://user-images.githubusercontent.com/73187720/232096343-212a562a-e812-4a55-85e7-2fe8eebe4de8.png)
+	<br>1. Turn  on Strange, Parker and Logan NUCs
+<br><h3>Strange:</h3>
+<img src="https://user-images.githubusercontent.com/73187720/232096343-212a562a-e812-4a55-85e7-2fe8eebe4de8.png"  width="300" height="400"><img src="https://user-images.githubusercontent.com/73187720/232096218-127fba12-eebf-4bdb-8cdc-f3e4d3059723.png"  width="300" height="400">
 
-	<br>2. Check that each of the liquid containers on the OT2 has enough liquid for the full run,
-	    And check that all of the tips for the OT2 are properly in the tip block
-	<br>3. From Logan, in separate terminals, run  <em>ssh rpl@parker </em> and  <em>ssh rpl@strange </em>
-	<br>4. On both terminals,run  <em>cd ~/workspace/rpl_workcell/scripts </em> folder
-	<br>5. On Parker,run  <em>./run_nodes_parker</em>
-	<br>6. On Strange run  <em>./run_nodes_strange</em>
-	
-![image](https://user-images.githubusercontent.com/73187720/232088734-ced6f822-847e-4e9e-bd37-165fc8b0982e.png)
+<br> <h3>Parker:</h3>
+<img src="https://user-images.githubusercontent.com/73187720/232100088-9ae23729-c71b-45a3-8d05-9ca00f0bdd13.png"  width="300" height="400"><img src="https://user-images.githubusercontent.com/73187720/232099345-7c81732e-a3d7-45a9-a4ab-a90617c4e001.png"  width="300" height="400">
+
+
+<br>2. Check that each of the liquid containers on the OT2 has enough liquid for the full run,
+and check that all of the tips for the OT2 are properly in the tip block
+<br>3. From Logan, in separate terminals, run  <em>ssh rpl@parker </em> and  <em>ssh rpl@strange </em>
+<br>4. On both terminals,run  <em>cd ~/workspace/rpl_workcell/scripts </em> folder
+<br>5. On Parker,run  <em>./run_nodes_parker</em>
+<br>6. On Strange run  <em>./run_nodes_strange</em>
+<img src="https://user-images.githubusercontent.com/73187720/232088734-ced6f822-847e-4e9e-bd37-165fc8b0982e.png"  width="1000" height="400">
 
 
   7. In a new terminal on Logan, run  <em>source ~/wei_ws/install/setup.bash</em>
