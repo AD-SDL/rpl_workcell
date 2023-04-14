@@ -31,12 +31,18 @@ ssh rpl@146.137.240.64
 ```
 
 ### Navigate in between TMUX shells
-If TMUX session is already running, you can navigate in between windows to check all the nodes. Number that correstponse to the nodes listed along bottum of the shell.
-- `Ctrl+B` 
+If TMUX sessions are already running, you can navigate in between windows to check all the nodes. Number that correstponse to the nodes listed along bottum of the shell.
+- `Ctrl+b` 
 - `Desired number`
 - On Strange, available window numbers are: 0 and 1 
 - On Parker, available window numbers are: 0 to 6 
 
+If you know that TMUX sessions are running in the background, you reopen the session on your shell with below commands.
+
+- `tmux a`
+- `Ctrl+b`
+- `w`
+- Choose the window you want to display
 ### Run PCR Campaign on your local computer
 - Before running the PCR Campaign check all the TMUX windows on both Parker and Strange to make sure all the robots are publishing "READY" state. If any of the robots are in "ERROR" state refer to the DEBUGGING Section in the Template. 
 - Open a new shell on the local computer.
@@ -50,7 +56,11 @@ source wei_ws/install/setup.bash
 
 #### PF400 issues
 #### Sealer issues
+If there is a connection problem because of the wrong port name
+-
 #### Peeler issues
+If there is a connection problem because of the wrong port name. Run the 
+- 
 #### OT2 issues
 #### Sciclops issues
 #### Other issues
