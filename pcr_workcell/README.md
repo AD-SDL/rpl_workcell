@@ -31,7 +31,7 @@ ssh rpl@146.137.240.64
 ```
 
 ### Navigate in between TMUX shells
-If TMUX sessions are already running, you can navigate in between windows to check all the nodes. Number that correstponse to the nodes listed along bottum of the shell.
+If TMUX sessions are already running, you can navigate in between windows to check all the nodes. Number that correspond to the nodes are listed along bottom of the window.
 - `Ctrl+b` 
 - `Desired number`
 - On Strange, available window numbers are: 0 and 1 
