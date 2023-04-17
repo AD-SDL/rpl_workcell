@@ -1,13 +1,56 @@
 
-## Initial setup 
-- Make sure all the devices are turned on
-- pipette tips
-- correct pipettes for PCR
-- deck on the OT2
-- Biometra lid
-- Sealer check if there is enough seal
-- Sealer check seal type
-- Peeler check tape
+## Initial setup
+Before running the PCR workflow, visually check each machine in the workcell to ensure that it is powered on, and ready to perform its task in the workflow as follows
+
+### Opentrons OT2 Beta
+- Make sure OT2 Beta is turned on
+- Make sure the OT2 has the proper labware configuration, and the correct amounts of reagents:
+
+#### Opentrons Deck Positions
+- Position 1: 96 well 100ul PCR full skirt plate
+    - Forward primers (~20ul per well)
+- Position 2: 96 well 100ul PCR full skirt plate
+    - Reverse primers(~20ul per well)
+- Position 3: Opentrons temperature module (turned on)
+    - Target location for destination plate to be placed
+- Position 4: 96 well 100ul PCR full skirt plate
+    - Template DNA strands (~20ul per well)
+- Position 5: Opentrons 10 tube rack nest 4 x 50mL, 6 x 15 mL conical
+    - Position A1: BioWater (tube filled to 10 mL so that pipette doesn't get wet)
+    - Position C2: Empty tube (to mix master mix in)
+- Position 6: Opentrons 24 1.5mL snapcap eppendorf tuberack
+    - Position A1: DNA polymerase (~40ul)
+    - Position A3: Reaction Buffer (~1mL)
+    - Position A5: DNTPs (~200 uL)
+    - Position B3: GC Enhancer (~1mL)
+- Position 7: Opentrons 20ul tiprack
+- Position 8: Opentrons 20ul tiprack
+- Position 9: Opentrons 300ul tiprack
+- Position 10: Opentrons 20ul tiprack
+- Position 11: Opentrons 20ul tiprack
+
+- Left pipette: Opentrons p20 multi pipette gen 2
+- Right pipette: Opentrons p300 single pipette gen 2
+
+### Hudson Sciclops PlateCrane
+- Check to see that there are enough PCR plates in Stack 4 (1 per run)
+- Make sure plate exchange is clear
+
+### Plate Sealer
+- Make sure there are an adequate amount of seals on the roll
+- Sealer is powered on
+- Clear tray
+
+### Plate Peeler
+- See if there is an adequate amount of tape on the roll
+- Peeler is powered on
+- Clear tray
+
+### Biometra Thermocycler
+- Thermocycler is powered on (green light shown on front)
+- Lid on thermocycler is open
+- Thermocycler is clear
+
 
 ## Running the PCR Workflow
 
