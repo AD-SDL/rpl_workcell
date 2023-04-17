@@ -37,14 +37,14 @@ If TMUX sessions are already running, you can navigate in between windows to che
 - On Strange, available window numbers are: 0 and 1 
 - On Parker, available window numbers are: 0 to 6 
 
-If you know that TMUX sessions are running in the background, you reopen the session on your shell with below commands.
+If you know that TMUX sessions are running in the background, you can reopen the session on your shell with below commands.
 
 - `tmux a`
 - `Ctrl+b`
 - `w`
 - Choose the window you want to display
 ### Run PCR Campaign on your local computer
-- Before running the PCR Campaign check all the TMUX windows on both Parker and Strange to make sure all the robots are publishing "READY" state. If any of the robots are in "ERROR" state refer to the DEBUGGING Section in the Template. 
+- Before running the PCR Campaign, check all the TMUX windows on both Parker and Strange to make sure all the robots are publishing "READY" state. If any of the robots are in "ERROR" state, refer to the DEBUGGING Section in the Template. 
 - Open a new shell on the local computer.
 ```
 source /opt/ros/humble/setup.bash  
@@ -53,7 +53,7 @@ source ~/wei_ws/install/setup.bash
 ```
 
 ## Rviz Visualization
-Real robot movements can be visualized in the RVIZ Visualization tool or you can also utilize the fake hardware to visualize the robotic setup without the real robot joint movements feedback
+Real robot movements can be visualized in the RViz Visualization tool or can also be utilized with the fake hardware without the movement feedback of the real robots.
 - On a new shell execute the following command
 
 ### Launch with real robots
