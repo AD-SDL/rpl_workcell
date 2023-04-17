@@ -18,7 +18,7 @@ The color picker workflow integrates a number of different modules in the overal
 <h3>Camera Module:</h3> The Camera Module is takes a picture of the wellplate, and sends it to Logan.
 <br>Repo: https://github.com/AD-SDL/camera_module
 <h2>Computers:</h2>
-The username and password for the computers is written on top of Logan
+The username and password for the computers is written on top of Logan as username/password
 <h3>Parker:</h3>
 NUC located on the Sealer-Peeler module cart on the left side of the setup
 <img src="https://user-images.githubusercontent.com/73187720/232100088-9ae23729-c71b-45a3-8d05-9ca00f0bdd13.png"  width="300" height="400"><img src="https://user-images.githubusercontent.com/73187720/232099345-7c81732e-a3d7-45a9-a4ab-a90617c4e001.png"  width="300" height="400">
