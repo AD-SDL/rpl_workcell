@@ -40,9 +40,9 @@ NUC located on right side of the trash module setup connected to the PF-400
 and check that all of the tips for the OT2 are properly in the tip block
 <br><img src="https://user-images.githubusercontent.com/73187720/232107500-ded7d73e-1d4b-4111-bb41-fa5a4536f7ad.png"  width="300" height="400">
 <br>3. From Logan, in separate terminals, run  <em>ssh rpl@parker </em> and  <em>ssh rpl@strange </em> and use the password written on Logan
-<br>4. On both terminals,run  <em>cd ~/workspace/rpl_workcell/scripts </em> folder
-<br>5. On Parker,run  <em>./run_nodes_parker</em>
-<br>6. On Strange run  <em>./run_nodes_strange</em>
+<br>4. On both terminals,run  <em>cd ~/wei_ws/demo/rpl_workcell/scripts </em> 
+<br>5. On Parker, try <em> tmux attach-session -t nodes</em>, and check that all nodes are displaying ready. If the session doesn't attach run  <em>./run_nodes_parker</em>
+<br>6. On Strange try <em> tmux attach-session -t nodes</em>, and check that all nodes are displaying ready. If the session doesn't attach run  <em>./run_nodes_strange</em>
 <img src="https://user-images.githubusercontent.com/73187720/232088734-ced6f822-847e-4e9e-bd37-165fc8b0982e.png"  width="1000" height="400">
 
 
