@@ -24,13 +24,13 @@ NUC located on the Sealer-Peeler module cart on the left side of the setup
 
 <h4>Modules:</h4>Sciclops<br>OT2_gamma
 <h3>Strange:</h3>
-NUC located on the trash on the left side of the setup connected to the PF-400
+NUC located on right side of the trash module setup connected to the PF-400
 <img src="https://user-images.githubusercontent.com/73187720/232096343-212a562a-e812-4a55-85e7-2fe8eebe4de8.png"  width="300" height="400"><img src="https://user-images.githubusercontent.com/73187720/232096218-127fba12-eebf-4bdb-8cdc-f3e4d3059723.png"  width="300" height="400">
 
 <h4>Modules:</h4>PF-400<br>Camera Module
-<h3>Logan:</h3> NUC located on the trash on the left side of setup of NUCs with monitors, runs the main loop for the color_picker
+<h3>Logan:</h3> NUC located on the left side of setup of NUCs with monitors, runs the main loop for the color_picker
 <img src="https://user-images.githubusercontent.com/73187720/232106097-ebe051bf-8085-4a5c-85be-ee22ea282e48.png"  width="300" height="400">
-<img src="https://user-images.githubusercontent.com/73187720/232106913-155e7279-65bc-4115-ab96-49c29dc39d22.png"  width="300" height="400">
+
 <h1>Running Instructions:</h1>
 <h2>Basic steps:</h2>
 <br>1. Turn  on Strange, Parker and Logan NUCs
@@ -46,9 +46,9 @@ and check that all of the tips for the OT2 are properly in the tip block
 
   7. In a new terminal on Logan, run  <em>source ~/wei_ws/install/setup.bash</em>
   8. On Logan, run <em>cd globusconnectpersonal-3.2.0 </em>, and then  <em>run ./globusconnectpersonal & </em> to start the globus endpoint for publishing
-  9. Run  <em>funcx-endpoint start default </em> to start funcx for publishing
-  10.  Run  <em>cd ~/workspace/rpl_workcell/color_picker </em>
-  11. Run  <em>./color_picker_loop </em> with the following Arguments:
+  9. On Logan, Run  <em>funcx-endpoint start default </em> to start funcx for publishing
+  10.  On Logan, Run  <em>cd ~/workspace/rpl_workcell/color_picker </em>
+  11. On Logan, Run  <em>./color_picker_loop </em> with the following Arguments:
 	--pop_size: number of wells per loop of the color_picker algorithm
 	--exp_budget: number of wells total allowed for the experiment
 	--solver: a string denoting the solver to be used for experiment
