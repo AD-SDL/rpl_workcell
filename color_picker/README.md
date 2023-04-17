@@ -18,6 +18,7 @@ The color picker workflow integrates a number of different modules in the overal
 <h3>Camera Module:</h3> The Camera Module is takes a picture of the wellplate, and sends it to Logan.
 <br>Repo: https://github.com/AD-SDL/camera_module
 <h2>Computers:</h2>
+The username and password for the computers is written on top of Logan
 <h3>Parker:</h3>
 NUC located on the Sealer-Peeler module cart on the left side of the setup
 <img src="https://user-images.githubusercontent.com/73187720/232100088-9ae23729-c71b-45a3-8d05-9ca00f0bdd13.png"  width="300" height="400"><img src="https://user-images.githubusercontent.com/73187720/232099345-7c81732e-a3d7-45a9-a4ab-a90617c4e001.png"  width="300" height="400">
@@ -30,6 +31,7 @@ NUC located on right side of the trash module setup connected to the PF-400
 <h4>Modules:</h4>PF-400<br>Camera Module
 <h3>Logan:</h3> NUC located on the left side of setup of NUCs with monitors, runs the main loop for the color_picker
 <img src="https://user-images.githubusercontent.com/73187720/232106097-ebe051bf-8085-4a5c-85be-ee22ea282e48.png"  width="300" height="400">
+<img src="https://user-images.githubusercontent.com/73187720/232529076-011500a5-7d9b-4ebf-90dd-26b40df82093.png"  width="300" height="400">
 
 <h1>Running Instructions:</h1>
 <h2>Basic steps:</h2>
@@ -37,7 +39,7 @@ NUC located on right side of the trash module setup connected to the PF-400
 <br>2. Check that each of the liquid containers on the OT2 has enough liquid for the full run,
 and check that all of the tips for the OT2 are properly in the tip block
 <br><img src="https://user-images.githubusercontent.com/73187720/232107500-ded7d73e-1d4b-4111-bb41-fa5a4536f7ad.png"  width="300" height="400">
-<br>3. From Logan, in separate terminals, run  <em>ssh rpl@parker </em> and  <em>ssh rpl@strange </em>
+<br>3. From Logan, in separate terminals, run  <em>ssh rpl@parker </em> and  <em>ssh rpl@strange </em> and use the password written on Logan
 <br>4. On both terminals,run  <em>cd ~/workspace/rpl_workcell/scripts </em> folder
 <br>5. On Parker,run  <em>./run_nodes_parker</em>
 <br>6. On Strange run  <em>./run_nodes_strange</em>
