@@ -12,7 +12,7 @@
 ## Running the PCR Workflow
 
 ### Running ROS2 NODES
-In order to start the PCR Workflow, you should start ROS2 Nodes on "Parker" and "Strange" computers first. Currently, Parker is assigned to run the nodes for OT2, Sealer, Peeler, Biometra and Sciclops robots and "Strange" is assigned to run the nodes for PF400 robot and Camera Module. To start the node follow the steps below.
+In order to start the PCR Workflow, you should start ROS2 Nodes on "Parker" and "Strange" computers first. Currently, Parker is assigned to run the nodes for OT2, Sealer, Peeler, Biometra and Sciclops robots and "Strange" is assigned to run the nodes for PF400 robot and Camera Module. To start the nodes, follow the steps below.
 ### Start ROS2 Nodes on Strange
 - Open a new shell and ssh into the Strange.
 - Note: Password to Strange is ....
@@ -31,13 +31,13 @@ ssh rpl@146.137.240.64
 ```
 
 ### Navigate in between TMUX shells
-If TMUX sessions are already running, you can navigate in between windows to check all the nodes. Number that correspond to the nodes are listed along bottom of the window.
+Once the TMUX session is started, you can navigate in between windows to check all the nodes. Number that correspond to the nodes are listed along bottom of the window.
 - `Ctrl+b` 
 - `Desired window number`
 - On Strange, available window numbers are: 0 and 1 
 - On Parker, available window numbers are: 0 to 6 
 
-If you know that TMUX sessions are running in the background, you can reopen the session on your shell with below commands.
+If you know that TMUX session is running in the background, you can reopen the session on your shell with below commands.
 
 - `tmux a`
 - `Ctrl+b`
