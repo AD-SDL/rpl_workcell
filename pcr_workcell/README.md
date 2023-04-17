@@ -52,6 +52,17 @@ source ~/wei_ws/install/setup.bash
 ./home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_full.py
 ```
 
+## Rviz Visualization
+Real robot movements can be visualized in the RVIZ Visualization tool or you can also utilize the fake hardware to visualize the robotic setup without the real robot joint movements feedback
+- On a new shell execute the following command
+
+### Launch with real robots
+- `ros2 launch pcr_description pcr_workcell.launch.py`
+### Launch with fake robot hardware
+- `ros2 launch pcr_description pcr_workcell.launch.py fake_hardware:=True`
+
+![RViz PCR Workcell Visualization](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_description/resources/figures/pcr_workcell.png)
+
 ### DEBUGGING Robot Problems
 
 #### PF400 issues
