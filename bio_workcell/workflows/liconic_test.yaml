@@ -78,15 +78,15 @@ flowdef:
   #   checks: null
   #   comment: Stage pcr plates
   
-  # Plate handling actions - ALL WORKING
-  # - name: Load Liconic
-  #   module: liconic
-  #   command: load_plate
-  #   args: 
-  #     stacker: payload.stacker
-  #     slot: payload.slot
-  #   checks: null
-  #   comment: Stage pcr plates
+  #Plate handling actions - ALL WORKING
+  - name: Load Liconic
+    module: liconic
+    command: load_plate
+    args: 
+      stacker: payload.stacker
+      slot: payload.slot
+    checks: null
+    comment: Stage pcr plates
   
   - name: Unload Liconic
     module: liconic
