@@ -96,7 +96,7 @@ source ~/wei_ws/install/setup.bash
 ```
 
 ## Rviz Visualization
-Real robot movements can be visualized in the RViz Visualization tool or can also be utilized with the fake hardware without the movement feedback of the real robots.
+Real robot movements can be visualized in the RViz Visualization tool and can also be launched with the fake hardware without the movement feedback on the real robots.
 - On a new shell execute the following command
 
 ### Launch with real robots
