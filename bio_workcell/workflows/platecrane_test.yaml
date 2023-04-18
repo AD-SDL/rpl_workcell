@@ -1,17 +1,13 @@
 metadata:
-  name: PCR - Workflow
-  author: Casey Stone, Rafael Vescovi
-  info: Initial PCR workflow for RPL workcell
+  name: Platecrane - Workflow
+  author: Doga Ozgulbas
+  info: Platecrane movements
   version: 0.1
 
 workcell: /home/rpl/workspace/rpl_workcell/bio_workcell/bio_workcell.yaml
 
 modules:
-  - name: solo
-  - name: peeler
-  - name: sealer
-  - name: plateEx
-  - name: camera
+  - name: plateCrane
 
 flowdef:
   - name: Move plate from Stack5 to Solo Position4
@@ -25,20 +21,12 @@ flowdef:
     checks: null
     comment: Place plate in Solo Position4
 
-  # - name: Mix Reactions
-  #   module: solo
-  #   command: run_protocol
-  #   args:
-  #     config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/solo_beta_test_first.yaml
-  #   checks: RESOURCE_CHECK
-  #   comment: resource check not implemented, but will be
-
   - name: Move plate from Solo Position4 to Hidex Nest
     module: plateCrane
     command: transfer
     args:
       source: "Solo.Position4"
-      target: "Hidex.Nest"
+      target: "HidexNest2"
       source_type: "module"
       target_type: "module"      
       height_offset: "360"
@@ -49,22 +37,13 @@ flowdef:
     module: plateCrane
     command: transfer
     args:
-      source: "Hidex.Nest"
+      source: "HidexNest2"
       target: "SealerNest"
       source_type: "module"
       target_type: "module"  
       height_offset: "360"
     checks: null
     comment: Place plate to Sealer
-
-  - name: Seal PCR plate
-    module: sealer
-    command: seal
-    args:
-      time: payload:seal.time
-      temperature: 175
-    checks: null
-    comment: null
 
   - name: Move plate from Sealer to Liconic
     module: plateCrane
@@ -77,32 +56,6 @@ flowdef:
     checks: null
     comment: Place plate onto Liconic
 
-  - name: Load Liconic
-    module: liconic
-    command: load_plate
-    args: 
-      stacker: payload.stacker
-      slot: payload.slot
-    checks: null
-    comment: Stage pcr plates
-
-  - name: Start shaker at set speed
-    module: liconic
-    command: begin_shake
-    args: 
-      shaker_speed: payload.shaker_speed
-    checks: null
-    comment: Stage pcr plates
-
-  - name: Unload Liconic
-    module: liconic
-    command: unload_plate
-    args: 
-      stacker: payload.stacker
-      slot: payload.slot
-    checks: null
-    comment: Stage pcr plates
-    
   - name: Move plate from Liconic to Peeler
     module: plateCrane
     command: transfer
@@ -114,20 +67,12 @@ flowdef:
     checks: null
     comment: Place plate onto PeelerNest
   
-  - name: Peel
-    module: peeler
-    command: peel
-    args:
-      test: null
-    checks: null
-    comment: null
-
   - name: Move plate from PeelerNest to HidexNest
     module: plateCrane
     command: transfer
     args:
       source: "PeelerNest"
-      target: "Hidex.Nest"
+      target: "HidexNest2"
       source_type: "module"
       target_type: "module"  
       height_offset: "360"
@@ -138,26 +83,10 @@ flowdef:
     module: plateCrane
     command: transfer
     args:
-      source: "Hidex.Nest"
+      source: "HidexNest2"
       target: "Stack1"
       source_type: "module"
       target_type: "stack"   
       height_offset: "360"
     checks: null
     comment: Place plate into trash stack
-
-  # - name: Move to camera_module
-  #   module: plateEx
-  #   command: transfer
-  #   args:
-  #     source: peeler.positions.default
-  #     target: camera_module.positions.plate_station
-  #     source_plate_rotation: narrow
-  #     target_plate_rotation: narrow
-
-  # - name: Take Picture
-  #   module: camera_module
-  #   command: take_picture
-  #   args:
-  #     save_location: local_run_results
-  #     file_name: "final_image.jpg"
