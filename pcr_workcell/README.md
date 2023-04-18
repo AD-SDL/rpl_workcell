@@ -111,7 +111,32 @@ source ~/wei_ws/install/setup.bash
 - Restart the Peeler node.
 - `ros2 launch brooks_peeler_client brooks_peeler_client.launch.py peeler_port:={Your Port Name}`
 #### OT2 issues
+- There are several actions on the OT2 which can only be completed through the Opentrons app on your personal computer. To do this, you need to physically plug you personal computer into the desired OT2. Some of these actions include:
+    - Ending a running protocol prematurely
+    - Recalibrating the OT2's pipettes
+    - Checking the general health of the OT2
+- If your OT2 is experiencing labware calibration issues, you can run a 'Labware position check' on the protocol you are trying to run, and input that data into your protocol.
+
 #### Sciclops issues
 #### Camera Module issues
+
+#### Biometra Thermocycler issues
+- If the Biometra Lid is initially closed before running the PCR protocol:
+    - Navigate to the 'parker' computer
+    - navigate to biometra_module/biometra_driver/biometra_driver/
+    - enter `python3`
+    - ```from os import stat
+        import clr
+        from pathlib import Path
+        import time as time 
+
+
+        dotnet_path = Path(__file__).resolve().parent / 'dotnet' / 'BiometraLibraryNet'
+        clr.AddReference(str(dotnet_path))
+        import BiometraLibrary 
+        ```
+    - ```from biometra_driver.functions import Functions```
+    - ```test = Functions()```
+    - ```test.open_lid()```
 
 #### Other issues
