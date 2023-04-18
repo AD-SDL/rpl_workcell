@@ -54,7 +54,7 @@ Before running the PCR workflow, visually check each machine in the workcell to 
 
 ## Running the PCR Workflow
 
-### Running ROS2 NODES
+### Running ROS2 Nodes
 In order to start the PCR Workflow, you should start ROS2 Nodes on "Parker" and "Strange" computers first. Currently, Parker is assigned to run the nodes for OT2, Sealer, Peeler, Biometra and Sciclops robots and "Strange" is assigned to run the nodes for PF400 robot and Camera Module. To start the nodes, follow the steps below.
 ### Start ROS2 Nodes on Strange
 - Open a new shell and ssh into the Strange.
