@@ -75,7 +75,7 @@ ssh rpl@146.137.240.64
 
 ### Navigate in between TMUX shells
 Once the TMUX session is started, you can navigate in between windows to check all the nodes. Number that correspond to the nodes are listed along bottom of the window.
-- `Ctrl+b` 
+- `Ctrl+B` 
 - `Desired window number`
 - On Strange, available window numbers are: 0 and 1 
 - On Parker, available window numbers are: 0 to 6 
@@ -83,7 +83,7 @@ Once the TMUX session is started, you can navigate in between windows to check a
 If you know that TMUX session is running in the background, you can reopen the session on your shell with below commands.
 
 - `tmux a`
-- `Ctrl+b`
+- `Ctrl+B`
 - `w`
 - Choose the window you want to display
 ### Run PCR Campaign on your local computer
@@ -134,7 +134,7 @@ Real robot movements can be visualized in the RViz Visualization tool or can als
 #### Biometra Thermocycler issues
 - If the Biometra Lid is initially closed before running the PCR protocol:
     - Navigate to the 'parker' computer
-    - navigate to biometra_module/biometra_driver/biometra_driver/
+    - Navigate to biometra_module/biometra_driver/biometra_driver/
     - enter `python3`
     - ```from os import stat
         import clr
