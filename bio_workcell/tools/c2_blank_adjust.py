@@ -1,8 +1,10 @@
 from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
 
 def c2_blank_adjust(**data):
-    data_frame = data['data_file']
-
+    import pandas as pd
+    import csv
+    csv_file = data.get("proc_folder") + "/" + data.get('csv_file')
+    data_frame = pd.read_csv(csv_file)
     def calculate_avg(list):
         """calculate_avg
 
@@ -41,12 +43,14 @@ def c2_blank_adjust(**data):
     """
     blank_adj_data_frame = data_frame
     adjusted_values_list = []
+    time_stamps = data_frame.columns[3:]
+    
     for time_point in time_stamps:
     
         blank_adj_list = calculate_avg(list(data_frame[time_point][84:]))
         index = 0
         
-        for data_index_num in range(1,len(data_frame)+1) :
+        for data_index_num in range(0,len(data_frame)) :
             A = float(data_frame[time_point][data_index_num])
             if index == len(blank_adj_list):
                 index = 0
@@ -57,14 +61,16 @@ def c2_blank_adjust(**data):
             blank_adj_data_frame[time_point][data_index_num] = adjust
             adjusted_values_list.append(adjust)
             index+=1
-    
-    return blank_adj_data_frame, adjusted_values_list
+    blank_adj_data_frame.to_csv( data.get("proc_folder") + "/blank_adj_" + data.get('csv_file'), encoding="utf-8", index=False)
+    with open( data.get("proc_folder") + "/adj_values_" + data.get('csv_file'), 'w') as f:
+        f.write(str(adjusted_values_list))
+    return 
 
 
 @generate_flow_definition
 class C2_blank_adjust(GladierBaseTool):
     funcx_functions = [c2_blank_adjust]
     required_input = [
-        'make_input',
+        
         'funcx_endpoint_compute'
     ]

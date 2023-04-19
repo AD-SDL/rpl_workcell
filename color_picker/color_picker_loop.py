@@ -354,8 +354,7 @@ def run(
             cur_best_color = plate_best_color
             time_to_best = str(datetime.now() - start)
 
-            time_to_best = str(datetime.now() - start)
-        
+           
 
 
         #again

@@ -54,9 +54,15 @@ def c2_hidex_ext(**data):
     return blob #df, timestamp_list, reading_date, reading_time, basename 
 
 @generate_flow_definition
+<<<<<<< HEAD
 class C2_read_hidex(GladierBaseTool):
     funcx_functions = [c2_hidex_ext]
     required_input = [
         'make_input',
+=======
+class C2_parse_hidex(GladierBaseTool):
+    funcx_functions = [c2_hidex_ext]
+    required_input = [
+>>>>>>> 393575f02fa5a5c48996a5ccba843838a1963115
         'funcx_endpoint_compute'
     ]
