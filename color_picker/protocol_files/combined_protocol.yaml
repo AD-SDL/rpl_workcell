@@ -8,7 +8,7 @@ equipment:
     alias: red
     offset: [0, 0, 0.8]
   - name: nest_1_reservoir_195ml
-    location: "7"
+    location: "7 "
     alias: blue
     offset: [0, 0, 0.8]
   - name: nest_12_reservoir_15ml

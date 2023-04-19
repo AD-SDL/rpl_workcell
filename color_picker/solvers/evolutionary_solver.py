@@ -225,7 +225,7 @@ class EvolutionaryColorSolver:
 
         for _ in range(len(new_pop), new_pop_size):
             new_pop.append(_random_init())
-        if previos_best_index is None:
+        if previos_best_index is None and new_pop_size >= 3:
             new_pop[0] = sRGBColor(0.98, 0.01, 0.01)
             new_pop[1] = sRGBColor(0.01, 0.98, 0.01)
             new_pop[2] = sRGBColor(0.01, 0.01, 0.98)

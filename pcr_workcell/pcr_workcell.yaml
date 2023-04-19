@@ -80,6 +80,7 @@ modules:
       ros_node: "/std_ns/ot2_cp_gamma"             
     positions:                                                    
       deck2: [161.484, 61.109, 89.671, 656.336, 125.533, -951.510]
+      
 
   - name: biometra
     type: wei_ros_node

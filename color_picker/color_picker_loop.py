@@ -22,6 +22,7 @@ import cv2
 from tools.publish import publish_iter
 from skopt import Optimizer
 from datetime import datetime
+from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
 MAX_PLATE_SIZE = 96
 
 def new_plate():
