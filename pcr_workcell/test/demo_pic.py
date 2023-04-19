@@ -2,10 +2,8 @@
 
 import logging
 from pathlib import Path
-from argparse import ArgumentParser
-from publish import publish_iter
+from ..tools.publish import publish_iter
 from rpl_wei.wei_workcell_base import WEI
-from rpl_wei.data_classes import Module, Step
 import shutil, os
 import json
 from datetime import datetime

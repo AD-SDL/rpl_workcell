@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
 
-import logging
 from pathlib import Path
-import re
 from argparse import ArgumentParser
 from typing import List, Dict, Any, Tuple
 from itertools import product
 from typing import Optional
 from threading import Thread
-from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
 import json
 import copy
 import yaml
@@ -57,9 +54,6 @@ def convert_volumes_to_payload(volumes: List[List[float]], curr_wells_used: List
         "blue_volumes": b_vol,
         "destination_wells": dest_wells,
     }, curr_wells_used
-
-
-
 
 
 

@@ -14,23 +14,6 @@ rclpy.init()
 wei_execution_node = weiExecNode()
 
 
-def wei_service_callback(step: Step, **kwargs):
-
-    module: Module = kwargs["step_module"]
-
-    msg = {
-        "node": module.config["ros_node"],
-        "action_handle": step.command,
-        "action_vars": step.args,
-    }
-    print("\n Callback message:")
-    print(msg)
-    print()
-
-    wei_execution_node.send_wei_command(
-        msg["node"], msg["action_handle"], msg["action_vars"]
-    )
-
 def main():
     wf_path = Path('/home/rpl/workspace/rpl_workcell/pcr_workcell/workflows/explore_wf.yaml')
 

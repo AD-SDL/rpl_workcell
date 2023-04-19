@@ -47,8 +47,6 @@ equipment:
     mount: right
 
 commands:
-  - name: cool test
-    change_temp: 4
   - name: test
     source: 6:[A1]
     aspirate_clearance: 1
