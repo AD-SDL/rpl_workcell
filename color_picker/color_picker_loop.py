@@ -11,7 +11,12 @@ import copy
 import yaml
 import numpy as np
 import os, shutil
+import matplotlib.pyplot as plt
+
+#wei
 from rpl_wei import WEI
+
+#solvers utils
 from tools.plate_color_analysis import get_colors_from_file
 from solvers.bayes_solver import BayesColorSolver
 from solvers.evolutionary_solver import EvolutionaryColorSolver
@@ -20,9 +25,12 @@ from funcx import FuncXExecutor
 from datetime import datetime
 import cv2
 from tools.publish import publish_iter
+from tools.log_info import get_log_info
 from skopt import Optimizer
 from datetime import datetime
 from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
+
+#DEF TODO:what does it mean?
 MAX_PLATE_SIZE = 96
 
 def new_plate():
@@ -56,15 +64,6 @@ def convert_volumes_to_payload(volumes: List[List[float]], curr_wells_used: List
         "destination_wells": dest_wells,
     }, curr_wells_used
 
-
-
-def wei_run_flow(wf_file_path, payload):
-    wei_client = WEI(wf_file_path)
-    run_info = wei_client.run_workflow(payload=payload)
-    #print(run_info)
-    return run_info
-
-
 class ThreadWithReturnValue(Thread):
     
     def __init__(self, group=None, target=None, name=None,
@@ -80,47 +79,129 @@ class ThreadWithReturnValue(Thread):
     def join(self, *args):
         Thread.join(self, *args)
         return self._return
-    
-    
-def get_log_info(run_path, steps_run):
-        lineiter=0
-        print("starting")
-        while not(os.path.isfile(run_path / "runLogger.log")):
-            print("waiting ")
-            pass
-        with open(run_path/ "runLogger.log") as log:
-            lines = log.read().splitlines()
-            log.close()
-            for i, step in enumerate(steps_run):
-                starttime = []
-                while starttime == [] and lineiter < len(lines):
-                    line = lines[lineiter]
-                    columns = [col.strip() for col in line.split(':') if col]
-                    if columns[-2] == 'Started running step with name' and columns[-1] == step["name"]:
-                        starttime = datetime.strptime(line[0:23], '%Y-%m-%d %H:%M:%S,%f')
-                    lineiter += 1
-                endtime = []
-                while endtime == [] and lineiter < len(lines):
-                    line = lines[lineiter]
-                    columns = [col.strip() for col in line.split(':') if col]
-                    if columns[-2] == 'Finished running step with name' and columns[-1] == step["name"]:
-                        endtime = datetime.strptime(line[0:23], '%Y-%m-%d %H:%M:%S,%f')
-                    lineiter += 1
-                steps_run[i]["start_time"] = str(starttime)
-                steps_run[i]["end_time"] = str(endtime)
-                steps_run[i]["duration"] = str(endtime-starttime)
-        return steps_run, lineiter
-    
-    
-def get_wf_info(ptcl):
-    steps_run = []
-    with open(ptcl, 'r') as stream:
-            wf = yaml.safe_load(stream)
-            for test in wf["flowdef"]:
-                steps_run.append(test)
-    return steps_run
 
+def wei_run_flow(wf_file_path, payload):
+    wei_client = WEI(wf_file_path)
+    run_info = wei_client.run_workflow(payload=payload)
+    #print(run_info)
+    return run_info
+def run_flow(protocol, payload, steps_run):
+                iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':protocol,'payload':payload})
+                iter_thread.run()
+                run_info = iter_thread._return
+                run_dir = run_info["run_dir"]
+                t_steps_run = get_log_info(run_dir, protocol)
+                steps_run.append(t_steps_run)
+                return steps_run, run_info
 
+def create_target_plate(plate_volumes: List[List[float]],
+                        colors: List[List[int]]):
+        norms = []
+        for i in plate_volumes:
+            norms.append(i/sum(i))
+        target_plate = np.array(norms)@np.array(colors)
+        target_plate = target_plate.tolist()
+        return target_plate
+
+    
+def calibrate(target_color: List[int], 
+              curr_wells_used: List[str], 
+              loop_protocol: str, 
+              exp_folder: Path, 
+              plate_max_volume: float,
+              steps_run: List[Dict[str, Any]],
+              pop_size: int
+              )-> (List[List[int]], List[int], List[str], List[Dict[str, Any]]):
+    """Performs a calibration run of the color picker system
+@Inputs: 
+    target_color: RGB Color the solver is attempting to match
+    curr_wells_used: The wells that have so far been filled with liquid by the
+    loop_protocol: Workcell protocol used to mix colors
+    exp_folder: Folder where the experiment data is saved
+    steps_run: The steps run in the workflow so far
+@Outputs:
+    colors: colors that are combined linearly to visualize experimental colors
+    target_color: RGB Color captured from camera image of actual plate based on the ratio calculated from the input RGB values
+    steps_run: """
+    plate_volumes = np.array([[0.98, 0.01, 0.01], [0.01, 0.98, 0.01], [0.01, 0.01, 0.98], np.array(target_color)/sum(target_color)])*plate_max_volume
+    payload, curr_wells_used = convert_volumes_to_payload(plate_volumes, curr_wells_used)
+    payload['use_existing_resources'] = False 
+    steps_run, run_info = run_flow(loop_protocol, payload, steps_run) 
+    fname = "final_image.jpg" #image"+str(ot2_iter) +".jpg"
+    img_path = run_info["run_dir"]/ "results" / fname
+    plate_colors_ratios = get_colors_from_file(img_path)[1]
+    plate_colors_ratios = {a:b[::-1] for a,b in plate_colors_ratios.items()}  
+    current_plate = []
+    wells_used = []
+    for well in payload["destination_wells"]:
+        color = plate_colors_ratios[well]
+        wells_used.append(well)
+        current_plate.append(color)
+    target_color = current_plate[3]
+    target_color = target_color.tolist()
+    colors = current_plate[0:3]
+    t = np.asarray(colors)
+    colors = t.tolist()
+    color_image = cv2.resize( np.asarray([colors]).astype(np.uint8), [pop_size*50, 50], interpolation = cv2.INTER_NEAREST)
+    plt.imsave(exp_folder/"results"/"mixed_colors.png", color_image/255)
+    return colors, target_color, curr_wells_used, steps_run
+#Creates the plots for the color picker system
+#@Inputs:
+    # target_plate: Expected colors output by solver
+    # current_plate: Colors measured from camera
+    # exp_folder: Folder where the experiment data is saved
+    # current_iter: Current iteration of the experiment
+    # target_color: Color the solver is attempting to match
+    # cur_best_color: The color mixed so far that best matches the target color
+    # pop_size: The number of wells used per experiment run 
+#@Outputs:
+    #None
+def create_visuals(target_plate: List[List[int]],
+                   current_plate: List[List[int]],
+                   exp_folder: Path,
+                   current_iter: int,
+                   target_color: List[int],
+                   cur_best_color: List[int],
+                   pop_size: int,
+                   diffs: List[List[float]], 
+                   solver_out_dim: int
+    ) -> None:
+ 
+    solver.plot_diffs(diffs, exp_folder)
+    plt.ion()
+    f, axarr = plt.subplots(2, 2)
+    # set figure size to 10x10
+    f.set_figheight(10)
+    f.set_figwidth(10)
+    graph_vis = np.asarray(target_plate)
+    graph_vis = graph_vis.reshape(*solver_out_dim)
+    plate_vis = np.asarray(current_plate)
+    plate_vis = plate_vis.reshape(*solver_out_dim)
+    exp_p = np.asarray([graph_vis]).astype(np.uint8)
+    exp_p = cv2.resize( np.asarray([graph_vis]).astype(np.uint8), [pop_size*50, 50], interpolation = cv2.INTER_NEAREST)
+    axarr[0][0].imshow(exp_p)
+    axarr[0][0].set_title("Experiment plate")
+    axarr[1][0].imshow([plate_vis])
+    axarr[1][0].set_title("Real plate")
+    axarr[0][1].imshow([[target_color]])
+    axarr[0][1].set_title("Target Color")
+    axarr[1][1].imshow([[cur_best_color]])
+    axarr[1][1].set_title("Experiment best color")
+    f.suptitle("PAUSING HERE TO MOVE THE PLATE")
+    f.canvas.draw()
+    f.canvas.flush_events()
+    plt.pause(0.001)
+    plt.savefig(exp_folder/"results"/"run_summary.png", dpi=300)
+    exp_p = np.asarray([graph_vis]).astype(np.uint8)
+    exp_p = cv2.resize( np.asarray([graph_vis]).astype(np.uint8), [pop_size*50, 50], interpolation = cv2.INTER_NEAREST)
+    plt.imsave(exp_folder/"results"/str("run_" + str(current_iter) + "_expected.png"), exp_p)
+    np.asarray([plate_vis]).astype(np.uint8)
+    real_p = cv2.resize( np.asarray([plate_vis]).astype(np.uint8), [pop_size*50, 50], interpolation = cv2.INTER_NEAREST)
+    plt.imsave(exp_folder/"results"/("run_" + str(current_iter) + "_measured.png"), real_p)
+    plt.imsave(exp_folder/"results"/"target_color.png", np.asarray([[target_color]])/255),
+    plt.imsave(exp_folder/"results"/"best_color.png", np.asarray([[cur_best_color ]])/255)
+
+    
 def run(
     exp_type: str,
     target_color: List[float],
@@ -162,7 +243,7 @@ def run(
     payload={}
     img_path = None
     diffs = []
-    
+    use_funcx = False
     #home = Path(os.path.expanduser('~'))
     #print(home)
     print(exp_path)
@@ -201,64 +282,20 @@ def run(
         #grab new plate if experiment starting or current plate is full
         if new_plate or current_iter==0:
             print('Grabbing New Plate')
-            iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':init_protocol,'payload':payload})
-            iter_thread.run()
-            print(iter_thread._return)
-            t_steps_run = get_wf_info(init_protocol)
-            run_dir = iter_thread._return["run_dir"]
-            t_steps_run, log_line = get_log_info(run_dir, t_steps_run)
-            steps_run.append(t_steps_run)
+            steps_run, run_info = run_flow(init_protocol, payload, steps_run)
             curr_wells_used = []
             new_plate = False
             if current_iter == 0:
-                plate_volumes = np.array([[0.98, 0.01, 0.01], [0.01, 0.98, 0.01], [0.01, 0.01, 0.98], np.array(target_color)/sum(target_color)])*plate_max_volume
-                payload, curr_wells_used = convert_volumes_to_payload(plate_volumes, curr_wells_used)
-                payload['use_existing_resources'] = False 
-                iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path': loop_protocol, 'payload':payload})
-                iter_thread.run()
-                run_info = iter_thread._return
-                t_steps_run = get_wf_info(loop_protocol)
-                run_dir = run_info["run_dir"]
-                t_steps_run, log_line = get_log_info(run_dir, t_steps_run)
-                steps_run.append(t_steps_run)
-                fname = "final_image.jpg" #image"+str(ot2_iter) +".jpg"
-                img_path = run_info["run_dir"]/ "results" / fname
-                plate_colors_ratios = get_colors_from_file(img_path)[1]
-                plate_colors_ratios = {a:b[::-1] for a,b in plate_colors_ratios.items()}  
-                current_plate = []
-                wells_used = []
-                for well in payload["destination_wells"]:
-                    color = plate_colors_ratios[well]
-                    wells_used.append(well)
-                    current_plate.append(color)
-                target_color = current_plate[3]
-                target_color = target_color.tolist()
-                colors = current_plate[0:3]
-                t = np.asarray(colors)
-                colors = t.tolist()
-                color_image = cv2.resize( np.asarray([colors]).astype(np.uint8), [pop_size*50, 50], interpolation = cv2.INTER_NEAREST)
-                plt.imsave(exp_folder/"results"/"mixed_colors.png", color_image/255)
-                current_plate = None
+                colors, target_color, curr_wells_used, steps_run = calibrate(target_color, curr_wells_used, loop_protocol, exp_folder, plate_max_volume, steps_run, pop_size)
             else:
+            #save the old plate picture and increment to a new plate
                filename = "plate_"+ str(plate_n)+".jpg"
                shutil.copy2(run_info["run_dir"]/ "results"/"plate_only.jpg",  (exp_folder/"results"/filename))
-               print("incrementing plate n!!!!")
                plate_n = plate_n + 1
             
 
         # Calculate volumes and current wells for creating the OT2 protocol
         ## FUNCX
-        if solver_name == "Aggressive Genetic Solver":
-            plate_volumes = solver.run_iteration(
-                target_color, 
-                current_plate,
-                out_dim=(pop_size, 3),
-                pop_size=pop_size,
-                return_volumes=True,
-                return_max_volume=plate_max_volume,
-                prev_best_color=cur_best_color
-            )
-        else:
             plate_volumes = solver.run_iteration(
                 target_color, 
                 current_plate,
@@ -267,13 +304,8 @@ def run(
                 return_volumes=True,
                 return_max_volume=plate_max_volume,
             )
-        print("testthing")
-        norms = []
         
-        for i in plate_volumes:
-            norms.append(i/sum(i))
-        target_plate = np.array(norms)@np.array(colors)
-        target_plate = target_plate.tolist()
+        target_plate = create_target_plate(plate_volumes, colors)
         payload, curr_wells_used = convert_volumes_to_payload(plate_volumes, curr_wells_used)
         
         #resets OT2 resources (or not)
@@ -282,54 +314,36 @@ def run(
         else: 
             payload['use_existing_resources'] = True 
         
-        iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path': loop_protocol, 'payload':payload})
-        iter_thread.run()
-        run_info = iter_thread._return
-        t_steps_run = get_wf_info(loop_protocol)
-        run_dir = run_info["run_dir"]
-        t_steps_run, log_line = get_log_info(run_dir, t_steps_run)
-        steps_run.append(t_steps_run)
-        
-        #with open(run_info["run_dir"]/ "runLogger.log") as f:
-        #        print(f.read())
+        steps_run, run_info = run_flow(loop_protocol, payload, steps_run)
         run_path =  run_info["run_dir"].parts[-1]
-
         if not (os.path.isdir(exp_folder / run_path)):
             os.mkdir(exp_folder / run_path)
-        
         runs_list.append(run_info)
-
         used_wells = (len(curr_wells_used))
         if used_wells + pop_size > MAX_PLATE_SIZE: #if we have used all wells or not enough for next iter (thrash plate, start from scratch)
-            print('Thrasing Used Plate')
-            iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':final_protocol,'payload':payload})
-            iter_thread.run()
-            run_dir =  iter_thread._return["run_dir"]
-            t_steps_run = get_wf_info(final_protocol)
-            t_steps_run, log_line = get_log_info(run_dir,  t_steps_run)
-            steps_run.append(t_steps_run)
+            print('Trashing Used Plate')
+            steps_run, _ = run_flow(final_protocol, payload, steps_run)
             new_plate = True
             curr_wells_used = []
 
         # Analyze image
         # output should be list [pop_size, 3]   
-        fname = "final_image.jpg" #image"+str(ot2_iter) +".jpg"
+        fname = "final_image.jpg" 
         img_path = run_info["run_dir"]/ "results" / fname
-        plate_colors_ratios = get_colors_from_file(img_path)[1] ##FUNCX
-        ##To be transplanted
-       
-        #print("funcx started")
-        # ep = '299edea0-db9a-4693-84ba-babfa655b1be' # local
+        
+        if use_funcx:
+            print("funcx started")
+            ep = '299edea0-db9a-4693-84ba-babfa655b1be' # local
+            fx = FuncXExecutor(endpoint_id=ep)
+            fxresult = fx.submit(get_colors_from_file, img_path)
+            fxresult = fx.submit(get_colors_from_file, img_path)
+            plate_colors_ratios = fxresult.result()[1]
+            
+            print("funcx finished")
+        else: 
+            plate_colors_ratios = get_colors_from_file(img_path)[1] ##FUNCX
         filename = "plate_"+ str(plate_n)+".jpg"
         shutil.copy2(run_info["run_dir"]/ "results"/"plate_only.jpg",  (exp_folder/"results"/filename))
-        # fx = FuncXExecutor(endpoint_id=ep)
-        # fxresult = fx.submit(get_colors_from_file, img_path)
-        # fxresult = fx.submit(get_colors_from_file, img_path)
-        # plate_colors_ratios = fxresult.result()[1]
-       
-        print("funcx finished")
-        #plate_colors_ratios = get_colors_from_file(img_path)[1]
-        
         # Swap BGR to RGB
         plate_colors_ratios = {a:b[::-1] for a,b in plate_colors_ratios.items()}  
         
@@ -341,10 +355,7 @@ def run(
             current_plate.append(color)
         
         ## save those and the initial colors, etc
-        if solver_name == "Aggressive Genetic Solver":
-            plate_best_color_ind, plate_diffs = solver._find_best_color(current_plate, target_color, cur_best_color)
-        else:
-             plate_best_color_ind, plate_diffs = solver._find_best_color(current_plate, target_color)
+        plate_best_color_ind, plate_diffs = solver._find_best_color(current_plate, target_color, cur_best_color)
         plate_best_color = current_plate[plate_best_color_ind]
         plate_best_diff = solver._color_diff(plate_best_color, target_color)
         diffs.append(plate_diffs)
@@ -353,146 +364,67 @@ def run(
             cur_best_diff = plate_best_diff
             cur_best_color = plate_best_color
             time_to_best = str(datetime.now() - start)
-
-           
-
-
         #again
-
-
         ##update numbers (seems redundant)
-   
         current_iter += 1
         num_exps += pop_size
-       
         ##Plot review
-        if show_visuals:
-            import matplotlib.pyplot as plt
-            solver.plot_diffs(diffs, exp_folder)
-            plt.ion()
-            f, axarr = plt.subplots(2, 2)
-            # set figure size to 10x10
-            f.set_figheight(10)
-            f.set_figwidth(10)
-            graph_vis = np.asarray(target_plate)
-            graph_vis = graph_vis.reshape(*solver_out_dim)
-            plate_vis = np.asarray(current_plate)
-            plate_vis = plate_vis.reshape(*solver_out_dim)
-            exp_p = np.asarray([graph_vis]).astype(np.uint8)
-            exp_p = cv2.resize( np.asarray([graph_vis]).astype(np.uint8), [pop_size*50, 50], interpolation = cv2.INTER_NEAREST)
-            #target_color = target_color
-            axarr[0][0].imshow(exp_p)
-            axarr[0][0].set_title("Experiment plate")
-            axarr[1][0].imshow([plate_vis])
-            axarr[1][0].set_title("Real plate")
-            axarr[0][1].imshow([[target_color]])
-            axarr[0][1].set_title("Target Color")
-            axarr[1][1].imshow([[cur_best_color]])
-            axarr[1][1].set_title("Experiment best color")
-            f.suptitle("PAUSING HERE TO MOVE THE PLATE")
-            f.canvas.draw()
-            f.canvas.flush_events()
-            plt.pause(0.001)
-            plt.savefig(exp_folder/"results"/"run_summary.png", dpi=300)
-            exp_p = np.asarray([graph_vis]).astype(np.uint8)
-            exp_p = cv2.resize( np.asarray([graph_vis]).astype(np.uint8), [pop_size*50, 50], interpolation = cv2.INTER_NEAREST)
-            plt.imsave(exp_folder/"results"/str("run_" + str(current_iter) + "_expected.png"), exp_p)
-            np.asarray([plate_vis]).astype(np.uint8)
-            real_p = cv2.resize( np.asarray([plate_vis]).astype(np.uint8), [pop_size*50, 50], interpolation = cv2.INTER_NEAREST)
-            plt.imsave(exp_folder/"results"/("run_" + str(current_iter) + "_measured.png"), real_p)
-            plt.imsave(exp_folder/"results"/"target_color.png", np.asarray([[target_color]])/255),
-            plt.imsave(exp_folder/"results"/"best_color.png", np.asarray([[cur_best_color ]])/255)
+        create_visuals(target_plate, current_plate, exp_folder, current_iter, target_color, cur_best_color, pop_size, diffs, solver_out_dim)
             # plt.imsave(run_info["run_dir"] / "results" / "experiment_summary.jpg")
         #print("novis")
-      
+        runs = []
+        report = {}
         if (exp_folder/"results"/"exp_data.txt").is_file():
             with open(exp_folder/"results"/"exp_data.txt", "r") as f:
                 report = json.loads(f.read())
-            c = report["runs"]
-            c =[{
-            "run_number": current_iter, 
-            "run_label": str(run_path),
+            runs = report["runs"]
+        #Create new run log
+        new_run = [{
+        "run_number": current_iter, 
+        "run_label": str(run_path),
+        "plate_N": plate_n,
+        "tried_values": target_plate,
+        "exp_volumes": plate_volumes,
+        "wells": list(wells_used),
+        "results": list(map(lambda x: x.tolist(), current_plate)),
+        "differences": plate_diffs.tolist(),
+        "best_on_plate": plate_best_color.tolist(),
+        "pos_on_plate": plate_best_color_ind.tolist(),
+        "plate_best_diff": plate_best_diff,
+        "best_so_far": cur_best_color.tolist()}]
+        #prepend new run to all run logs
+        runs = new_run + runs
+        #update report
+        report.update({
+            "experiment": str(exp_label),
+            "exp_type": "color_picker",
+            "solver": solver_name,
             "plate_N": plate_n,
-            "tried_values": target_plate,
-            "exp_volumes": plate_volumes,
-            "wells": list(wells_used),
-            "results": list(map(lambda x: x.tolist(), current_plate)),
-            "differences": plate_diffs.tolist(),
-            "best_on_plate": plate_best_color.tolist(),
-            "pos_on_plate": plate_best_color_ind.tolist(),
-            "plate_best_diff": plate_best_diff,
-            "best_so_far": cur_best_color.tolist()}] + c
+            "target_color": target_color,
+            "best_so_far": cur_best_color.tolist(),
+            "best_diff": cur_best_diff,
+            "time_to_best": time_to_best,
+            "colors": colors, 
+            "total_time": str(datetime.now() - start),
+            "total_iterations": current_iter, 
+            "pop_size": pop_size, 
+            "exp_budget": exp_budget,
+            "wf_steps": steps_run,
+            "runs": runs
             
-            report.update({
-                "experiment": str(exp_label),
-                "exp_type": "color_picker",
-                "solver": solver_name,
-                "plate_N": plate_n,
-                "target_color": target_color,
-                "best_so_far": cur_best_color.tolist(),
-                "best_diff": cur_best_diff,
-                "time_to_best": time_to_best,
-                "colors": colors, 
-                "total_time": str(datetime.now() - start),
-                "total_iterations": current_iter, 
-                "pop_size": pop_size, 
-                "exp_budget": exp_budget,
-                "wf_steps": steps_run,
-                "runs": c
-                
-            })
-        else:   
-            report={
-                "experiment": str(exp_label),
-                "exp_type": "color_picker",
-                "plate_N": plate_n,
-                "target_color": target_color,
-                "best_so_far": cur_best_color.tolist(),
-                "time_to_best": time_to_best,   
-                "colors": colors,   
-                "total_time": str(datetime.now() - start),    
-                "wf_steps": steps_run,
-                "total_iterations": current_iter, 
-                "pop_size": pop_size, 
-                "exp_budget": exp_budget,
-                
-                "runs": [{
-                "run_number": current_iter, 
-                "run_label": str(run_path),
-                "tried_values": target_plate,
-                "exp_volumes": plate_volumes,
-                "wells": wells_used,
-                "results": list(map(lambda x: x.tolist(), current_plate)),
-                "differences": plate_diffs.tolist(),
-                "best_on_plate": plate_best_color.tolist(),
-                "pos_on_plate": plate_best_color_ind.tolist(),
-                "plate_best_diff": plate_best_diff,
-                "best_so_far": cur_best_color.tolist(),
-                "best_diff": cur_best_diff
-                
-              
-                }]
-                
-                }
+        })
+        
         #Save run report
-        # if cur_best_diff < 15:
-        #     test = datetime.now()
-        #     report["time_to_solution"] = str(test-start)
-        print(type(colors[0]))    
         with open(exp_folder/"results"/ "exp_data.txt", "w") as f:
             report_js = json.dumps(report, indent=4)
             f.write(report_js)
         #Save overall results
         print("publishing:")
         publish_iter(exp_folder/"results", exp_folder)
-        # if cur_best_diff < 15:
-        #     break
         
     #Trash plate after experiment
-    iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':final_protocol,'payload':payload})
-    iter_thread.run()
     shutil.copy2(run_info["run_dir"]/ "results"/"plate_only.jpg",  (exp_folder/"results"/f"plate_{plate_n}.jpg"))
-    
+    steps_run, _ = run_flow(final_protocol, payload, steps_run)
     if show_visuals:
         import matplotlib.pyplot as plt
 
@@ -504,7 +436,6 @@ def run(
         axarr[0].set_title("Experiment best color, diff: " + str(cur_best_diff))
         axarr[1].imshow([[target_color]])
         axarr[1].set_title("Target Color")
-
         plt.show()
         plt.savefig(exp_folder/"results" / "final_plot.png", dpi=300)
     

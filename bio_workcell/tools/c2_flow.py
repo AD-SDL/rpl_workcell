@@ -28,7 +28,7 @@ def c2_flow(exp_name,plate_n,time, local_path, fname):
                 'funcx_endpoint_non_compute':'95038e17-339b-4462-9c9f-a8473809af25', #ripchip funcx
                 'exp_name':exp_name,
                 'plate_n':plate_n,
-                'make_input': local_path,
+                'make_input': local_path, #FIX
                 'local_path': local_path,
                 'remote_file': fname,
                 'csv_file': fname.split('.')[0] +".csv",

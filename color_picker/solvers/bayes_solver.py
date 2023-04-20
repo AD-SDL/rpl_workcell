@@ -28,6 +28,7 @@ class BayesColorSolver:
         return_max_volume: float = 275.0,
         out_dim: Tuple[int] = (96, 3),
         pop_size: int = 96,
+        prev_best_color: Optional[List[float]] = None
     ) -> List[List[float]]:
         opt = Optimizer(dimensions=[(0.0, 1.0), (0.0, 1.0), (0.0, 1.0)],
                         # base_estimator='GP',
@@ -83,6 +84,7 @@ class BayesColorSolver:
     def _find_best_color(
         experiment_colors: List[Union[sRGBColor, List[float]]],
         target_color: List[Union[sRGBColor, List[float]]],
+        best_color: Optional[List[Union[sRGBColor, List[float]]]] = None
     ) -> Tuple[int, List[float]]:
         """returns index of best color in population
 
@@ -226,7 +228,7 @@ class BayesColorSolver:
                 a.append(min(i))
         plt.figure()
         plt.plot(range(1, len(difflist)+1), a)
-        plt.xlabel("Color Index")
+        plt.xlabel("Color Rank")
         plt.ylabel("Color Difference")
         plt.title("Loss Graph")
         print(exp_folder/"results" / "convergence_graph.png")

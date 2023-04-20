@@ -29,6 +29,7 @@ class EvolutionaryColorSolver:
         return_max_volume: float = 275.0,
         out_dim: Tuple[int] = (96, 3),
         pop_size: int = 96,
+        prev_best_color: Optional[List[float]] = None
     ) -> List[List[float]]:
 
         assert pop_size == out_dim[0], "Population size must equal out_dim[0]"
@@ -99,6 +100,7 @@ class EvolutionaryColorSolver:
     def _find_best_color(
         experiment_colors: List[Union[sRGBColor, List[float]]],
         target_color: List[Union[sRGBColor, List[float]]],
+        best_color: Optional[List[Union[sRGBColor, List[float]]]] = None
     ) -> Tuple[int, List[float]]:
         """returns index of best color in population
 
@@ -241,12 +243,12 @@ class EvolutionaryColorSolver:
         a = []
         print(range(1, len(difflist)+1))
         for i in difflist:
-            if a == [] or min(i) < min(a):
+            if True: #a == [] or min(i) < min(a):
                 a.append(min(i))
         plt.figure()
-        
+        a.sort(reverse=True)
         plt.plot(range(1, len(a)+1), a)
-        plt.xlabel("Color Index")
+        plt.xlabel("Color Rank")
         plt.ylabel("Color Difference")
         plt.title("Loss Graph")
         print(exp_folder/"results" / "convergence_graph.png")

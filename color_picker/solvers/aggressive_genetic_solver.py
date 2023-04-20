@@ -257,7 +257,7 @@ class AggroColorSolver:
                 a.append(min(i))
         plt.figure()
         plt.plot(range(1, len(difflist)+1), a)
-        plt.xlabel("Color Index")
+        plt.xlabel("Color Rank")
         plt.ylabel("Color Difference")
         plt.title("Loss Graph")
         print(exp_folder/"results" / "convergence_graph.png")
