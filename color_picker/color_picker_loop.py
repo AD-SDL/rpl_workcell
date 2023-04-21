@@ -282,10 +282,11 @@ def run(
         #grab new plate if experiment starting or current plate is full
         if new_plate or current_iter==0:
             print('Grabbing New Plate')
-            steps_run, run_info = run_flow(init_protocol, payload, steps_run)
+            steps_run, _ = run_flow(init_protocol, payload, steps_run)
             curr_wells_used = []
             new_plate = False
             if current_iter == 0:
+                #Run the calibration protocol that gets the colors being mixed and ensures the target color is within the possible color space
                 colors, target_color, curr_wells_used, steps_run = calibrate(target_color, curr_wells_used, loop_protocol, exp_folder, plate_max_volume, steps_run, pop_size)
             else:
             #save the old plate picture and increment to a new plate
@@ -296,16 +297,17 @@ def run(
 
         # Calculate volumes and current wells for creating the OT2 protocol
         ## FUNCX
-            plate_volumes = solver.run_iteration(
-                target_color, 
-                current_plate,
-                out_dim=(pop_size, 3),
-                pop_size=pop_size,
-                return_volumes=True,
-                return_max_volume=plate_max_volume,
-            )
-        
+        plate_volumes = solver.run_iteration(
+            target_color, 
+            current_plate,
+            out_dim=(pop_size, 3),
+            pop_size=pop_size,
+            return_volumes=True,
+            return_max_volume=plate_max_volume,
+        )
+        #Perform a linear combination of the next colors being tried to show what the solver expects to create on this run
         target_plate = create_target_plate(plate_volumes, colors)
+        #Assign volumes to wells and colors and make a payload compatible with the OT2 protopiler
         payload, curr_wells_used = convert_volumes_to_payload(plate_volumes, curr_wells_used)
         
         #resets OT2 resources (or not)
@@ -314,6 +316,7 @@ def run(
         else: 
             payload['use_existing_resources'] = True 
         
+        #Run the flow to mix all of the colors 
         steps_run, run_info = run_flow(loop_protocol, payload, steps_run)
         run_path =  run_info["run_dir"].parts[-1]
         if not (os.path.isdir(exp_folder / run_path)):
@@ -343,10 +346,11 @@ def run(
         else: 
             plate_colors_ratios = get_colors_from_file(img_path)[1] ##FUNCX
         filename = "plate_"+ str(plate_n)+".jpg"
+        #Copy the plate image into the experiment folder
         shutil.copy2(run_info["run_dir"]/ "results"/"plate_only.jpg",  (exp_folder/"results"/filename))
         # Swap BGR to RGB
         plate_colors_ratios = {a:b[::-1] for a,b in plate_colors_ratios.items()}  
-        
+        #Find the colors to be processed by the solver
         current_plate = []
         wells_used = []
         for well in payload["destination_wells"]:
@@ -364,14 +368,12 @@ def run(
             cur_best_diff = plate_best_diff
             cur_best_color = plate_best_color
             time_to_best = str(datetime.now() - start)
-        #again
-        ##update numbers (seems redundant)
+
+        ##update numbers
         current_iter += 1
         num_exps += pop_size
         ##Plot review
         create_visuals(target_plate, current_plate, exp_folder, current_iter, target_color, cur_best_color, pop_size, diffs, solver_out_dim)
-            # plt.imsave(run_info["run_dir"] / "results" / "experiment_summary.jpg")
-        #print("novis")
         runs = []
         report = {}
         if (exp_folder/"results"/"exp_data.txt").is_file():
@@ -499,18 +501,17 @@ if __name__ == "__main__":
     print(solver)
     print(target_ratio)
     print(exp_label)
-    run_args = {}
-    run_args["target_color"] = target_ratio
-    run_args["init_protocol"] = wf_get_plate
-    run_args["loop_protocol"] = wf_mix_colors
-    run_args["final_protocol"] = wf_trash_plate
-    run_args["solver"] = solver
-    run_args["solver_name"] = solver_name
-    run_args["exp_budget"] = args.exp_budget
-    run_args["pop_size"] = args.pop_size
-    run_args["solver_out_dim"] = (args.pop_size, 3)
-    run_args["plate_max_volume"] = args.plate_max_volume
-    run_args["exp_label"] = exp_label
-    run_args["exp_path"] = exp_path
-    run_args["exp_type"] = exp_path
+    run_args = {"target_color": target_ratio,
+                "init_protocol": wf_get_plate,
+                "loop_protocol" : wf_mix_colors,
+                "final_protocol" : wf_trash_plate,
+                "solver" : solver,
+                "solver_name" : solver_name,
+                "exp_budget" : args.exp_budget,
+                "pop_size": args.pop_size,
+                "solver_out_dim": (args.pop_size, 3),
+                "plate_max_volume": args.plate_max_volume,
+                "exp_label": exp_label,
+                "exp_path": exp_path,
+                "exp_type": exp_path}
     run(**run_args)

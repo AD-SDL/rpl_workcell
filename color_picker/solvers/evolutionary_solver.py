@@ -40,7 +40,7 @@ class EvolutionaryColorSolver:
 
         if previous_experiment_colors is None:
             c_ratios = make_random_plate(dim=out_dim)
-            if pop_size >= 3 and previous_experiment_colors is None:
+            if pop_size >= 3:
                 c_ratios[0] = sRGBColor(0.98, 0.01, 0.01)
                 c_ratios[1] = sRGBColor(0.01, 0.98, 0.01)
                 c_ratios[2] = sRGBColor(0.01, 0.01, 0.98)
