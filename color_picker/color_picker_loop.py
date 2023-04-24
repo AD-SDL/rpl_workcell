@@ -13,25 +13,30 @@ import matplotlib.pyplot as plt
 #solvers utils
 #For extracting colors from each plate
 from tools.plate_color_analysis import get_colors_from_file
+
 #Different possible solvers for the color_picker problem
 from solvers.bayes_solver import BayesColorSolver
 from solvers.evolutionary_solver import EvolutionaryColorSolver
 from solvers.aggressive_genetic_solver import AggroColorSolver
 from funcx import FuncXExecutor
+
 from datetime import datetime
+
 #For publishing to RPL Portal
 from tools.publish import publish_iter
+
 #For creating a payload that the OT2 will accept from the solver output
 from tools.volumes_to_payload import convert_volumes_to_payload
+
 #For running WEI flows
 from tools.run_flow import run_flow
+
 #for measuring the three mixed colors for calibration and for 
 # ensuring the target color is in the right color space
 from tools.calibrate import calibrate
+
 #For constructing the plots for each run
 from tools.create_visuals import create_visuals, create_target_plate
-from datetime import datetime
-from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
 
 #DEF TODO:what does it mean?
 MAX_PLATE_SIZE = 96
@@ -65,28 +70,13 @@ def run(
     """
     import matplotlib.pyplot as plt
     show_visuals = True 
-    num_exps = 0
-    current_plate = None
-    plate_n=1
-    plate_total = int(exp_budget/MAX_PLATE_SIZE)
-    current_iter = 0 
-    cur_best_color = None
-    cur_best_diff = float("inf")
-    runs_list = []
-    new_plate=True
-    payload={}
-    img_path = None
-    diffs = []
+    
+    
+    #Constants
     use_funcx = False
-    #home = Path(os.path.expanduser('~'))
-    #print(home)
-    print(exp_path)
     exp_path =  Path(exp_path)
-    #exp_path = home/exp_path
-    #print(exp_path)
     exp_label = Path(exp_label)
     exp_folder = exp_path / exp_label
-    
     if not (os.path.isdir(exp_path)):
         os.makedirs(exp_path)
         print("makingdir")
@@ -95,10 +85,23 @@ def run(
     if not (os.path.isdir(exp_folder/"results")):
         os.mkdir(exp_folder/"results") 
     
-    curr_wells_used = []
-    start = datetime.now(
-    )
+    #Resource Tracking:
+    plate_n=1 #total number of plates
+    current_iter = 0 #total number of itertions
+    num_exps = 0 #total number of wells used
+    curr_wells_used = [] #list of all wells used
+    
+    #Information Tracking:
+    current_plate = None
+    cur_best_color = None
+    cur_best_diff = float("inf") #Min difference between color found and target color so far
+    runs_list = [] #List of info about each run of the experiment
+    start = datetime.now()
     time_to_best = str(start - start)
+    diffs = [] #List of all diffs from all runs of the experiment
+    new_plate=True
+    payload={}  #Payload to be sent to the WEI runs
+    
     
     while num_exps + pop_size <= exp_budget:
         new_run = {}
@@ -112,7 +115,7 @@ def run(
         )
 
         print('Starting iteration ' + str(current_iter))
-        #publish_iter()
+        
 
         #grab new plate if experiment starting or current plate is full
         if new_plate or current_iter==0:
