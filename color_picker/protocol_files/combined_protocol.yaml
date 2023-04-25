@@ -37,7 +37,7 @@ commands:
   #   dispense_clearance: 2
   #   aspirate_clearance: 0.1
 
-  - name: Mix Color 1
+  - name: Add Color 1
     source: red:A1
     destination: payload.destination_wells  # Argument provided (a dictionary)
     volume: payload.red_volumes             # Argument
@@ -48,7 +48,7 @@ commands:
   - name: replace_tip1
     replace_tip: True
 
-  - name: Mix color 2
+  - name: Add color 2
     source: blue:A1
     destination: payload.destination_wells
     volume: payload.green_volumes
@@ -59,7 +59,7 @@ commands:
   - name: replace_tip2
     replace_tip: True
 
-  - name: Mix color 3
+  - name: Add color 3
     source: yellow:A8
     destination: payload.destination_wells
     volume: payload.blue_volumes
@@ -71,6 +71,15 @@ commands:
 
   - name: replace_tip3
     replace_tip: True
+
+  # - name: Mix Colors
+  #   destination: payload.destination_wells
+  #   mix_cycles: 3
+  #   mix_volume: 100
+  #   drop_tip: False
+
+  # - name: replace_tip3
+  #   replace_tip: True
 
 metadata:
   protocolName: Color Mixing all
