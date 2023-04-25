@@ -20,10 +20,10 @@ from funcx import FuncXExecutor
 from datetime import datetime
 
 #For publishing to RPL Portal
-from tools.publish import publish_iter
+from tools.publish_v2 import publish_iter
 
 #For creating a payload that the OT2 will accept from the solver output
-from tools.volumes_to_payload import convert_volumes_to_payload
+from tools.color_utils import convert_volumes_to_payload
 
 #For running WEI flows
 from tools.run_flow import run_flow
@@ -309,7 +309,6 @@ if __name__ == "__main__":
                 "solver_name" : solver_name,
                 "exp_budget" : args.exp_budget,
                 "pop_size": args.pop_size,
-                "solver_out_dim": (args.pop_size, 3),
                 "plate_max_volume": args.plate_max_volume,
                 "exp_label": exp_label,
                 "exp_path": exp_path,

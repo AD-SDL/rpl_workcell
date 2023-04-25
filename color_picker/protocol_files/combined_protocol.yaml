@@ -69,17 +69,15 @@ commands:
     mix_volume: 100
     drop_tip: False
 
+  
+  - name: Mix Colors
+    reps: 3
+    mix_volume: 100
+    location: payload.destination_wells
+    
+  
   - name: replace_tip3
     replace_tip: True
-
-  # - name: Mix Colors
-  #   destination: payload.destination_wells
-  #   mix_cycles: 3
-  #   mix_volume: 100
-  #   drop_tip: False
-
-  # - name: replace_tip3
-  #   replace_tip: True
 
 metadata:
   protocolName: Color Mixing all
