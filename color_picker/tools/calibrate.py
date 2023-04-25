@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 from tools.volumes_to_payload import convert_volumes_to_payload
 from tools.plate_color_analysis import get_colors_from_file
+import cv2
 def calibrate(target_color: List[int], 
               curr_wells_used: List[str], 
               loop_protocol: str, 
