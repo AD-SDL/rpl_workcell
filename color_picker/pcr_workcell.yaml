@@ -1,4 +1,3 @@
-
 config:
   ros_namespace: rpl_workcell
   funcx_local_ep: "299edea0-db9a-4693-84ba-babfa655b1be"
@@ -100,4 +99,4 @@ modules:
     type: wei_ros_node
     model: ur5
     config:
-      ros_node: '/ur5_client/UR5_Client_Node'
+      ros_node: "/ur5_client/UR5_Client_Node"

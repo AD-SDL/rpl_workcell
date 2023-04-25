@@ -1,9 +1,7 @@
-# TODO: add input vars to the ot2 command (csv col)
-
 metadata:
-  name: PCR - Workflow
-  author: Casey Stone, Rafael Vescovi
-  info: Initial PCR workflow for RPL workcell
+  name: Color Picker - New Plate - Workflow
+  author: Tobias Ginsburg, Rafael Vescovi
+  info: New Plate workflow for the RPL Color Picker
   version: 0.1
 
 workcell: /home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_workcell.yaml

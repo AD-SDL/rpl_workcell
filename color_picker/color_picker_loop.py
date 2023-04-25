@@ -9,7 +9,6 @@ import numpy as np
 import os, shutil
 import matplotlib.pyplot as plt
 
-
 #solvers utils
 #For extracting colors from each plate
 from tools.plate_color_analysis import get_colors_from_file
@@ -70,7 +69,6 @@ def run(
     """
     import matplotlib.pyplot as plt
     show_visuals = True 
-    
     
     #Constants
     use_funcx = False
@@ -283,28 +281,22 @@ def run(
     print(cur_best_color)
     print("Runs on this experiment")
     print(runs_list)
-
-    
+   
 def parse_args():
     parser = ArgumentParser()
     parser.add_argument(
         "--pop_size",
         default=4,
         type=int,
-        help="Population size (num wells to fill per iter)",
-    )
+        help="Population size (num wells to fill per iter)",)
     parser.add_argument(
-        "--exp_budget", default=8, type=int, help="Experiment budget"
-    )
+        "--exp_budget", default=8, type=int, help="Experiment budget")
     parser.add_argument(
-        "--target","-t", default=str(np.random.randint(0, 255, 3).tolist()), help="Color Target"
-    )
+        "--target","-t", default=str(np.random.randint(0, 255, 3).tolist()), help="Color Target")
     parser.add_argument(
-        "--solver", default="Evo", help="Bay = Bayes, Evo = Evolutionary, Agg = Aggro"
-    )
+        "--solver", default="Evo", help="Bay = Bayes, Evo = Evolutionary, Agg = Aggro")
     parser.add_argument("--plate_max_volume", default=275.0, type=float)
     return parser.parse_args()
-
 
 if __name__ == "__main__":
 

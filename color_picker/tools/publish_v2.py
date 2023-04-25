@@ -1,6 +1,6 @@
 
 from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
-from tools.gather_datav2 import GatherMetaData
+from rpl_workcell.color_picker.tools.gather_data_v2 import GatherMetaData
 from pathlib import Path
 @generate_flow_definition(modifiers={'publishv2_gather_metadata': {'payload': '$.GatherMetadata.details.result[0]'}})
 class PublishRun(GladierBaseClient):
@@ -19,21 +19,6 @@ def publish_iter(folder_path, dest_path):
                 'make_input': str(folder_path.expanduser()),
                 'funcx_endpoint_compute':'95038e17-339b-4462-9c9f-a8473809af25',
                 'funcx_endpoint_non_compute':'95038e17-339b-4462-9c9f-a8473809af25',
-
-                
-                # 'pilot': {
-                #     'dataset': str(folder_path.expanduser()),
-                #     'index': 'aefcecc6-e554-4f8c-a25b-147f23091944',
-                #     'project': 'reports',
-                #     'source_globus_endpoint': '6e245524-d967-11ed-9720-e54704575ba0',
-                #     'source_collection_basepath': '/',
-                #     'metadata': {},
-                #     'destination':str(dest_path),
-                #     'visible_to': ['dda56f31-53d1-11ed-bd8b-0db7472df7d6']
-
-                # }
-
-
                 'publishv2': {
                     'dataset': str(folder_path.expanduser()),
                     'index': 'aefcecc6-e554-4f8c-a25b-147f23091944',

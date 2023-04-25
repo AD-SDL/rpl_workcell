@@ -2,15 +2,16 @@ from itertools import product
 from typing import List, Dict, Any, Tuple
 import copy
 
-#Chooses wells for the OT2 to use for this iteration and then assign the
-#combination of volumes that will be mixed in that well
-#@Inputs: 
-#   volumes: The list of mix volumes to try for this experiment iterations
-#   curr_wells_used: The wells on the plate that have been used so far
-#@Outputs:
-#   payload: A dictionary containing a list of the volumes for each colorand the wells
-#            They are assigned to. 
-#   curr_wells_used: An updated list of the wells that have been used in the current experiment and plate.
+'''Chooses wells for the OT2 to use for this iteration and then assign the
+combination of volumes that will be mixed in that well
+@Inputs: 
+  volumes: The list of mix volumes to try for this experiment iterations
+  curr_wells_used: The wells on the plate that have been used so far
+@Outputs:
+  payload: A dictionary containing a list of the volumes for each colorand the wells
+           They are assigned to. 
+  curr_wells_used: An updated list of the wells that have been used in the current experiment and plate.
+  '''
 
 def convert_volumes_to_payload(
         volumes: List[List[float]], 

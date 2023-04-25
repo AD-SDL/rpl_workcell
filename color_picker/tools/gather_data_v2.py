@@ -1,8 +1,10 @@
-from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
+from gladier import GladierBaseTool, generate_flow_definition
+
 def gather_metadata(**data):
 
     from pathlib import Path
     import json
+    
     GENERAL_METADATA = {
     "creators": [{"creatorName": "RPL Team"}],
     "publicationYear": "2023",
@@ -13,7 +15,6 @@ def gather_metadata(**data):
     },
     "subjects": [{"subject": "SDL"}],
     "exp_type": "color_picker"
-
     }
 
     input_path = Path(data['make_input']).expanduser()
