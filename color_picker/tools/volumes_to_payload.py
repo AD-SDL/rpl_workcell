@@ -1,6 +1,6 @@
 from itertools import product
 from typing import List, Dict, Any, Tuple
-from copy import copy
+import copy
 
 #Chooses wells for the OT2 to use for this iteration and then assign the
 #combination of volumes that will be mixed in that well

@@ -79,7 +79,7 @@ modules:
     config:
       ros_node: "/std_ns/ot2_cp_gamma"             
     positions:                                                    
-      deck2: [157.0, 61.109, 89.671, 656.336, 125.533, -951.510]
+      deck2: [161.5, 61.109, 89.671, 656.336, 125.533, -951.510]
       
 
   - name: biometra

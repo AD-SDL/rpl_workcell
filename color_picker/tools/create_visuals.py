@@ -4,6 +4,7 @@ from typing import List, Any
 import matplotlib.pyplot as plt
 import cv2
 import numpy as np
+from pathlib import Path
 
 def create_visuals(target_plate: List[List[int]],
                    current_plate: List[List[int]],

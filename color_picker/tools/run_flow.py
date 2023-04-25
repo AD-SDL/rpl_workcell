@@ -1,7 +1,7 @@
 
 from rpl_wei import WEI
-from threadReturn import ThreadWithReturnValue
-from log_info import get_log_info
+from tools.threadReturn import ThreadWithReturnValue
+from tools.log_info import get_log_info
 
 
 def wei_run_flow(wf_file_path, payload):
