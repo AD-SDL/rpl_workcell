@@ -1,6 +1,7 @@
 import yaml
 import os
 from datetime import datetime
+
 def get_log_info(run_path, ptcl):
         lineiter=0
         steps_run = []
