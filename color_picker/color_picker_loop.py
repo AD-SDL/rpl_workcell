@@ -7,9 +7,7 @@ from typing import Optional
 import json
 import numpy as np
 import os, shutil
-import matplotlib.pyplot as plt
 
-#solvers utils
 #For extracting colors from each plate
 from tools.plate_color_analysis import get_colors_from_file
 
@@ -42,19 +40,14 @@ MAX_PLATE_SIZE = 96
     
 def run(
     exp_type: str,
-    target_color: List[float],
-    wei_client: Optional["WEI"] = None,
+    exp_label: str = "",
+    exp_path: str = "",
+    target_color: List[float] = [],
     solver: BayesColorSolver = BayesColorSolver,
     solver_name: str = "Evolutionary Solver",
     exp_budget: int = MAX_PLATE_SIZE * 3,
     pop_size: int = MAX_PLATE_SIZE,
-    init_protocol = None,
-    loop_protocol = None,
-    final_protocol = None,
-    solver_out_dim: Tuple[int, int] = (MAX_PLATE_SIZE, 3),
     plate_max_volume: float = 275.0,
-    exp_label: str = "",
-    exp_path: str = ""
 ) -> None:
     """
     Steps
@@ -67,11 +60,18 @@ def run(
         3. grade population
     while num_exps < threshhold and solution not found
     """
-    import matplotlib.pyplot as plt
-    show_visuals = True 
-    
+
+    #workflows used
+    wf_dir = Path('/home/rpl/workspace/rpl_workcell/color_picker/workflows')
+    init_protocol = wf_dir / 'cp_wf_newplate.yaml'
+    loop_protocol = wf_dir / 'cp_wf_mixcolor.yaml'
+    final_protocol = wf_dir / 'cp_wf_trashplate.yaml'
+        
     #Constants
+    solver_out_dim = (pop_size, 3)
     use_funcx = False
+    funcx_local_ep = '299edea0-db9a-4693-84ba-babfa655b1be' # local
+
     exp_path =  Path(exp_path)
     exp_label = Path(exp_label)
     exp_folder = exp_path / exp_label
@@ -104,23 +104,18 @@ def run(
     while num_exps + pop_size <= exp_budget:
         new_run = {}
         steps_run = []
-        log_line = 0
-        run_dir = ""
        
-        print(
-            "Starting experiment, can run at least one iteration:",
-            num_exps + pop_size <= exp_budget,
-        )
-
+        print("Starting experiment, can run at least one iteration:",
+            num_exps + pop_size <= exp_budget,)
         print('Starting iteration ' + str(current_iter))
         
-
         #grab new plate if experiment starting or current plate is full
         if new_plate or current_iter==0:
             print('Grabbing New Plate')
             steps_run, _ = run_flow(init_protocol, payload, steps_run)
             curr_wells_used = []
             new_plate = False
+            
             if current_iter == 0:
                 #Run the calibration protocol that gets the colors being mixed and ensures the target color is within the possible color space
                 colors, target_color, curr_wells_used, steps_run = calibrate(target_color, curr_wells_used, loop_protocol, exp_folder, plate_max_volume, steps_run, pop_size)
@@ -130,17 +125,16 @@ def run(
                shutil.copy2(run_info["run_dir"]/ "results"/"plate_only.jpg",  (exp_folder/"results"/filename))
                plate_n = plate_n + 1
             
-
         # Calculate volumes and current wells for creating the OT2 protocol
-        ## FUNCX
         plate_volumes = solver.run_iteration(
             target_color, 
             current_plate,
-            out_dim=(pop_size, 3),
             pop_size=pop_size,
+            out_dim=(pop_size, 3),
             return_volumes=True,
             return_max_volume=plate_max_volume,
         )
+
         #Perform a linear combination of the next colors being tried to show what the solver expects to create on this run
         target_plate = create_target_plate(plate_volumes, colors)
         #Assign volumes to wells and colors and make a payload compatible with the OT2 protopiler
@@ -172,15 +166,14 @@ def run(
         
         if use_funcx:
             print("funcx started")
-            ep = '299edea0-db9a-4693-84ba-babfa655b1be' # local
-            fx = FuncXExecutor(endpoint_id=ep)
+            fx = FuncXExecutor(endpoint_id=funcx_local_ep)
             fxresult = fx.submit(get_colors_from_file, img_path)
             fxresult = fx.submit(get_colors_from_file, img_path)
             plate_colors_ratios = fxresult.result()[1]
-            
             print("funcx finished")
         else: 
-            plate_colors_ratios = get_colors_from_file(img_path)[1] ##FUNCX
+            plate_colors_ratios = get_colors_from_file(img_path)[1]
+
         filename = "plate_"+ str(plate_n)+".jpg"
         #Copy the plate image into the experiment folder
         shutil.copy2(run_info["run_dir"]/ "results"/"plate_only.jpg",  (exp_folder/"results"/filename))
@@ -249,7 +242,6 @@ def run(
             "exp_budget": exp_budget,
             "wf_steps": steps_run,
             "runs": runs
-            
         })
         
         #Save run report
@@ -263,19 +255,6 @@ def run(
     #Trash plate after experiment
     shutil.copy2(run_info["run_dir"]/ "results"/"plate_only.jpg",  (exp_folder/"results"/f"plate_{plate_n}.jpg"))
     steps_run, _ = run_flow(final_protocol, payload, steps_run)
-    if show_visuals:
-        import matplotlib.pyplot as plt
-
-        f, axarr = plt.subplots(1, 2)
-        # set figure size to 10x10
-        f.set_figheight(10)
-        f.set_figwidth(10)
-        axarr[0].imshow([[cur_best_color]])
-        axarr[0].set_title("Experiment best color, diff: " + str(cur_best_diff))
-        axarr[1].imshow([[target_color]])
-        axarr[1].set_title("Target Color")
-        plt.show()
-        plt.savefig(exp_folder/"results" / "final_plot.png", dpi=300)
     
     print("This is our best color so far")
     print(cur_best_color)
@@ -306,12 +285,6 @@ if __name__ == "__main__":
     #target color
     target_ratio = eval(args.target)
 
-    #workflows used
-    wf_dir = Path('/home/rpl/workspace/rpl_workcell/color_picker/workflows')
-    wf_get_plate = wf_dir / 'cp_wf_newplate.yaml'
-    wf_trash_plate = wf_dir / 'cp_wf_trashplate.yaml'
-    wf_mix_colors = wf_dir / 'cp_wf_mixcolor.yaml'
-
     exp_label = "ColorPicker_" + str(target_ratio[0]) +"_" + str(target_ratio[1]) + "_" +  str(target_ratio[2]) + "_" + str(datetime.date(datetime.now()))
     exp_path = '/home/rpl/experiments'
     exp_type = 'color_picker'
@@ -332,9 +305,6 @@ if __name__ == "__main__":
     print(target_ratio)
     print(exp_label)
     run_args = {"target_color": target_ratio,
-                "init_protocol": wf_get_plate,
-                "loop_protocol" : wf_mix_colors,
-                "final_protocol" : wf_trash_plate,
                 "solver" : solver,
                 "solver_name" : solver_name,
                 "exp_budget" : args.exp_budget,
@@ -343,5 +313,5 @@ if __name__ == "__main__":
                 "plate_max_volume": args.plate_max_volume,
                 "exp_label": exp_label,
                 "exp_path": exp_path,
-                "exp_type": exp_path}
+                "exp_type": exp_type}
     run(**run_args)
