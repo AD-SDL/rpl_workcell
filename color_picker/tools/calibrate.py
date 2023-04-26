@@ -26,7 +26,7 @@ def calibrate(target_color: List[int],
     colors: colors that are combined linearly to visualize experimental colors
     target_color: RGB Color captured from camera image of actual plate based on the ratio calculated from the input RGB values
     steps_run: """
-    plate_volumes = np.array([[0.98, 0.01, 0.01], [0.01, 0.98, 0.01], [0.01, 0.01, 0.98], np.array(target_color)/sum(target_color)])*plate_max_volume
+    plate_volumes = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1], np.array(target_color)/sum(target_color)])*plate_max_volume
     payload, curr_wells_used = convert_volumes_to_payload(plate_volumes, curr_wells_used)
     payload['use_existing_resources'] = False 
     steps_run, run_info = run_flow(loop_protocol, payload, steps_run) 

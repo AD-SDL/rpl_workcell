@@ -41,9 +41,9 @@ class EvolutionaryColorSolver:
         if previous_experiment_colors is None:
             c_ratios = make_random_plate(dim=out_dim)
             if pop_size >= 3:
-                c_ratios[0] = sRGBColor(0.98, 0.01, 0.01)
-                c_ratios[1] = sRGBColor(0.01, 0.98, 0.01)
-                c_ratios[2] = sRGBColor(0.01, 0.01, 0.98)
+                c_ratios[0] = sRGBColor(1, 0, 0)
+                c_ratios[1] = sRGBColor(0, 1, 0)
+                c_ratios[2] = sRGBColor(0, 0, 1)
             if return_volumes:
                 return EvolutionaryColorSolver.convert_ratios_to_volumes(c_ratios)
             else:
@@ -229,9 +229,9 @@ class EvolutionaryColorSolver:
         for _ in range(len(new_pop), new_pop_size):
             new_pop.append(_random_init())
         if previos_best_index is None and len(new_pop) >= 3:
-            new_pop[0] = sRGBColor(0.98, 0.01, 0.01)
-            new_pop[1] = sRGBColor(0.01, 0.98, 0.01)
-            new_pop[2] = sRGBColor(0.01, 0.01, 0.98)
+            new_pop[0] = sRGBColor(1, 0, 0)
+            new_pop[1] = sRGBColor(0, 1, 0)
+            new_pop[2] = sRGBColor(0, 0, 1)
         return new_pop
     @staticmethod
     def plot_diffs(
