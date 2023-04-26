@@ -58,7 +58,8 @@ and check that all of the tips for the OT2 are properly in the tip block
   8. In the same terminal, run 
   ```
   cd globusconnectpersonal-3.2.0 
-  ```, and then  
+  ```
+  and then  
   ```
   run ./globusconnectpersonal &
   ``` 
