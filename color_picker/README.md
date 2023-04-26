@@ -45,11 +45,19 @@ NUC located on the left side of setup of NUCs with monitors, runs the main loop 
 # Running Instructions:
 ## Basic steps:
 1. Turn  on Strange, Parker and Logan NUCs  
-2. Check that each of the liquid containers on the OT2 has enough liquid for the full run,  
-and check that all of the tips for the OT2 are properly in the tip block  
-<img src="https://user-images.githubusercontent.com/73187720/232107500-ded7d73e-1d4b-4111-bb41-fa5a4536f7ad.png"  width="300" height="400">
+2. Check that the deck is set up as in the image below, there is no plate already on the OT2, each of the liquid containers on the OT2 has enough liquid for the run,  and that all of the tips for the OT2 are properly in the tip block  
+  
+![image](https://user-images.githubusercontent.com/73187720/234690859-fc4cda2c-8233-487d-be62-8c2058a5a30b.png)
 
-3. From Logan, in separate terminals, run  
+3. Ensure that there are enough plates in the Sciclops tower closest to the computers. Each plate has 96 wells. On the first plate used, four of these of  are used to calibrate the system, leaving 92 available. Since the example command below has an exp_budget of 92 wells, it will only need 1 plate, however any more wells will require another plate. 
+
+![image](https://user-images.githubusercontent.com/73187720/234692402-1ea01080-a448-4986-9ef0-f4d1644e4e4f.png)
+
+4. Ensure that the camera module looks like the image below, with no plate obstructing it.  
+    
+![image](https://user-images.githubusercontent.com/73187720/234693435-724505cd-9b20-4226-988f-6ed1c72a1761.png)
+
+5. From Logan, in separate terminals, run  
 ```
 ssh rpl@parker 
 ``` 
@@ -58,11 +66,11 @@ and
 ssh rpl@strange
 ``` 
 and use the password written on Logan  
-4. On both terminals, run  
+6. On both terminals, run  
 ```
 cd ~/wei_ws/demo/rpl_workcell/scripts 
 ```  
-5. On Parker, try running
+7. On Parker, try running
 ``` 
 tmux attach-session -t nodes
 ```
@@ -70,7 +78,7 @@ tmux attach-session -t nodes
  ```
  ./run_nodes_parker
  ```  
-6. On Strange try running
+8. On Strange try running
 ```
 tmux attach-session -t nodes
 ``` 
@@ -80,12 +88,11 @@ and check that the camera_module is publishing frames and the PF-400 is publishi
 ```  
 <img src="https://user-images.githubusercontent.com/73187720/232088734-ced6f822-847e-4e9e-bd37-165fc8b0982e.png"  width="1000" height="400">  
 
-
-  7. In a new terminal on Logan, run  
+9. In a new terminal on Logan, run  
   ```
   source ~/wei_ws/install/setup.bash
   ```  
-  8. In the same terminal, run 
+10. In the same terminal, run 
   ```
   cd globusconnectpersonal-3.2.0 
   ```
@@ -94,16 +101,16 @@ and check that the camera_module is publishing frames and the PF-400 is publishi
   run ./globusconnectpersonal &
   ``` 
   to start the globus endpoint for publishing. A window will pop up with a connect button. If when this connect button is pressed it says there is already an instance running, then you are free to close it and skip this step.     
-  9. In the same terminal, Run  
+11. In the same terminal, Run  
   ```
    funcx-endpoint start default 
   ```
-   to start funcx for publishing
-  10. In the same terminal Run  
+   to start funcx for publishing  
+12. In the same terminal Run  
   ```
   cd ~/workspace/rpl_workcell/color_picker
    ```
-  11. In the same terminal Run  
+13. In the same terminal Run  
   ```
   ./color_picker_loop 
   ``` 
@@ -113,7 +120,7 @@ and check that the camera_module is publishing frames and the PF-400 is publishi
 	--solver: a string denoting the solver to be used for experiment
    Example:  
    ```
-   ./color_picker_loop --pop_size=8 --exp_budget=96 --solver=Agg 
+   ./color_picker_loop --pop_size=8 --exp_budget=92 --solver=Agg 
    ```
 ## Troubleshooting
 
