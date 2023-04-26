@@ -51,11 +51,32 @@ and check that all of the tips for the OT2 are properly in the tip block
 <img src="https://user-images.githubusercontent.com/73187720/232088734-ced6f822-847e-4e9e-bd37-165fc8b0982e.png"  width="1000" height="400">  
 
 
-  7. In a new terminal on Logan, run  ```source ~/wei_ws/install/setup.bash```  
-  8. In the same terminal, run ```cd globusconnectpersonal-3.2.0 ```, and then  ```run ./globusconnectpersonal & ``` to start the globus endpoint for publishing. A window will pop up with a connect button. If when this connect button is pressed it says there is already an instance running, then you are free to close it and skip this step.     
-  9. In the same terminal, Run  ```funcx-endpoint start default ``` to start funcx for publishing
-  10. In the same terminal Run  ```cd ~/workspace/rpl_workcell/color_picker ```
-  11. In the same terminal Run  ```./color_picker_loop ``` with the following Arguments:
+  7. In a new terminal on Logan, run  
+  ```
+  source ~/wei_ws/install/setup.bash
+  ```  
+  8. In the same terminal, run 
+  ```
+  cd globusconnectpersonal-3.2.0 
+  ```, and then  
+  ```
+  run ./globusconnectpersonal &
+  ``` 
+  to start the globus endpoint for publishing. A window will pop up with a connect button. If when this connect button is pressed it says there is already an instance running, then you are free to close it and skip this step.     
+  9. In the same terminal, Run  
+  ```
+   funcx-endpoint start default 
+  ```
+   to start funcx for publishing
+  10. In the same terminal Run  
+  ```
+  cd ~/workspace/rpl_workcell/color_picker
+   ```
+  11. In the same terminal Run  
+  ```
+  ./color_picker_loop 
+  ``` 
+  with the following Arguments:
 	--pop_size: number of wells per loop of the color_picker algorithm
 	--exp_budget: number of wells total allowed for the experiment
 	--solver: a string denoting the solver to be used for experiment
