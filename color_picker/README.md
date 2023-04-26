@@ -59,7 +59,10 @@ and check that all of the tips for the OT2 are properly in the tip block
 	--pop_size: number of wells per loop of the color_picker algorithm
 	--exp_budget: number of wells total allowed for the experiment
 	--solver: a string denoting the solver to be used for experiment
-   Example:  ```./color_picker_loop --pop_size=8 --exp_budget=96 --solver=Agg ```
+   Example:  
+   ```
+   ./color_picker_loop --pop_size=8 --exp_budget=96 --solver=Agg 
+   ```
 ## Troubleshooting
 
 ### Hardware
