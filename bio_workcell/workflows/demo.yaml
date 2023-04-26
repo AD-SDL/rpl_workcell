@@ -14,43 +14,48 @@ modules:
   - name: camera
 
 flowdef:
-  - name: PCR Plate Exchange
-    module: plateEx
-    command: get_plate
-    args:
-      pos: "tower2"
-    checks: null
-    comment: Stage pcr plates
-
-  - name: Move from plateEx to solo
-    module: plateEx
+  - name: Move plate from Stack5 to Solo Position4
+    module: plateCrane
     command: transfer
     args:
-      source: plateEx.positions.exchange
-      target: solo_pcr_alpha.positions.deck1_cooler
-      source_plate_rotation: narrow
-      target_plate_rotation: wide
+      source: "Stack5"
+      target: "Solo.Position4"
+      source_type: "stack"
+      target_type: "module"
     checks: null
-    comment: Place plate in solo
+    comment: Place plate in Solo Position4
 
-  - name: Mix Reactions
-    module: solo
-    command: run_protocol
-    args:
-      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/solo_beta_test_first.yaml
-    checks: RESOURCE_CHECK
-    comment: resource check not implemented, but will be
+  # - name: Mix Reactions
+  #   module: solo
+  #   command: run_protocol
+  #   args:
+  #     config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/solo_beta_test_first.yaml
+  #   checks: RESOURCE_CHECK
+  #   comment: resource check not implemented, but will be
 
-  - name: Move from solo to sealer
-    module: plateEx
+  - name: Move plate from Solo Position4 to Hidex Nest
+    module: plateCrane
     command: transfer
     args:
-      source: solo_pcr_alpha.positions.deck1_cooler
-      target: sealer.positions.default
-      source_plate_rotation: wide
-      target_plate_rotation: narrow
+      source: "Solo.Position4"
+      target: "HidexNest2"
+      source_type: "module"
+      target_type: "module"      
+      height_offset: "360"
     checks: null
-    comment: null
+    comment: Place plate to Hidex Nest
+
+  - name: Move plate from HidexNest to Sealer
+    module: plateCrane
+    command: transfer
+    args:
+      source: "HidexNest2"
+      target: "SealerNest"
+      source_type: "module"
+      target_type: "module"  
+      height_offset: "360"
+    checks: null
+    comment: Place plate to Sealer
 
   - name: Seal PCR plate
     module: sealer
@@ -61,28 +66,54 @@ flowdef:
     checks: null
     comment: null
 
-  - name: Move from sealer to Thermocycler
-    module: plateEx
+  - name: Move plate from Sealer to Liconic
+    module: plateCrane
     command: transfer
     args:
-      source: sealer.positions.default
-      target: biometra.positions.default
-      source_plate_rotation: narrow
-      target_plate_rotation: wide
+      source: "SealerNest"
+      target: "Liconic.Nest"
+      source_type: "module"
+      target_type: "stack"   
     checks: null
-    comment: null
+    comment: Place plate onto Liconic
 
-  - name: Move from Thermocycler to peeler
-    module: plateEx
+  - name: Load Liconic
+    module: liconic
+    command: load_plate
+    args: 
+      stacker: payload.stacker
+      slot: payload.slot
+    checks: null
+    comment: Stage pcr plates
+
+  - name: Start shaker at set speed
+    module: liconic
+    command: begin_shake
+    args: 
+      shaker_speed: payload.shaker_speed
+    checks: null
+    comment: Stage pcr plates
+
+  - name: Unload Liconic
+    module: liconic
+    command: unload_plate
+    args: 
+      stacker: payload.stacker
+      slot: payload.slot
+    checks: null
+    comment: Stage pcr plates
+    
+  - name: Move plate from Liconic to Peeler
+    module: plateCrane
     command: transfer
     args:
-      source: biometra.positions.default
-      target: peeler.positions.default
-      source_plate_rotation: wide
-      target_plate_rotation: narrow
+      source: "Liconic.Nest"
+      target: "PeelerNest"
+      source_type: "stack"
+      target_type: "module"   
     checks: null
-    comment: null
-
+    comment: Place plate onto PeelerNest
+  
   - name: Peel
     module: peeler
     command: peel
@@ -91,18 +122,42 @@ flowdef:
     checks: null
     comment: null
 
-  - name: Move to camera_module
-    module: plateEx
+  - name: Move plate from PeelerNest to HidexNest
+    module: plateCrane
     command: transfer
     args:
-      source: peeler.positions.default
-      target: camera_module.positions.plate_station
-      source_plate_rotation: narrow
-      target_plate_rotation: narrow
-
-  - name: Take Picture
-    module: camera_module
-    command: take_picture
+      source: "PeelerNest"
+      target: "HidexNest2"
+      source_type: "module"
+      target_type: "module"  
+      height_offset: "360"
+    checks: null
+    comment: Place plate in Hidex Nest
+  
+  - name: Move plate from HidexNest to Stack1
+    module: plateCrane
+    command: transfer
     args:
-      save_location: local_run_results
-      file_name: "final_image.jpg"
+      source: "HidexNest2"
+      target: "Stack1"
+      source_type: "module"
+      target_type: "stack"   
+      height_offset: "360"
+    checks: null
+    comment: Place plate into trash stack
+
+  # - name: Move to camera_module
+  #   module: plateEx
+  #   command: transfer
+  #   args:
+  #     source: peeler.positions.default
+  #     target: camera_module.positions.plate_station
+  #     source_plate_rotation: narrow
+  #     target_plate_rotation: narrow
+
+  # - name: Take Picture
+  #   module: camera_module
+  #   command: take_picture
+  #   args:
+  #     save_location: local_run_results
+  #     file_name: "final_image.jpg"

@@ -26,8 +26,8 @@ commands:
 
   - name: Mix Color 1
     source: source:A1
-    destination: payload.destination_wells
-    volume: payload.red_volumes
+    destination: payload.destination_wells  # Argument provided (a dictionary)
+    volume: payload.red_volumes             # Argument
     dispense_clearance: 2
     aspirate_clearance: 1
     drop_tip: False
@@ -41,8 +41,7 @@ commands:
     volume: payload.green_volumes
     dispense_clearance: 2
     aspirate_clearance: 1
-    drop_tip: False
-    
+    drop_tip: False    
   
   - name: test2
     replace_tip: True
@@ -63,5 +62,5 @@ commands:
 metadata:
   protocolName: Color Mixing all
   author: Kyle khippe@anl.gov
-  description: Mixing red colors
+  description: Mixing all colors
   apiLevel: "2.12"

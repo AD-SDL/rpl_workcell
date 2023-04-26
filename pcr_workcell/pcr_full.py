@@ -3,7 +3,7 @@
 import logging
 from pathlib import Path
 from argparse import ArgumentParser
-from tools.publish import publish_iter
+# from tools.publish import publish_iter
 from rpl_wei.wei_workcell_base import WEI
 
 def main():
@@ -14,6 +14,6 @@ def main():
 
     payload={}
     run_info = wei_client.run_workflow(payload=payload)
-    publish_iter(run_info["run_dir"], run_info["run_dir"])
+    # publish_iter(run_info["run_dir"], run_info["run_dir"])
 if __name__ == "__main__":
     main()
