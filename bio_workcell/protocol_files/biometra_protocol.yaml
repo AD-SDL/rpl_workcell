@@ -1,0 +1,12 @@
+commands:
+  - name: Cycle 1
+    time: 10
+    temp1: 0
+    temp2: 50
+    rate: 25/m
+
+  - name: Cycle 2
+    time: 30
+    temp1: 20
+    temp2: 100
+    rate: 50/m

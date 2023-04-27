@@ -1,0 +1,23 @@
+metadata:
+  name: PCR - Workflow
+  author: Casey Stone, Rafael Vescovi
+  info: Initial PCR workflow for RPL workcell
+  version: 0.1
+
+workcell: /home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_workcell.yaml
+
+modules:
+  - name: biometra
+
+flowdef:
+  - name: Biometra Open
+    module: biometra
+    command: open_lid
+    args:
+      foo: Null
+
+  - name: Biometra Open
+    module: biometra
+    command: run_program
+    args:
+      prog: 4
