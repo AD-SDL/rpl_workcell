@@ -25,6 +25,16 @@ flowdef:
     checks: null
     comment: Place plate in Solo Position4
 
+  - name: Remove lid
+    module: plateCrane
+    command: remove_lid
+    args:
+      source: "Solo.Position4"
+      target: "LidNest3"
+      plate_type: "96_well"
+    checks: null
+    comment: Place plate in Solo Position4
+
   # - name: Mix Reactions
   #   module: solo
   #   command: run_protocol
@@ -32,6 +42,14 @@ flowdef:
   #     config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/solo_beta_test_first.yaml
   #   checks: RESOURCE_CHECK
   #   comment: resource check not implemented, but will be
+
+  - name: Open Hidex
+    module: hidex
+    command: open
+    args: 
+      foo: "bar"
+    checks: null
+    comment: Open Hidex Gate
 
   - name: Move plate from Solo Position4 to Hidex Nest
     module: plateCrane
@@ -45,6 +63,14 @@ flowdef:
     checks: null
     comment: Place plate to Hidex Nest
 
+  - name: run Hidex
+    module: hidex
+    command: run_protocol
+    args: 
+      protocol_path: "C:\\Users\\svcaibio\\Documents\\Hidex Sense\\Campaign2_wei.sensetemplate"
+    checks: null
+    comment: Run protocol at hidex
+
   - name: Move plate from HidexNest to Sealer
     module: plateCrane
     command: transfer
@@ -56,6 +82,14 @@ flowdef:
       height_offset: "360"
     checks: null
     comment: Place plate to Sealer
+
+  - name: Close Hidex
+    module: hidex
+    command: close
+    args: 
+      foo: "bar"
+    checks: null
+    comment: Close Hidex Gate
 
   - name: Seal PCR plate
     module: sealer
@@ -94,6 +128,14 @@ flowdef:
     checks: null
     comment: Stage pcr plates
 
+  # - name: Wait
+  #   module: local
+  #   command: wait
+  #   args: 
+  #     wait_time: "12:00:00"
+  #   checks: null
+  #   comment: Stage pcr plates
+
   - name: Unload Liconic
     module: liconic
     command: unload_plate
@@ -121,6 +163,14 @@ flowdef:
       test: null
     checks: null
     comment: null
+    
+  - name: Open Hidex
+    module: hidex
+    command: open
+    args: 
+      foo: "bar"
+    checks: null
+    comment: Open Hidex Gate
 
   - name: Move plate from PeelerNest to HidexNest
     module: plateCrane
@@ -133,7 +183,15 @@ flowdef:
       height_offset: "360"
     checks: null
     comment: Place plate in Hidex Nest
-  
+
+  - name: Run Protocol Hidex
+    module: hidex
+    command: run_protocol
+    args: 
+      protocol_path: "C:\\Users\\svcaibio\\Documents\\Hidex Sense\\Campaign2_wei.sensetemplate"
+    checks: null  
+    comment: Run protocol Hidex 
+
   - name: Move plate from HidexNest to Stack1
     module: plateCrane
     command: transfer
@@ -145,6 +203,14 @@ flowdef:
       height_offset: "360"
     checks: null
     comment: Place plate into trash stack
+
+  - name: Close Hidex
+    module: hidex
+    command: close
+    args: 
+      foo: "bar"
+    checks: null
+    comment: Close Hidex Gate
 
   # - name: Move to camera_module
   #   module: plateEx
