@@ -16,24 +16,24 @@ modules:
   - name: camera
 
 flowdef:
-  - name: PCR Plate Exchange
-    module: sciclops
-    command: get_plate
-    args:
-      pos: "tower2"
-    checks: null
-    comment: Stage pcr plates
+  # - name: PCR Plate Exchange
+  #   module: sciclops
+  #   command: get_plate
+  #   args:
+  #     pos: "tower2"
+  #   checks: null
+  #   comment: Stage pcr plates
 
-  - name: Move from Sciclops to OT2
-    module: pf400
-    command: transfer
-    args:
-      source: sciclops.positions.exchange
-      target: ot2_pcr_alpha.positions.deck1_cooler
-      source_plate_rotation: narrow
-      target_plate_rotation: wide
-    checks: null
-    comment: Place plate in ot2
+  # - name: Move from Sciclops to OT2
+  #   module: pf400
+  #   command: transfer
+  #   args:
+  #     source: sciclops.positions.exchange
+  #     target: ot2_pcr_alpha.positions.deck1_cooler
+  #     source_plate_rotation: narrow
+  #     target_plate_rotation: wide
+  #   checks: null
+  #   comment: Place plate in ot2
 
   # - name: Mix OT2 reactions
   #   module: ot2_pcr_beta
@@ -51,77 +51,101 @@ flowdef:
   #   checks: RESOURCE_CHECK
   #   comment: resource check not implemented, but will be
 
-  - name: Move from OT2 to sealer
-    module: pf400
-    command: transfer
+  # - name: Move from OT2 to sealer
+  #   module: pf400
+  #   command: transfer
+  #   args:
+  #     source: ot2_pcr_alpha.positions.deck1_cooler
+  #     target: sealer.positions.default
+  #     source_plate_rotation: wide
+  #     target_plate_rotation: narrow
+  #   checks: null
+  #   comment: null
+
+  # - name: Seal PCR plate
+  #   module: sealer
+  #   command: seal
+  #   args:
+  #     time: payload:seal.time
+  #     temperature: 175
+  #   checks: null
+  #   comment: null
+
+  # - name: Move from sealer to Thermocycler
+  #   module: pf400
+  #   command: transfer
+  #   args:
+  #     source: sealer.positions.default
+  #     target: biometra.positions.default
+  #     source_plate_rotation: narrow
+  #     target_plate_rotation: wide
+  #   checks: null
+  #   comment: null
+
+  - name: Close lid Thermocycler
+    module: biometra
+    command: close_lid
     args:
-      source: ot2_pcr_alpha.positions.deck1_cooler
-      target: sealer.positions.default
-      source_plate_rotation: wide
-      target_plate_rotation: narrow
+        test: null
     checks: null
     comment: null
 
-  - name: Seal PCR plate
-    module: sealer
-    command: seal
+  - name: Run Thermocycler Program
+    module: biometra
+    command: run_program
     args:
-      time: payload:seal.time
-      temperature: 175
+        program_n: 4
     checks: null
     comment: null
 
-  - name: Move from sealer to Thermocycler
-    module: pf400
-    command: transfer
+  - name: Open lid Thermocycler
+    module: biometra
+    command: open_lid
     args:
-      source: sealer.positions.default
-      target: biometra.positions.default
-      source_plate_rotation: narrow
-      target_plate_rotation: wide
+        test: null
     checks: null
     comment: null
+    
+  # - name: Move from Thermocycler to peeler
+  #   module: pf400
+  #   command: transfer
+  #   args:
+  #     source: biometra.positions.default
+  #     target: peeler.positions.default
+  #     source_plate_rotation: wide
+  #     target_plate_rotation: narrow
+  #   checks: null
+  #   comment: null
 
-  - name: Move from Thermocycler to peeler
-    module: pf400
-    command: transfer
-    args:
-      source: biometra.positions.default
-      target: peeler.positions.default
-      source_plate_rotation: wide
-      target_plate_rotation: narrow
-    checks: null
-    comment: null
+  # - name: Peel
+  #   module: peeler
+  #   command: peel
+  #   args:
+  #     test: null
+  #   checks: null
+  #   comment: null
 
-  - name: Peel
-    module: peeler
-    command: peel
-    args:
-      test: null
-    checks: null
-    comment: null
+  # - name: Move to camera_module
+  #   module: pf400
+  #   command: transfer
+  #   args:
+  #     source: peeler.positions.default
+  #     target: camera_module.positions.plate_station
+  #     source_plate_rotation: narrow
+  #     target_plate_rotation: narrow
 
-  - name: Move to camera_module
-    module: pf400
-    command: transfer
-    args:
-      source: peeler.positions.default
-      target: camera_module.positions.plate_station
-      source_plate_rotation: narrow
-      target_plate_rotation: narrow
+  # - name: Take Picture
+  #   module: camera_module
+  #   command: take_picture
+  #   args:
+  #     save_location: local_run_results
+  #     file_name: "final_image.jpg"
 
-  - name: Take Picture
-    module: camera_module
-    command: take_picture
-    args:
-      save_location: local_run_results
-      file_name: "final_image.jpg"
-
-  - name: Trash Plate
-    module: pf400
-    command: transfer
-    args:
-      source: camera_module.positions.plate_station
-      target: pf400.positions.trash
-      source_plate_rotation: narrow
-      target_plate_rotation: narrow
+  # - name: Trash Plate
+  #   module: pf400
+  #   command: transfer
+  #   args:
+  #     source: camera_module.positions.plate_station
+  #     target: pf400.positions.trash
+  #     source_plate_rotation: narrow
+  #     target_plate_rotation: narrow
