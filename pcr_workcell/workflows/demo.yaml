@@ -87,6 +87,7 @@ flowdef:
     command: close_lid
     args:
         test: null
+        test: null
     checks: null
     comment: null
 
@@ -102,6 +103,7 @@ flowdef:
     module: biometra
     command: open_lid
     args:
+        test: null
         test: null
     checks: null
     comment: null
@@ -134,6 +136,12 @@ flowdef:
   #     source_plate_rotation: narrow
   #     target_plate_rotation: narrow
 
+  # - name: Take Picture
+  #   module: camera_module
+  #   command: take_picture
+  #   args:
+  #     save_location: local_run_results
+  #     file_name: "final_image.jpg"
   # - name: Take Picture
   #   module: camera_module
   #   command: take_picture
