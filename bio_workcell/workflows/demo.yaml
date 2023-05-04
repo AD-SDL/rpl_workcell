@@ -35,13 +35,13 @@ flowdef:
     checks: null
     comment: Place plate in Solo Position4
 
-  # - name: Mix Reactions
-  #   module: solo
-  #   command: run_protocol
-  #   args:
-  #     config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/solo_beta_test_first.yaml
-  #   checks: RESOURCE_CHECK
-  #   comment: resource check not implemented, but will be
+  - name: Mix Reactions
+    module: solo
+    command: run_protocol
+    args:
+      protocol_path: "C:\\Users\\svcaibio\\Dev\\hidex_module\\hidex_driver\\ahk\\test_hso\\test.hso"
+    checks: RESOURCE_CHECK
+    comment: resource check not implemented, but will be
 
   - name: Open Hidex
     module: hidex
@@ -70,6 +70,14 @@ flowdef:
       protocol_path: "C:\\Users\\svcaibio\\Documents\\Hidex Sense\\Campaign2_wei.sensetemplate"
     checks: null
     comment: Run protocol at hidex
+
+  - name: Open Hidex
+    module: hidex
+    command: open
+    args: 
+      foo: "bar"
+    checks: null
+    comment: Open Hidex Gate
 
   - name: Move plate from HidexNest to Sealer
     module: plateCrane
@@ -191,6 +199,14 @@ flowdef:
       protocol_path: "C:\\Users\\svcaibio\\Documents\\Hidex Sense\\Campaign2_wei.sensetemplate"
     checks: null  
     comment: Run protocol Hidex 
+
+  - name: Open Hidex
+    module: hidex
+    command: open
+    args: 
+      foo: "bar"
+    checks: null
+    comment: Open Hidex Gate
 
   - name: Move plate from HidexNest to Stack1
     module: plateCrane
