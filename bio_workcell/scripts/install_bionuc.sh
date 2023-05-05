@@ -5,19 +5,26 @@ ROS_WS=~/wei_ws
 
 mkdir -p $ROS_WS
 mkdir -p $ROS_WS/src
-cd $ROS_WS/src
+SRC_FOLDER=$ROS_WS/src 
+
 
 ##Peeler
+cd $SRC_FOLDER
 git clone https://github.com/AD-SDL/a4s_sealer_module
 cd a4s_sealer_module/a4s_sealer_driver
 pip install . 
 
 ##Sealer
+cd $SRC_FOLDER
 git clone https://github.com/AD-SDL/brooks_xpeel_module
-cd brooks_xpeel_module/brooks_xpeel_driver
+cd brooks_xpeel_module
+git pull
+git checkout -b main
+cd brooks_xpeel_driver
 pip install . 
 
 ##Sciclops
+cd $SRC_FOLDER
 git clone https://github.com/AD-SDL/platecrane_module
 
 ##Cameras

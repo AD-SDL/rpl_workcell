@@ -50,12 +50,21 @@ modules:
     positions:
       default: []
 
-  - name: solo
+  - name: hidex
     type: wei_tcp_node
-    model: SoloSoft
+    model: Hidex
     config:
       tcp_address: "hudson01.cels.anl.gov"
       tcp_port: "5556"
+    positions:
+      default: []
+
+  - name: solo
+    type: wei_tcp_node
+    model: Solo
+    config:
+      tcp_address: "hudson01.cels.anl.gov"
+      tcp_port: "5557"
     positions:
       default: []
 
