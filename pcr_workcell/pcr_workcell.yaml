@@ -65,7 +65,7 @@ modules:
     positions:                                                    
       deck1_cooler: [247.999, -30.702, 275.835, 381.513, 124.830, -585.403] 
 
-  - name: ot2_pcr_beta 
+  - name: ot2_growth_beta 
     type: wei_ros_node 
     model: ot2
     config:
