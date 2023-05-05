@@ -8,7 +8,7 @@ window=0
 tmux new-window -t $session:$window -n 'sealerpeeler_camera'
 tmux rename-window -t $session:$window 'sealerpeeler_camera'
 tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
-tmux send-keys -t $session:$window 'ros2 launch camera_module_client camera_publisher.launch.py camera_name:=camera_sp camera_number:=0' C-m
+#tmux send-keys -t $session:$window 'ros2 launch camera_module_client camera_publisher.launch.py camera_name:=camera_sp camera_number:=6' C-m
 
 window=1
 tmux new-window -t $session:$window -n 'sealer'
