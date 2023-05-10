@@ -1,6 +1,7 @@
 from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
-from gather_data import GatherMetaData
+from tools.gather_data import GatherMetaData
 from pathlib import Path
+
 @generate_flow_definition(modifiers={'publish_gather_metadata': {'payload': '$.GatherMetadata.details.result[0]'}})
 class PublishRun(GladierBaseClient):
     globus_group = 'dda56f31-53d1-11ed-bd8b-0db7472df7d6'
@@ -10,7 +11,7 @@ class PublishRun(GladierBaseClient):
     ]
 
 def publish_iter(folder_path, dest_path):
-        #gather some shit and transfer it to the exp\
+        # Gather some information and transfer it to the endpoint
         print(str(folder_path.expanduser()))
         print(str(dest_path ))    
         flow_input = {
@@ -18,8 +19,6 @@ def publish_iter(folder_path, dest_path):
                 'make_input': str(folder_path.expanduser()),
                 'funcx_endpoint_compute':'299edea0-db9a-4693-84ba-babfa655b1be',
                 'funcx_endpoint_non_compute':'299edea0-db9a-4693-84ba-babfa655b1be',
-
-                
                 'pilot': {
                     'dataset': str(folder_path.expanduser()),
                     'index': 'aefcecc6-e554-4f8c-a25b-147f23091944',
@@ -29,9 +28,8 @@ def publish_iter(folder_path, dest_path):
                     'metadata': {},
                     'destination':str(dest_path)
                 }
-                }
             }
-
+        }
 
         # Create the Client
         publishFlow = PublishRun()
@@ -42,4 +40,3 @@ def publish_iter(folder_path, dest_path):
         # action_id = flow['action_id']
         # publishFlow.progress(action_id)
      
-        

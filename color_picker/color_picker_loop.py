@@ -68,6 +68,7 @@ def wei_run_flow(wf_file_path, payload):
     #print(run_info)
     return run_info
 
+
 class ThreadWithReturnValue(Thread):
     
     def __init__(self, group=None, target=None, name=None,
@@ -83,6 +84,8 @@ class ThreadWithReturnValue(Thread):
     def join(self, *args):
         Thread.join(self, *args)
         return self._return
+    
+    
 def get_log_info(run_path, steps_run):
         lineiter=0
         print("starting")
@@ -111,6 +114,8 @@ def get_log_info(run_path, steps_run):
                 steps_run[i]["end_time"] = str(endtime)
                 steps_run[i]["duration"] = str(endtime-starttime)
         return steps_run, lineiter
+    
+    
 def get_wf_info(ptcl):
     steps_run = []
     with open(ptcl, 'r') as stream:
@@ -118,6 +123,8 @@ def get_wf_info(ptcl):
             for test in wf["flowdef"]:
                 steps_run.append(test)
     return steps_run
+
+
 def run(
     exp_type: str,
     target_color: List[float],
@@ -180,6 +187,7 @@ def run(
     start = datetime.now(
     )
     time_to_best = str(start - start)
+    
     while num_exps + pop_size <= exp_budget:
         steps_run = []
         log_line = 0
@@ -252,15 +260,14 @@ def run(
         t_steps_run, log_line = get_log_info(run_dir, t_steps_run)
         steps_run.append(t_steps_run)
         
-        
         #with open(run_info["run_dir"]/ "runLogger.log") as f:
         #        print(f.read())
         run_path =  run_info["run_dir"].parts[-1]
+
         if not (os.path.isdir(exp_folder / run_path)):
             os.mkdir(exp_folder / run_path)
         
         runs_list.append(run_info)
-        
 
         used_wells = (len(curr_wells_used))
         if used_wells + pop_size > MAX_PLATE_SIZE: #if we have used all wells or not enough for next iter (thrash plate, start from scratch)
@@ -274,7 +281,7 @@ def run(
             new_plate = True
             curr_wells_used = []
 
-        # analize image
+        # Analyze image
         # output should be list [pop_size, 3]   
         fname = "final_image.jpg" #image"+str(ot2_iter) +".jpg"
         img_path = run_info["run_dir"]/ "results" / fname
@@ -302,7 +309,6 @@ def run(
             wells_used.append(well)
             current_plate.append(color)
         
-        
         ## save those and the initial colors, etc
         if solver_name == "Aggressive Genetic Solver":
             plate_best_color_ind, plate_diffs = solver._find_best_color(current_plate, target_color, cur_best_color)
@@ -316,14 +322,9 @@ def run(
             cur_best_diff = plate_best_diff
             cur_best_color = plate_best_color
             time_to_best = str(datetime.now() - start)
-        
-
-
-        #again
-
 
         ##update numbers (seems redundant)
-      
+   
         current_iter += 1
         num_exps += pop_size
        
@@ -437,10 +438,12 @@ def run(
         publish_iter(exp_folder/"results", exp_folder)
         # if cur_best_diff < 15:
         #     break
+        
     #Trash plate after experiment
     iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':final_protocol,'payload':payload})
     iter_thread.run()
     shutil.copy2(run_info["run_dir"]/ "results"/"final_image.jpg",  (exp_folder/"results"/f"plate_{plate_n}.jpg"))
+    
     if show_visuals:
         import matplotlib.pyplot as plt
 
@@ -456,12 +459,12 @@ def run(
         plt.show()
         plt.savefig(exp_folder/"results" / "final_plot.png", dpi=300)
     
-    
     print("This is our best color so far")
     print(cur_best_color)
     print("Runs on this experiment")
     print(runs_list)
 
+    
 def parse_args():
     parser = ArgumentParser()
     parser.add_argument(

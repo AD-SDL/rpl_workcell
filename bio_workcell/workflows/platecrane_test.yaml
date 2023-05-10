@@ -26,10 +26,10 @@ flowdef:
     command: transfer
     args:
       source: "Solo.Position4"
-      target: "Hidex.Nest"
+      target: "HidexNest2"
       source_type: "module"
       target_type: "module"      
-      height_offset: "350"
+      height_offset: "359"
     checks: null
     comment: Place plate to Hidex Nest
 
@@ -37,11 +37,11 @@ flowdef:
     module: plateCrane
     command: transfer
     args:
-      source: "Hidex.Nest"
+      source: "HidexNest2"
       target: "SealerNest"
       source_type: "module"
       target_type: "module"  
-      height_offset: "350"
+      height_offset: "359"
     checks: null
     comment: Place plate to Sealer
 
@@ -72,21 +72,21 @@ flowdef:
     command: transfer
     args:
       source: "PeelerNest"
-      target: "Hidex.Nest"
+      target: "HidexNest2"
       source_type: "module"
       target_type: "module"  
-      height_offset: "350"
+      height_offset: "359"
     checks: null
     comment: Place plate in Hidex Nest
-
+  
   - name: Move plate from HidexNest to Stack1
     module: plateCrane
     command: transfer
     args:
-      source: "Hidex.Nest"
+      source: "HidexNest2"
       target: "Stack1"
       source_type: "module"
       target_type: "stack"   
-      height_offset: "350"
+      height_offset: "359"
     checks: null
     comment: Place plate into trash stack
