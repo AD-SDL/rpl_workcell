@@ -23,7 +23,7 @@ def publish_iter(folder_path, dest_path):
                     'dataset': str(folder_path.expanduser()),
                     'index': 'aefcecc6-e554-4f8c-a25b-147f23091944',
                     'project': 'reports',
-                    'source_collection': '6e245524-d967-11ed-9720-e54704575ba0',
+                    'source_collection': 'c6480a47-e864-11ed-9a66-83ef71fbf0ae',
                     'source_collection_basepath': '/',
                     'destination_collection': 'bb8d048a-2cad-4029-a9c7-671ec5d1f84d',
                     'metadata': {},

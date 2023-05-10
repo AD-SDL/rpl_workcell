@@ -304,7 +304,7 @@ if __name__ == "__main__":
     print(solver)
     print(target_ratio)
     print(exp_label)
-    run_args = {"target_color": target_ratio,
+    run_args = {"target_color": [120, 120, 120],
                 "solver" : solver,
                 "solver_name" : solver_name,
                 "exp_budget" : args.exp_budget,
