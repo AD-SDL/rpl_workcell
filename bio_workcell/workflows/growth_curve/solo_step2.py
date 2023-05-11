@@ -31,7 +31,7 @@ def generate_hso_file(
         media_start_column = payload['media_start_column']
         treatment_dil_half = payload['treatment_dil_half']
     except Exception as error_msg: 
-        # TODO
+        # TODO: how to handle this?
         raise error_msg
     
     # Locate treatment plate location and column

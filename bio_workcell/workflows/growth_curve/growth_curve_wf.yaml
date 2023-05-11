@@ -42,6 +42,7 @@ flowdef:
     args:
       hso_contents: payload.hso_1
       hso_num_lines: payload.hso_1_lines
+      hso_basename: payload.hso_1_basename
     checks: RESOURCE_CHECK
     comment: resource check not implemented, but will be
 
@@ -52,6 +53,7 @@ flowdef:
     args:
       hso_contents: payload.hso_2
       hso_num_lines: payload.hso_2_lines
+      hso_basename: payload.hso_2_basename
     checks: RESOURCE_CHECK
     comment: resource check not implemented, but will be
 
@@ -62,17 +64,9 @@ flowdef:
     args:
       hso_contents: payload.hso_3
       hso_num_lines: payload.hso_3_lines
+      hso_basename: payload.hso_3_basename
     checks: RESOURCE_CHECK
     comment: resource check not implemented, but will be
-
-  # # TEST
-  # - name: Mix Reactions
-  #   module: solo
-  #   command: run_protocol
-  #   args:
-  #     protocol_path: "C:\\Users\\svcaibio\\Dev\\hidex_module\\hidex_driver\\ahk\\test_hso\\test.hso"
-  #   checks: RESOURCE_CHECK
-  #   comment: resource check not implemented, but will be
 
   - name: Open Hidex
     module: hidex

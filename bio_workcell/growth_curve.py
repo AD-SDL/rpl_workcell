@@ -30,17 +30,22 @@ def main():
         }
 
     # from somewhere import create_hso? or directly the solo script
-    hso_1, hso_1_lines = package_hso(solo_step1.generate_hso_file, payload, "/home/rpl/wei_temp/solo_temp1.hso") 
-    hso_2, hso_2_lines = package_hso(solo_step2.generate_hso_file, payload, "/home/rpl/wei_temp/solo_temp2.hso")  
-    hso_3, hso_3_lines = package_hso(solo_step3.generate_hso_file, payload, "/home/rpl/wei_temp/solo_temp3.hso")  
+    hso_1, hso_1_lines, hso_1_basename = package_hso(solo_step1.generate_hso_file, payload, "/home/rpl/wei_temp/solo_temp1.hso") 
+    hso_2, hso_2_lines, hso_2_basename = package_hso(solo_step2.generate_hso_file, payload, "/home/rpl/wei_temp/solo_temp2.hso")  
+    hso_3, hso_3_lines, hso_3_basename = package_hso(solo_step3.generate_hso_file, payload, "/home/rpl/wei_temp/solo_temp3.hso")  
 
     # update payload with solo hso details
     payload['hso_1'] = hso_1
     payload['hso_1_lines'] = hso_1_lines
+    payload['hso_1_basename'] = hso_1_basename
+
     payload['hso_2'] = hso_2
     payload['hso_2_lines'] = hso_2_lines
+    payload['hso_2_basename'] = hso_2_basename
+
     payload['hso_3'] = hso_3
     payload['hso_3_lines'] = hso_3_lines
+    payload['hso_3_basename'] = hso_3_basename
 
     # #run Growth Create Plate
     run_info = wei_client.run_workflow(payload=payload)

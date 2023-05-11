@@ -11,18 +11,14 @@ def package_hso(
         create_hso_method,
         payload,
         temp_file_path,
-        
 ):
-    """package_hso_1
+    """package_hso
 
     Description: Calls method to create hso then reads contents into string and counts num lines
 
     Args:
         payload (_type_): _description_
-        temp_file_path (_type_): _description_
-
-    Raises:
-        TODO 
+        temp_file_path (_type_): _description_ 
 
     Returns:
         hso_contents: (str) contents of new hso file produced
@@ -32,21 +28,22 @@ def package_hso(
     try: 
         # generate hso file at temp file path
         create_hso_method(payload=payload, temp_file_path=temp_file_path)
-    except Exception as erorr_msg: 
-        # TODO 
+    except Exception as error_msg: 
+        # TODO: how to handle this?
         print("Could not create hso at specified temp file path")
         raise error_msg
 
     # extract text and number of lines from new hso file
     hso_contents = ""
     hso_num_lines = 0
+    hso_basename = os.path.basename(temp_file_path)
     try: 
         with open(temp_file_path, 'r') as hso: 
             for line in hso: 
                 hso_contents += line 
                 hso_num_lines += 1
     except Exception as error_msg:
-        # TODO
+        # TODO: how to handle this?
         print("Could not read in contents of new hso file")
         raise error_msg
     
@@ -60,5 +57,5 @@ def package_hso(
         # TODO
         raise error_msg
 
-    return hso_contents, hso_num_lines    
+    return hso_contents, hso_num_lines, hso_basename    
             
