@@ -14,6 +14,18 @@ modules:
   - name: camera
 
 flowdef:
+  - name: Move tip bin from Stack4 to Solo Position3
+    module: plateCrane
+    command: transfer
+    args:
+      source: "Stack4"
+      target: "Solo.Position3"
+      source_type: "stack"
+      target_type: "stack"
+      plate_type: "tip_box_lid_off"
+    checks: null
+    comment: Place plate in Solo Position4
+
   - name: Move plate from Stack5 to Solo Position4
     module: plateCrane
     command: transfer
@@ -22,6 +34,7 @@ flowdef:
       target: "Solo.Position4"
       source_type: "stack"
       target_type: "module"
+      plate_type: "96_well"
     checks: null
     comment: Place plate in Solo Position4
 
@@ -30,11 +43,40 @@ flowdef:
     command: remove_lid
     args:
       source: "Solo.Position4"
-      target: "LidNest3"
+      target: "LidNest2"
       plate_type: "96_well"
     checks: null
-    comment: Place plate in Solo Position4
+    comment: Place plate lid on lid nest 2
 
+  # # Run steps 1,2, and 3 of solo growth curve protocol
+  # # STEP 1
+  # - name: Mix Reactions
+  #   module: solo
+  #   command: run_protocol
+  #   args:
+  #     protocol_path: "C:\\labautomation\\instructions_wei\\Growth_Curve-wei-v1-1683313673\\plate0_step1.hso"
+  #   checks: RESOURCE_CHECK
+  #   comment: resource check not implemented, but will be
+
+  #     # STEP 2
+  # - name: Mix Reactions
+  #   module: solo
+  #   command: run_protocol
+  #   args:
+  #     protocol_path: "C:\\labautomation\\instructions_wei\\Growth_Curve-wei-v1-1683313673\\plate0_step2.hso"
+  #   checks: RESOURCE_CHECK
+  #   comment: resource check not implemented, but will be
+
+  # # STEP 3
+  # - name: Mix Reactions
+  #   module: solo
+  #   command: run_protocol
+  #   args:
+  #     protocol_path: "C:\\labautomation\\instructions_wei\\Growth_Curve-wei-v1-1683313673\\plate0_step3.hso"
+  #   checks: RESOURCE_CHECK
+  #   comment: resource check not implemented, but will be
+
+  # TEST
   - name: Mix Reactions
     module: solo
     command: run_protocol
@@ -58,7 +100,8 @@ flowdef:
       source: "Solo.Position4"
       target: "HidexNest2"
       source_type: "module"
-      target_type: "module"      
+      target_type: "module"   
+      plate_type: "96_well"   
       height_offset: "360"
     checks: null
     comment: Place plate to Hidex Nest
@@ -87,6 +130,7 @@ flowdef:
       target: "SealerNest"
       source_type: "module"
       target_type: "module"  
+      plate_type: "96_well"   
       height_offset: "360"
     checks: null
     comment: Place plate to Sealer
@@ -116,6 +160,7 @@ flowdef:
       target: "Liconic.Nest"
       source_type: "module"
       target_type: "stack"   
+      plate_type: "96_well"   
     checks: null
     comment: Place plate onto Liconic
 
@@ -161,6 +206,7 @@ flowdef:
       target: "PeelerNest"
       source_type: "stack"
       target_type: "module"   
+      plate_type: "96_well"   
     checks: null
     comment: Place plate onto PeelerNest
   
@@ -188,6 +234,7 @@ flowdef:
       target: "HidexNest2"
       source_type: "module"
       target_type: "module"  
+      plate_type: "96_well"   
       height_offset: "360"
     checks: null
     comment: Place plate in Hidex Nest
@@ -216,6 +263,7 @@ flowdef:
       target: "Stack1"
       source_type: "module"
       target_type: "stack"   
+      plate_type: "96_well"   
       height_offset: "360"
     checks: null
     comment: Place plate into trash stack
