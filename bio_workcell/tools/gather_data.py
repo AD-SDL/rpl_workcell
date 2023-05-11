@@ -1,4 +1,4 @@
-from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
+from gladier import GladierBaseTool, generate_flow_definition
 
 def gather_metadata(**data):
 

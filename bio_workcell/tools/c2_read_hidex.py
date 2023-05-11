@@ -1,5 +1,4 @@
-from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
-
+from gladier import GladierBaseTool, generate_flow_definition
 
 def excel_to_csv(**data):
     """
@@ -36,6 +35,4 @@ def excel_to_csv(**data):
 @generate_flow_definition
 class C2_read_hidex(GladierBaseTool):
     funcx_functions = [excel_to_csv]
-    required_input = [
-        'funcx_endpoint_compute'
-    ]
+    required_input = ['funcx_endpoint_compute']

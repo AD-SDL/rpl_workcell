@@ -1,5 +1,4 @@
-from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
-
+from gladier import GladierBaseTool, generate_flow_definition
 
 def c2_check_contam(**data):
     import pandas as pd
@@ -43,7 +42,4 @@ def c2_check_contam(**data):
 @generate_flow_definition
 class C2_check_contam(GladierBaseTool):
     funcx_functions = [c2_check_contam]
-    required_input = [
-       
-        'funcx_endpoint_compute'
-    ]
+    required_input = ['funcx_endpoint_compute']

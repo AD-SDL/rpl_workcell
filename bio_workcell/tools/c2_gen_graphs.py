@@ -1,4 +1,4 @@
-from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
+from gladier import GladierBaseTool, generate_flow_definition
 
 def c2_gen_graphs(**data):
     import matplotlib.pyplot as plt
@@ -91,7 +91,4 @@ def c2_gen_graphs(**data):
 @generate_flow_definition
 class C2_gen_graphs(GladierBaseTool):
     funcx_functions = [c2_gen_graphs]
-    required_input = [
-        
-        'funcx_endpoint_compute'
-    ]
+    required_input = ['funcx_endpoint_compute']
