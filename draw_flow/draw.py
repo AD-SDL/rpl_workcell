@@ -44,7 +44,7 @@ def draw_bold_text(x, y, text):
     draw.text((x, y), text, font=arial_bold, fill=black)
 
 def draw_my_text(x, y, A, B):
-    width = font.getlength(A)+text_offset
+    width = arial.getlength(A)+text_offset
     draw.text((x-width, y), A, font=arial, fill=black)
     draw.text((x, y), B, font=arial_bold, fill=black)
 
