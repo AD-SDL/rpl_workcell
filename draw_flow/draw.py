@@ -37,12 +37,11 @@ y_max = 0
 im = Image.new('RGB', (x_size, y_size), base_color)
 draw = ImageDraw.Draw(im)
 
-font = ImageFont.truetype('arial.ttf', fontsize)
 arial = ImageFont.truetype('arial.ttf', fontsize)
 arial_bold = ImageFont.truetype('arial-bold.ttf', fontsize)
 
 def draw_bold_text(x, y, text):
-    draw.text((x, y), text, font=font, fill=black)
+    draw.text((x, y), text, font=arial_bold, fill=black)
 
 def draw_my_text(x, y, A, B):
     width = font.getlength(A)+text_offset
@@ -54,7 +53,7 @@ def draw_my_text_normal(x, y, A):
 
 def draw_my_text_rectangle(x, y, text, color):
     # x0, y0, x1, y1
-    text_width = font.getlength(text)
+    text_width = arial.getlength(text)
     width = text_width+2*text_x_offset
     draw.rectangle((x, y, x+width, y+box_height), fill=color, outline=white)
     draw.text((x+text_x_offset, y+text_y_offset), text, font=arial, fill=black)
@@ -68,7 +67,7 @@ def draw_my_text_rectangle(x, y, text, color):
     
 def draw_my_text_rectangle_width(x, y, length, text, color):
     # x0, y0, x1, y1
-    text_width = font.getlength(text)
+    text_width = arial.getlength(text)
     width = text_width+2*text_x_offset
     text_start = length/2 - text_width/2
     draw.rectangle((x, y, x+length, y+box_height), fill=color, outline=white)
