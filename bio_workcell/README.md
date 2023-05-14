@@ -1,3 +1,11 @@
+# Picture
+
+Created with `python ../../draw_flow/draw.py -i demo.json -o demo.jpg`
+
+![application, as drawn by draw.py.](demo.jpg)
+
+
+
 # RPL Weekly Campaigns
 
 ## Initial setup 
