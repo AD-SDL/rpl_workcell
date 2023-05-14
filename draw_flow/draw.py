@@ -1,4 +1,4 @@
-# E.g., python draw.py -i color_picker.json -o i.pdf
+# E.g., python draw.py -i color_picker.json -o o.jpg
 
 from PIL import Image, ImageDraw, ImageFont, ImageColor
 import json, sys, argparse
@@ -40,17 +40,21 @@ draw = ImageDraw.Draw(im)
 arial = ImageFont.truetype('arial.ttf', fontsize)
 arial_bold = ImageFont.truetype('arial-bold.ttf', fontsize)
 
+
 def draw_bold_text(x, y, text):
     draw.text((x, y), text, font=arial_bold, fill=black)
 
+    
 def draw_my_text(x, y, A, B):
     width = arial.getlength(A)+text_offset
     draw.text((x-width, y), A, font=arial, fill=black)
     draw.text((x, y), B, font=arial_bold, fill=black)
 
+    
 def draw_my_text_normal(x, y, A):
     draw.text((x, y), A, font=arial, fill=black)
 
+    
 def draw_my_text_rectangle(x, y, text, color):
     # x0, y0, x1, y1
     text_width = arial.getlength(text)
@@ -64,7 +68,8 @@ def draw_my_text_rectangle(x, y, text, color):
     if x+width > x_max:
         x_max = x+width
     return((x, y, x+width, y+box_height))
-    
+  
+  
 def draw_my_text_rectangle_width(x, y, length, text, color):
     # x0, y0, x1, y1
     text_width = arial.getlength(text)
@@ -80,6 +85,7 @@ def draw_my_text_rectangle_width(x, y, length, text, color):
         x_max = x+length
     return((x, y, x+length, y+box_height))
 
+  
 def draw_header():
     draw_my_text(python_offset, 0, '', 'Python program')
     draw_my_text(workflow_offset, 0, 'runs', 'Workflow (YAML)')
@@ -89,6 +95,7 @@ def draw_header():
     global x_max
     x_max = protocol_offset + arial_bold.getlength('OT protocol specification') + text_x_offset
 
+    
 def arrow_from_to(from_box, to_box, color):
     (x_from_1, _, x_from_2, y_from) = from_box
     (x_to_1, y_to_1, _, y_to_2) = to_box
@@ -98,10 +105,7 @@ def arrow_from_to(from_box, to_box, color):
     draw.line( (x_start, y_end, x_to_1, y_end), fill=color, width=2)
     draw.polygon([(x_to_1,y_end), (x_to_1-arrow_size, y_end-arrow_size/2), (x_to_1-arrow_size, y_end+arrow_size/2)], fill=color)
 
-def draw_actions(actions):
-    for (t, y) in actions:
-        draw_my_text_rectangle(action_offset, y, t, red)
-
+    
 def draw_workflow(workflow, y_start):
     y_size = 0
     name = workflow['name']
@@ -124,8 +128,8 @@ def draw_workflow(workflow, y_start):
         y_size += box_height + box_sep
     return (name_box, y_size)
 
+  
 def process_file(spec_file, output_file):
-
     draw_header()
 
     f = open(spec_file, 'r')
@@ -144,7 +148,6 @@ def process_file(spec_file, output_file):
         y_location += y_size
 
     im_cropped = im.crop((0, 0, x_max, y_max))
-
     im_cropped.save(output_file, quality=95)
 
 
@@ -152,10 +155,9 @@ def main(argv):
     parser = argparse.ArgumentParser(description='Program to generate plots for WEI workflows')
     parser.add_argument('-i','--input', help='Input file name', required=True)
     parser.add_argument('-o', '--output', default="t.pdf", help='Output file name', required=True)
- 
     args = parser.parse_args()
-
     process_file(args.input, args.output)
+    
 
 if __name__ == "__main__":
    main(sys.argv[1:])
