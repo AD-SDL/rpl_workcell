@@ -17,9 +17,9 @@ def c2_gen_graphs(**data):
         plot_paths: a list of file paths to newly saved graphs in order of increasing data timepoint
     
     """
-    csv_file = data.get("proc_folder") +"/" + data.get('csv_file')
     plot_directory_path = data.get("proc_folder")
-    ba_csv_file =  data.get("proc_folder") + "/blank_adj_" + data.get('csv_file')
+    csv_file = os.path.join(plot_directory_path, data.get('csv_file'))
+    ba_csv_file =  os.path.join(plot_directory_path, "blank_adj_" + data.get('csv_file'))
     data_filename = data.get('csv_file').split('.')[0]
 #    blank_adj_df, data_filename, plot_directory_path
     plot_paths = []

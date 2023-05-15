@@ -20,7 +20,7 @@ def gather_metadata(**data):
 
     }
 
-    input_path = Path(data['make_input']).expanduser()
+    input_path = Path(data['proc_folder']).expanduser()
     datal = {}
     for file in os.listdir(input_path):
      if re.match(".*csv", file):
@@ -43,6 +43,5 @@ def gather_metadata(**data):
 class GatherMetaData(GladierBaseTool):
     funcx_functions = [gather_metadata]
     required_input = [
-        'make_input',
         'funcx_endpoint_compute'
     ]
