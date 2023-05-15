@@ -10,8 +10,8 @@ Our Hudson SOLO liquid handler was expanded to contain 8 deck positions, 7 of wh
 -  (TODO: link to SOLO module description)
 #### Deck Layout
 
+![Labware layout at start of growth curve protocol]https://github.com/AD-SDL/rpl_workcell/blob/main/bio_workcell/workflows/growth_curve/growth_curve_description/resources/figures/gc_layout_at_start.png
 - TODO: Diagram of deck locations
-- TODO: Diagram of resource layout at start
 - TODO: Photo of resource layout at start
 
 
