@@ -5,30 +5,32 @@ from c2_check_contam import C2_check_contam
 from c2_blank_adjust import C2_blank_adjust
 from c2_gen_graphs import C2_gen_graphs
 from gather_data import GatherMetaData
-from pathlib import Path
+import os
+
 @generate_flow_definition(modifiers={'publishv2_gather_metadata' : {'payload': '$.GatherMetadata.details.result[0]'}})
 class C2Flow(GladierBaseClient):
     globus_group = 'dda56f31-53d1-11ed-bd8b-0db7472df7d6'
     gladier_tools = [
-    #    'gladier_tools.globus.Transfer',
-    #     C2_read_hidex,
-    #     C2_check_contam,
-    #     C2_blank_adjust,
-    #     C2_gen_graphs,
+       'gladier_tools.globus.Transfer',
+        C2_read_hidex,
+        C2_check_contam,
+        C2_blank_adjust,
+        C2_gen_graphs,
         GatherMetaData,
        'gladier_tools.publish.Publishv2'
     ]
 
 def c2_flow(exp_name, plate_n,time, local_path, fname):
-        remote_folder = '/home/rpl/test/'
+        exp_label = exp_name + '_' + plate_n + '_' + time
+        remote_folder = os.path.join('/home/rpl/wei_runs/',exp_label)
         local_gcp = 'e69053b2-f02f-11ed-ba44-09d6a6f08166'
         local_funcx = 'b246dc22-4cc6-406f-bd44-3748b775f3bb'
         flow_input = {
             'input': {
                 'transfer_source_endpoint_id':'2f3968d6-d8a4-11ed-971f-e54704575ba0', #hudson ep
-                'transfer_source_path': local_path + fname,
+                'transfer_source_path': os.path.join(local_path,fname),
                 'transfer_destination_endpoint_id': local_gcp, #biopotts ep
-                'transfer_destination_path': remote_folder  + fname,
+                'transfer_destination_path': os.path.join(remote_folder,fname),
                 'transfer_recursive': False,
                 'funcx_endpoint_compute': local_funcx, #biopotts funcx
                 'funcx_endpoint_non_compute': local_funcx, #biopotts funcx
@@ -49,7 +51,7 @@ def c2_flow(exp_name, plate_n,time, local_path, fname):
                     'metadata': {},
                     'ingest_enabled': True,
                     'transfer_enabled':True,
-                    'destination':str("/portal/bio"),
+                    'destination': os.path.join("/portal/bio",exp_label),
                     'visible_to' : ['public']
                    }
                 }
@@ -66,7 +68,11 @@ def c2_flow(exp_name, plate_n,time, local_path, fname):
      
         
 if __name__ == "__main__":
-  local_path = "/C/labautomation/data_wei/proc/"
-  fname = "Campaign2_wei_(10)_20230501_143510.xlsx"
 
-  c2_flow("test_exp", 1, "time", local_path, fname)
+    local_path = "/C/labautomation/data_wei/proc/" #location on hudson
+    fname = "Campaign1_noIncubate2_20221013_150855.xlsx" #filename on hudson 
+    exp_name = "campaign_1_test"
+    plate_n = "plate"
+    time = "time"
+
+    c2_flow(exp_name, plate_n, time, local_path, fname)
