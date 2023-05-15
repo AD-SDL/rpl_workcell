@@ -51,7 +51,7 @@ def c2_flow(exp_name, plate_n,time, local_path, fname):
                     'metadata': {},
                     'ingest_enabled': True,
                     'transfer_enabled':True,
-                    'destination': os.path.join("/portal/bio",exp_label),
+                    'destination': "/portal/bio",
                     'visible_to' : ['public']
                    }
                 }
