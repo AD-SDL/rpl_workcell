@@ -10,14 +10,19 @@ Our Hudson SOLO liquid handler was expanded to contain 8 deck positions, 7 of wh
 -  (TODO: link to SOLO module description)
 #### Deck Layout
 
-<img src="https://github.com/AD-SDL/rpl_workcell/blob/main/bio_workcell/workflows/growth_curve/growth_curve_description/resources/figures/SOLO_deck_positions.png"  width="60%" height="60%" alt="SOLO deck positions with labels">
+<figure>
+<img src="https://github.com/AD-SDL/rpl_workcell/blob/main/bio_workcell/workflows/growth_curve/growth_curve_description/resources/figures/SOLO_deck_positions.png"  width="75%" height="75%" alt="SOLO deck positions with labels">
 
-<img src="https://github.com/AD-SDL/rpl_workcell/blob/main/bio_workcell/workflows/growth_curve/growth_curve_description/resources/figures/gc_layout_at_start.png"  width="60%" height="60%" alt="Labware layout at start of growth curve workflow">
+<figcaption align="center">Top-down view of SOLO deck positions 1 though 8</figcaption>
+</figure>
 
+<figure>
+<img src="https://github.com/AD-SDL/rpl_workcell/blob/main/bio_workcell/workflows/growth_curve/growth_curve_description/resources/figures/gc_layout_at_start.png"  width="75%" height="75%" alt="Labware layout at start of growth curve workflow">
 
+<figcaption align="center">Labware layout on SOLO at start of Growth Curve workflow</figcaption>
+</figure>
 
 - TODO: Photo of resource layout at start
-
 
 - Position 1: Media stock plate
     - Example labware: Thermo Scientific™ Abgene™ 96 Well 2.2mL Polypropylene Deepwell Storage Plate
