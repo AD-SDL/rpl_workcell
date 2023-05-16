@@ -14,6 +14,18 @@ modules:
   - name: camera
 
 flowdef:
+  - name: Move tip bin from Stack4 to Solo Position3
+    module: plateCrane
+    command: transfer
+    args:
+      source: "Stack4"
+      target: "Solo.Position3"
+      source_type: "stack"
+      target_type: "stack"
+      plate_type: "tip_box_lid_off"
+    checks: null
+    comment: Place plate in Solo Position4
+
   - name: Move plate from Stack5 to Solo Position4
     module: plateCrane
     command: transfer
@@ -21,7 +33,8 @@ flowdef:
       source: "Stack5"
       target: "Solo.Position4"
       source_type: "stack"
-      target_type: "module"
+      target_type: "stack"
+      plate_type: "96_well"
     checks: null
     comment: Place plate in Solo Position4
 
@@ -30,10 +43,10 @@ flowdef:
     command: remove_lid
     args:
       source: "Solo.Position4"
-      target: "LidNest3"
+      target: "LidNest2"
       plate_type: "96_well"
     checks: null
-    comment: Place plate in Solo Position4
+    comment: Place plate lid on lid nest 2
 
     # STEP 1
   - name: Mix Reactions
@@ -84,7 +97,7 @@ flowdef:
       target: "HidexNest2"
       source_type: "module"
       target_type: "module"      
-      height_offset: "360"
+      height_offset: "700"
     checks: null
     comment: Place plate to Hidex Nest
 
@@ -112,7 +125,7 @@ flowdef:
       target: "SealerNest"
       source_type: "module"
       target_type: "module"  
-      height_offset: "360"
+      height_offset: "650"
     checks: null
     comment: Place plate to Sealer
 
@@ -161,13 +174,13 @@ flowdef:
     checks: null
     comment: Stage pcr plates
    
-  # - name: Wait
-  #   module: local
-  #   command: wait
-  #   args: 
-  #     wait_time: "12:00:00"
-  #   checks: null
-  #   comment: Stage pcr plates
+  # # - name: Wait
+  # #   module: local
+  # #   command: wait
+  # #   args: 
+  # #     wait_time: "12:00:00"
+  # #   checks: null
+  # #   comment: Stage pcr plates
 
   - name: Unload Liconic
     module: liconic
@@ -213,7 +226,7 @@ flowdef:
       target: "HidexNest2"
       source_type: "module"
       target_type: "module"  
-      height_offset: "360"
+      height_offset: "700"
     checks: null
     comment: Place plate in Hidex Nest
 
@@ -241,7 +254,7 @@ flowdef:
       target: "Stack1"
       source_type: "module"
       target_type: "stack"   
-      height_offset: "360"
+      height_offset: "650"
     checks: null
     comment: Place plate into trash stack
 

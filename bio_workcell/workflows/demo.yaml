@@ -33,7 +33,7 @@ flowdef:
       source: "Stack5"
       target: "Solo.Position4"
       source_type: "stack"
-      target_type: "module"
+      target_type: "stack"
       plate_type: "96_well"
     checks: null
     comment: Place plate in Solo Position4
@@ -102,7 +102,7 @@ flowdef:
       source_type: "module"
       target_type: "module"   
       plate_type: "96_well"   
-      height_offset: "360"
+      height_offset: "700"
     checks: null
     comment: Place plate to Hidex Nest
 
@@ -131,7 +131,7 @@ flowdef:
       source_type: "module"
       target_type: "module"  
       plate_type: "96_well"   
-      height_offset: "360"
+      height_offset: "650"
     checks: null
     comment: Place plate to Sealer
 
@@ -235,7 +235,7 @@ flowdef:
       source_type: "module"
       target_type: "module"  
       plate_type: "96_well"   
-      height_offset: "360"
+      height_offset: "700"
     checks: null
     comment: Place plate in Hidex Nest
 
@@ -264,7 +264,7 @@ flowdef:
       source_type: "module"
       target_type: "stack"   
       plate_type: "96_well"   
-      height_offset: "360"
+      height_offset: "650"
     checks: null
     comment: Place plate into trash stack
 
