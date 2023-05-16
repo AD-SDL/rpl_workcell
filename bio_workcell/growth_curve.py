@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 from argparse import ArgumentParser
 from rpl_wei.wei_workcell_base import WEI
-# from .tools.publishv2 import publish_iter
+from .tools.c2_flow import c2_flow
 from pathlib import Path
 
 from workflows.growth_curve.hso_functions import package_hso
@@ -49,7 +49,7 @@ def main():
 
     # #run Growth Create Plate
     run_info = wei_client.run_workflow(payload=payload)
-    # print(run_info)
+    print(run_info)
     # # store plate_n, payload, and time into a db
     # # publish flow
     # # loop here

@@ -14,8 +14,9 @@ def excel_to_csv(**data):
     import pandas as pd
     import csv
 
-    filepath = data.get('local_path')
-    filename = data.get('proc_folder') + "/" +  data.get("remote_file")
+    filepath = data.get('proc_folder')
+    filename = data.get('file_name')
+    filename = os.path.join(filepath,filename)
     sheet_name = "Raw OD(590)"
     csv_filename = None
     if os.path.exists(filename):
