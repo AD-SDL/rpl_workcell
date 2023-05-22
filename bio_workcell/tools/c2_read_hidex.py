@@ -1,5 +1,4 @@
-from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
-
+from gladier import GladierBaseTool, generate_flow_definition
 
 def excel_to_csv(**data):
     """
@@ -15,8 +14,9 @@ def excel_to_csv(**data):
     import pandas as pd
     import csv
 
-    filepath = data.get('local_path')
-    filename = data.get('proc_folder') + "/" +  data.get("remote_file")
+    filepath = data.get('proc_folder')
+    filename = data.get('file_name')
+    filename = os.path.join(filepath,filename)
     sheet_name = "Raw OD(590)"
     csv_filename = None
     if os.path.exists(filename):
@@ -36,6 +36,4 @@ def excel_to_csv(**data):
 @generate_flow_definition
 class C2_read_hidex(GladierBaseTool):
     funcx_functions = [excel_to_csv]
-    required_input = [
-        'funcx_endpoint_compute'
-    ]
+    required_input = ['funcx_endpoint_compute']

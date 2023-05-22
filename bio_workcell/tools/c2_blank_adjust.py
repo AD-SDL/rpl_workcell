@@ -1,4 +1,4 @@
-from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
+from gladier import GladierBaseTool, generate_flow_definition
 
 def c2_blank_adjust(**data):
     import pandas as pd
@@ -70,7 +70,4 @@ def c2_blank_adjust(**data):
 @generate_flow_definition
 class C2_blank_adjust(GladierBaseTool):
     funcx_functions = [c2_blank_adjust]
-    required_input = [
-        
-        'funcx_endpoint_compute'
-    ]
+    required_input = ['funcx_endpoint_compute']

@@ -1,16 +1,17 @@
 from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
 
-from c2_read_hidex import C2_read_hidex
-from c2_check_contam import C2_check_contam
-from c2_blank_adjust import C2_blank_adjust
-from c2_gen_graphs import C2_gen_graphs
-from gather_data import GatherMetaData
-from pathlib import Path
+from tools.c2_read_hidex import C2_read_hidex
+from tools.c2_check_contam import C2_check_contam
+from tools.c2_blank_adjust import C2_blank_adjust
+from tools.c2_gen_graphs import C2_gen_graphs
+from tools.gather_data import GatherMetaData
+import os
+
 @generate_flow_definition(modifiers={'publishv2_gather_metadata' : {'payload': '$.GatherMetadata.details.result[0]'}})
 class C2Flow(GladierBaseClient):
     globus_group = 'dda56f31-53d1-11ed-bd8b-0db7472df7d6'
     gladier_tools = [
-       # 'gladier_tools.transfer.Transfer',
+       'gladier_tools.globus.Transfer',
         C2_read_hidex,
         C2_check_contam,
         C2_blank_adjust,
@@ -19,44 +20,40 @@ class C2Flow(GladierBaseClient):
        'gladier_tools.publish.Publishv2'
     ]
 
-def c2_flow(exp_name,plate_n,time, local_path, fname):
+def c2_flow(exp_name, plate_n,time, local_path, fname):
+        exp_label = exp_name + '_' + plate_n + '_' + time
+        remote_folder = os.path.join('/home/rpl/wei_runs/',exp_label)
+        local_gcp = 'e69053b2-f02f-11ed-ba44-09d6a6f08166'
+        local_funcx = 'b246dc22-4cc6-406f-bd44-3748b775f3bb'
         flow_input = {
             'input': {
-                'source_globus_endpoint':'c819ce5c-d3e4-11ed-a9ce-63ca5f6c6821', #hudson ep
-                'destination_globus_endpoint':'f9726362-96a7-11ed-b310-55098fa75e99', #ripchip ep
-                'funcx_endpoint_compute':'95038e17-339b-4462-9c9f-a8473809af25', #ripchip funcx
-                'funcx_endpoint_non_compute':'95038e17-339b-4462-9c9f-a8473809af25', #ripchip funcx
+                'transfer_source_endpoint_id':'9cb2966e-f8dc-11ed-9bb9-c9bb788c490e', #hudson ep
+                'transfer_source_path': os.path.join(local_path,fname),
+                'transfer_destination_endpoint_id': local_gcp, #biopotts ep
+                'transfer_destination_path': os.path.join(remote_folder,fname),
+                'transfer_recursive': False,
+                'funcx_endpoint_compute': local_funcx, #biopotts funcx
+                'funcx_endpoint_non_compute': local_funcx, #biopotts funcx
                 'exp_name':exp_name,
                 'plate_n':plate_n,
-                'make_input': local_path, #FIX
-                'local_path': local_path,
-                'remote_file': fname,
+                'proc_folder': remote_folder,
+                'file_name': fname,
                 'csv_file': fname.split('.')[0] +".csv",
                 'csv_file_corr': fname +"_corr.csv",
-                'proc_folder': str(Path(local_path) ),
                 'time':time,
                 'publishv2': {
-                    'dataset': local_path,
+                    'dataset': remote_folder,
                     'index': '4e2884b0-e585-4913-8a33-4be155ebb06c',
                     'project': 'bio',
-                    'source_collection': '1a11369a-d3eb-11ed-a9ce-63ca5f6c6821',
+                    'source_collection': local_gcp,
                     'source_collection_basepath': '/',
                     'destination_collection': 'bb8d048a-2cad-4029-a9c7-671ec5d1f84d',
                     'metadata': {},
                     'ingest_enabled': True,
                     'transfer_enabled':True,
-                    'destination':str("/portal/bio"),
+                    'destination': "/portal/bio",
                     'visible_to' : ['public']
                    }
-                # 'pilot': {
-                #     'dataset': str(folder_path.expanduser()),
-                #     'index': '4e2884b0-e585-4913-8a33-4be155ebb06c',
-                #     'project': 'bio',
-                #     'source_globus_endpoint': '95038e17-339b-4462-9c9f-a8473809af25',
-                #     'source_collection_basepath': '/',
-                #     'metadata': {},
-                #     'destination':str(dest_path)
-                #    }
                 }
             }
 
@@ -66,12 +63,16 @@ def c2_flow(exp_name,plate_n,time, local_path, fname):
         # Run the flow
         flow = publishFlow.run_flow(flow_input=flow_input,label=label)
         # Track progress
-        # action_id = flow['action_id']
-        # publishFlow.progress(action_id)
+        action_id = flow['action_id']
+        publishFlow.progress(action_id)
      
         
 if __name__ == "__main__":
-  local_path = "/home/tginsbu/workspace/rpl_workcell/bio_workcell/demo_data/example_report"
-  fname = "Campaign1_noIncubate2_20221201_160907.xlsx"
 
-  c2_flow("test_exp", 1, "time", local_path, fname)
+    local_path = "/C/labautomation/data_wei/proc/" #location on hudson
+    fname = "Campaign1_noIncubate2_20221013_150855.xlsx" #filename on hudson 
+    exp_name = "campaign_1_test"
+    plate_n = "plate"
+    time = "time"
+
+    c2_flow(exp_name, plate_n, time, local_path, fname)
