@@ -1,0 +1,32 @@
+metadata:
+  name: PCR - Workflow
+  author: Casey Stone, Rafael Vescovi
+  info: Initial PCR workflow for RPL workcell
+  version: 0.1
+
+workcell: /home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_workcell.yaml
+
+modules:
+  - name: MiR_base
+
+flowdef:
+  - name: test_get
+    module: MiR_base
+    command: Get
+    args:
+      type: Get
+      endpoint: missions
+
+  - name: hidex_close
+    module: hidex
+    command: close
+    args:
+      prog: 1
+
+  - name: run_assay
+    module: hidex
+    command: run_assay
+    args:
+      assay_name: "WEI_TEST"
+          
+  
