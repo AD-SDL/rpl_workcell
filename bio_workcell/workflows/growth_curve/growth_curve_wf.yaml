@@ -48,40 +48,36 @@ flowdef:
     checks: null
     comment: Place plate lid on lid nest 2
 
-  # # Run steps 1,2, and 3 of solo growth curve protocol
-  # # STEP 1
-  # - name: Mix Reactions
-  #   module: solo
-  #   command: run_protocol
-  #   args:
-  #     protocol_path: "C:\\labautomation\\instructions_wei\\Growth_Curve-wei-v1-1683313673\\plate0_step1.hso"
-  #   checks: RESOURCE_CHECK
-  #   comment: resource check not implemented, but will be
-
-  #     # STEP 2
-  # - name: Mix Reactions
-  #   module: solo
-  #   command: run_protocol
-  #   args:
-  #     protocol_path: "C:\\labautomation\\instructions_wei\\Growth_Curve-wei-v1-1683313673\\plate0_step2.hso"
-  #   checks: RESOURCE_CHECK
-  #   comment: resource check not implemented, but will be
-
-  # # STEP 3
-  # - name: Mix Reactions
-  #   module: solo
-  #   command: run_protocol
-  #   args:
-  #     protocol_path: "C:\\labautomation\\instructions_wei\\Growth_Curve-wei-v1-1683313673\\plate0_step3.hso"
-  #   checks: RESOURCE_CHECK
-  #   comment: resource check not implemented, but will be
-
-  # TEST
+    # STEP 1
   - name: Mix Reactions
     module: solo
     command: run_protocol
     args:
-      protocol_path: "C:\\Users\\svcaibio\\Dev\\hidex_module\\hidex_driver\\ahk\\test_hso\\test.hso"
+      hso_contents: payload.hso_1
+      hso_num_lines: payload.hso_1_lines
+      hso_basename: payload.hso_1_basename
+    checks: RESOURCE_CHECK
+    comment: resource check not implemented, but will be
+
+    # STEP 2
+  - name: Mix Reactions
+    module: solo
+    command: run_protocol
+    args:
+      hso_contents: payload.hso_2
+      hso_num_lines: payload.hso_2_lines
+      hso_basename: payload.hso_2_basename
+    checks: RESOURCE_CHECK
+    comment: resource check not implemented, but will be
+
+    # STEP 3
+  - name: Mix Reactions
+    module: solo
+    command: run_protocol
+    args:
+      hso_contents: payload.hso_3
+      hso_num_lines: payload.hso_3_lines
+      hso_basename: payload.hso_3_basename
     checks: RESOURCE_CHECK
     comment: resource check not implemented, but will be
 
@@ -100,8 +96,7 @@ flowdef:
       source: "Solo.Position4"
       target: "HidexNest2"
       source_type: "module"
-      target_type: "module"   
-      plate_type: "96_well"   
+      target_type: "module"      
       height_offset: "700"
     checks: null
     comment: Place plate to Hidex Nest
@@ -130,7 +125,6 @@ flowdef:
       target: "SealerNest"
       source_type: "module"
       target_type: "module"  
-      plate_type: "96_well"   
       height_offset: "650"
     checks: null
     comment: Place plate to Sealer
@@ -160,7 +154,6 @@ flowdef:
       target: "Liconic.Nest"
       source_type: "module"
       target_type: "stack"   
-      plate_type: "96_well"   
     checks: null
     comment: Place plate onto Liconic
 
@@ -180,14 +173,14 @@ flowdef:
       shaker_speed: payload.shaker_speed
     checks: null
     comment: Stage pcr plates
-
-  # - name: Wait
-  #   module: local
-  #   command: wait
-  #   args: 
-  #     wait_time: "12:00:00"
-  #   checks: null
-  #   comment: Stage pcr plates
+   
+  # # - name: Wait
+  # #   module: local
+  # #   command: wait
+  # #   args: 
+  # #     wait_time: "12:00:00"
+  # #   checks: null
+  # #   comment: Stage pcr plates
 
   - name: Unload Liconic
     module: liconic
@@ -206,7 +199,6 @@ flowdef:
       target: "PeelerNest"
       source_type: "stack"
       target_type: "module"   
-      plate_type: "96_well"   
     checks: null
     comment: Place plate onto PeelerNest
   
@@ -234,7 +226,6 @@ flowdef:
       target: "HidexNest2"
       source_type: "module"
       target_type: "module"  
-      plate_type: "96_well"   
       height_offset: "700"
     checks: null
     comment: Place plate in Hidex Nest
@@ -263,7 +254,6 @@ flowdef:
       target: "Stack1"
       source_type: "module"
       target_type: "stack"   
-      plate_type: "96_well"   
       height_offset: "650"
     checks: null
     comment: Place plate into trash stack
@@ -275,19 +265,3 @@ flowdef:
       foo: "bar"
     checks: null
     comment: Close Hidex Gate
-
-  # - name: Move to camera_module
-  #   module: plateEx
-  #   command: transfer
-  #   args:
-  #     source: peeler.positions.default
-  #     target: camera_module.positions.plate_station
-  #     source_plate_rotation: narrow
-  #     target_plate_rotation: narrow
-
-  # - name: Take Picture
-  #   module: camera_module
-  #   command: take_picture
-  #   args:
-  #     save_location: local_run_results
-  #     file_name: "final_image.jpg"

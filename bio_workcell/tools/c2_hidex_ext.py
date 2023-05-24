@@ -1,6 +1,4 @@
-from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
-
-
+from gladier import GladierBaseTool, generate_flow_definition
 
 def c2_hidex_ext(**data):
     import pandas as pd
@@ -56,6 +54,4 @@ def c2_hidex_ext(**data):
 @generate_flow_definition
 class C2_parse_hidex(GladierBaseTool):
     funcx_functions = [c2_hidex_ext]
-    required_input = [
-        'funcx_endpoint_compute'
-    ]
+    required_input = ['funcx_endpoint_compute']

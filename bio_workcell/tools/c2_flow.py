@@ -34,6 +34,13 @@ def c2_flow(exp_name, plate_n,time, local_path, fname):
                 'transfer_recursive': False,
                 'funcx_endpoint_compute': local_funcx, #biopotts funcx
                 'funcx_endpoint_non_compute': local_funcx, #biopotts funcx
+                'transfer_source_endpoint_id':'2f3968d6-d8a4-11ed-971f-e54704575ba0', #hudson ep
+                'transfer_source_path': os.path.join(local_path,fname),
+                'transfer_destination_endpoint_id': local_gcp, #biopotts ep
+                'transfer_destination_path': os.path.join(remote_folder,fname),
+                'transfer_recursive': False,
+                'funcx_endpoint_compute': local_funcx, #biopotts funcx
+                'funcx_endpoint_non_compute': local_funcx, #biopotts funcx
                 'exp_name':exp_name,
                 'plate_n':plate_n,
                 'proc_folder': remote_folder,

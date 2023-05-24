@@ -10,6 +10,18 @@ modules:
   - name: plateCrane
 
 flowdef:
+  - name: Move tip bin from Stack4 to Solo Position3
+    module: plateCrane
+    command: transfer
+    args:
+      source: "Stack4"
+      target: "Solo.Position3"
+      source_type: "stack"
+      target_type: "stack"
+      plate_type: "tip_box_lid_off"
+    checks: null
+    comment: Place plate in Solo Position4
+
   - name: Move plate from Stack5 to Solo Position4
     module: plateCrane
     command: transfer
@@ -17,9 +29,20 @@ flowdef:
       source: "Stack5"
       target: "Solo.Position4"
       source_type: "stack"
-      target_type: "module"
+      target_type: "stack"
+      plate_type: "96_well"
     checks: null
     comment: Place plate in Solo Position4
+
+  - name: Remove lid
+    module: plateCrane
+    command: remove_lid
+    args:
+      source: "Solo.Position4"
+      target: "LidNest2"
+      plate_type: "96_well"
+    checks: null
+    comment: Place plate lid on lid nest 2
 
   - name: Move plate from Solo Position4 to Hidex Nest
     module: plateCrane
@@ -28,10 +51,12 @@ flowdef:
       source: "Solo.Position4"
       target: "HidexNest2"
       source_type: "module"
-      target_type: "module"      
-      height_offset: "360"
+      target_type: "module"   
+      plate_type: "96_well"   
+      height_offset: "700"
     checks: null
     comment: Place plate to Hidex Nest
+
 
   - name: Move plate from HidexNest to Sealer
     module: plateCrane
@@ -41,9 +66,11 @@ flowdef:
       target: "SealerNest"
       source_type: "module"
       target_type: "module"  
-      height_offset: "360"
+      plate_type: "96_well"   
+      height_offset: "650"
     checks: null
     comment: Place plate to Sealer
+
 
   - name: Move plate from Sealer to Liconic
     module: plateCrane
@@ -53,9 +80,10 @@ flowdef:
       target: "Liconic.Nest"
       source_type: "module"
       target_type: "stack"   
+      plate_type: "96_well"   
     checks: null
     comment: Place plate onto Liconic
-
+ 
   - name: Move plate from Liconic to Peeler
     module: plateCrane
     command: transfer
@@ -64,6 +92,7 @@ flowdef:
       target: "PeelerNest"
       source_type: "stack"
       target_type: "module"   
+      plate_type: "96_well"   
     checks: null
     comment: Place plate onto PeelerNest
   
@@ -75,10 +104,12 @@ flowdef:
       target: "HidexNest2"
       source_type: "module"
       target_type: "module"  
-      height_offset: "360"
+      plate_type: "96_well"   
+      height_offset: "700"
     checks: null
     comment: Place plate in Hidex Nest
-  
+
+
   - name: Move plate from HidexNest to Stack1
     module: plateCrane
     command: transfer
@@ -87,6 +118,7 @@ flowdef:
       target: "Stack1"
       source_type: "module"
       target_type: "stack"   
-      height_offset: "360"
+      plate_type: "96_well"   
+      height_offset: "650"
     checks: null
     comment: Place plate into trash stack

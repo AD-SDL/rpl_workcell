@@ -95,7 +95,7 @@ flowdef:
     module: biometra
     command: run_program
     args:
-        program_n: 2
+        program_n: 3
     checks: null
     comment: null
 

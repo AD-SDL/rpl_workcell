@@ -10,23 +10,53 @@ modules:
   - name: MiR_base
 
 flowdef:
-  - name: test_get
+  - name: test_move
     module: MiR_base
-    command: Get
+    command: Post
     args:
-      type: Get
-      endpoint: missions
-
-  - name: hidex_close
-    module: hidex
-    command: close
+      type: Post
+      endpoint: mission_queue
+      payload: {"mission_id": "mirconst-guid-0000-0003-actionlist00",
+                "message": "string",
+                "parameters": [
+                  {
+                    "id": "X",
+                    "value": 9.55,
+                    "label": "9.55"
+                  },
+                  {
+                    "id": "Y",
+                    "value": 20.15,
+                    "label": "20.15"
+                  },
+                  {
+                    "id": "Orientation",
+                    "value": -96.34019175,
+                    "label": "-96.34019175"
+                  }
+                ],
+                "priority": 0,
+                
+                "description": ""
+               }
+  - name: test_start
+    module: MiR_base
+    command: Post
     args:
-      prog: 1
-
-  - name: run_assay
-    module: hidex
-    command: run_assay
-    args:
-      assay_name: "WEI_TEST"
+      type: Post
+      endpoint: mission_queue
+      payload: {"mission_id": "mirconst-guid-0000-0004-actionlist00",
+                "message": "string",
+                "parameters": [
+                  {
+                    "id": "chargingStationPosition",
+                    "value": "b3a0a8f9-8b49-11ed-8c1e-00012978ed57",
+                    "label": "Charger1"
+                  }
+                ],
+                "priority": 0,
+                
+                "description": ""
+               }
           
   
