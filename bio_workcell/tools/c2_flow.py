@@ -1,10 +1,10 @@
 from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
 
-from c2_read_hidex import C2_read_hidex
-from c2_check_contam import C2_check_contam
-from c2_blank_adjust import C2_blank_adjust
-from c2_gen_graphs import C2_gen_graphs
-from gather_data import GatherMetaData
+from tools.c2_read_hidex import C2_read_hidex
+from tools.c2_check_contam import C2_check_contam
+from tools.c2_blank_adjust import C2_blank_adjust
+from tools.c2_gen_graphs import C2_gen_graphs
+from tools.gather_data import GatherMetaData
 import os
 
 @generate_flow_definition(modifiers={'publishv2_gather_metadata' : {'payload': '$.GatherMetadata.details.result[0]'}})
@@ -27,6 +27,13 @@ def c2_flow(exp_name, plate_n,time, local_path, fname):
         local_funcx = 'b246dc22-4cc6-406f-bd44-3748b775f3bb'
         flow_input = {
             'input': {
+                'transfer_source_endpoint_id':'9cb2966e-f8dc-11ed-9bb9-c9bb788c490e', #hudson ep
+                'transfer_source_path': os.path.join(local_path,fname),
+                'transfer_destination_endpoint_id': local_gcp, #biopotts ep
+                'transfer_destination_path': os.path.join(remote_folder,fname),
+                'transfer_recursive': False,
+                'funcx_endpoint_compute': local_funcx, #biopotts funcx
+                'funcx_endpoint_non_compute': local_funcx, #biopotts funcx
                 'transfer_source_endpoint_id':'2f3968d6-d8a4-11ed-971f-e54704575ba0', #hudson ep
                 'transfer_source_path': os.path.join(local_path,fname),
                 'transfer_destination_endpoint_id': local_gcp, #biopotts ep

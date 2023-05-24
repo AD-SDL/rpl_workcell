@@ -79,7 +79,8 @@ modules:
     config:
       ros_node: "/std_ns/ot2_cp_gamma"             
     positions:                                                    
-      deck2: [161.481, 60.986, 88.774, 657.358, 124.091, -951.510]
+      deck2: [156, 66.112, 83.90, 656.404, 119.405, -946.818]
+      
 
   - name: biometra
     type: wei_ros_node
@@ -96,6 +97,35 @@ modules:
     positions:
       plate_station: [90.597,26.416, 66.422, 714.811, 81.916, 995.074]
 
+  - name: hidex
+    type: wei_tcp_node
+    model: Hidex
+    config:
+      tcp_address: "146.137.240.22"
+      tcp_port: 2000
+    positions:
+      default: []
+  - name: MiR_base
+    type: wei_rest_node
+    model: MiR250
+    config:
+      url: "http://mirbase1.cels.anl.gov/api/v2.0.0/"
+      auth: "/home/rpl/Documents/mirauth.txt"
+    positions:
+     default: []
+  # - name: hidex
+  #   type: wei_ros_node
+  #   model: hidex
+  #   config:
+  #     ros_node: hidex rosnode
+  #   positions:
+  #     default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+  # - name: ur5
+  #   type: wei_ros_node
+  #   model: ur5
+  #   config:
+  #     ros_node: '/ur5_client/UR5_Client_Node'
   - name: ur5
     type: wei_ros_node
     model: ur5
