@@ -35,9 +35,13 @@ from tools.calibrate import calibrate
 #For constructing the plots for each run
 from tools.create_visuals import create_visuals, create_target_plate
 
+from rpl_wei.experiment import Experiment
 #DEF TODO:what does it mean?
 MAX_PLATE_SIZE = 96
-    
+ 
+
+   
+   
 def run(
     exp_type: str,
     exp_label: str = "",
@@ -66,7 +70,7 @@ def run(
     init_protocol = wf_dir / 'cp_wf_newplate.yaml'
     loop_protocol = wf_dir / 'cp_wf_mixcolor.yaml'
     final_protocol = wf_dir / 'cp_wf_trashplate.yaml'
-        
+    
     #Constants
     solver_out_dim = (pop_size, 3)
     use_funcx = False
@@ -82,6 +86,7 @@ def run(
         os.mkdir(exp_folder)
     if not (os.path.isdir(exp_folder/"results")):
         os.mkdir(exp_folder/"results") 
+    exp = Experiment('127.0.0.1', '8000', 'Color_Picker')
     
     #Resource Tracking:
     plate_n=1 #total number of plates
@@ -112,13 +117,13 @@ def run(
         #grab new plate if experiment starting or current plate is full
         if new_plate or current_iter==0:
             print('Grabbing New Plate')
-            steps_run, _ = run_flow(init_protocol, payload, steps_run)
+            steps_run, _ = run_flow(init_protocol, payload, steps_run, exp)
             curr_wells_used = []
             new_plate = False
             
             if current_iter == 0:
                 #Run the calibration protocol that gets the colors being mixed and ensures the target color is within the possible color space
-                colors, target_color, curr_wells_used, steps_run = calibrate(target_color, curr_wells_used, loop_protocol, exp_folder, plate_max_volume, steps_run, pop_size)
+                colors, target_color, curr_wells_used, steps_run = calibrate(target_color, curr_wells_used, loop_protocol, exp_folder, plate_max_volume, steps_run, pop_size, exp)
             else:
             #save the old plate picture and increment to a new plate
                filename = "plate_"+ str(plate_n)+".jpg"
@@ -147,7 +152,7 @@ def run(
             payload['use_existing_resources'] = True 
         
         #Run the flow to mix all of the colors 
-        steps_run, run_info = run_flow(loop_protocol, payload, steps_run)
+        steps_run, run_info = run_flow(loop_protocol, payload, steps_run, exp)
         run_path =  run_info["run_dir"].parts[-1]
         if not (os.path.isdir(exp_folder / run_path)):
             os.mkdir(exp_folder / run_path)
@@ -155,7 +160,7 @@ def run(
         used_wells = (len(curr_wells_used))
         if used_wells + pop_size > MAX_PLATE_SIZE: #if we have used all wells or not enough for next iter (thrash plate, start from scratch)
             print('Trashing Used Plate')
-            steps_run, _ = run_flow(final_protocol, payload, steps_run)
+            steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
             new_plate = True
             curr_wells_used = []
 
@@ -254,7 +259,7 @@ def run(
         
     #Trash plate after experiment
     shutil.copy2(run_info["run_dir"]/ "results"/"plate_only.jpg",  (exp_folder/"results"/f"plate_{plate_n}.jpg"))
-    steps_run, _ = run_flow(final_protocol, payload, steps_run)
+    steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
     
     print("This is our best color so far")
     print(cur_best_color)
