@@ -35,7 +35,7 @@ from tools.run_flow import run_flow
 # #For constructing the plots for each run
 # from tools.create_visuals import create_visuals, create_target_plate
 
-from rpl_wei.experiment import Experiment
+from rpl_wei import Experiment
 #DEF TODO:what does it mean?
 MAX_PLATE_SIZE = 96
  
