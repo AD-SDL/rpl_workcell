@@ -13,7 +13,8 @@ def calibrate(target_color: List[int],
               exp_folder: Path, 
               plate_max_volume: float,
               steps_run: List[Dict[str, Any]],
-              pop_size: int
+              pop_size: int,
+              experiment: Any,
               )-> Tuple[List[List[int]], List[int], List[str], List[Dict[str, Any]]]:
     """Performs a calibration run of the color picker system
 @Inputs: 
@@ -29,7 +30,7 @@ def calibrate(target_color: List[int],
     plate_volumes = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1], np.array(target_color)/sum(target_color)])*plate_max_volume
     payload, curr_wells_used = convert_volumes_to_payload(plate_volumes, curr_wells_used)
     payload['use_existing_resources'] = False 
-    steps_run, run_info = run_flow(loop_protocol, payload, steps_run) 
+    steps_run, run_info = run_flow(loop_protocol, payload, steps_run, experiment) 
     fname = "final_image.jpg" #image"+str(ot2_iter) +".jpg"
     img_path = run_info["run_dir"]/ "results" / fname
     plate_colors_ratios = get_colors_from_file(img_path)[1]

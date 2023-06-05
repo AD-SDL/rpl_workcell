@@ -1,9 +1,10 @@
 import yaml
 import os
 from datetime import datetime
-
+from pathlib import Path
 def get_log_info(run_path, ptcl):
         lineiter=0
+        run_path = Path(run_path)
         steps_run = []
         with open(ptcl, 'r') as stream:
                 wf = yaml.safe_load(stream)
