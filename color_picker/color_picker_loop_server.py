@@ -9,45 +9,50 @@ import numpy as np
 import os, shutil
 
 #For extracting colors from each plate
-from tools.plate_color_analysis import get_colors_from_file
+# from tools.plate_color_analysis import get_colors_from_file
 
-#Different possible solvers for the color_picker problem
-from solvers.bayes_solver import BayesColorSolver
-from solvers.evolutionary_solver import EvolutionaryColorSolver
-from solvers.aggressive_genetic_solver import AggroColorSolver
-from funcx import FuncXExecutor
+# #Different possible solvers for the color_picker problem
+# from solvers.bayes_solver import BayesColorSolver
+# from solvers.evolutionary_solver import EvolutionaryColorSolver
+# from solvers.aggressive_genetic_solver import AggroColorSolver
+# from funcx import FuncXExecutor
 
-from datetime import datetime
+# from datetime import datetime
 
-#For publishing to RPL Portal
-from tools.publish_v2 import publish_iter
+# #For publishing to RPL Portal
+# from tools.publish_v2 import publish_iter
 
-#For creating a payload that the OT2 will accept from the solver output
-from tools.color_utils import convert_volumes_to_payload
+# #For creating a payload that the OT2 will accept from the solver output
+# from tools.color_utils import convert_volumes_to_payload
 
 #For running WEI flows
 from tools.run_flow import run_flow
 
-#for measuring the three mixed colors for calibration and for 
-# ensuring the target color is in the right color space
-from tools.calibrate import calibrate
+# #for measuring the three mixed colors for calibration and for 
+# # ensuring the target color is in the right color space
+# from tools.calibrate import calibrate
 
-#For constructing the plots for each run
-from tools.create_visuals import create_visuals, create_target_plate
+# #For constructing the plots for each run
+# from tools.create_visuals import create_visuals, create_target_plate
 
 from rpl_wei.experiment import Experiment
 #DEF TODO:what does it mean?
 MAX_PLATE_SIZE = 96
  
-
-   
-   
+def test_run():
+    exp = Experiment('127.0.0.1', '8000', 'Color_Picker')
+    exp.register_exp()
+    exp.start_loop("Main Loop")
+    for i in range(1, 5):
+        steps_run, _ = run_flow(Path("./workflows/test_wf.yaml"), {}, [], exp)
+        exp.loop_check("i < 4", i < 4)
+    exp.end_loop()
 def run(
     exp_type: str,
     exp_label: str = "",
     exp_path: str = "",
     target_color: List[float] = [],
-    solver: BayesColorSolver = BayesColorSolver,
+    #solver: BayesColorSolver = BayesColorSolver,
     solver_name: str = "Evolutionary Solver",
     exp_budget: int = MAX_PLATE_SIZE * 3,
     pop_size: int = MAX_PLATE_SIZE,
@@ -118,6 +123,7 @@ def run(
         if new_plate or current_iter==0:
             print('Grabbing New Plate')
             steps_run, _ = run_flow(init_protocol, payload, steps_run, exp)
+            return
             curr_wells_used = []
             new_plate = False
             
@@ -283,39 +289,40 @@ def parse_args():
     return parser.parse_args()
 
 if __name__ == "__main__":
+    test_run()
+    
+    # #parser
+    # args = parse_args()
 
-    #parser
-    args = parse_args()
+    # #target color
+    # target_ratio = eval(args.target)
 
-    #target color
-    target_ratio = eval(args.target)
-
-    exp_label = "ColorPicker_" + str(target_ratio[0]) +"_" + str(target_ratio[1]) + "_" +  str(target_ratio[2]) + "_" + str(datetime.date(datetime.now()))
-    exp_path = '/home/rpl/experiments'
-    exp_type = 'color_picker'
-    if args.solver:
-            if args.solver == "Bay":
-                solver = BayesColorSolver
-                solver_name = "Bayesian Solver"
-            elif args.solver == "Evo":
-                solver_name = "Evolutionary Solver"
-                solver = EvolutionaryColorSolver
-            elif args.solver == "Agg":
-                solver = AggroColorSolver
-                solver_name = "Aggressive Genetic Solver"
-    else:
-        solver = EvolutionaryColorSolver
-        solver_name = "Evolutionary Solver"
-    print(solver)
-    print(target_ratio)
-    print(exp_label)
-    run_args = {"target_color": [120, 120, 120],
-                "solver" : solver,
-                "solver_name" : solver_name,
-                "exp_budget" : args.exp_budget,
-                "pop_size": args.pop_size,
-                "plate_max_volume": args.plate_max_volume,
-                "exp_label": exp_label,
-                "exp_path": exp_path,
-                "exp_type": exp_type}
-    run(**run_args)
+    # exp_label = "ColorPicker_" + str(target_ratio[0]) +"_" + str(target_ratio[1]) + "_" +  str(target_ratio[2]) + "_" + str(datetime.date(datetime.now()))
+    # exp_path = '/home/rpl/experiments'
+    # exp_type = 'color_picker'
+    # if args.solver:
+    #         if args.solver == "Bay":
+    #             solver = BayesColorSolver
+    #             solver_name = "Bayesian Solver"
+    #         elif args.solver == "Evo":
+    #             solver_name = "Evolutionary Solver"
+    #             solver = EvolutionaryColorSolver
+    #         elif args.solver == "Agg":
+    #             solver = AggroColorSolver
+    #             solver_name = "Aggressive Genetic Solver"
+    # else:
+    #     solver = EvolutionaryColorSolver
+    #     solver_name = "Evolutionary Solver"
+    # print(solver)
+    # print(target_ratio)
+    # print(exp_label)
+    # run_args = {"target_color": [120, 120, 120],
+    #             "solver" : solver,
+    #             "solver_name" : solver_name,
+    #             "exp_budget" : args.exp_budget,
+    #             "pop_size": args.pop_size,
+    #             "plate_max_volume": args.plate_max_volume,
+    #             "exp_label": exp_label,
+    #             "exp_path": exp_path,
+    #             "exp_type": exp_type}
+    # run(**run_args)
