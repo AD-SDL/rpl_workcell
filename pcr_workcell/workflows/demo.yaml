@@ -7,12 +7,13 @@ metadata:
 workcell: /home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_workcell.yaml
 
 modules:
-  - name: ot2_pcr_beta
+  - name: ot2_pcr_alpha
   - name: pf400
   - name: peeler
   - name: sealer
   - name: biometra
   - name: sciclops
+  - name: camera
 
 flowdef:
   - name: PCR Plate Exchange
@@ -35,20 +36,21 @@ flowdef:
     comment: Place plate in ot2
 
   - name: Mix OT2 reactions
-    module: ot2_pcr_beta
+    module: ot2_pcr_alpha
     command: run_protocol
     args:
-      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/ot2_beta_test_first.yaml
+      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/PCR_prep_full_plate_multi_noresource.yaml
+      use_existing_resources: False
     checks: RESOURCE_CHECK
     comment: resource check not implemented, but will be
 
-  - name: Mix OT2 reactions
-    module: ot2_pcr_beta
-    command: run_protocol
-    args:
-      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/ot2_beta_test_second.yaml
-    checks: RESOURCE_CHECK
-    comment: resource check not implemented, but will be
+  # - name: Mix OT2 reactions
+  #   module: ot2_pcr_alpha
+  #   command: run_protocol
+  #   args:
+  #     config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/ot2_beta_test_second.yaml
+  #   checks: RESOURCE_CHECK
+  #   comment: resource check not implemented, but will be
 
   - name: Move from OT2 to sealer
     module: pf400
@@ -81,6 +83,30 @@ flowdef:
     checks: null
     comment: null
 
+  - name: Close lid Thermocycler
+    module: biometra
+    command: close_lid
+    args:
+        test: null
+    checks: null
+    comment: null
+
+  - name: Run Thermocycler Program
+    module: biometra
+    command: run_program
+    args:
+        program_n: 3
+    checks: null
+    comment: null
+
+  - name: Open lid Thermocycler
+    module: biometra
+    command: open_lid
+    args:
+        test: null
+    checks: null
+    comment: null
+    
   - name: Move from Thermocycler to peeler
     module: pf400
     command: transfer
@@ -100,11 +126,33 @@ flowdef:
     checks: null
     comment: null
 
-  - name: Move to final location
+  - name: Move to camera_module
     module: pf400
     command: transfer
     args:
       source: peeler.positions.default
       target: camera_module.positions.plate_station
+      source_plate_rotation: narrow
+      target_plate_rotation: narrow
+
+  - name: Take Picture
+    module: camera_module
+    command: take_picture
+    args:
+      save_location: local_run_results
+      file_name: "final_image.jpg"
+  - name: Take Picture
+    module: camera_module
+    command: take_picture
+    args:
+      save_location: local_run_results
+      file_name: "final_image.jpg"
+
+  - name: Trash Plate
+    module: pf400
+    command: transfer
+    args:
+      source: camera_module.positions.plate_station
+      target: pf400.positions.trash
       source_plate_rotation: narrow
       target_plate_rotation: narrow

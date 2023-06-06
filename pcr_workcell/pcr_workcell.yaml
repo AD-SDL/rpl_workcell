@@ -57,7 +57,6 @@ modules:
     config:
       ros_node: "/std_ns/sp_module_camera"
 
-
   - name: ot2_pcr_alpha
     type: wei_ros_node 
     model: ot2
@@ -66,7 +65,7 @@ modules:
     positions:                                                    
       deck1_cooler: [247.999, -30.702, 275.835, 381.513, 124.830, -585.403] 
 
-  - name: ot2_pcr_beta 
+  - name: ot2_growth_beta 
     type: wei_ros_node 
     model: ot2
     config:
@@ -86,7 +85,7 @@ modules:
     type: wei_ros_node
     model: biometra
     config:
-      ros_node: "/std_ns/biometraNode"
+      ros_node: "/std_ns/biometra96"
     positions:
       default: [247.0, 40.698, 38.294, 728.332, 123.077, 301.082]
 
@@ -97,16 +96,8 @@ modules:
     positions:
       plate_station: [90.597,26.416, 66.422, 714.811, 81.916, 995.074]
 
-  # - name: hidex
-  #   type: wei_ros_node
-  #   model: hidex
-  #   config:
-  #     ros_node: hidex rosnode
-  #   positions:
-  #     default: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-
-  # - name: ur5
-  #   type: wei_ros_node
-  #   model: ur5
-  #   config:
-  #     ros_node: '/ur5_client/UR5_Client_Node'
+  - name: ur5
+    type: wei_ros_node
+    model: ur5
+    config:
+      ros_node: '/ur5_client/UR5_Client_Node'
