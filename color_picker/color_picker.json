@@ -1,0 +1,26 @@
+{ "python":
+  { "name"    : "color_picker_loop.py",
+    "workflows" : [
+      { "name"    : "cp_wf_new_plate.yaml",
+        "actions" : [
+            { "name": "get_plate", "instrument":  "SciClops" },
+            { "name": "transfer", "instrument":  "PF400" }
+        ]
+      },
+      { "name"    : "cp_wf_mixcolor.yaml",
+        "actions" : [
+            { "name": "transfer", "instrument":  "PF400" },
+            { "name": "run_protocol", "instrument":  "OT2", "protocol" : "combined_protocol.yaml" },
+            { "name": "transfer", "instrument":  "PF400" },
+            { "name": "take_picture", "instrument":  "camera" }
+        ]
+      },
+      { "name"    : "cp_wf_trashplate.yaml",
+        "actions" : [
+            { "name": "transfer", "instrument":  "PF400" }
+        ]
+      }
+    ]
+  }
+}
+

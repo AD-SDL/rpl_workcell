@@ -17,23 +17,25 @@ def publish_iter(folder_path, dest_path):
         flow_input = {
             'input': {
                 'make_input': str(folder_path.expanduser()),
-                'funcx_endpoint_compute':'299edea0-db9a-4693-84ba-babfa655b1be',
-                'funcx_endpoint_non_compute':'299edea0-db9a-4693-84ba-babfa655b1be',
+                'funcx_endpoint_compute':'9e370560-9463-4a3d-a836-4db1dfb9ccb6',
+                'funcx_endpoint_non_compute':'9e370560-9463-4a3d-a836-4db1dfb9ccb6',
                 'pilot': {
                     'dataset': str(folder_path.expanduser()),
                     'index': 'aefcecc6-e554-4f8c-a25b-147f23091944',
                     'project': 'reports',
-                    'source_globus_endpoint': 'eeabbb24-b47d-11ed-a504-1f2a3a60e896',
-                    'source_collection_basepath': '/home/rpl/',
+                    'source_globus_endpoint': '6e245524-d967-11ed-9720-e54704575ba0',
+                    'source_collection_basepath': '/',
                     'metadata': {},
-                    'destination':str(dest_path)
+                    'destination':str(dest_path),
+                    'visible_to': ['dda56f31-53d1-11ed-bd8b-0db7472df7d6']
+
                 }
             }
         }
 
         # Create the Client
         publishFlow = PublishRun()
-        label = 'testPublishTobias'
+        label = 'ColorPickerPublish'
         # Run the flow
         flow = publishFlow.run_flow(flow_input=flow_input,label=label)
         # Track progress

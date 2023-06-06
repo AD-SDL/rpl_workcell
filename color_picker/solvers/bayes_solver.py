@@ -1,6 +1,6 @@
 from math import floor
 from random import sample, choice
-from typing import List, Tuple, Union, Optional
+from typing import List, Tuple, Union, Optional, Any
 
 from pydantic import BaseModel
 
@@ -11,6 +11,7 @@ from colormath.color_objects import sRGBColor, LabColor
 from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie2000
 from skopt import Optimizer
+import matplotlib.pyplot as plt
 
 class BestColor(BaseModel):
     color: List[float]
@@ -28,6 +29,7 @@ class BayesColorSolver:
         return_max_volume: float = 275.0,
         out_dim: Tuple[int] = (96, 3),
         pop_size: int = 96,
+        prev_best_color: Optional[List[float]] = None
     ) -> List[List[float]]:
         opt = Optimizer(dimensions=[(0.0, 1.0), (0.0, 1.0), (0.0, 1.0)],
                         # base_estimator='GP',
@@ -83,6 +85,7 @@ class BayesColorSolver:
     def _find_best_color(
         experiment_colors: List[Union[sRGBColor, List[float]]],
         target_color: List[Union[sRGBColor, List[float]]],
+        best_color: Optional[List[Union[sRGBColor, List[float]]]] = None
     ) -> Tuple[int, List[float]]:
         """returns index of best color in population
 
@@ -212,7 +215,26 @@ class BayesColorSolver:
             new_pop.append(_random_init())
 
         return new_pop
-
+    @staticmethod
+    def plot_diffs(
+        difflist: List[List[float]],
+        exp_folder: Any
+    ) -> Any:
+        import pathlib
+        from pathlib import Path
+        a = []
+        print(range(1, len(difflist)+1))
+        for i in difflist:
+            if a == [] or min(i) < min(a):
+                a.append(min(i))
+        plt.figure()
+        plt.plot(range(1, len(difflist)+1), a)
+        plt.xlabel("Color Rank")
+        plt.ylabel("Color Difference")
+        plt.title("Loss Graph")
+        print(exp_folder/"results" / "convergence_graph.png")
+        plt.savefig(exp_folder/"results" / "convergence_graph.png", dpi=300)
+        return a
 
 def make_random_plate(dim: Tuple[int] = ()) -> List[List[List[float]]]:
     total = np.prod(dim)

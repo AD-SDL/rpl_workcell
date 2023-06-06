@@ -1,3 +1,4 @@
+# rpl-workcell
 # Background on Workcells, Carts, Modules, and Workflows
 
 We define conventional hardware and software configurations for robotic equipment and control software in order to simplify the assembly, modification, and scaling of experimental systems. The following figure shows our hardware conventions:
@@ -200,3 +201,4 @@ A Python program defines the process required to run an experiment. E.g., see [c
 * First, if needed, `cp_wf_newplate.yaml`
 * Then, the workflow given above, `cp_wf_mixcolor.yaml`
 * Finally, as needed, `cp_wf_trashplate.yaml`
+

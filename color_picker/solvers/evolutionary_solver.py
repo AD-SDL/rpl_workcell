@@ -1,11 +1,12 @@
 from math import floor
 from random import sample, choice
-from typing import List, Tuple, Union, Optional
+from typing import List, Tuple, Union, Optional, Any
 
 from pydantic import BaseModel
-
+import pathlib
+from pathlib import Path
 import numpy as np
-
+import matplotlib.pyplot as plt
 # https://python-colormath.readthedocs.io/en/latest/color_objects.html
 from colormath.color_objects import sRGBColor, LabColor
 from colormath.color_conversions import convert_color
@@ -28,6 +29,7 @@ class EvolutionaryColorSolver:
         return_max_volume: float = 275.0,
         out_dim: Tuple[int] = (96, 3),
         pop_size: int = 96,
+        prev_best_color: Optional[List[float]] = None
     ) -> List[List[float]]:
 
         assert pop_size == out_dim[0], "Population size must equal out_dim[0]"
@@ -38,9 +40,10 @@ class EvolutionaryColorSolver:
 
         if previous_experiment_colors is None:
             c_ratios = make_random_plate(dim=out_dim)
-            c_ratios[0] = sRGBColor(0.98, 0.01, 0.01)
-            c_ratios[1] = sRGBColor(0.01, 0.98, 0.01)
-            c_ratios[2] = sRGBColor(0.01, 0.01, 0.98)
+            if pop_size >= 3:
+                c_ratios[0] = sRGBColor(1, 0, 0)
+                c_ratios[1] = sRGBColor(0, 1, 0)
+                c_ratios[2] = sRGBColor(0, 0, 1)
             if return_volumes:
                 return EvolutionaryColorSolver.convert_ratios_to_volumes(c_ratios)
             else:
@@ -97,6 +100,7 @@ class EvolutionaryColorSolver:
     def _find_best_color(
         experiment_colors: List[Union[sRGBColor, List[float]]],
         target_color: List[Union[sRGBColor, List[float]]],
+        best_color: Optional[List[Union[sRGBColor, List[float]]]] = None
     ) -> Tuple[int, List[float]]:
         """returns index of best color in population
 
@@ -224,11 +228,32 @@ class EvolutionaryColorSolver:
 
         for _ in range(len(new_pop), new_pop_size):
             new_pop.append(_random_init())
-        if previos_best_index is None:
-            new_pop[0] = sRGBColor(0.98, 0.01, 0.01)
-            new_pop[1] = sRGBColor(0.01, 0.98, 0.01)
-            new_pop[2] = sRGBColor(0.01, 0.01, 0.98)
+        if previos_best_index is None and len(new_pop) >= 3:
+            new_pop[0] = sRGBColor(1, 0, 0)
+            new_pop[1] = sRGBColor(0, 1, 0)
+            new_pop[2] = sRGBColor(0, 0, 1)
         return new_pop
+    @staticmethod
+    def plot_diffs(
+        difflist: List[List[float]],
+        exp_folder: Any
+    ) -> Any:
+        import pathlib
+        from pathlib import Path
+        a = []
+        print(range(1, len(difflist)+1))
+        for i in difflist:
+            if True: #a == [] or min(i) < min(a):
+                a.append(min(i))
+        plt.figure()
+        a.sort(reverse=True)
+        plt.plot(range(1, len(a)+1), a)
+        plt.xlabel("Color Rank")
+        plt.ylabel("Color Difference")
+        plt.title("Loss Graph")
+        print(exp_folder/"results" / "convergence_graph.png")
+        plt.savefig(exp_folder/"results" / "convergence_graph.png", dpi=300)
+        return a
 
 
 def make_random_plate(dim: Tuple[int] = ()) -> List[List[List[float]]]:

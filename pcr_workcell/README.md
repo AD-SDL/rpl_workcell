@@ -1,3 +1,9 @@
+## Picture
+
+Created with `python ../../draw_flow/draw.py -i pcr_full.json -o pcr_full.jpg`
+
+![PCR application, as draw by draw.py.](pcr_full.jpg)
+
 
 ## Initial setup
 Before running the PCR workflow, visually check each machine in the workcell to ensure that it is powered on, and ready to perform its task in the workflow as follows

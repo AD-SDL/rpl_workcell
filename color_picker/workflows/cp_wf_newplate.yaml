@@ -1,9 +1,7 @@
-# TODO: add input vars to the ot2 command (csv col)
-
 metadata:
-  name: PCR - Workflow
-  author: Casey Stone, Rafael Vescovi
-  info: Initial PCR workflow for RPL workcell
+  name: Color Picker - New Plate - Workflow
+  author: Tobias Ginsburg, Rafael Vescovi
+  info: New Plate workflow for the RPL Color Picker
   version: 0.1
 
 workcell: /home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_workcell.yaml
@@ -13,12 +11,12 @@ modules:
   - name: sciclops
 
 flowdef:
-  - name: Color Plate to Plate Exchange
-    module: sciclops
-    command: get_plate
-    args:
-      pos: "tower1"
-    comments: Move initial color plate from sciclops to plate exchange
+  # - name: Color Plate to Plate Exchange
+  #   module: sciclops
+  #   command: get_plate
+  #   args:
+  #     pos: "tower1"
+  #   comments: Move initial color plate from sciclops to plate exchange
 
   - name: Move to final location
     module: pf400

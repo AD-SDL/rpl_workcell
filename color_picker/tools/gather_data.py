@@ -21,7 +21,7 @@ def gather_metadata(**data):
         datal = json.loads(f.read())
  
     datal.update(GENERAL_METADATA)
-    final_data = data["publishv2"]
+    final_data = data["pilot"]
     final_data['metadata'] = datal
     return final_data
 
@@ -30,7 +30,8 @@ class GatherMetaData(GladierBaseTool):
     funcx_functions = [gather_metadata]
     required_input = [
         'make_input',
-        'funcx_endpoint_compute'
+        'funcx_endpoint_compute',
+        'pilot'
     ]
 
 
