@@ -10,6 +10,13 @@ config:
   globus_group: "dda56f31-53d1-11ed-bd8b-0db7472df7d6"
 
 modules:
+  - name: test
+    type: simulate_callback
+    model: test
+    config:
+      foo: bar
+    positions:
+      trash: [218.457, -2.408, 38.829, 683.518, 89.109, 995.074]
   - name: pf400
     type: wei_ros_node
     model: pf400
