@@ -198,7 +198,12 @@ def run(
             cur_best_color = plate_best_color
             time_to_best = str(datetime.now() - start)
 
+<<<<<<< HEAD
         ##update numbers
+=======
+        ##update numbers (seems redundant)
+   
+>>>>>>> main
         current_iter += 1
         num_exps += pop_size
         ##Plot review

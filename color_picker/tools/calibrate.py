@@ -30,6 +30,7 @@ def calibrate(target_color: List[int],
     plate_volumes = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1], np.array(target_color)/sum(target_color)])*plate_max_volume
     payload, curr_wells_used = convert_volumes_to_payload(plate_volumes, curr_wells_used)
     payload['use_existing_resources'] = False 
+    print(payload)
     steps_run, run_info = run_flow(loop_protocol, payload, steps_run, experiment) 
     fname = "final_image.jpg" #image"+str(ot2_iter) +".jpg"
     img_path = run_info["run_dir"]/ "results" / fname
