@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
-import logging
 from pathlib import Path
-from argparse import ArgumentParser
 # from tools.publish import publish_iter
-from rpl_wei.experiment import Experiment
+from rpl_wei import Experiment
 
 def main():
     wf_path = Path('/home/rpl/workspace/rpl_workcell/pcr_workcell/workflows/qtest.yaml')
