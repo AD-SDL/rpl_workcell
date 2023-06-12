@@ -7,7 +7,7 @@ from argparse import ArgumentParser
 from rpl_wei.experiment import Experiment
 
 def main():
-    wf_path = Path('/home/rpl/workspace/rpl_workcell/pcr_workcell/workflows/demo.yaml')
+    wf_path = Path('/home/rpl/workspace/rpl_workcell/pcr_workcell/workflows/qtest.yaml')
     v = Experiment('127.0.0.1', '8000')
     t = v.run_job(wf_path.resolve())
 
