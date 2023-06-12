@@ -10,7 +10,7 @@ class PublishRun(GladierBaseClient):
         'gladier_tools.publish.Publishv2'
     ]
 
-def publish_iter(folder_path, dest_path):
+def publish_iter(folder_path, dest_path, exp):
         #gather some shit and transfer it to the exp\
         print(str(folder_path.expanduser()))
         print(str(dest_path ))    
@@ -41,6 +41,7 @@ def publish_iter(folder_path, dest_path):
         label = 'testPublishTobias'
         # Run the flow
         flow = publishFlow.run_flow(flow_input=flow_input,label=label)
+        exp.events.log_gladier(label, flow['action_id'])
         # Track progress
         # action_id = flow['action_id']
         # publishFlow.progress(action_id)
