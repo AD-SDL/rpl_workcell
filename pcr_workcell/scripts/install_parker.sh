@@ -1,5 +1,3 @@
-#!/bin/bash
-echo asdkfasjdfkljasdf
 source /opt/ros/humble/install.bash
 ROS_WS=~/wei_ws
 
@@ -32,13 +30,6 @@ pip3 install -r ot2_driver/requirements.txt
 
 ##WEI
 git clone https://github.com/AD-SDL/wei_ros
-git clone https://github.com/AD-SDL/rpl_wei
-
-##Thermocicler
-sudo apt install mono-devel
-pip3 install pythonnet
-git clone https://github.com/AD-SDL/biometra_module
-pip install biometra_module/biometra_driver
 
 cd ..
 rosdep install --from-paths src --ignore-src --rosdistro humble -y
