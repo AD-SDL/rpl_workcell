@@ -3,21 +3,20 @@
     "workflows" : [
       { "name"    : "demo.yaml",
         "actions" : [
-            { "name": "get_plate", "instrument":  "SciClops" },
-            { "name": "transfer", "instrument":  "PF400" },
+            { "name": "get_plate", "instrument":  "sciclops" },
+            { "name": "transfer", "instrument":  "pf400" },
             { "name": "run_protocol", "instrument":  "ot2_pcr_alpha", "protocol" : "PCR_prep_full_plate_multi_noresource.yaml" },
-            { "name": "transfer", "instrument":  "PF400" },
+            { "name": "transfer", "instrument":  "pf400" },
             { "name": "seal", "instrument":  "sealer" },
-            { "name": "transfer", "instrument":  "PF400" },
-            { "name": "close_lid", "instrument":  "BioMetra" },
-            { "name": "run_program", "instrument":  "BioMetra" },
-            { "name": "open_lid", "instrument":  "BioMetra" },
-            { "name": "transfer", "instrument":  "PF400" },
+            { "name": "transfer", "instrument":  "pf400" },
+            { "name": "close_lid", "instrument":  "biometra" },
+            { "name": "run_program", "instrument":  "biometra" },
+            { "name": "open_lid", "instrument":  "biometra" },
+            { "name": "transfer", "instrument":  "pf400" },
             { "name": "peel", "instrument":  "peeler" },
-            { "name": "transfer", "instrument":  "PF400" },
+            { "name": "transfer", "instrument":  "pf400" },
             { "name": "take_picture", "instrument":  "camera" },
-            { "name": "take_picture", "instrument":  "camera" },
-            { "name": "transfer", "instrument":  "PF400" }
+            { "name": "transfer", "instrument":  "pf400" }
         ]
       }
     ]
