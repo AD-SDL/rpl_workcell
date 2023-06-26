@@ -37,8 +37,8 @@ y_max = 0
 im = Image.new('RGB', (x_size, y_size), base_color)
 draw = ImageDraw.Draw(im)
 
-arial = ImageFont.truetype('arial.ttf', fontsize)
-arial_bold = ImageFont.truetype('arial-bold.ttf', fontsize)
+arial = ImageFont.truetype('../draw_flow/arial.ttf', fontsize)
+arial_bold = ImageFont.truetype('../draw_flow/arial-bold.ttf', fontsize)
 
 
 def draw_bold_text(x, y, text):
@@ -46,7 +46,8 @@ def draw_bold_text(x, y, text):
 
     
 def draw_my_text(x, y, A, B):
-    width = arial.getlength(A)+text_offset
+    width,_ = arial.getsize(A)
+    width += text_offset
     draw.text((x-width, y), A, font=arial, fill=black)
     draw.text((x, y), B, font=arial_bold, fill=black)
 
@@ -57,7 +58,7 @@ def draw_my_text_normal(x, y, A):
     
 def draw_my_text_rectangle(x, y, text, color):
     # x0, y0, x1, y1
-    text_width = arial.getlength(text)
+    text_width,_ = arial.getsize(text)
     width = text_width+2*text_x_offset
     draw.rectangle((x, y, x+width, y+box_height), fill=color, outline=white)
     draw.text((x+text_x_offset, y+text_y_offset), text, font=arial, fill=black)
@@ -72,7 +73,7 @@ def draw_my_text_rectangle(x, y, text, color):
   
 def draw_my_text_rectangle_width(x, y, length, text, color):
     # x0, y0, x1, y1
-    text_width = arial.getlength(text)
+    text_width,_ = arial.getsize(text)
     width = text_width+2*text_x_offset
     text_start = length/2 - text_width/2
     draw.rectangle((x, y, x+length, y+box_height), fill=color, outline=white)
@@ -90,10 +91,11 @@ def draw_header():
     draw_my_text(python_offset, 0, '', 'Python program')
     draw_my_text(workflow_offset, 0, 'runs', 'Workflow (YAML)')
     draw_my_text(action_offset, 0, 'invokes', 'Action')
-    draw_my_text(instrument_offset, 0, 'on', 'Instrument')
+    draw_my_text(instrument_offset, 0, 'on', 'Component')
     draw_my_text(protocol_offset, 0, 'with', 'OT2 protocol specification')
     global x_max
-    x_max = protocol_offset + arial_bold.getlength('OT protocol specification') + text_x_offset
+    width,_ = arial_bold.getsize('OT protocol specification')
+    x_max = protocol_offset + width + text_x_offset
 
     
 def arrow_from_to(from_box, to_box, color):
@@ -115,6 +117,10 @@ def draw_workflow(workflow, y_start):
     for action in actions:
         action_name = action['name']
         instrument  = action['instrument']
+        if action_name == 'transfer':
+            from_name = action['from']
+            to_name   = action['to']
+            instrument += f': {from_name} \u2192 {to_name}'
         text_box = draw_my_text_rectangle_width(action_offset, y_start+y_size, action_name_length, action_name, red)
         draw_my_text_normal(action_offset+action_name_length+text_x_offset,  y_start+y_size+text_y_offset, instrument)
         arrow_from_to(name_box, text_box, red)
