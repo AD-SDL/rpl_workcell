@@ -134,11 +134,11 @@ flowdef:
       save_location: local_run_results
       file_name: "final_image.jpg"
 
-  - name: pf400 discards plate
-    module: pf400
-    command: transfer
-    args:
-      source: camera_module.positions.plate_station
-      target: pf400.positions.trash
-      source_plate_rotation: narrow
-      target_plate_rotation: narrow
+  # - name: pf400 discards plate
+  #   module: pf400
+  #   command: transfer
+  #   args:
+  #     source: camera_module.positions.plate_station
+  #     target: pf400.positions.trash
+  #     source_plate_rotation: narrow
+  #     target_plate_rotation: narrow
