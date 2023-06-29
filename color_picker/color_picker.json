@@ -3,11 +3,12 @@
     "workflows" : [
       { "name"    : "cp_wf_new_plate.yaml",
         "actions" : [
-            { "name": "get_plate", "instrument":  "sciclops" },
-            { "name": "transfer", "instrument":  "pf400", "from": "sciclops", "to": "camera" }
+            { "name": "get_plate", "instrument": "sciclops", "from": "sciclops", "to": "<staging>" },
+            { "name": "transfer", "instrument":  "pf400", "from": "<staging>", "to": "camera" }
         ]
       },
       { "name"    : "cp_wf_mixcolor.yaml",
+        "repeat"  : ["publish", "compute"],
         "actions" : [
             { "name": "transfer", "instrument":  "pf400", "from": "camera", "to": "ot2" },
             { "name": "run_protocol", "instrument":  "ot2", "protocol" : "combined_protocol.yaml" },
@@ -17,7 +18,7 @@
       },
       { "name"    : "cp_wf_trashplate.yaml",
         "actions" : [
-            { "name": "transfer", "instrument":  "pf400", "from": "camera", "to": "trash" }
+            { "name": "transfer", "instrument":  "pf400", "from": "camera", "to": "<trash>" }
         ]
       }
     ]
