@@ -136,6 +136,12 @@ def draw_workflow(offsets, workflow, y_start):
         draw.polygon([(x_left, y_repeat), (x_left-arrow_size/2/factor, y_repeat+arrow_size/factor), (x_left+arrow_size/2/factor, y_repeat+arrow_size/factor)], fill=blue)
     except:
         repeat_indent = 0
+        if len(workflow)==1: # Special Casey case: text without workflow, and a clock next to it
+            im_clock = Image.open('clock2.png').resize((20,20), Image.ANTIALIAS)
+            im.paste(im_clock, (125, y_start+y_size))
+            return_box = draw_my_text_rectangle_width(offsets['python_step_offset'] + repeat_indent, y_start+y_size, offsets['max_step_width'], name, blue)
+            y_size += 40
+            return(return_box, y_size)
         return_box = draw_my_text_rectangle_width(offsets['python_step_offset'] + repeat_indent, y_start+y_size, offsets['max_step_width'], 'Run:', blue)
         run_box = return_box
         last_box = return_box
@@ -178,7 +184,7 @@ def get_sizes(plot):
     python_width = max(arial.getsize(n)[0], 20+max_step_width)
     max_workflow_name_width = max([arial.getsize(x['name'].replace('.yaml',''))[0] for x in plot['workflows']])
     workflows = plot['workflows']
-    actions = sum([x['actions'] for x in workflows], [])
+    actions = sum([x['actions'] for x in workflows if len(x)>1], [])
     max_action_name_width = max([arial.getsize(x['name'])[0] for x in actions])
 
     workflow_header_width = arial_bold.getsize('Workflow')[0]
@@ -195,7 +201,6 @@ def get_sizes(plot):
                 'max_action_width': max_action_width,
                 'component_offset': action_offset + max_action_width + text_x_offset/2
               }
-
     return( offsets )
 
 
@@ -223,7 +228,7 @@ def process_file(spec_file, output_file):
         y_location += y_size
 
     im_cropped = im.crop((0, 0, x_max, y_max))
-    im_cropped.save(output_file)
+    im_cropped.save(output_file, quality=100, subsampling=0)
 
 def main(argv):
     parser = argparse.ArgumentParser(description='Program to generate plots for WEI workflows')
