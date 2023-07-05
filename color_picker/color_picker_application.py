@@ -184,6 +184,7 @@ def run(
         target_plate = create_target_plate(plate_volumes, colors)
         #Assign volumes to wells and colors and make a payload compatible with the OT2 protopiler
         payload, curr_wells_used = convert_volumes_to_payload(plate_volumes, curr_wells_used)
+        print('Payload:', payload)
         
         #resets OT2 resources (or not)
         if current_iter == 0: 
