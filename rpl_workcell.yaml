@@ -120,14 +120,6 @@ modules:
       auth: "/home/rpl/Documents/mirauth.txt"
     positions:
      default: []
-  - name: sealer_rest
-    type: wei_rest_node
-    model: a4s_sealer
-    config:
-      url: "http://parker.cels.anl.gov:8000"
-      auth: "/home/rpl/Documents/mirauth.txt"
-    positions:
-     default: []
   # - name: hidex
   #   type: wei_ros_node
   #   model: hidex
