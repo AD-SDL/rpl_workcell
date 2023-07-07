@@ -243,8 +243,7 @@ def run(
 
         # Analyze image
         # output should be list [pop_size, 3]
-        fname = "final_image.jpg"
-        img_path = run_info["run_dir"] / "results" / fname
+        img_path = run_info["hist"]["Take Picture"]["action_msg"]
 
         if use_funcx:
             print("funcx started")
