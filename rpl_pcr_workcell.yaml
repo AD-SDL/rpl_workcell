@@ -132,52 +132,7 @@ modules:
     workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
     config:
       ros_node: '/ur5_client/UR5_Client_Node'
-  
-  - name: pf400_table
-    type: no_interface
-    model: pf400_table
-    workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
-
-  - name: cart1
-    type: no_interface
-    model: rpl_cart
-    workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
-
-  - name: cart2
-    type: no_interface
-    model: rpl_cart
-    workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
-
-  - name: cart3
-    type: no_interface
-    model: rpl_cart
-    workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
-
-  - name: cart4
-    type: no_interface
-    model: rpl_cart
-    workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
-
-  - name: cart5
-    type: no_interface
-    model: rpl_cart
-    workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
-
-  - name: cart6
-    type: no_interface
-    model: rpl_cart
-    workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
-
-  - name: cart7
-    type: no_interface
-    model: rpl_cart
-    workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
-
-  - name: cart8
-    type: no_interface
-    model: rpl_cart
-    workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
-
+ 
 
 locations:
   pf400:
