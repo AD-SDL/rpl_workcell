@@ -140,6 +140,9 @@ modules:
     workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
     config:
       ros_node: '/ur5_client/UR5_Client_Node'
+<<<<<<< HEAD
+ 
+=======
   
   # - name: pf400_table
   #   type: no_interface
@@ -186,6 +189,7 @@ modules:
   #   model: rpl_cart
   #   workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
 
+>>>>>>> 8cb2a2b3661605cd111348d7f5a9cdbe8ad2a525
 
 locations:
   pf400:
