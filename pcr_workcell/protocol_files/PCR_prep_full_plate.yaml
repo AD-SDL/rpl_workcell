@@ -135,7 +135,6 @@ commands:
     mix_cycles: 3
     mix_volume: 15
     drop_tip: True
-
 metadata:
   protocolName: PCR Prep Full Plate
   author: Abe astroka@anl.gov

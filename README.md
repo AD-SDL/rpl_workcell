@@ -55,7 +55,7 @@ For example, this module specification included in [pcr_workcell.yaml](https://g
       default: [205.128, -2.814, 264.373, 365.863, 79.144, 411.553]
 ```
 
-The positions here are specific to the PF400: they give joint angles. ???Why does the Sealer have PF400 angles???
+The positions here are relative to the PF400 and are expressed in terms of PF400 joint angles.
 
 For other modules, a module specification could include things like protocol and IP port.
 
