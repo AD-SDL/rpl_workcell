@@ -1,0 +1,19 @@
+name: Color Picker - Trash Plate - Workflow
+
+metadata:  
+  author: Tobias Ginsburg, Rafael Vescovi
+  info: Plate removal workflow for the RPL Color Picker
+  version: 0.1
+
+modules:
+  - name: pf400
+
+flowdef:
+  - name: Move to final location
+    module: pf400
+    command: transfer
+    args:
+      source: camera_module.positions.plate_station
+      target: pf400.positions.trash
+      source_plate_rotation: narrow
+      target_plate_rotation: narrow

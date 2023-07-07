@@ -1,0 +1,137 @@
+metadata:
+  name: PCR - Workflow
+  author: Casey Stone, Rafael Vescovi
+  info: Initial PCR workflow for RPL workcell
+  version: 0.1
+
+workcell: /home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_workcell.yaml
+
+modules:
+  - name: ot2_pcr_alpha
+  - name: pf400
+  - name: peeler
+  - name: sealer
+  - name: biometra
+  - name: sciclops
+  - name: camera
+
+flowdef:
+  - name: Obtain a new plate from sciclops
+    module: sciclops
+    command: get_plate
+    args:
+      pos: "tower2"
+    checks: null
+    comment: Stage PCR plates
+
+  - name: pf400 moves plate from sciclops to ot2
+    module: pf400
+    command: transfer
+    args:
+      source: sciclops.positions.exchange
+      target: ot2_pcr_alpha.positions.deck1_cooler
+      source_plate_rotation: narrow
+      target_plate_rotation: wide
+    checks: null
+    comment: Place plate in ot2
+
+  - name: ot2 runs the "Mix reactions" protocol
+    module: ot2_pcr_alpha
+    command: run_protocol
+    args:
+      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/PCR_prep_full_plate_multi_noresource.yaml
+      use_existing_resources: False
+    checks: RESOURCE_CHECK
+    comment: Resource check not implemented, but will be
+
+  - name: pf400 moves plate from ot2 to sealer
+    module: pf400
+    command: transfer
+    args:
+      source: ot2_pcr_alpha.positions.deck1_cooler
+      target: sealer.positions.default
+      source_plate_rotation: wide
+      target_plate_rotation: narrow
+    checks: null
+    comment: null
+
+  - name: Seal plate in sealer
+    module: sealer
+    command: seal
+    args:
+      time: payload:seal.time
+      temperature: 175
+    checks: null
+    comment: null
+
+  - name: pf400 moves plate from sealer to biometra
+    module: pf400
+    command: transfer
+    args:
+      source: sealer.positions.default
+      target: biometra.positions.default
+      source_plate_rotation: narrow
+      target_plate_rotation: wide
+    checks: null
+    comment: null
+
+  - name: Close lid of biometra
+    module: biometra
+    command: close_lid
+    args:
+        test: null
+    checks: null
+    comment: null
+
+  - name: Run biometra program
+    module: biometra
+    command: run_program
+    args:
+        program_n: 3
+    checks: null
+    comment: null
+
+  - name: Open lid of biometra
+    module: biometra
+    command: open_lid
+    args:
+        test: null
+    checks: null
+    comment: null
+    
+  - name: pf400 moves plate from biometra to peeler
+    module: pf400
+    command: transfer
+    args:
+      source: biometra.positions.default
+      target: peeler.positions.default
+      source_plate_rotation: wide
+      target_plate_rotation: narrow
+    checks: null
+    comment: null
+
+  - name: Peel plate
+    module: peeler
+    command: peel
+    args:
+      test: null
+    checks: null
+    comment: null
+
+  - name: pf400 moves plate from peeler to camera
+    module: pf400
+    command: transfer
+    args:
+      source: peeler.positions.default
+      target: camera_module.positions.plate_station
+      source_plate_rotation: narrow
+      target_plate_rotation: narrow
+
+  - name: camera takes picture of plate
+    module: camera_module
+    command: take_picture
+    args:
+      save_location: local_run_results
+      file_name: "final_image.jpg"
+
+  
