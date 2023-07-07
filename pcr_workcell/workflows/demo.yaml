@@ -16,8 +16,9 @@ modules:
   - name: camera
 
 flowdef:
+
   - name: Obtain a new plate from sciclops
-    module: sciclops
+    module: sciclopsfiles
     command: get_plate
     args:
       pos: "tower2"
@@ -79,9 +80,10 @@ flowdef:
     module: biometra
     command: close_lid
     args:
-        test: null
-    checks: null
-    comment: null
+      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/ot2_beta_test_second.yaml
+    checks: RESOURCE_CHECK
+    comment: resource check not implemented, but will be
+
 
   - name: Run biometra program
     module: biometra
@@ -134,4 +136,3 @@ flowdef:
       save_location: local_run_results
       file_name: "final_image.jpg"
 
-  
