@@ -1,0 +1,18 @@
+name: Color Picker - Barty - Workflow
+
+metadata:  
+  author: Aileen Cleary, Tobias Ginsburg, Rafael Vescovi
+  info: Replenish colors workflow for the RPL Color Picker
+  version: 0.1
+
+modules:
+  - name: barty
+
+flowdef:
+  - name: Add colors
+    module: pf400
+    command: add_colors
+    args:
+      volumeA: payload.volumeA
+      volumeB: payload.volumeB
+      volumeC: payload.volumeC

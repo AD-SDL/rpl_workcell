@@ -118,6 +118,14 @@ modules:
       tcp_address: "146.137.240.22"
       tcp_port: 2000
 
+  - name: barty
+    type: wei_rest_node
+    model: RPL BARTY
+    workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
+    config:
+      url: "http://barty.cels.anl.gov/"
+      port: 8000
+
   - name: MiR_base
     type: wei_rest_node
     model: MiR250
