@@ -15,15 +15,15 @@ class PublishRun(GladierBaseClient):
 
 def publish_iter(folder_path, dest_path, exp):
     # gather some shit and transfer it to the exp\
-    print(str(folder_path.expanduser()))
+    print(str(folder_path))
     print(str(dest_path))
     flow_input = {
         "input": {
-            "make_input": str(folder_path.expanduser()),
+            "make_input": str(folder_path),
             "funcx_endpoint_compute": "299edea0-db9a-4693-84ba-babfa655b1be",
             "funcx_endpoint_non_compute": "299edea0-db9a-4693-84ba-babfa655b1be",
             "publishv2": {
-                "dataset": str(folder_path.expanduser()),
+                "dataset": str(folder_path),
                 "index": "aefcecc6-e554-4f8c-a25b-147f23091944",
                 "project": "reports",
                 "source_collection": "eeabbb24-b47d-11ed-a504-1f2a3a60e896",

@@ -124,6 +124,7 @@ modules:
     workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
     config:
       url: "http://barty.cels.anl.gov/"
+      auth: ""
       port: 8000
 
   - name: MiR_base
