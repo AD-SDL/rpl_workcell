@@ -11,7 +11,7 @@ modules:
 flowdef:
   - name: Add colors
     module: pf400
-    command: add_colors
+    action: add_colors
     args:
       volumeA: payload.volumeA
       volumeB: payload.volumeB
