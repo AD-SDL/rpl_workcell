@@ -202,3 +202,13 @@ locations:
     biometra.default: [247.0, 40.698, 38.294, 728.332, 123.077, 301.082]
     camera.plate_station: [90.597,26.416, 66.422, 714.811, 81.916, 995.074]
     wc.trash: [218.457, -2.408, 38.829, 683.518, 89.109, 995.074]
+  workcell_coordinates:
+    sciclops.exchange: [0,0,0,1,0,0,0]
+    sealer.default: [0,0,0,1,0,0,0]
+    peeler.default: [0,0,0,1,0,0,0]
+    ot2_pcr_alpha.deck1_cooler: [0,0,0,1,0,0,0]
+    ot2_growth_beta.deck2: [0,0,0,1,0,0,0]
+    ot2_cp_gamma.deck2: [0,0,0,1,0,0,0]
+    biometra.default: [0,0,0,1,0,0,0]
+    camera.plate_station: [0,0,0,1,0,0,0]
+    wc.trash: [0,0,0,1,0,0,0]
