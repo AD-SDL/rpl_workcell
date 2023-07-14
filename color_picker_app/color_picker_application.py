@@ -41,7 +41,7 @@ MAX_PLATE_SIZE = 96
 
 
 def test_run():
-    exp = Experiment("127.0.0.1", "8000", "Color_Picker")
+    exp = Experiment("127.0.0.1", "8000", "Color-Picker")
     exp.register_exp()  # parser
     args = parse_args()
 
@@ -175,6 +175,7 @@ def run(
         if new_plate or current_iter == 0:
             # print('Grabbing New Plate')
             steps_run, _ = run_flow(init_protocol, payload, steps_run, exp)
+            return
             curr_wells_used = []
             new_plate = False
             exp.events.decision("Need Calibration", (current_iter == 0))
