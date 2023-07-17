@@ -139,7 +139,7 @@ def run(
         os.mkdir(exp_folder)
     if not (os.path.isdir(exp_folder / "results")):
         os.mkdir(exp_folder / "results")
-    exp = Experiment("127.0.0.1", "8000", "Color_Picker")
+    exp = Experiment("127.0.0.1", "8000", "Color_Picker",kafka_server="ec2-54-160-200-147.compute-1.amazonaws.com:9092")
     exp.register_exp()
     # Resource Tracking:
     plate_n = 1  # total number of plates
