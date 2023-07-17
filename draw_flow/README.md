@@ -10,5 +10,5 @@ For example:
 
 Produces:
 
-![Color-picker application, as drawn by draw.py.](../color_picker/color_picker.jpg)
+![Color-picker application, as drawn by draw.py.](color_picker.jpg)
   
