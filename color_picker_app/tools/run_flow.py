@@ -23,7 +23,7 @@ def run_flow(protocol, payload, steps_run, experiment):
         run_info: The WEI output from running the flow'''
     #iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':protocol,'payload':payload})
     #iter_thread.run()
-    response = experiment.run_job(protocol.resolve(), payload=payload, simulate=False)
+    response = experiment.run_job(protocol.resolve(), payload=payload, simulate=True)
     job_status = experiment.query_job(response["job_id"])
     print(job_status)
     while(job_status["status"] != "finished" and job_status["status"] != "failure"):

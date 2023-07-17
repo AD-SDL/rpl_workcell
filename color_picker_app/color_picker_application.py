@@ -41,7 +41,7 @@ MAX_PLATE_SIZE = 96
 
 
 def test_run():
-    exp = Experiment("127.0.0.1", "8000", "Color-Picker")
+    exp = Experiment("127.0.0.1", "8000", "Color-Picker", kafka_server="ec2-54-160-200-147.compute-1.amazonaws.com:9092")
     exp.register_exp()  # parser
     args = parse_args()
 
