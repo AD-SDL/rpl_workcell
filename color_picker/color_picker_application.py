@@ -228,20 +228,16 @@ def run(
             curr_wells_used = []
 
         #checking whether to refill ink
-        motor_1 = {"e":11,"f":15,"r":13}
-        motor_2 = {"e":22,"f":16,"r":18}
-        motor_3 = {"e":19,"f":21,"r":23}
-        # motor_4 = {"e":32,"f":24,"r":26}
 
         for i in len(colors_used):
             exp.events.decision("Need Ink", (colors_used[i] >= 5000))
             if colors_used[i] >= 5000:
                 if i == 0:
-                   payload['refill_motor'] = [motor_1]
+                   payload['refill_motor'] = ["motor_1"]
                 elif i == 1:
-                   payload['refill_motor'] = [motor_2]
+                   payload['refill_motor'] = ["motor_2"]
                 elif i == 2:
-                   payload['refill_motor'] = [motor_3]
+                   payload['refill_motor'] = ["motor_3"]
                 # elif i == 3:
                     # payload['refill_motor'] = [motor_4]
                 steps_run, _ = run_flow(refill_barty, payload, steps_run, exp) 
