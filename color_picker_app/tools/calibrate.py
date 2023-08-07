@@ -5,6 +5,7 @@ import numpy as np
 from tools.color_utils import convert_volumes_to_payload
 from tools.plate_color_analysis import get_colors_from_file
 import cv2
+import base64
 from matplotlib import pyplot as plt
 
 def calibrate(target_color: List[int], 
@@ -30,10 +31,12 @@ def calibrate(target_color: List[int],
     plate_volumes = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1], np.array(target_color)/sum(target_color)])*plate_max_volume
     payload, curr_wells_used = convert_volumes_to_payload(plate_volumes, curr_wells_used)
     payload['use_existing_resources'] = False 
-    print(payload)
     steps_run, run_info = run_flow(loop_protocol, payload, steps_run, experiment) 
-    fname = "final_image.jpg" #image"+str(ot2_iter) +".jpg"
-    img_path = run_info["run_dir"]/ "results" / fname
+    action_msg = run_info["hist"]["Take Picture"]["action_msg"]
+    image = np.fromstring(base64.b64decode(action_msg), np.uint8)
+    img = cv2.imdecode(image, cv2.IMREAD_COLOR)
+    img_path = run_info["run_dir"] / "results" / "final_image.jpg"
+    cv2.imwrite(str(img_path), img)
     plate_colors_ratios = get_colors_from_file(img_path)[1]
     plate_colors_ratios = {a:b[::-1] for a,b in plate_colors_ratios.items()}  
     current_plate = []

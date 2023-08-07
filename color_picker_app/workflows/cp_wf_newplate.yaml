@@ -16,6 +16,7 @@ flowdef:
     action: get_plate
     args:
       pos: "tower1"
+      target: sciclops.exchange
     comments: Move initial color plate from sciclops to plate exchange
 
   - name: Move to final location

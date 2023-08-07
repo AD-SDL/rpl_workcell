@@ -43,7 +43,7 @@ def publish_iter(folder_path, dest_path, exp):
     label = "ColorPickerRPL"
     # Run the flow
     flow = publishFlow.run_flow(flow_input=flow_input, label=label)
-    exp.events.log_gladier(label, flow["action_id"])
+    exp.events.log_globus_flow(label, flow["action_id"])
     # Track progress
     # action_id = flow['action_id']
     # publishFlow.progress(action_id)

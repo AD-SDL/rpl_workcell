@@ -8,12 +8,16 @@ metadata:
 modules:
   - name: pf400
 
+modules:
+  - name: sciclops
+  - name: pf400
+
 flowdef:
   - name: Move to final location
     module: pf400
-    command: transfer
+    action: transfer
     args:
       source: camera_module.plate_station
-      target: pf400.trash
+      target: wc.trash
       source_plate_rotation: narrow
       target_plate_rotation: narrow
