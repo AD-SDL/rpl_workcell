@@ -5,25 +5,36 @@ metadata:
   info: Main workflow for the RPL Color Picker
   version: 0.1
 
+#List of modules used in workflow
 modules:
   - name: ot2_cp_gamma
   - name: pf400
   - name: camera
 
+#A list of steps in the workflow. Each step represents an action on a single module
 flowdef:
+  #a human legible name for the step
   - name: Move from Camera Module to OT2
+    
+    #which module the action will run on
     module: pf400
-    command: transfer
+    
+    #This tells the module which action in its library to run
+    action: transfer
+    
+    #These arguments specify the parameters for the action above
     args:
-      source: camera_module.positions.plate_station
-      target: ot2_cp_gamma.positions.deck2
+      source: camera_module.plate_station
+      target: ot2_cp_gamma.deck2
       source_plate_rotation: narrow
       target_plate_rotation: wide
+      
+    #This is a place for additional notes
     comment: Place plate in ot2
 
   - name: Mix all colors
     module: ot2_cp_gamma
-    command: run_protocol
+    action: run_protocol
     args:
       config_path:  /home/rpl/workspace/rpl_workcell/color_picker_app/protocol_files/combined_protocol.yaml
       color_A_volumes: payload.color_A_volumes
@@ -35,16 +46,16 @@ flowdef:
 
   - name: Move to Picture
     module: pf400
-    command: transfer
+    action: transfer
     args:
-      source: ot2_cp_gamma.positions.deck2
-      target: camera_module.positions.plate_station
+      source: ot2_cp_gamma.deck2
+      target: camera_module.plate_station
       source_plate_rotation: wide
       target_plate_rotation: narrow
 
   - name: Take Picture
     module: camera_module
-    command: take_picture
+    action: take_picture
     args:
       save_location: local_run_results
       file_name: "final_image.jpg"
