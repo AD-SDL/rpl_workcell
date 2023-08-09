@@ -20,13 +20,13 @@ def publish_iter(folder_path, dest_path, exp):
     flow_input = {
         "input": {
             "make_input": str(folder_path),
-            "funcx_endpoint_compute": "299edea0-db9a-4693-84ba-babfa655b1be",
-            "funcx_endpoint_non_compute": "299edea0-db9a-4693-84ba-babfa655b1be",
+            "funcx_endpoint_compute": "9e370560-9463-4a3d-a836-4db1dfb9ccb6",
+            "funcx_endpoint_non_compute": "9e370560-9463-4a3d-a836-4db1dfb9ccb6",
             "publishv2": {
                 "dataset": str(folder_path),
                 "index": "aefcecc6-e554-4f8c-a25b-147f23091944",
                 "project": "reports",
-                "source_collection": "eeabbb24-b47d-11ed-a504-1f2a3a60e896",
+                "source_collection": "c6480a47-e864-11ed-9a66-83ef71fbf0ae",
                 "source_collection_basepath": "/",
                 "destination_collection": "bb8d048a-2cad-4029-a9c7-671ec5d1f84d",
                 "metadata": {},
@@ -43,7 +43,7 @@ def publish_iter(folder_path, dest_path, exp):
     label = "ColorPickerRPL"
     # Run the flow
     flow = publishFlow.run_flow(flow_input=flow_input, label=label)
-    exp.events.log_gladier(label, flow["action_id"])
+    exp.events.log_globus_flow(label, flow["action_id"])
     # Track progress
     # action_id = flow['action_id']
     # publishFlow.progress(action_id)

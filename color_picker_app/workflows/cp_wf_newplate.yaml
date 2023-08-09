@@ -9,6 +9,7 @@ metadata:
 modules:
   - name: sciclops
   - name: pf400
+  - name: barty
 
 flowdef:
   - name: Color Plate to Plate Exchange
@@ -16,6 +17,7 @@ flowdef:
     action: get_plate
     args:
       pos: "tower1"
+      target: sciclops.exchange
     comments: Move initial color plate from sciclops to plate exchange
 
   - name: Move to final location
@@ -26,3 +28,18 @@ flowdef:
       target: camera_module.plate_station
       source_plate_rotation: narrow
       target_plate_rotation: narrow
+
+  - name: Drain Max Ink
+    module: barty
+    action: drain_ink_all_motors 
+    args:
+     foo: bar
+    comments: Drain OT2 of max vol of ink.
+
+  - name: Fill Max Ink
+    module: barty
+    action: fill_ink_all_motors 
+    args:
+     foo: bar
+    comments: Fill OT2 of max vol of ink.
+
