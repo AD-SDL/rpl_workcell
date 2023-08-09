@@ -11,9 +11,14 @@ equipment:
     location: "7"
     alias: colorB
     offset: [0, 0, 0.8]
-  - name: nest_12_reservoir_15ml
+  - name: nest_1_reservoir_195ml
     location: "6"
     alias: colorC
+    offset: [0, 0, 0.8]
+  - name: nest_1_reservoir_195ml
+    location: "5"
+    alias: colorD
+    offset: [0, 0, 0.8]
   - name: opentrons_96_tiprack_300ul
     location: "8"
     offset: [0.3, 0.7, -0.5]
@@ -60,9 +65,20 @@ commands:
     replace_tip: True
 
   - name: Add color C
-    source: colorC:A8
+    source: colorC:A1 
     destination: payload.destination_wells
     volume: payload.color_C_volumes
+    dispense_clearance: 2
+    aspirate_clearance: 1
+    drop_tip: False
+  
+  - name: replace_tip3
+    replace_tip: True
+
+  - name: Add color D
+    source: colorD:A1
+    destination: payload.destination_wells
+    volume: payload.color_D_volumes
     dispense_clearance: 2
     aspirate_clearance: 1
     drop_tip: False
@@ -72,7 +88,7 @@ commands:
     mix_volume: 100
     location: payload.destination_wells    
   
-  - name: replace_tip3
+  - name: replace_tip4
     replace_tip: True
 
 metadata:

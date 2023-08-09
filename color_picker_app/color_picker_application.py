@@ -14,9 +14,9 @@ import base64
 from tools.plate_color_analysis import get_colors_from_file
 
 # Different possible solvers for the color_picker problem
-from solvers.bayes_solver import BayesColorSolver
-from solvers.evolutionary_solver import EvolutionaryColorSolver
-from solvers.aggressive_genetic_solver import AggroColorSolver
+from solvers.bayes_solver import BayesColorSolver # ***
+from solvers.evolutionary_solver import EvolutionaryColorSolver # ***
+from solvers.aggressive_genetic_solver import AggroColorSolver # ***
 from funcx import FuncXExecutor
 
 from datetime import datetime
@@ -25,14 +25,14 @@ from datetime import datetime
 from tools.publish_v2 import publish_iter
 
 # For creating a payload that the OT2 will accept from the solver output
-from tools.color_utils import convert_volumes_to_payload
+from tools.color_utils import convert_volumes_to_payload # ***
 
 # For running WEI flows
 from tools.run_flow import run_flow
 
 # for measuring the three mixed colors for calibration and for
 # ensuring the target color is in the right color space
-from tools.calibrate import calibrate
+from tools.calibrate import calibrate # ***
 
 # For constructing the plots for each run
 from tools.create_visuals import create_visuals, create_target_plate
@@ -69,14 +69,10 @@ def run(
     init_protocol = wf_dir / "cp_wf_newplate.yaml"
     loop_protocol = wf_dir / "cp_wf_mixcolor.yaml"
     final_protocol = wf_dir / "cp_wf_trashplate.yaml"
-
-    #wf_b_dir = Path("/home/rpl/workspace/Barty/workflows")
-    #startup_barty = wf_b_dir / "barty_startup.yaml"
-    #shutdown_barty = wf_b_dir / "barty_shutdown.yaml"
     refill_barty = wf_dir / "cp_wf_replenish.yaml" 
 
     # Constants
-    solver_out_dim = (pop_size, 3)
+    solver_out_dim = (pop_size, 4) # ***
     use_funcx = False
     funcx_local_ep = "299edea0-db9a-4693-84ba-babfa655b1be"  # local
 
@@ -109,8 +105,8 @@ def run(
     time_to_best = str(start - start)
     diffs = []  # List of all diffs from all runs of the experiment
     new_plate = True
-    payload = {}  # Payload to be sent to the WEI runs
-    colors_used = [0,0,0]   
+    payload = {}  # Payload to be sent to the WEI runs # ***
+    colors_used = [0,0,0,0] # ***
     exp.events.log_loop_start("Main Loop")
     while num_exps + pop_size <= exp_budget:
         new_run = {}
@@ -124,6 +120,8 @@ def run(
 
         # grab new plate if experiment starting or current plate is full
         exp.events.log_decision("Need New Plate", (new_plate or current_iter == 0))
+        # Starting Barty up.
+        exp.events.log_decision("Refill Max Ink", (current_iter==0))
         if (new_plate or current_iter == 0):
             # print('Grabbing New Plate')
             steps_run, _ = run_flow(init_protocol, payload, steps_run, exp)
@@ -141,7 +139,7 @@ def run(
                     steps_run,
                     pop_size,
                     exp,
-                )
+                ) # ***
             else:
                 # save the old plate picture and increment to a new plate
                 filename = "plate_" + str(plate_n) + ".jpg"
@@ -151,31 +149,26 @@ def run(
                 )
                 plate_n = plate_n + 1
 
-        # Starting Barty up.
-        exp.events.log_decision("Refill Max Ink", (current_iter==0))
-        #if current_iter==0:
-  #         steps_run, _ = run_flow(startup_barty, payload, steps_run, exp) 
-
         # Calculate volumes and current wells for creating the OT2 protocol
         exp.events.log_local_compute("solver.run_iteration")
         plate_volumes = solver.run_iteration(
             target_color,
             current_plate,
             pop_size=pop_size,
-            out_dim=(pop_size, 3),
+            out_dim=(pop_size, 4), # ***
             return_volumes=True,
             return_max_volume=plate_max_volume,
         )
 
         # Only for visualization, Perform a linear combination of the next colors being tried to show what the solver expects to create on this run.
-        target_plate = create_target_plate(plate_volumes, colors)
+        target_plate = create_target_plate(plate_volumes, colors) 
         # Assign volumes to wells and colors and make a payload compatible with the OT2 protopiler
-        payload, curr_wells_used = convert_volumes_to_payload(
+        payload, curr_wells_used = convert_volumes_to_payload( # ***
             plate_volumes, curr_wells_used
         )
+
         # Information tracking of ink usage.
-        curr_colors_used = [sum(payload['color_A_volumes']),sum(payload['color_B_volumes']),sum(payload['color_C_volumes'])] # Add color D later..
-        # Change keys for all files to match ^
+        curr_colors_used = [sum(payload['color_A_volumes']),sum(payload['color_B_volumes']),sum(payload['color_C_volumes']), sum(payload['color_D_volumes'])] # ***
         comb_list = [colors_used, curr_colors_used]
         colors_used = [sum(vols) for vols in zip(*comb_list)]
         print('Total vol of colors used so far:', colors_used)
@@ -210,16 +203,16 @@ def run(
                 if i == 0:
                     payload["refill_motor"] = ["motor_1"]
                 elif i == 1:
-                    payload["refill_motor"] = ["motor_4"]
+                    payload["refill_motor"] = ["motor_2"]
                 elif i == 2:
                     payload["refill_motor"] = ["motor_3"]
-                # elif i == 3:
-                #   payload["refill_motor"] = ["motor_4"]
+                elif i == 3:
+                    payload["refill_motor"] = ["motor_4"] # ***
                 steps_run, _ = run_flow(refill_barty, payload, steps_run, exp)
                 colors_used[i] = 0
 
         # Analyze image
-        # output should be list [pop_size, 3]
+        # output should be list [pop_size, 3] # ****
         action_msg = run_info["hist"]["Take Picture"]["action_msg"]
         image = np.fromstring(base64.b64decode(action_msg), np.uint8)
         img = cv2.imdecode(image, cv2.IMREAD_COLOR)
@@ -244,8 +237,8 @@ def run(
             run_info["run_dir"] / "results" / "plate_only.jpg",
             (exp_folder / "results" / filename),
         )
-        # Swap BGR to RGB
-        plate_colors_ratios = {a: b[::-1] for a, b in plate_colors_ratios.items()}
+        # Swap BlBGR to RGBBl
+        plate_colors_ratios = {a: b[::-1] for a, b in plate_colors_ratios.items()} # ****
         # Find the colors to be processed by the solver
         current_plate = []
         wells_used = []
@@ -255,7 +248,7 @@ def run(
             current_plate.append(color)
 
         ## save those and the initial colors, etc
-        plate_best_color_ind, plate_diffs = solver._find_best_color(
+        plate_best_color_ind, plate_diffs = solver._find_best_color( # ****
             current_plate, target_color, cur_best_color
         )
         plate_best_color = current_plate[plate_best_color_ind]
@@ -271,7 +264,7 @@ def run(
         current_iter += 1
         num_exps += pop_size
         ##Plot review
-        create_visuals(
+        create_visuals( 
             target_plate,
             current_plate,
             exp_folder,
@@ -340,14 +333,12 @@ def run(
             "Sufficient Wells in Experiment Budget", num_exps + pop_size <= exp_budget
         )
     exp.events.log_loop_end()
-    # Trash plate after experiment
-    # Return ink to reservoirs.
-    steps_run, _ = run_flow(shutdown_barty, payload, steps_run, exp)
 
     shutil.copy2(
         run_info["run_dir"] / "results" / "plate_only.jpg",
         (exp_folder / "results" / f"plate_{plate_n}.jpg"),
     )
+    # Return ink to reservoirs.
     steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
     exp.events.end_experiment()
     print("This is our best color so far")
@@ -368,7 +359,7 @@ def parse_args():
     parser.add_argument(
         "--target",
         "-t",
-        default=str(np.random.randint(0, 255, 3).tolist()),
+        default=str(np.random.randint(0, 255, 3).tolist()), # # *** Target comes in as RGB color, don't have to adjust, only adjust ratios...
         help="Color Target",
     )
     parser.add_argument(
@@ -416,7 +407,7 @@ if __name__ == "__main__":
     print(target_ratio)
     print(exp_label)
     run_args = {
-        "target_color": [120, 120, 120],
+        "target_color": [120, 120, 120], # *** Don't think I have to change this
         "solver": solver,
         "solver_name": solver_name,
         "exp_budget": args.exp_budget,

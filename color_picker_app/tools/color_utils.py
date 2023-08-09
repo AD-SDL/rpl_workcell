@@ -28,19 +28,20 @@ combination of volumes that will be mixed in that well
         for i in curr_wells_used:
             curr_wells_available.remove(i)
         
-    r_vol, g_vol, b_vol = [], [], []
+    color_A_vol, color_B_vol, color_C_vol, color_D_vol = [], [], [], [] # ***
     dest_wells = []
     for color, well in zip(volumes, curr_wells_available):
     # for color, well in zip(volumes, well_names):
-        r, g, b = color
-        r_vol.append(r)
-        g_vol.append(g)
-        b_vol.append(b)
+        a, b, c, d = color # ***
+        color_A_vol.append(a)
+        color_B_vol.append(b)
+        color_C_vol.append(c)
+        color_D_vol.append(d) 
         dest_wells.append(well)
         curr_wells_used.append(well)
     return {
-        "color_A_volumes": r_vol,
-        "color_B_volumes": g_vol,
-        "color_C_volumes": b_vol,
+        "color_A_volumes": color_A_vol, # ***
+        "color_B_volumes": color_B_vol,
+        "color_C_volumes": color_C_vol,
         "destination_wells": dest_wells,
     }, curr_wells_used

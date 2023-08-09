@@ -12,6 +12,7 @@ from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie2000
 from skopt import Optimizer
 import matplotlib.pyplot as plt
+import mixbox
 
 class BestColor(BaseModel):
     color: List[float]
@@ -27,11 +28,11 @@ class BayesColorSolver:
         previous_experiment_colors: Optional[List[List[float]]] = None,
         return_volumes: bool = True,
         return_max_volume: float = 275.0,
-        out_dim: Tuple[int] = (96, 3),
+        out_dim: Tuple[int] = (96, 4), # ***
         pop_size: int = 96,
         prev_best_color: Optional[List[float]] = None
     ) -> List[List[float]]:
-        opt = Optimizer(dimensions=[(0.0, 1.0), (0.0, 1.0), (0.0, 1.0)],
+        opt = Optimizer(dimensions=[(0.0, 1.0), (0.0, 1.0), (0.0, 1.0), (0.0, 1.0)], # ***
                         # base_estimator='GP',
                         n_initial_points=4,
                         initial_point_generator='random',
@@ -40,13 +41,15 @@ class BayesColorSolver:
         )
         assert pop_size == out_dim[0], "Population size must equal out_dim[0]"
         if previous_experiment_colors is None:
-            c_ratios = make_random_plate(dim=out_dim)
+            c_ratios = make_random_plate(dim=out_dim) # Makes 96 groups of 4, DONE
             if return_volumes:
-                return BayesColorSolver.convert_ratios_to_volumes(c_ratios)
+                return BayesColorSolver.convert_ratios_to_volumes(c_ratios) # DONE
+        if len(target_color)==len(mixing_colors): # Might be unnecessary..
+            target_color = BayesColorSolver.mix_simulated_ratios(target_color, mixing_colors) # DONE
         target_color = sRGBColor(
-            *target_color, is_upscaled=True if max(target_color) > 1 else False
+            *target_color, is_upscaled=True if max(target_color) > 1 else False 
         )
-        opt.tell(previous_experiment_colors, BayesColorSolver._grade_population(previous_experiment_colors))
+        opt.tell(previous_experiment_colors, BayesColorSolver._grade_population(previous_experiment_colors)) # DONE
         new_population = opt.ask(pop_size)
         # Augment
         
@@ -69,6 +72,7 @@ class BayesColorSolver:
         sanitized_colors = []
         for color in color_ratios:
             if not isinstance(color, sRGBColor):
+                color = BayesColorSolver.mix_simulated_ratios(color, mixing_colors) # ***
                 sanitized_colors.append(sRGBColor(*color))
             else:
                 sanitized_colors.append(color)
@@ -105,6 +109,8 @@ class BayesColorSolver:
         """
 
         if not isinstance(target_color, sRGBColor):
+            if len(target_color)==len(mixing_colors):
+                target_color = BayesColorSolver.mix_simulated_ratios(target_color, mixing_colors) # ***
             target_color = sRGBColor(
                 *target_color, is_upscaled=True if max(target_color) > 1 else False
             )
@@ -112,6 +118,8 @@ class BayesColorSolver:
         if not all(
             [isinstance(exp_color, sRGBColor) for exp_color in experiment_colors]
         ):
+            for i in range(len(experiment_colors)):
+                experiment_colors[i] = [BayesColorSolver.mix_simulated_ratios(experiment_colors[i], mixing_colors)] # *** check if needs to be list or not
             experiment_colors = [
                 sRGBColor(
                     *exp_color,
@@ -126,7 +134,33 @@ class BayesColorSolver:
         )
         return np.argmin(plate_diffs), plate_diffs
         
+    @staticmethod
+    def mix_simulated_ratios(
+        ratio: List[float], input_colors: List[List[float]], normalize_output: bool = True
+        ) -> List[float]:
+        
+        assert len(ratio) == len(input_colors)
 
+        upscaled_input_colors = []
+        for color in input_colors:
+            if max(color) <= 1:
+                upscaled_input_colors.append([c * 255 for c in color])
+            else:
+                upscaled_input_colors.append(color)
+
+        latent_colors = [mixbox.rgb_to_latent(color) for color in upscaled_input_colors]
+
+        z_mix = [0 for _ in range(mixbox.LATENT_SIZE)]
+        for i in range(len(z_mix)):
+            for j in range(len(ratio)):
+                z_mix[i] += ratio[j] * latent_colors[j][i]
+
+        rgb_mix = mixbox.latent_to_rgb(z_mix)
+        # Normalize to [0, 1]
+        if normalize_output:
+            rgb_mix = [c / 255 for c in rgb_mix]
+        return rgb_mix   
+    
     @staticmethod
     def _grade_population(
         pop_colors: List[Union[sRGBColor, List[float]]],
@@ -134,8 +168,12 @@ class BayesColorSolver:
     ):
 
         if not isinstance(target, sRGBColor):
+            if len(target)==len(mixing_colors):
+                target = BayesColorSolver.mix_simulated_ratios(target, mixing_colors)
             target = sRGBColor(*target, is_upscaled=True if max(target) > 1 else False)
         if not all([isinstance(exp_color, sRGBColor) for exp_color in pop_colors]):
+            for i in range(len(pop_colors)):
+                pop_colors[i] = [BayesColorSolver.mix_simulated_ratios(pop_colors[i], mixing_colors)]
             pop_colors = [
                 sRGBColor(
                     *exp_color,
@@ -215,6 +253,7 @@ class BayesColorSolver:
             new_pop.append(_random_init())
 
         return new_pop
+    
     @staticmethod
     def plot_diffs(
         difflist: List[List[float]],
@@ -248,10 +287,10 @@ if __name__ == "__main__":
     print_color = True
 
     target_ratio = [237, 36, 36]
-    mixing_colors = [[255, 0, 0], [0, 255, 0], [0, 0, 255]]
+    mixing_colors = [[255, 0, 0], [0, 255, 0], [0, 0, 255], [0, 0, 0]] # ***
     solver = BayesColorSolver
 
-    init_guesses = make_random_plate(dim=(8, 12, 3))
+    init_guesses = make_random_plate(dim=(8, 12, 4)) # ***
     if show_visual:
         plt.imshow(init_guesses)
         plt.show()
@@ -259,13 +298,13 @@ if __name__ == "__main__":
     cur_plate = init_guesses
     best_color = None
     best_diff = float("inf")
-    for iter in range(4):
+    for iter in range(4): # change? maybe 5?
         new_plate = solver.run_iteration(target_ratio, cur_plate, return_volumes=False)
-        new_plate = np.asarray(new_plate).reshape((8, 12, 3)).tolist()
+        new_plate = np.asarray(new_plate).reshape((8, 12, 4)).tolist()
         cur_plate = new_plate
         if print_color:
             plate_best_color_ind = solver._find_best_color(
-                np.asarray(cur_plate).reshape((-1, 3)).tolist(), target_ratio
+                np.asarray(cur_plate).reshape((-1, 4)).tolist(), target_ratio
             )
             row = plate_best_color_ind // 12
             col = plate_best_color_ind % 12

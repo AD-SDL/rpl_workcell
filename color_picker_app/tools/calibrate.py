@@ -2,8 +2,8 @@ from typing import List, Dict, Any, Tuple
 from tools.run_flow import run_flow
 from pathlib import Path
 import numpy as np
-from tools.color_utils import convert_volumes_to_payload
-from tools.plate_color_analysis import get_colors_from_file
+from tools.color_utils import convert_volumes_to_payload 
+from tools.plate_color_analysis import get_colors_from_file 
 import cv2
 import base64
 from matplotlib import pyplot as plt
@@ -28,7 +28,7 @@ def calibrate(target_color: List[int],
     colors: colors that are combined linearly to visualize experimental colors
     target_color: RGB Color captured from camera image of actual plate based on the ratio calculated from the input RGB values
     steps_run: """
-    plate_volumes = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1], np.array(target_color)/sum(target_color)])*plate_max_volume
+    plate_volumes = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1], [0, 0, 0], np.array(target_color)/sum(target_color)])*plate_max_volume # ***
     payload, curr_wells_used = convert_volumes_to_payload(plate_volumes, curr_wells_used)
     payload['use_existing_resources'] = False 
     steps_run, run_info = run_flow(loop_protocol, payload, steps_run, experiment) 
@@ -45,9 +45,9 @@ def calibrate(target_color: List[int],
         color = plate_colors_ratios[well]
         wells_used.append(well)
         current_plate.append(color)
-    target_color = current_plate[3]
+    target_color = current_plate[4] # ***
     target_color = target_color.tolist()
-    colors = current_plate[0:3]
+    colors = current_plate[0:4] # ***
     t = np.asarray(colors)
     colors = t.tolist()
     color_image = cv2.resize( np.asarray([colors]).astype(np.uint8), [pop_size*50, 50], interpolation = cv2.INTER_NEAREST)
