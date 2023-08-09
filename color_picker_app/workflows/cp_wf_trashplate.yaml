@@ -9,8 +9,8 @@ modules:
   - name: pf400
 
 modules:
-  - name: sciclops
   - name: pf400
+  - name: barty
 
 flowdef:
   - name: Move to final location
@@ -21,3 +21,9 @@ flowdef:
       target: wc.trash
       source_plate_rotation: narrow
       target_plate_rotation: narrow
+  - name: Drain Max Ink
+    module: barty
+    action: drain_ink_all_motors 
+    args:
+     foo: bar
+    comments: Drain OT2 of max vol of ink.

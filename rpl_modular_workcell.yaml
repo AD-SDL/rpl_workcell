@@ -154,13 +154,13 @@ modules:
   #     tcp_node_address: "146.137.240.22"
   #     tcp_node_port: 2000
 
-  # - name: barty
-  #   model: RPL BARTY
-  #   interface: wei_rest_node
-  #   workcell_coordinates: [0,0,0,1,0,0,0] 
-  #   config:
-  #     rest_node_address: "http://barty.cels.anl.gov:8000"
-  #     rest_node_auth: ""
+  - name: barty
+    model: RPL BARTY
+    interface: wei_rest_node
+    workcell_coordinates: [0,0,0,1,0,0,0] 
+    config:
+      rest_node_address: "http://kirby.cels.anl.gov:8000"
+      rest_node_auth: ""
 
   # - name: MiR_base
   #   model: MiR250

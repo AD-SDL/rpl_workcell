@@ -70,6 +70,11 @@ def run(
     loop_protocol = wf_dir / "cp_wf_mixcolor.yaml"
     final_protocol = wf_dir / "cp_wf_trashplate.yaml"
 
+    #wf_b_dir = Path("/home/rpl/workspace/Barty/workflows")
+    #startup_barty = wf_b_dir / "barty_startup.yaml"
+    #shutdown_barty = wf_b_dir / "barty_shutdown.yaml"
+    refill_barty = wf_dir / "cp_wf_replenish.yaml" 
+
     # Constants
     solver_out_dim = (pop_size, 3)
     use_funcx = False
@@ -105,7 +110,7 @@ def run(
     diffs = []  # List of all diffs from all runs of the experiment
     new_plate = True
     payload = {}  # Payload to be sent to the WEI runs
-    colors_used = [0,0,0]
+    colors_used = [0,0,0]   
     exp.events.log_loop_start("Main Loop")
     while num_exps + pop_size <= exp_budget:
         new_run = {}
@@ -119,7 +124,7 @@ def run(
 
         # grab new plate if experiment starting or current plate is full
         exp.events.log_decision("Need New Plate", (new_plate or current_iter == 0))
-        if new_plate or current_iter == 0:
+        if (new_plate or current_iter == 0):
             # print('Grabbing New Plate')
             steps_run, _ = run_flow(init_protocol, payload, steps_run, exp)
             curr_wells_used = []
@@ -146,6 +151,11 @@ def run(
                 )
                 plate_n = plate_n + 1
 
+        # Starting Barty up.
+        exp.events.log_decision("Refill Max Ink", (current_iter==0))
+        #if current_iter==0:
+  #         steps_run, _ = run_flow(startup_barty, payload, steps_run, exp) 
+
         # Calculate volumes and current wells for creating the OT2 protocol
         exp.events.log_local_compute("solver.run_iteration")
         plate_volumes = solver.run_iteration(
@@ -163,18 +173,12 @@ def run(
         payload, curr_wells_used = convert_volumes_to_payload(
             plate_volumes, curr_wells_used
         )
-        print(payload)
-        curr_colors_used = [sum(payload['color_A_volumes']),sum(payload['color_B_volumes']),sum(payload['color_C_volumes'])]
+        # Information tracking of ink usage.
+        curr_colors_used = [sum(payload['color_A_volumes']),sum(payload['color_B_volumes']),sum(payload['color_C_volumes'])] # Add color D later..
+        # Change keys for all files to match ^
         comb_list = [colors_used, curr_colors_used]
         colors_used = [sum(vols) for vols in zip(*comb_list)]
         print('Total vol of colors used so far:', colors_used)
-
-        for i in colors_used:
-            if i > 5000:
-                print(i, ': Has used 5 mL of ink, Barty refill command')
-                i = 0
-                print('Updated colors_used:', colors_used)
-
 
         # resets OT2 resources (or not)
         if current_iter == 0:
@@ -198,6 +202,21 @@ def run(
             steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
             new_plate = True
             curr_wells_used = []
+
+        # Checking whether to refill ink.
+        for i, color_vol in enumerate(colors_used):
+            exp.events.log_decision("Need Ink", (color_vol >= 5000)) # 5 mL, change to whatever threshold.
+            if color_vol >= 5000:
+                if i == 0:
+                    payload["refill_motor"] = ["motor_1"]
+                elif i == 1:
+                    payload["refill_motor"] = ["motor_4"]
+                elif i == 2:
+                    payload["refill_motor"] = ["motor_3"]
+                # elif i == 3:
+                #   payload["refill_motor"] = ["motor_4"]
+                steps_run, _ = run_flow(refill_barty, payload, steps_run, exp)
+                colors_used[i] = 0
 
         # Analyze image
         # output should be list [pop_size, 3]
@@ -322,6 +341,9 @@ def run(
         )
     exp.events.log_loop_end()
     # Trash plate after experiment
+    # Return ink to reservoirs.
+    steps_run, _ = run_flow(shutdown_barty, payload, steps_run, exp)
+
     shutil.copy2(
         run_info["run_dir"] / "results" / "plate_only.jpg",
         (exp_folder / "results" / f"plate_{plate_n}.jpg"),
