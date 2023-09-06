@@ -14,7 +14,7 @@ window=1
 tmux new-window -t $session:$window -n 'worker'
 tmux send-keys -t $session:$window 'cd ' $folder C-m
 tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
-tmux send-keys -t $session:$window 'python3 -m rpl_wei.processing.worker' C-m
+tmux send-keys -t $session:$window 'python3 -m rpl_wei.scheduler --workcell ~/workspace/rpl_workcell/rpl_modular_workcell.yaml' C-m
 
 window=2
 tmux new-window -t $session:$window -n 'server'
