@@ -201,7 +201,7 @@ def run(
 
         # Analyze image
         # output should be list [pop_size, 3]
-        action_msg = run_info["hist"]["Take Picture"]["action_msg"]
+        action_msg = run_info["Take Picture"]["action_msg"]
         image = np.fromstring(base64.b64decode(action_msg), np.uint8)
         img = cv2.imdecode(image, cv2.IMREAD_COLOR)
         img_path = run_info["run_dir"] / "results" / "final_image.jpg"

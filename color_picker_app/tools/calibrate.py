@@ -32,7 +32,7 @@ def calibrate(target_color: List[int],
     payload, curr_wells_used = convert_volumes_to_payload(plate_volumes, curr_wells_used)
     payload['use_existing_resources'] = False 
     steps_run, run_info = run_flow(loop_protocol, payload, steps_run, experiment) 
-    action_msg = run_info["hist"]["Take Picture"]["action_msg"]
+    action_msg = run_info["Take Picture"]["action_msg"]
     image = np.fromstring(base64.b64decode(action_msg), np.uint8)
     img = cv2.imdecode(image, cv2.IMREAD_COLOR)
     img_path = run_info["run_dir"] / "results" / "final_image.jpg"
