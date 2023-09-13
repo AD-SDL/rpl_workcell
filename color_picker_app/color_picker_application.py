@@ -122,7 +122,6 @@ def run(
         if new_plate or current_iter == 0:
             # print('Grabbing New Plate')
             steps_run, _ = run_flow(init_protocol, payload, steps_run, exp)
-            return
             curr_wells_used = []
             new_plate = False
             exp.events.log_decision("Need Calibration", (current_iter == 0))
