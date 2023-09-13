@@ -19,8 +19,8 @@ tmux send-keys -t $session:$window  "uvicorn brooks_xpeel_rest_client:app --host
 
 window=2
 tmux new-window -t $session:$window -n 'sciclops'
-tmux send-keys -t $session:$window  'cd ~/workspace/hudson_platecrane_module/scripts'
-tmux send-keys -t $session:$window 'uvicorn sciclops_rest_client:app --host 'parker.cels.anl.gov' --port=2002' C-m
+tmux send-keys -t $session:$window  'cd ~/workspace/hudson_platecrane_module/scripts' C-m
+tmux send-keys -t $session:$window  'python3 -m sciclops_rest_client --alias="sciclops" --host="parker.cels.anl.gov" --port=2002' C-m
 
 window=4
 tmux new-window -t $session:$window -n 'ot2_alpha'
