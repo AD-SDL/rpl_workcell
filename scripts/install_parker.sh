@@ -6,7 +6,7 @@ cd $WS
 
 ##Peeler
 git clone https://github.com/AD-SDL/a4s_sealer_module
-cd a4s_sealer_module/a4s_sealer_driver
+cd a4s_sealer_module
 pip install -r requirements.txt
 pip install . 
 cd $WS
@@ -14,14 +14,14 @@ cd $WS
 
 ##Sealer
 git clone https://github.com/AD-SDL/brooks_xpeel_module
-cd brooks_xpeel_module/brooks_xpeel_driver
+cd brooks_xpeel_module
 pip install -r requirements.txt
 pip install . 
 cd $WS
 
 ##Sciclops
 git clone https://github.com/AD-SDL/hudson_platecrane_module
-cd hudson_platecrane_module/hudson_platecrane_driver
+cd hudson_platecrane_module
 pip install -r requirements.txt
 pip install . 
 cd $WS

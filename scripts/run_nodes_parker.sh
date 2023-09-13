@@ -10,12 +10,12 @@ tmux set -g mouse on
 window=0
 tmux new-window -t $session:$window -n 'sealer'
 tmux send-keys -t $session:$window  'cd ~/workspace/a4s_sealer_module/scripts' C-m
-tmux send-keys -t $session:$window  "uvicorn a4s_sealer_rest_client:app --host 'parker.cels.anl.gov' --port=2000" C-m
+tmux send-keys -t $session:$window  "python3 -m a4s_sealer_rest_client --alias="sealer" --host="parker.cels.anl.gov"  --port=2000" C-m
 
 window=1
 tmux new-window -t $session:$window -n 'peeler'
 tmux send-keys -t $session:$window  'cd ~/workspace/brooks_xpeel_module/scripts' C-m
-tmux send-keys -t $session:$window  "uvicorn brooks_xpeel_rest_client:app --host 'parker.cels.anl.gov' --port=2001" C-m
+tmux send-keys -t $session:$window   'python3 -m brooks_xpeel_rest_client --alias="peeler" --host="parker.cels.anl.gov" --port=2001' C-m
 
 window=2
 tmux new-window -t $session:$window -n 'sciclops'
