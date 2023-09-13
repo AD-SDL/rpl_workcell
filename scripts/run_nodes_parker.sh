@@ -5,6 +5,8 @@ tmux new-session -d -s $session
 tmux set -g mouse on
 
 
+
+
 window=0
 tmux new-window -t $session:$window -n 'sealer'
 tmux send-keys -t $session:$window  'cd ~/workspace/a4s_sealer_module/scripts' C-m
@@ -23,17 +25,17 @@ tmux send-keys -t $session:$window 'uvicorn sciclops_rest_client:app --host 'par
 window=4
 tmux new-window -t $session:$window -n 'ot2_alpha'
 tmux send-keys -t $session:$window  'cd ~/workspace/scripts/' C-m
-tmux send-keys -t $session:$window  'python3 -m ot2_rest_client --node_name="ot2_cp_alpha" --ip="146.137.240.101" --port=2003' C-m
+tmux send-keys -t $session:$window  'python3 -m ot2_rest_client --alias="ot2_pcr_alpha" --host="parker.cels.anl.gov" --ot2_ip="146.137.240.101" --port=2003' C-m
 
 window=5
 tmux new-window -t $session:$window -n 'ot2_beta'
 tmux send-keys -t $session:$window  'cd ~/workspace/scripts/' C-m
-tmux send-keys -t $session:$window  'python3 -m ot2_rest_client --node_name="ot2_cp_beta" --ip="146.137.240.100" --port=2004' C-m
+tmux send-keys -t $session:$window  'python3 -m ot2_rest_client --alias="ot2_gc_beta" --host="parker.cels.anl.gov" --ot2_ip="146.137.240.100" --port=2004' C-m
 
 window=6
 tmux new-window -t $session:$window -n 'ot2_gamma'
 tmux send-keys -t $session:$window  'cd ~/workspace/scripts/' C-m
-tmux send-keys -t $session:$window  'python3 -m ot2_rest_client --node_name="ot2_cp_gamma" --ip="146.137.240.102" --port=2005' C-m
+tmux send-keys -t $session:$window  'python3 -m ot2_rest_client --alias="ot2_cp_gamma"  --host="parker.cels.anl.gov"  --ot2_ip="146.137.240.102" --port=2005' C-m
 
 
 tmux attach-session -t $session

@@ -46,7 +46,7 @@ class BayesColorSolver:
         target_color = sRGBColor(
             *target_color, is_upscaled=True if max(target_color) > 1 else False
         )
-        opt.tell(previous_experiment_colors, BayesColorSolver._grade_population(previous_experiment_colors))
+        opt.tell(previous_experiment_colors, BayesColorSolver._grade_population(previous_experiment_colors, target_color))
         new_population = opt.ask(pop_size)
         # Augment
         

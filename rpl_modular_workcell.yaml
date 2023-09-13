@@ -85,6 +85,13 @@ modules:
       rest_node_address: "http://strange.cels.anl.gov:3001"
       rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0,0,0,1,0,0,0] 
+  - name: biometra
+    interface: wei_zmq_node
+    model: Hidex
+    workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
+    config:
+      zmq_node_address: "wendy.cels.anl.gov"
+      zmq_node_port: 2002
 
 locations:
   pf400: #Joint angles for the PF400 Plate Handler
