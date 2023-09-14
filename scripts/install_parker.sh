@@ -1,4 +1,5 @@
-WS = ~/workspace
+#!/bin/bash
+WS=~/workspace
 
 mkdir -p $WS
 cd $WS
