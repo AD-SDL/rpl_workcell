@@ -27,7 +27,7 @@ cd $WS
 
 ##OT2
 git clone https://github.com/AD-SDl/ot2_module
-cd ot2_module/ot2_driver
+cd ot2_module
 pip install -r requirements.txt
 pip install . 
 cd $WS
