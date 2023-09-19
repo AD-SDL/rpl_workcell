@@ -23,8 +23,6 @@ class BestColor(BaseModel):
 
 
 
-def patch_asscalar(a):
-    return a.item()
 
 setattr(np, "asscalar", patch_asscalar)
 class BayesColorSolver(Solver):

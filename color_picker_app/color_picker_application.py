@@ -127,7 +127,7 @@ def run(
             exp.events.log_decision("Need Calibration", (current_iter == 0))
             if current_iter == 0:
                 # Run the calibration protocol that gets the colors being mixed and ensures the target color is within the possible color space
-                colors, target_color, curr_wells_used, steps_run = calibrate(
+                colors, target_color, curr_wells_used, steps_run, analytical_sol = calibrate(
                     target_color,
                     curr_wells_used,
                     loop_protocol,
@@ -137,6 +137,7 @@ def run(
                     pop_size,
                     exp,
                 )
+                analytical_score = solver._grade_population([analytical_sol], target_color)[0]
             else:
                 # save the old plate picture and increment to a new plate
                 filename = "plate_" + str(plate_n) + ".jpg"
@@ -379,16 +380,16 @@ if __name__ == "__main__":
     exp_type = "color_picker"
     if args.solver:
         if args.solver == "Bay":
-            solver = BayesColorSolver
+            solver = BayesColorSolver()
             solver_name = "Bayesian Solver"
         elif args.solver == "Evo":
             solver_name = "Evolutionary Solver"
-            solver = EvolutionaryColorSolver
+            solver = EvolutionaryColorSolver()
         elif args.solver == "Agg":
-            solver = AggroColorSolver
+            solver = AggroColorSolver()
             solver_name = "Aggressive Genetic Solver"
     else:
-        solver = EvolutionaryColorSolver
+        solver = EvolutionaryColorSolver()
         solver_name = "Evolutionary Solver"
     print(solver)
     print(target_ratio)
