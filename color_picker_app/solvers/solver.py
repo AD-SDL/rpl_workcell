@@ -20,11 +20,12 @@ class BestColor(BaseModel):
     diff_to_target: float = float("inf")
 
 
-class GenericSolver:
+class Solver:
     model_name: str =  'Generic Model'
-    
-    @staticmethod
+    def __init__(self) -> None:
+        pass
     def run_iteration(
+        self,
         target_color: List[float],
         previous_experiment_colors: Optional[List[List[float]]] = None,
         return_volumes: bool = True,
@@ -43,11 +44,11 @@ class GenericSolver:
         if previous_experiment_colors is None:
             c_ratios = make_random_plate(dim=out_dim)
             if pop_size >= 3:
-                c_ratios[0] = sRGBColor(0.98, 0.01, 0.01)
-                c_ratios[1] = sRGBColor(0.01, 0.98, 0.01)
+                c_ratios[0] = sRGBColor(1, 0, 0)
+                c_ratios[1] = sRGBColor(0, 1, 0.01)
                 c_ratios[2] = sRGBColor(0.01, 0.01, 0.98)
             if return_volumes:
-                return EvolutionaryColorSolver.convert_ratios_to_volumes(c_ratios)
+                return Solver.convert_ratios_to_volumes(c_ratios)
             else:
                 return c_ratios
 
@@ -61,18 +62,18 @@ class GenericSolver:
         ]
 
         # Find population best color
-        (best_color_position, t) = EvolutionaryColorSolver._find_best_color(
+        (best_color_position) = Solver._find_best_color(
             previous_experiment_colors, target_color
         )
 
         # Augment
-        new_population = EvolutionaryColorSolver._augment(
-            previous_experiment_colors, pop_size, best_color_position
+        new_population = self._augment(
+            previous_experiment_colors, pop_size, best_color_position, target_color
         )
 
         # Convert to volumes
         if return_volumes:
-            return EvolutionaryColorSolver.convert_ratios_to_volumes(
+            return Solver.convert_ratios_to_volumes(
                 new_population, return_max_volume
             )
 
@@ -137,11 +138,11 @@ class GenericSolver:
                 for exp_color in experiment_colors
             ]
         plate_diffs = np.array(
-                EvolutionaryColorSolver._grade_population(
+                Solver._grade_population(
                     experiment_colors, target_color
                 )
         )
-        return np.argmin(plate_diffs), plate_diffs
+        return np.argmin(plate_diffs)
         
 
     @staticmethod
@@ -163,7 +164,7 @@ class GenericSolver:
 
         diffs = []
         for color in pop_colors:
-            diff = EvolutionaryColorSolver._color_diff(target, color)
+            diff = Solver._color_diff(target, color)
             diffs.append(diff)
 
         return diffs
@@ -187,12 +188,13 @@ class GenericSolver:
         color2_lab = convert_color(color2_rgb, LabColor)
         delta_e = delta_e_cie2000(color1_lab, color2_lab)
         return delta_e
-
-    @staticmethod
+    
     def _augment(
+        self,
         pop: List[sRGBColor],
         new_pop_size: int,
         previos_best_index: Optional[int] = None,
+        target_color=None
     ) -> List[sRGBColor]:
         new_pop = []
         n = new_pop_size
@@ -270,7 +272,7 @@ if __name__ == "__main__":
 
     target_ratio = [237, 36, 36]
     mixing_colors = [[255, 0, 0], [0, 255, 0], [0, 0, 255]]
-    solver = EvolutionaryColorSolver
+    solver = Solver
 
     init_guesses = make_random_plate(dim=(8, 12, 3))
     if show_visual:

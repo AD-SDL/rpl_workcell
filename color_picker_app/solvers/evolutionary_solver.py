@@ -21,8 +21,7 @@ class BestColor(BaseModel):
 
 
 class EvolutionaryColorSolver:
-    @staticmethod
-    def run_iteration(
+    def run_iteration(self,
         target_color: List[float],
         previous_experiment_colors: Optional[List[List[float]]] = None,
         return_volumes: bool = True,
@@ -75,118 +74,8 @@ class EvolutionaryColorSolver:
             )
 
         return [c.get_value_tuple() for c in new_population]
-
-    @staticmethod
-    def convert_ratios_to_volumes(
-        color_ratios: List[List[Union[sRGBColor, float]]],
-        total_volume: float = 275.0,
-    ) -> List[List[float]]:
-        sanitized_colors = []
-        for color in color_ratios:
-            if not isinstance(color, sRGBColor):
-                sanitized_colors.append(sRGBColor(*color))
-            else:
-                sanitized_colors.append(color)
-
-        volume_list = []
-        for color in sanitized_colors:
-            color_ratio = np.asarray(color.get_value_tuple())
-            color_ratio /= sum(color_ratio)
-            volume_list.append([r * total_volume for r in color_ratio])
-
-        return volume_list
-
-    @staticmethod
-    def _find_best_color(
-        experiment_colors: List[Union[sRGBColor, List[float]]],
-        target_color: List[Union[sRGBColor, List[float]]],
-        best_color: Optional[List[Union[sRGBColor, List[float]]]] = None
-    ) -> Tuple[int, List[float]]:
-        """returns index of best color in population
-
-        Parameters
-        ----------
-        experiment_colors : List[sRGBColor]
-            List of colors in population
-        target_color : List[sRGBColor]
-            Target color
-
-        Returns
-        -------
-        int
-            Index of best color in population
-        List[float]:
-            Difference scores for all colors
-        """
-
-        if not isinstance(target_color, sRGBColor):
-            target_color = sRGBColor(
-                *target_color, is_upscaled=True if max(target_color) > 1 else False
-            )
-
-        if not all(
-            [isinstance(exp_color, sRGBColor) for exp_color in experiment_colors]
-        ):
-            experiment_colors = [
-                sRGBColor(
-                    *exp_color,
-                    is_upscaled=True if max(exp_color) > 1 else False,
-                )
-                for exp_color in experiment_colors
-            ]
-        plate_diffs = np.array(
-                EvolutionaryColorSolver._grade_population(
-                    experiment_colors, target_color
-                )
-        )
-        return np.argmin(plate_diffs), plate_diffs
         
 
-    @staticmethod
-    def _grade_population(
-        pop_colors: List[Union[sRGBColor, List[float]]],
-        target: Union[sRGBColor, List[float]],
-    ):
-
-        if not isinstance(target, sRGBColor):
-            target = sRGBColor(*target, is_upscaled=True if max(target) > 1 else False)
-        if not all([isinstance(exp_color, sRGBColor) for exp_color in pop_colors]):
-            pop_colors = [
-                sRGBColor(
-                    *exp_color,
-                    is_upscaled=True if max(exp_color) > 1 else False,
-                )
-                for exp_color in pop_colors
-            ]
-
-        diffs = []
-        for color in pop_colors:
-            diff = EvolutionaryColorSolver._color_diff(target, color)
-            diffs.append(diff)
-
-        return diffs
-
-    @staticmethod
-    def _color_diff(
-        color1_rgb: Union[sRGBColor, List[float]],
-        color2_rgb: Union[sRGBColor, List[float]],
-    ) -> float:
-
-        if not isinstance(color1_rgb, sRGBColor):
-            color1_rgb = sRGBColor(
-                *color1_rgb, is_upscaled=True if max(color1_rgb) > 1 else False
-            )
-        if not isinstance(color2_rgb, sRGBColor):
-            color2_rgb = sRGBColor(
-                *color2_rgb, is_upscaled=True if max(color2_rgb) > 1 else False
-            )
-
-        color1_lab = convert_color(color1_rgb, LabColor)
-        color2_lab = convert_color(color2_rgb, LabColor)
-        delta_e = delta_e_cie2000(color1_lab, color2_lab)
-        return delta_e
-
-    @staticmethod
     def _augment(
         pop: List[sRGBColor],
         new_pop_size: int,
@@ -233,7 +122,7 @@ class EvolutionaryColorSolver:
             new_pop[1] = sRGBColor(0, 1, 0)
             new_pop[2] = sRGBColor(0, 0, 1)
         return new_pop
-    @staticmethod
+    
     def plot_diffs(
         difflist: List[List[float]],
         exp_folder: Any
@@ -255,10 +144,6 @@ class EvolutionaryColorSolver:
         plt.savefig(exp_folder/"results" / "convergence_graph.png", dpi=300)
         return a
 
-
-def make_random_plate(dim: Tuple[int] = ()) -> List[List[List[float]]]:
-    total = np.prod(dim)
-    return np.random.random(size=total).reshape(dim).tolist()
 
 
 if __name__ == "__main__":
