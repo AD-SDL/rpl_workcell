@@ -1,16 +1,12 @@
 from math import floor
 from random import sample, choice
-from typing import List, Tuple, Union, Optional, Any
+from typing import List, Tuple, Optional, Any, Union
 
 from pydantic import BaseModel
-import pathlib
-from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 # https://python-colormath.readthedocs.io/en/latest/color_objects.html
-from colormath.color_objects import sRGBColor, LabColor
-from colormath.color_conversions import convert_color
-from colormath.color_diff import delta_e_cie2000
+from colormath.color_objects import sRGBColor
 
 
 class BestColor(BaseModel):
@@ -19,6 +15,9 @@ class BestColor(BaseModel):
     population_index: int
     diff_to_target: float = float("inf")
 
+def make_random_plate(dim: Tuple[int] = ()) -> List[List[List[float]]]:
+    total = np.prod(dim)
+    return np.random.random(size=total).reshape(dim).tolist()
 
 class EvolutionaryColorSolver:
     def run_iteration(self,
@@ -143,6 +142,26 @@ class EvolutionaryColorSolver:
         print(exp_folder/"results" / "convergence_graph.png")
         plt.savefig(exp_folder/"results" / "convergence_graph.png", dpi=300)
         return a
+    
+    @staticmethod
+    def convert_ratios_to_volumes(
+        color_ratios: List[List[Union[sRGBColor, float]]],
+        total_volume: float = 275.0,
+    ) -> List[List[float]]:
+        sanitized_colors = []
+        for color in color_ratios:
+            if not isinstance(color, sRGBColor):
+                sanitized_colors.append(sRGBColor(*color))
+            else:
+                sanitized_colors.append(color)
+
+        volume_list = []
+        for color in sanitized_colors:
+            color_ratio = np.asarray(color.get_value_tuple())
+            color_ratio /= sum(color_ratio)
+            volume_list.append([r * total_volume for r in color_ratio])
+
+        return volume_list
 
 
 

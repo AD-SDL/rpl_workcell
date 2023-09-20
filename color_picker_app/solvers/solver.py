@@ -14,10 +14,10 @@ from colormath.color_diff import delta_e_cie2000
 
 
 
-def patch_asscalar(a):
-    return a.item()
+# def patch_asscalar(a):
+    # return a.item()
 
-setattr(np, "asscalar", patch_asscalar)
+# setattr(np, "asscalar", patch_asscalar)
 
 class BestColor(BaseModel):
     color: List[float]
@@ -68,7 +68,7 @@ class Solver:
         ]
 
         # Find population best color
-        (best_color_position) = Solver._find_best_color(
+        best_color_position, _ = Solver._find_best_color(
             previous_experiment_colors, target_color
         )
 
@@ -148,7 +148,7 @@ class Solver:
                     experiment_colors, target_color
                 )
         )
-        return np.argmin(plate_diffs)
+        return np.argmin(plate_diffs), plate_diffs
         
 
     @staticmethod
@@ -199,14 +199,14 @@ class Solver:
         self,
         pop: List[sRGBColor],
         new_pop_size: int,
-        previos_best_index: Optional[int] = None,
+        previous_best_index: Optional[int] = None,
         target_color=None
     ) -> List[sRGBColor]:
         new_pop = []
         n = new_pop_size
-        if previos_best_index is not None:
+        if previous_best_index is not None:
             n -= 1  # Save one spot for the best color
-            new_pop.append(pop[previos_best_index])
+            new_pop.append(pop[previous_best_index])
         # combine colors towards average
         for _ in range(floor(n // 3)):
             t1, t2 = sample(pop, 2)
@@ -238,7 +238,7 @@ class Solver:
 
         for _ in range(len(new_pop), new_pop_size):
             new_pop.append(_random_init())
-        if previos_best_index is None and len(new_pop) >= 3:
+        if previous_best_index is None and len(new_pop) >= 3:
             new_pop[0] = sRGBColor(0.98, 0.01, 0.01)
             new_pop[1] = sRGBColor(0.01, 0.98, 0.01)
             new_pop[2] = sRGBColor(0.01, 0.01, 0.98)

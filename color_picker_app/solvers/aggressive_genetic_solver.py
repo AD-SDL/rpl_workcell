@@ -1,7 +1,7 @@
 from math import floor
 from random import sample, choice
 from typing import List, Tuple, Union, Optional, Any
-from solver import Solver
+from solvers.solver import Solver
 from pydantic import BaseModel
 
 import numpy as np

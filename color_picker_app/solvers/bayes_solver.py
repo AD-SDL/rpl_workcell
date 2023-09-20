@@ -12,7 +12,7 @@ from colormath.color_objects import sRGBColor, LabColor
 from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie2000
 from skopt import Optimizer
-from solver import Solver
+from solvers.solver import Solver
 import matplotlib.pyplot as plt
 
 class BestColor(BaseModel):
@@ -24,7 +24,7 @@ class BestColor(BaseModel):
 
 
 
-setattr(np, "asscalar", patch_asscalar)
+# setattr(np, "asscalar", patch_asscalar)
 class BayesColorSolver(Solver):
     def __init__(self) -> None:
         pass

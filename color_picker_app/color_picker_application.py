@@ -17,6 +17,7 @@ from tools.plate_color_analysis import get_colors_from_file
 from solvers.bayes_solver import BayesColorSolver
 from solvers.evolutionary_solver import EvolutionaryColorSolver
 from solvers.aggressive_genetic_solver import AggroColorSolver
+from solvers.solver import Solver
 from funcx import FuncXExecutor
 
 from datetime import datetime
@@ -37,7 +38,7 @@ from tools.calibrate import calibrate
 # For constructing the plots for each run
 from tools.create_visuals import create_visuals, create_target_plate
 
-from rpl_wei.exp_app import Experiment
+from wei.exp_app import Experiment
 
 MAX_PLATE_SIZE = 96
 
@@ -127,7 +128,7 @@ def run(
             exp.events.log_decision("Need Calibration", (current_iter == 0))
             if current_iter == 0:
                 # Run the calibration protocol that gets the colors being mixed and ensures the target color is within the possible color space
-                colors, target_color, curr_wells_used, steps_run, analytical_sol = calibrate(
+                colors, target_color, curr_wells_used, steps_run, analytical_sol, color_inverse = calibrate(
                     target_color,
                     curr_wells_used,
                     loop_protocol,
@@ -203,7 +204,7 @@ def run(
         # Analyze image
         # output should be list [pop_size, 3]
         action_msg = run_info["Take Picture"]["action_msg"]
-        image = np.fromstring(base64.b64decode(action_msg), np.uint8)
+        image = np.frombuffer(base64.b64decode(action_msg), np.uint8)
         img = cv2.imdecode(image, cv2.IMREAD_COLOR)
         img_path = run_info["run_dir"] / "results" / "final_image.jpg"
         cv2.imwrite(str(img_path), img)
@@ -378,19 +379,20 @@ if __name__ == "__main__":
     )
     exp_path = "/home/rpl/experiments"
     exp_type = "color_picker"
-    if args.solver:
-        if args.solver == "Bay":
-            solver = BayesColorSolver()
-            solver_name = "Bayesian Solver"
-        elif args.solver == "Evo":
-            solver_name = "Evolutionary Solver"
-            solver = EvolutionaryColorSolver()
-        elif args.solver == "Agg":
-            solver = AggroColorSolver()
-            solver_name = "Aggressive Genetic Solver"
-    else:
-        solver = EvolutionaryColorSolver()
-        solver_name = "Evolutionary Solver"
+    # if args.solver:
+    #     if args.solver == "Bay":
+    #         solver = BayesColorSolver()
+    #         solver_name = "Bayesian Solver"
+    #     elif args.solver == "Evo":
+    #         solver_name = "Evolutionary Solver"
+    #         solver = EvolutionaryColorSolver()
+    #     elif args.solver == "Agg":
+    #         solver = AggroColorSolver()
+    #         solver_name = "Aggressive Genetic Solver"
+    #     elif args.solver == "Solver"
+    # else:
+    solver = Solver()
+    solver_name = "Solver"
     print(solver)
     print(target_ratio)
     print(exp_label)

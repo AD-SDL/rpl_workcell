@@ -29,6 +29,7 @@ modules:
 
   #In this case, the rest url used to send actions to the component
       rest_node_address: "http://parker.cels.anl.gov:2000"
+      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
 
   # X, Y, Z, Q0, Q1, Q2, Q3 relative to workcell_origin_coordinates
     workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
@@ -54,6 +55,7 @@ modules:
     interface: wei_rest_node
     config:
       rest_node_address: "http://parker.cels.anl.gov:2003"
+      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0,0,0,1,0,0,0] 
 
   - name: ot2_gc_beta
@@ -61,6 +63,7 @@ modules:
     interface: wei_rest_node
     config:
       rest_node_address: "http://parker.cels.anl.gov:2004"
+      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0,0,0,1,0,0,0] 
 
   - name: ot2_cp_gamma
@@ -68,6 +71,7 @@ modules:
     interface: wei_rest_node
     config:
       rest_node_address: "http://parker.cels.anl.gov:2005"
+      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0,0,0,1,0,0,0] 
 
   - name: pf400
@@ -85,13 +89,13 @@ modules:
       rest_node_address: "http://strange.cels.anl.gov:3001"
       rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0,0,0,1,0,0,0] 
-  - name: biometra
-    interface: wei_zmq_node
-    model: Hidex
-    workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
-    config:
-      zmq_node_address: "wendy.cels.anl.gov"
-      zmq_node_port: 2002
+  # - name: biometra
+  #   interface: wei_zmq_node
+  #   model: Hidex
+  #   workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
+  #   config:
+  #     zmq_node_address: "wendy.cels.anl.gov"
+  #     zmq_node_port: 2002
 
 locations:
   pf400: #Joint angles for the PF400 Plate Handler

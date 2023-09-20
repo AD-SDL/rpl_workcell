@@ -1,8 +1,8 @@
 
-#from rpl_wei import WEI
+#from wei import WEI
 from tools.threadReturn import ThreadWithReturnValue
 from tools.log_info import get_log_info
-from rpl_wei.exp_app import Experiment
+from wei.exp_app import Experiment
 from pathlib import Path
 import time
 def wei_run_flow(wf_file_path, payload):
@@ -10,7 +10,7 @@ def wei_run_flow(wf_file_path, payload):
     run_info = wei_client.run_workflow(payload=payload)
     return run_info
 
-def run_flow(protocol, payload, steps_run, experiment):
+def run_flow(protocol, payload, steps_run, experiment: Experiment):
     '''Runs a WEI flow and 
     updates the steps that have been run in the experiment
     @Inputs: 
@@ -32,7 +32,7 @@ def run_flow(protocol, payload, steps_run, experiment):
     #print(experiment.get_job_log(response["job_id"]))
     run_info = job_status["result"]
     run_info["run_dir"] = Path(run_info["run_dir"])
-    print(run_info)
+    # print(run_info)
     run_dir = Path(run_info["run_dir"])
     t_steps_run = get_log_info(run_dir, protocol)
     steps_run.append(t_steps_run)
