@@ -5,10 +5,10 @@ from typing import List, Tuple, Optional, Any, Union
 from pydantic import BaseModel
 import numpy as np
 import matplotlib.pyplot as plt
+
 # https://python-colormath.readthedocs.io/en/latest/color_objects.html
 from colormath.color_objects import sRGBColor
 from solvers.solver import Solver
-
 
 
 class BestColor(BaseModel):
@@ -17,24 +17,26 @@ class BestColor(BaseModel):
     population_index: int
     diff_to_target: float = float("inf")
 
+
 def make_random_plate(dim: Tuple[int] = ()) -> List[List[List[float]]]:
     total = np.prod(dim)
     return np.random.random(size=total).reshape(dim).tolist()
+
 
 class EvolutionaryColorSolver(Solver):
     def __init__(self) -> None:
         super().__init__()
 
-    def run_iteration(self,
+    def run_iteration(
+        self,
         target_color: List[float],
         previous_experiment_colors: Optional[List[List[float]]] = None,
         return_volumes: bool = True,
         return_max_volume: float = 275.0,
         out_dim: Tuple[int] = (96, 3),
         pop_size: int = 96,
-        prev_best_color: Optional[List[float]] = None
+        prev_best_color: Optional[List[float]] = None,
     ) -> List[List[float]]:
-
         assert pop_size == out_dim[0], "Population size must equal out_dim[0]"
 
         target_color = sRGBColor(
@@ -78,7 +80,6 @@ class EvolutionaryColorSolver(Solver):
             )
 
         return [c.get_value_tuple() for c in new_population]
-        
 
     def _augment(
         pop: List[sRGBColor],
@@ -114,7 +115,7 @@ class EvolutionaryColorSolver(Solver):
 
                 new_color_ratio.append(round(r + delta, 3))
             new_pop.append(sRGBColor(*new_color_ratio))
-        
+
         # generate new randoms
         def _random_init():
             return sRGBColor(*np.random.rand(3).round(3).tolist())
@@ -126,7 +127,7 @@ class EvolutionaryColorSolver(Solver):
             new_pop[1] = sRGBColor(0, 1, 0)
             new_pop[2] = sRGBColor(0, 0, 1)
         return new_pop
-    
+
     # def plot_diffs(
     #     difflist: List[List[float]],
     #     exp_folder: Any
@@ -147,7 +148,7 @@ class EvolutionaryColorSolver(Solver):
     #     print(exp_folder/"results" / "convergence_graph.png")
     #     plt.savefig(exp_folder/"results" / "convergence_graph.png", dpi=300)
     #     return a
-    
+
     @staticmethod
     def convert_ratios_to_volumes(
         color_ratios: List[List[Union[sRGBColor, float]]],
@@ -167,7 +168,6 @@ class EvolutionaryColorSolver(Solver):
             volume_list.append([r * total_volume for r in color_ratio])
 
         return volume_list
-
 
 
 if __name__ == "__main__":

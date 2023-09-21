@@ -7,17 +7,18 @@ import pathlib
 from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
+
 # https://python-colormath.readthedocs.io/en/latest/color_objects.html
 from colormath.color_objects import sRGBColor, LabColor
 from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie2000
 
 
-
 # def patch_asscalar(a):
-    # return a.item()
+# return a.item()
 
 # setattr(np, "asscalar", patch_asscalar)
+
 
 class BestColor(BaseModel):
     color: List[float]
@@ -27,10 +28,11 @@ class BestColor(BaseModel):
 
 
 class Solver:
-    model_name: str =  'Generic Model'
+    model_name: str = "Generic Model"
+
     def __init__(self) -> None:
         pass
-    
+
     def run_iteration(
         self,
         target_color: List[float],
@@ -39,9 +41,8 @@ class Solver:
         return_max_volume: float = 275.0,
         out_dim: Tuple[int] = (96, 3),
         pop_size: int = 96,
-        prev_best_color: Optional[List[float]] = None
+        prev_best_color: Optional[List[float]] = None,
     ) -> List[List[float]]:
-
         assert pop_size == out_dim[0], "Population size must equal out_dim[0]"
 
         target_color = sRGBColor(
@@ -80,9 +81,7 @@ class Solver:
 
         # Convert to volumes
         if return_volumes:
-            return Solver.convert_ratios_to_volumes(
-                new_population, return_max_volume
-            )
+            return Solver.convert_ratios_to_volumes(new_population, return_max_volume)
 
         return [c.get_value_tuple() for c in new_population]
 
@@ -110,7 +109,7 @@ class Solver:
     def _find_best_color(
         experiment_colors: List[Union[sRGBColor, List[float]]],
         target_color: List[Union[sRGBColor, List[float]]],
-        best_color: Optional[List[Union[sRGBColor, List[float]]]] = None
+        best_color: Optional[List[Union[sRGBColor, List[float]]]] = None,
     ) -> Tuple[int, List[float]]:
         """returns index of best color in population
 
@@ -145,19 +144,15 @@ class Solver:
                 for exp_color in experiment_colors
             ]
         plate_diffs = np.array(
-                Solver._grade_population(
-                    experiment_colors, target_color
-                )
+            Solver._grade_population(experiment_colors, target_color)
         )
         return np.argmin(plate_diffs), plate_diffs
-        
 
     @staticmethod
     def _grade_population(
         pop_colors: List[Union[sRGBColor, List[float]]],
         target: Union[sRGBColor, List[float]],
     ):
-
         if not isinstance(target, sRGBColor):
             target = sRGBColor(*target, is_upscaled=True if max(target) > 1 else False)
         if not all([isinstance(exp_color, sRGBColor) for exp_color in pop_colors]):
@@ -181,7 +176,6 @@ class Solver:
         color1_rgb: Union[sRGBColor, List[float]],
         color2_rgb: Union[sRGBColor, List[float]],
     ) -> float:
-
         if not isinstance(color1_rgb, sRGBColor):
             color1_rgb = sRGBColor(
                 *color1_rgb, is_upscaled=True if max(color1_rgb) > 1 else False
@@ -195,13 +189,13 @@ class Solver:
         color2_lab = convert_color(color2_rgb, LabColor)
         delta_e = delta_e_cie2000(color1_lab, color2_lab)
         return delta_e
-    
+
     def _augment(
         self,
         pop: List[sRGBColor],
         new_pop_size: int,
         previous_best_index: Optional[int] = None,
-        target_color=None
+        target_color=None,
     ) -> List[sRGBColor]:
         new_pop = []
         n = new_pop_size
@@ -232,7 +226,7 @@ class Solver:
 
                 new_color_ratio.append(round(r + delta, 3))
             new_pop.append(sRGBColor(*new_color_ratio))
-        
+
         # generate new randoms
         def _random_init():
             return sRGBColor(*np.random.rand(3).round(3).tolist())
@@ -244,25 +238,22 @@ class Solver:
             new_pop[1] = sRGBColor(0.01, 0.98, 0.01)
             new_pop[2] = sRGBColor(0.01, 0.01, 0.98)
         return new_pop
-    
+
     @staticmethod
-    def plot_diffs(
-        difflist: List[List[float]],
-        exp_folder: Any
-    ) -> Any:
+    def plot_diffs(difflist: List[List[float]], exp_folder: Any) -> Any:
         a = []
-        print(range(1, len(difflist)+1))
+        print(range(1, len(difflist) + 1))
         for i in difflist:
-            if True: #a == [] or min(i) < min(a):
+            if True:  # a == [] or min(i) < min(a):
                 a.append(min(i))
         plt.figure()
         a.sort(reverse=True)
-        plt.plot(range(1, len(a)+1), a)
+        plt.plot(range(1, len(a) + 1), a)
         plt.xlabel("Color Rank")
         plt.ylabel("Color Difference")
         plt.title("Loss Graph")
-        print(exp_folder/"results" / "convergence_graph.png")
-        plt.savefig(exp_folder/"results" / "convergence_graph.png", dpi=300)
+        print(exp_folder / "results" / "convergence_graph.png")
+        plt.savefig(exp_folder / "results" / "convergence_graph.png", dpi=300)
         return a
 
 

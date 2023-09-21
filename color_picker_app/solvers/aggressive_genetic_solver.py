@@ -21,52 +21,48 @@ class BestColor(BaseModel):
 
 
 class AggroColorSolver(Solver):
-
     def __init__(self) -> None:
         super().__init__()
-    
+
     def _augment(
-        self, 
+        self,
         pop: List[sRGBColor],
         new_pop_size: int,
         previos_best_index: Optional[int] = None,
         prev_best_diff: Optional[float] = None,
     ) -> List[sRGBColor]:
         new_pop = []
-        
+
         n = new_pop_size
         if previos_best_index is not None:
             sample_pop = [pop[previos_best_index] for x in range(n)]
             print("prevbest")
         else:
-            sample_pop = (choice(pop, n))
-            
+            sample_pop = choice(pop, n)
+
         # combine colors towards average
-      
+
         # shift some values up or down
-        
+
         for color in sample_pop:
-            t_color_ratios =  color.get_value_tuple()   
-           
+            t_color_ratios = color.get_value_tuple()
 
             new_color_ratio = []
             # randomly shift some of the values up or down
-            lim = min(prev_best_diff/200, 0.2)
+            lim = min(prev_best_diff / 200, 0.2)
             vals = np.random.rand(3)
-            vals = vals/sum(vals)
-
+            vals = vals / sum(vals)
 
             i = 0
             for r in t_color_ratios:
-                
-                delta = vals[i]*np.random.choice([-1, 1])*lim
+                delta = vals[i] * np.random.choice([-1, 1]) * lim
                 new_color_ratio.append(round(np.clip(r + delta, 0.01, 1), 3))
                 i += 1
-                
+
             new_pop.append(sRGBColor(*new_color_ratio))
-        
+
         # generate new randoms
-        
+
         def _random_init():
             return sRGBColor(*np.random.rand(3).round(3).tolist())
 
@@ -78,26 +74,26 @@ class AggroColorSolver(Solver):
             new_pop[1] = sRGBColor(0.01, 0.98, 0.01)
             new_pop[2] = sRGBColor(0.01, 0.01, 0.98)
         return new_pop
+
     @staticmethod
-    def plot_diffs(
-        difflist: List[List[float]],
-        exp_folder: Any
-    ) -> Any:
+    def plot_diffs(difflist: List[List[float]], exp_folder: Any) -> Any:
         import pathlib
         from pathlib import Path
+
         a = []
-        print(range(1, len(difflist)+1))
+        print(range(1, len(difflist) + 1))
         for i in difflist:
             if a == [] or min(i) < min(a):
                 a.append(min(i))
         plt.figure()
-        plt.plot(range(1, len(difflist)+1), a)
+        plt.plot(range(1, len(difflist) + 1), a)
         plt.xlabel("Color Rank")
         plt.ylabel("Color Difference")
         plt.title("Loss Graph")
-        print(exp_folder/"results" / "convergence_graph.png")
-        plt.savefig(exp_folder/"results" / "convergence_graph.png", dpi=300)
+        print(exp_folder / "results" / "convergence_graph.png")
+        plt.savefig(exp_folder / "results" / "convergence_graph.png", dpi=300)
         return a
+
 
 def make_random_plate(dim: Tuple[int] = ()) -> List[List[List[float]]]:
     total = np.prod(dim)

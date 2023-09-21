@@ -15,6 +15,7 @@ from skopt import Optimizer
 from solvers.solver import Solver
 import matplotlib.pyplot as plt
 
+
 class BestColor(BaseModel):
     color: List[float]
     location: str
@@ -22,57 +23,52 @@ class BestColor(BaseModel):
     diff_to_target: float = float("inf")
 
 
-
-
 # setattr(np, "asscalar", patch_asscalar)
 class BayesColorSolver(Solver):
     def __init__(self) -> None:
-        self.optimizer = Optimizer(dimensions=[(0.0, 1.0), (0.0, 1.0), (0.0, 1.0)],
-                        # base_estimator='GP',
-                        n_initial_points=4,
-                        initial_point_generator='random',
-                        # acq_func='EI',
-                        # acq_optimizer='sampling',
+        self.optimizer = Optimizer(
+            dimensions=[(0.0, 1.0), (0.0, 1.0), (0.0, 1.0)],
+            # base_estimator='GP',
+            n_initial_points=4,
+            initial_point_generator="random",
+            # acq_func='EI',
+            # acq_optimizer='sampling',
         )
         super().__init()
-   
 
-   
-    
     def _augment(
         self,
         pop: List[sRGBColor],
         new_pop_size: int,
         previos_best_index: Optional[int] = None,
-        target_color = None,
+        target_color=None,
     ) -> List[sRGBColor]:
-       grades = Solver._grade_population(pop,  target_color)
-       test_pop = [[a for a in x.get_value_tuple()] for x in pop]
-       print(test_pop)
-       self.optimizer.tell(test_pop, grades)
-       new_pop = self.optimizer.ask(new_pop_size)
-       return new_pop
-    
+        grades = Solver._grade_population(pop, target_color)
+        test_pop = [[a for a in x.get_value_tuple()] for x in pop]
+        print(test_pop)
+        self.optimizer.tell(test_pop, grades)
+        new_pop = self.optimizer.ask(new_pop_size)
+        return new_pop
+
     @staticmethod
-    def plot_diffs(
-        difflist: List[List[float]],
-        exp_folder: Any
-    ) -> Any:
+    def plot_diffs(difflist: List[List[float]], exp_folder: Any) -> Any:
         import pathlib
         from pathlib import Path
+
         a = []
-        print(range(1, len(difflist)+1))
+        print(range(1, len(difflist) + 1))
         for i in difflist:
             if a == [] or min(i) < min(a):
                 a.append(min(i))
         plt.figure()
-        plt.plot(range(1, len(difflist)+1), a)
+        plt.plot(range(1, len(difflist) + 1), a)
         plt.xlabel("Color Rank")
         plt.ylabel("Color Difference")
         plt.title("Loss Graph")
-        print(exp_folder/"results" / "convergence_graph.png")
-        plt.savefig(exp_folder/"results" / "convergence_graph.png", dpi=300)
+        print(exp_folder / "results" / "convergence_graph.png")
+        plt.savefig(exp_folder / "results" / "convergence_graph.png", dpi=300)
         return a
+
 
 def make_random_plate(dim: Tuple[int] = ()) -> List[List[List[float]]]:
     total = np.prod(dim)

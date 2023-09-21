@@ -42,6 +42,7 @@ from wei.exp_app import Experiment
 
 MAX_PLATE_SIZE = 96
 
+
 def run(
     exp_type: str,
     exp_label: str = "",
@@ -86,7 +87,12 @@ def run(
         os.mkdir(exp_folder)
     if not (os.path.isdir(exp_folder / "results")):
         os.mkdir(exp_folder / "results")
-    exp = Experiment("127.0.0.1", "8000", "Color_Picker",kafka_server="ec2-54-160-200-147.compute-1.amazonaws.com:9092")
+    exp = Experiment(
+        "127.0.0.1",
+        "8000",
+        "Color_Picker",
+        kafka_server="ec2-54-160-200-147.compute-1.amazonaws.com:9092",
+    )
     exp.register_exp()
     # Resource Tracking:
     plate_n = 1  # total number of plates
@@ -106,7 +112,7 @@ def run(
     diffs = []  # List of all diffs from all runs of the experiment
     new_plate = True
     payload = {}  # Payload to be sent to the WEI runs
-    colors_used = [0,0,0]
+    colors_used = [0, 0, 0]
     exp.events.log_loop_start("Main Loop")
     while num_exps + pop_size <= exp_budget:
         new_run = {}
@@ -128,7 +134,14 @@ def run(
             exp.events.log_decision("Need Calibration", (current_iter == 0))
             if current_iter == 0:
                 # Run the calibration protocol that gets the colors being mixed and ensures the target color is within the possible color space
-                colors, target_color, curr_wells_used, steps_run, analytical_sol, color_inverse = calibrate(
+                (
+                    colors,
+                    target_color,
+                    curr_wells_used,
+                    steps_run,
+                    analytical_sol,
+                    color_inverse,
+                ) = calibrate(
                     target_color,
                     curr_wells_used,
                     loop_protocol,
@@ -138,7 +151,9 @@ def run(
                     pop_size,
                     exp,
                 )
-                analytical_score = solver._grade_population([analytical_sol], target_color)[0]
+                analytical_score = solver._grade_population(
+                    [analytical_sol], target_color
+                )[0]
             else:
                 # save the old plate picture and increment to a new plate
                 filename = "plate_" + str(plate_n) + ".jpg"
@@ -166,17 +181,20 @@ def run(
             plate_volumes, curr_wells_used
         )
         print(payload)
-        curr_colors_used = [sum(payload['color_A_volumes']),sum(payload['color_B_volumes']),sum(payload['color_C_volumes'])]
+        curr_colors_used = [
+            sum(payload["color_A_volumes"]),
+            sum(payload["color_B_volumes"]),
+            sum(payload["color_C_volumes"]),
+        ]
         comb_list = [colors_used, curr_colors_used]
         colors_used = [sum(vols) for vols in zip(*comb_list)]
-        print('Total vol of colors used so far:', colors_used)
+        print("Total vol of colors used so far:", colors_used)
 
         for i in colors_used:
             if i > 5000:
-                print(i, ': Has used 5 mL of ink, Barty refill command')
+                print(i, ": Has used 5 mL of ink, Barty refill command")
                 i = 0
-                print('Updated colors_used:', colors_used)
-
+                print("Updated colors_used:", colors_used)
 
         # resets OT2 resources (or not)
         if current_iter == 0:
@@ -197,7 +215,7 @@ def run(
             used_wells + pop_size > MAX_PLATE_SIZE
         ):  # if we have used all wells or not enough for next iter (thrash plate, start from scratch)
             print("Trashing Used Plate")
-            #steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
+            # steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
             new_plate = True
             curr_wells_used = []
 
@@ -213,7 +231,7 @@ def run(
             print("funcx started")
             exp.events.log_globus_compute("get_colors_from_file")
             fx = FuncXExecutor(endpoint_id=funcx_local_ep)
-            fxresult = fx.submit(get_colors_from_file, img_path) 
+            fxresult = fx.submit(get_colors_from_file, img_path)
             fxresult = fx.submit(get_colors_from_file, img_path)
             plate_colors_ratios = fxresult.result()[1]
             print("funcx finished")
@@ -318,7 +336,7 @@ def run(
             f.write(report_js)
         # Save overall results
         print("publishing:")
-        #publish_iter(exp_folder / "results", exp_folder, exp)
+        # publish_iter(exp_folder / "results", exp_folder, exp)
         exp.events.log_loop_check(
             "Sufficient Wells in Experiment Budget", num_exps + pop_size <= exp_budget
         )
