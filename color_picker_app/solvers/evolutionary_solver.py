@@ -7,6 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 # https://python-colormath.readthedocs.io/en/latest/color_objects.html
 from colormath.color_objects import sRGBColor
+from solvers.solver import Solver
+
 
 
 class BestColor(BaseModel):
@@ -19,7 +21,10 @@ def make_random_plate(dim: Tuple[int] = ()) -> List[List[List[float]]]:
     total = np.prod(dim)
     return np.random.random(size=total).reshape(dim).tolist()
 
-class EvolutionaryColorSolver:
+class EvolutionaryColorSolver(Solver):
+    def __init__(self) -> None:
+        super().__init__()
+
     def run_iteration(self,
         target_color: List[float],
         previous_experiment_colors: Optional[List[List[float]]] = None,
@@ -122,26 +127,26 @@ class EvolutionaryColorSolver:
             new_pop[2] = sRGBColor(0, 0, 1)
         return new_pop
     
-    def plot_diffs(
-        difflist: List[List[float]],
-        exp_folder: Any
-    ) -> Any:
-        import pathlib
-        from pathlib import Path
-        a = []
-        print(range(1, len(difflist)+1))
-        for i in difflist:
-            if True: #a == [] or min(i) < min(a):
-                a.append(min(i))
-        plt.figure()
-        a.sort(reverse=True)
-        plt.plot(range(1, len(a)+1), a)
-        plt.xlabel("Color Rank")
-        plt.ylabel("Color Difference")
-        plt.title("Loss Graph")
-        print(exp_folder/"results" / "convergence_graph.png")
-        plt.savefig(exp_folder/"results" / "convergence_graph.png", dpi=300)
-        return a
+    # def plot_diffs(
+    #     difflist: List[List[float]],
+    #     exp_folder: Any
+    # ) -> Any:
+    #     import pathlib
+    #     from pathlib import Path
+    #     a = []
+    #     print(range(1, len(difflist)+1))
+    #     for i in difflist:
+    #         if True: #a == [] or min(i) < min(a):
+    #             a.append(min(i))
+    #     plt.figure()
+    #     a.sort(reverse=True)
+    #     plt.plot(range(1, len(a)+1), a)
+    #     plt.xlabel("Color Rank")
+    #     plt.ylabel("Color Difference")
+    #     plt.title("Loss Graph")
+    #     print(exp_folder/"results" / "convergence_graph.png")
+    #     plt.savefig(exp_folder/"results" / "convergence_graph.png", dpi=300)
+    #     return a
     
     @staticmethod
     def convert_ratios_to_volumes(

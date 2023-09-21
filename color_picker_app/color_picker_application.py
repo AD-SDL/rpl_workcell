@@ -379,20 +379,19 @@ if __name__ == "__main__":
     )
     exp_path = "/home/rpl/experiments"
     exp_type = "color_picker"
-    # if args.solver:
-    #     if args.solver == "Bay":
-    #         solver = BayesColorSolver()
-    #         solver_name = "Bayesian Solver"
-    #     elif args.solver == "Evo":
-    #         solver_name = "Evolutionary Solver"
-    #         solver = EvolutionaryColorSolver()
-    #     elif args.solver == "Agg":
-    #         solver = AggroColorSolver()
-    #         solver_name = "Aggressive Genetic Solver"
-    #     elif args.solver == "Solver"
-    # else:
-    solver = Solver()
-    solver_name = "Solver"
+    if args.solver:
+        if args.solver == "Bay":
+            solver = BayesColorSolver()
+            solver_name = "Bayesian Solver"
+        elif args.solver == "Evo":
+            solver_name = "Evolutionary Solver"
+            solver = EvolutionaryColorSolver()
+        elif args.solver == "Agg":
+            solver = AggroColorSolver()
+            solver_name = "Aggressive Genetic Solver"
+    else:
+        solver = Solver()
+        solver_name = "Solver"
     print(solver)
     print(target_ratio)
     print(exp_label)

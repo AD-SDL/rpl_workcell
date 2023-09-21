@@ -27,7 +27,6 @@ class BestColor(BaseModel):
 # setattr(np, "asscalar", patch_asscalar)
 class BayesColorSolver(Solver):
     def __init__(self) -> None:
-        pass
         self.optimizer = Optimizer(dimensions=[(0.0, 1.0), (0.0, 1.0), (0.0, 1.0)],
                         # base_estimator='GP',
                         n_initial_points=4,
@@ -35,6 +34,7 @@ class BayesColorSolver(Solver):
                         # acq_func='EI',
                         # acq_optimizer='sampling',
         )
+        super().__init()
    
 
    

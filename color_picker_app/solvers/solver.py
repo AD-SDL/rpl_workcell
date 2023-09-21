@@ -30,6 +30,7 @@ class Solver:
     model_name: str =  'Generic Model'
     def __init__(self) -> None:
         pass
+    
     def run_iteration(
         self,
         target_color: List[float],

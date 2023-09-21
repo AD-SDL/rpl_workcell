@@ -21,6 +21,9 @@ class BestColor(BaseModel):
 
 
 class AggroColorSolver(Solver):
+
+    def __init__(self) -> None:
+        super().__init__()
     
     def _augment(
         self, 
