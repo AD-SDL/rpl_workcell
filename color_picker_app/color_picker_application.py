@@ -132,7 +132,7 @@ def run(
         exp.events.log_decision("Need New Plate", (new_plate or current_iter == 0))
         if new_plate or current_iter == 0:
             # print('Grabbing New Plate')
-            #steps_run, _ = run_flow(init_protocol, payload, steps_run, exp)
+            steps_run, _ = run_flow(init_protocol, payload, steps_run, exp)
             curr_wells_used = []
             new_plate = False
             exp.events.log_decision("Need Calibration", (current_iter == 0))
@@ -218,7 +218,7 @@ def run(
             used_wells + pop_size > MAX_PLATE_SIZE
         ):  # if we have used all wells or not enough for next iter (thrash plate, start from scratch)
             print("Trashing Used Plate")
-            # steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
+            steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
             new_plate = True
             curr_wells_used = []
 
@@ -352,7 +352,7 @@ def run(
         run_info["run_dir"] / "results" / "plate_only.jpg",
         (exp_folder / "results" / f"plate_{plate_n}.jpg"),
     )
-    #steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
+    steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
     exp.events.end_experiment()
     print("This is our best color so far")
     print(cur_best_color)
