@@ -39,16 +39,15 @@ class EvolutionaryColorSolver(Solver):
         # combine colors towards average
         for _ in range(floor(n // 3)):
             t1, t2 = sample(prev_pop, 2)
-            t1_ratios = t1.get_value_tuple()
-            t2_ratios = t2.get_value_tuple()
+
             new_color_ratio = (
-                ((np.asarray(t1_ratios) + np.asarray(t2_ratios)) / 2).round(3).tolist()
+                ((np.asarray(t1) + np.asarray(t2)) / 2).round(3).tolist()
             )
-            new_pop.append(sRGBColor(new_color_ratio))
+            new_pop.append((new_color_ratio))
 
         # shift some values up or down
         for _ in range(floor(n // 3)):
-            t_color_ratios = choice(prev_pop).get_value_tuple()
+            t_color_ratios = choice(prev_pop)
 
             new_color_ratio = []
             # randomly shift some of the values up or down

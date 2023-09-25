@@ -172,18 +172,18 @@ def run(
         exp.events.log_local_compute("solver.run_iteration")
         if plate_colors:
             prev_diffs = solver._grade_population(prev_colors, target_color)
-        plate_ratios = solver.run_iteration(
+        previous_ratios = solver.run_iteration(
             previous_ratios,
             prev_diffs
         )
 
         # Only for visualization, Perform a linear combination of the next colors being tried to show what the solver expects to create on this run.
-        target_plate = create_target_plate(plate_ratios, colors)
+        target_plate = create_target_plate(previous_ratios, colors)
         # Assign volumes to wells and colors and make a payload compatible with the OT2 protopiler
         payload, curr_wells_used = convert_volumes_to_payload(
-            np.multiply(plate_ratios, plate_max_volume), curr_wells_used
+            np.multiply(previous_ratios, plate_max_volume), curr_wells_used
         )
-        print(payload)
+
         curr_colors_used = [
             sum(payload["color_A_volumes"]),
             sum(payload["color_B_volumes"]),
@@ -295,13 +295,15 @@ def run(
                 report = json.loads(f.read())
             runs = report["runs"]
         # Create new run log
+        print("prev vols")
+        print(np.multiply(previous_ratios, plate_max_volume).tolist())
         new_run = [
             {
                 "run_number": current_iter,
                 "run_label": str(run_path),
                 "plate_N": plate_n,
                 "tried_values": target_plate,
-                "exp_volumes": plate_ratios,
+                "exp_volumes": np.multiply(previous_ratios, plate_max_volume).tolist(),
                 "wells": list(wells_used),
                 "results": list(map(lambda x: x.tolist(), prev_colors)),
                 "differences": plate_diffs.tolist(),
