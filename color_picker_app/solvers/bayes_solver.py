@@ -12,7 +12,7 @@ from colormath.color_objects import sRGBColor, LabColor
 from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie2000
 from skopt import Optimizer
-from solvers.solver import Solver
+from solver import Solver
 import matplotlib.pyplot as plt
 
 
@@ -34,7 +34,7 @@ class BayesColorSolver(Solver):
             # acq_func='EI',
             # acq_optimizer='sampling',
         )
-        super().__init()
+        super().__init__()
 
     def _augment(
         self,
@@ -43,30 +43,53 @@ class BayesColorSolver(Solver):
         previos_best_index: Optional[int] = None,
         target_color=None,
     ) -> List[sRGBColor]:
+        print("here")
         grades = Solver._grade_population(pop, target_color)
         test_pop = [[a for a in x.get_value_tuple()] for x in pop]
         print(test_pop)
         self.optimizer.tell(test_pop, grades)
+        print("start")
         new_pop = self.optimizer.ask(new_pop_size)
+        print("end")
         return new_pop
 
     @staticmethod
-    def plot_diffs(difflist: List[List[float]], exp_folder: Any) -> Any:
+    # def plot_diffs(difflist: List[List[float]], exp_folder: Any) -> Any:
+    #     import pathlib
+    #     from pathlib import Path
+
+    #     a = []
+    #     print(range(1, len(difflist) + 1))
+    #     for i in difflist:
+    #         if a == [] or min(i) < min(a):
+    #             a.append(min(i))
+    #     plt.figure()
+    #     plt.plot(range(1, len(difflist) + 1), a)
+    #     plt.xlabel("Color Rank")
+    #     plt.ylabel("Color Difference")
+    #     plt.title("Loss Graph")
+    #     print(exp_folder / "results" / "convergence_graph.png")
+    #     plt.savefig(exp_folder / "results" / "convergence_graph.png", dpi=300)
+    #     return a
+    def plot_diffs(
+        difflist: List[List[float]],
+        exp_folder: Any
+    ) -> Any:
         import pathlib
         from pathlib import Path
-
         a = []
-        print(range(1, len(difflist) + 1))
+        print(range(1, len(difflist)+1))
         for i in difflist:
-            if a == [] or min(i) < min(a):
+            if True: #a == [] or min(i) < min(a):
                 a.append(min(i))
         plt.figure()
-        plt.plot(range(1, len(difflist) + 1), a)
+        a.sort(reverse=True)
+        plt.plot(range(1, len(a)+1), a)
         plt.xlabel("Color Rank")
         plt.ylabel("Color Difference")
         plt.title("Loss Graph")
-        print(exp_folder / "results" / "convergence_graph.png")
-        plt.savefig(exp_folder / "results" / "convergence_graph.png", dpi=300)
+        print(exp_folder/"results" / "convergence_graph.png")
+        plt.savefig(exp_folder/"results" / "convergence_graph.png", dpi=300)
         return a
 
 
@@ -78,23 +101,24 @@ def make_random_plate(dim: Tuple[int] = ()) -> List[List[List[float]]]:
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    show_visual = True
+    show_visual = False
     print_color = True
 
     target_ratio = [237, 36, 36]
     mixing_colors = [[255, 0, 0], [0, 255, 0], [0, 0, 255]]
     solver = BayesColorSolver()
 
-    init_guesses = make_random_plate(dim=(8, 12, 3))
+    init_guesses = make_random_plate(dim=(1, 3, 3))
     if show_visual:
         plt.imshow(init_guesses)
         plt.show()
-
+    print("here")
     cur_plate = init_guesses
     best_color = None
     best_diff = float("inf")
     for iter in range(4):
         new_plate = solver.run_iteration(target_ratio, cur_plate, return_volumes=False)
+        print("start")
         new_plate = np.asarray(new_plate).reshape((8, 12, 3)).tolist()
         cur_plate = new_plate
         if print_color:

@@ -167,6 +167,7 @@ def run(
         exp.events.log_local_compute("solver.run_iteration")
         plate_volumes = solver.run_iteration(
             target_color,
+            colors,
             current_plate,
             pop_size=pop_size,
             out_dim=(pop_size, 3),
@@ -225,6 +226,7 @@ def run(
         image = np.frombuffer(base64.b64decode(action_msg), np.uint8)
         img = cv2.imdecode(image, cv2.IMREAD_COLOR)
         img_path = run_info["run_dir"] / "results" / "final_image.jpg"
+
         cv2.imwrite(str(img_path), img)
 
         if use_funcx:
@@ -336,7 +338,7 @@ def run(
             f.write(report_js)
         # Save overall results
         print("publishing:")
-        # publish_iter(exp_folder / "results", exp_folder, exp)
+        #publish_iter(exp_folder / "results", exp_folder, exp)
         exp.events.log_loop_check(
             "Sufficient Wells in Experiment Budget", num_exps + pop_size <= exp_budget
         )

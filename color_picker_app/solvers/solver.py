@@ -36,6 +36,7 @@ class Solver:
     def run_iteration(
         self,
         target_color: List[float],
+        mixing_colors: List[List[float]],
         previous_experiment_colors: Optional[List[List[float]]] = None,
         return_volumes: bool = True,
         return_max_volume: float = 275.0,
