@@ -25,7 +25,7 @@ class BestColor(BaseModel):
 
 # setattr(np, "asscalar", patch_asscalar)
 class BayesColorSolver(Solver):
-    def __init__(self) -> None:
+    def __init__(self, pop_size) -> None:
         self.optimizer = Optimizer(
             dimensions=[(0.0, 1.0), (0.0, 1.0), (0.0, 1.0)],
             # base_estimator='GP',
@@ -34,22 +34,18 @@ class BayesColorSolver(Solver):
             # acq_func='EI',
             # acq_optimizer='sampling',
         )
-        super().__init__()
+        super().__init__(pop_size=pop_size)
 
     def _augment(
         self,
-        pop: List[sRGBColor],
-        new_pop_size: int,
-        previos_best_index: Optional[int] = None,
-        target_color=None,
-    ) -> List[sRGBColor]:
-        print("here")
-        grades = Solver._grade_population(pop, target_color)
-        test_pop = [[a for a in x.get_value_tuple()] for x in pop]
-        print(test_pop)
-        self.optimizer.tell(test_pop, grades)
+        prev_pop: List[sRGBColor],
+        prev_grades: int,
+    ) -> List[float]:
+        
+        self.optimizer.tell(prev_pop, prev_grades)
         print("start")
-        new_pop = self.optimizer.ask(new_pop_size)
+        new_pop = self.optimizer.ask(self.pop_size)
+        new_pop = [x / np.sum(x) for x in new_pop]
         print("end")
         return new_pop
 

@@ -13,45 +13,45 @@ modules:
 
 #A list of steps in the workflow. Each step represents an action on a single module
 flowdef:
-  # #a human legible name for the step
-  - name: Move from Camera Module to OT2
+  # # #a human legible name for the step
+  # - name: Move from Camera Module to OT2
     
-  #   #which module the action will run on
-    module: pf400
+  # #   #which module the action will run on
+  #   module: pf400
     
-  #   #This tells the module which action in its library to run
-    action: transfer
+  # #   #This tells the module which action in its library to run
+  #   action: transfer
     
-  #   #These arguments specify the parameters for the action above
-    args:
-      source: camera_module.plate_station
-      target: ot2_cp_gamma.deck2
-      source_plate_rotation: narrow
-      target_plate_rotation: wide
+  # #   #These arguments specify the parameters for the action above
+  #   args:
+  #     source: camera_module.plate_station
+  #     target: ot2_cp_gamma.deck2
+  #     source_plate_rotation: narrow
+  #     target_plate_rotation: wide
       
-  #   #This is a place for additional notes
-    comment: Place plate in ot2
+  # #   #This is a place for additional notes
+  #   comment: Place plate in ot2
 
-  - name: Mix all colors
-    module: ot2_cp_gamma
-    action: run_protocol
-    args:
-      config_path:  /home/rpl/workspace/rpl_workcell/color_picker_app/protocol_files/combined_protocol.yaml
-      color_A_volumes: payload.color_A_volumes
-      color_B_volumes: payload.color_B_volumes
-      color_C_volumes: payload.color_C_volumes
-      destination_wells: payload.destination_wells
-      use_existing_resources: payload.use_existing_resources
-    comment: Mix colors A, B and C portions according to input data
+  # - name: Mix all colors
+  #   module: ot2_cp_gamma
+  #   action: run_protocol
+  #   args:
+  #     config_path:  /home/rpl/workspace/rpl_workcell/color_picker_app/protocol_files/combined_protocol.yaml
+  #     color_A_volumes: payload.color_A_volumes
+  #     color_B_volumes: payload.color_B_volumes
+  #     color_C_volumes: payload.color_C_volumes
+  #     destination_wells: payload.destination_wells
+  #     use_existing_resources: payload.use_existing_resources
+  #   comment: Mix colors A, B and C portions according to input data
 
-  - name: Move to Picture
-    module: pf400
-    action: transfer
-    args:
-      source: ot2_cp_gamma.deck2
-      target: camera_module.plate_station
-      source_plate_rotation: wide
-      target_plate_rotation: narrow
+  # - name: Move to Picture
+  #   module: pf400
+  #   action: transfer
+  #   args:
+  #     source: ot2_cp_gamma.deck2
+  #     target: camera_module.plate_station
+  #     source_plate_rotation: wide
+  #     target_plate_rotation: narrow
 
   - name: Take Picture
     module: camera_module

@@ -30,82 +30,36 @@ class BestColor(BaseModel):
 class Solver:
     model_name: str = "Generic Model"
 
-    def __init__(self) -> None:
+    def __init__(self, pop_size) -> None:
+        self.pop_size = pop_size 
         pass
+
 
     def run_iteration(
         self,
-        target_color: List[float],
-        mixing_colors: List[List[float]],
-        previous_experiment_colors: Optional[List[List[float]]] = None,
-        return_volumes: bool = True,
-        return_max_volume: float = 275.0,
-        out_dim: Tuple[int] = (96, 3),
-        pop_size: int = 96,
-        prev_best_color: Optional[List[float]] = None,
+        previous_ratios:  Optional[List[List[float]]] = None,
+        previous_diffs: Optional[List[float]] = None,
+        
     ) -> List[List[float]]:
-        assert pop_size == out_dim[0], "Population size must equal out_dim[0]"
+        if previous_ratios is None:
+            test_ratios = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+            ratios = []
+            for ratio in range(0, self.pop_size):
+                ratios.append(test_ratios[ratio % 3])
+            return ratios
 
-        target_color = sRGBColor(
-            *target_color, is_upscaled=True if max(target_color) > 1 else False
-        )
 
-        if previous_experiment_colors is None:
-            c_ratios = make_random_plate(dim=out_dim)
-            if pop_size >= 3:
-                c_ratios[0] = sRGBColor(1, 0, 0)
-                c_ratios[1] = sRGBColor(0, 1, 0.01)
-                c_ratios[2] = sRGBColor(0.01, 0.01, 0.98)
-            if return_volumes:
-                return Solver.convert_ratios_to_volumes(c_ratios)
-            else:
-                return c_ratios
 
-        # Flatten if not already flattened
-        previous_experiment_colors = (
-            np.asarray(previous_experiment_colors).reshape((-1, 3)).tolist()
-        )
-        previous_experiment_colors = [
-            sRGBColor(*color_ratio, is_upscaled=True if max(color_ratio) > 1 else False)
-            for color_ratio in previous_experiment_colors
-        ]
-
-        # Find population best color
-        best_color_position, _ = Solver._find_best_color(
-            previous_experiment_colors, target_color
-        )
 
         # Augment
         new_population = self._augment(
-            previous_experiment_colors, pop_size, best_color_position, target_color
+            previous_ratios, previous_diffs
         )
 
         # Convert to volumes
-        if return_volumes:
-            return Solver.convert_ratios_to_volumes(new_population, return_max_volume)
+        return new_population 
 
-        return [c.get_value_tuple() for c in new_population]
-
-    @staticmethod
-    def convert_ratios_to_volumes(
-        color_ratios: List[List[Union[sRGBColor, float]]],
-        total_volume: float = 275.0,
-    ) -> List[List[float]]:
-        sanitized_colors = []
-        for color in color_ratios:
-            if not isinstance(color, sRGBColor):
-                sanitized_colors.append(sRGBColor(*color))
-            else:
-                sanitized_colors.append(color)
-
-        volume_list = []
-        for color in sanitized_colors:
-            color_ratio = np.asarray(color.get_value_tuple())
-            color_ratio /= sum(color_ratio)
-            volume_list.append([r * total_volume for r in color_ratio])
-
-        return volume_list
-
+    
     @staticmethod
     def _find_best_color(
         experiment_colors: List[Union[sRGBColor, List[float]]],

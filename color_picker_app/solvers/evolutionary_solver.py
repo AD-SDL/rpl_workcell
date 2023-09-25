@@ -82,28 +82,26 @@ class EvolutionaryColorSolver(Solver):
         return [c.get_value_tuple() for c in new_population]
 
     def _augment(
-        pop: List[sRGBColor],
-        new_pop_size: int,
-        previos_best_index: Optional[int] = None,
-    ) -> List[sRGBColor]:
+        self,
+        prev_pop: List[sRGBColor],
+        prev_grades: int,
+    ) -> List[float]:
         new_pop = []
-        n = new_pop_size
-        if previos_best_index is not None:
-            n -= 1  # Save one spot for the best color
-            new_pop.append(pop[previos_best_index])
+        n = self.pop_size
+        previous_best_index = np.argmax(prev_grades)
         # combine colors towards average
         for _ in range(floor(n // 3)):
-            t1, t2 = sample(pop, 2)
+            t1, t2 = sample(prev_pop, 2)
             t1_ratios = t1.get_value_tuple()
             t2_ratios = t2.get_value_tuple()
             new_color_ratio = (
                 ((np.asarray(t1_ratios) + np.asarray(t2_ratios)) / 2).round(3).tolist()
             )
-            new_pop.append(sRGBColor(*new_color_ratio))
+            new_pop.append(sRGBColor(new_color_ratio))
 
         # shift some values up or down
         for _ in range(floor(n // 3)):
-            t_color_ratios = choice(pop).get_value_tuple()
+            t_color_ratios = choice(prev_pop).get_value_tuple()
 
             new_color_ratio = []
             # randomly shift some of the values up or down
@@ -114,18 +112,15 @@ class EvolutionaryColorSolver(Solver):
                     delta = 0
 
                 new_color_ratio.append(round(r + delta, 3))
-            new_pop.append(sRGBColor(*new_color_ratio))
+            new_pop.append(new_color_ratio)
 
         # generate new randoms
         def _random_init():
-            return sRGBColor(*np.random.rand(3).round(3).tolist())
+            return np.random.rand(3).round(3).tolist()
 
-        for _ in range(len(new_pop), new_pop_size):
+        for _ in range(len(new_pop), self.pop_size):
             new_pop.append(_random_init())
-        if previos_best_index is None and len(new_pop) >= 3:
-            new_pop[0] = sRGBColor(1, 0, 0)
-            new_pop[1] = sRGBColor(0, 1, 0)
-            new_pop[2] = sRGBColor(0, 0, 1)
+        new_pop = [x / np.sum(x) for x in new_pop]
         return new_pop
 
     # def plot_diffs(
