@@ -101,9 +101,10 @@ def run(
     curr_wells_used = []  # list of all wells used
 
     # Information Tracking:
-    current_plate = None
+    prev_colors = None
     cur_best_color = None
     previous_ratios = None
+    prev_diffs = None
     plate_diffs = None
     plate_colors = None
     cur_best_diff = float(
@@ -170,7 +171,7 @@ def run(
 
         exp.events.log_local_compute("solver.run_iteration")
         if plate_colors:
-            prev_diffs = solver._grade_population(plate_colors)
+            prev_diffs = solver._grade_population(prev_colors, target_color)
         plate_ratios = solver.run_iteration(
             previous_ratios,
             prev_diffs
@@ -180,7 +181,7 @@ def run(
         target_plate = create_target_plate(plate_ratios, colors)
         # Assign volumes to wells and colors and make a payload compatible with the OT2 protopiler
         payload, curr_wells_used = convert_volumes_to_payload(
-            plate_ratios*plate_max_volume, curr_wells_used
+            np.multiply(plate_ratios, plate_max_volume), curr_wells_used
         )
         print(payload)
         curr_colors_used = [
@@ -251,18 +252,18 @@ def run(
         # Swap BGR to RGB
         plate_colors = {a: b[::-1] for a, b in plate_colors.items()}
         # Find the colors to be processed by the solver
-        current_plate = []
+        prev_colors = []
         wells_used = []
         for well in payload["destination_wells"]:
             color = plate_colors[well]
             wells_used.append(well)
-            current_plate.append(color)
+            prev_colors.append(color)
 
         ## save those and the initial colors, etc
         plate_best_color_ind, plate_diffs = solver._find_best_color(
-            current_plate, target_color, cur_best_color
+            prev_colors, target_color, cur_best_color
         )
-        plate_best_color = current_plate[plate_best_color_ind]
+        plate_best_color = prev_colors[plate_best_color_ind]
         plate_best_diff = solver._color_diff(plate_best_color, target_color)
         diffs.append(plate_diffs)
         # Find best colors
@@ -277,7 +278,7 @@ def run(
         ##Plot review
         create_visuals(
             target_plate,
-            current_plate,
+            prev_colors,
             exp_folder,
             current_iter,
             target_color,
@@ -300,9 +301,9 @@ def run(
                 "run_label": str(run_path),
                 "plate_N": plate_n,
                 "tried_values": target_plate,
-                "exp_volumes": plate_volumes,
+                "exp_volumes": plate_ratios,
                 "wells": list(wells_used),
-                "results": list(map(lambda x: x.tolist(), current_plate)),
+                "results": list(map(lambda x: x.tolist(), prev_colors)),
                 "differences": plate_diffs.tolist(),
                 "best_on_plate": plate_best_color.tolist(),
                 "pos_on_plate": plate_best_color_ind.tolist(),
@@ -402,13 +403,13 @@ if __name__ == "__main__":
     exp_type = "color_picker"
     if args.solver:
         if args.solver == "Bay":
-            solver = BayesColorSolver()
+            solver = BayesColorSolver(args.pop_size)
             solver_name = "Bayesian Solver"
         elif args.solver == "Evo":
             solver_name = "Evolutionary Solver"
-            solver = EvolutionaryColorSolver()
+            solver = EvolutionaryColorSolver(args.pop_size)
         elif args.solver == "Agg":
-            solver = AggroColorSolver()
+            solver = AggroColorSolver(args.pop_size)
             solver_name = "Aggressive Genetic Solver"
     else:
         solver = Solver()
