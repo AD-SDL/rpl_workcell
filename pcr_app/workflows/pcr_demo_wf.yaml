@@ -15,12 +15,12 @@ modules:
   - name: camera
 
 flowdef:
-  # - name: Obtain a new plate from sciclops
-  #   module: sciclops
-  #   action: get_plate
-  #   args:
-  #     pos: "tower2"
-  #   comment: Stage PCR plates
+  - name: Obtain a new plate from sciclops
+    module: sciclops
+    action: get_plate
+    args:
+      pos: "tower2"
+    comment: Stage PCR plates
 
   - name: pf400 moves plate from sciclops to ot2
     module: pf400
@@ -31,77 +31,86 @@ flowdef:
       source_plate_rotation: narrow
       target_plate_rotation: narrow
 
-  # - name: ot2 runs the "Mix reactions" protocol
-  #   module: ot2_pcr_alpha
-  #   action: run_protocol
-  #   args:
-  #     config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/PCR_prep_full_plate_multi_noresource.yaml
-  #     use_existing_resources: False
+  - name: ot2 runs the "Mix reactions" protocol
+    module: ot2_pcr_alpha
+    action: run_protocol
+    args:
+      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/PCR_prep_full_plate_multi_noresource.yaml
+      use_existing_resources: False
 
-  # - name: pf400 moves plate from ot2 to sealer
-  #   module: pf400
-  #   action: transfer
-  #   args:
-  #     source: ot2_pcr_alpha.deck1_cooler
-  #     target: sealer.default
-  #     source_plate_rotation: wide
-  #     target_plate_rotation: narrow
+  - name: pf400 moves plate from ot2 to sealer
+    module: pf400
+    action: transfer
+    args:
+      source: ot2_pcr_alpha.deck1_cooler
+      target: sealer.default
+      source_plate_rotation: wide
+      target_plate_rotation: narrow
 
-  # - name: Seal plate in sealer
-  #   module: sealer_rest
-  #   action: seal
-  #   args:
-  #     time: payload:seal.time
-  #     temperature: 175
+  - name: Seal plate in sealer
+    module: sealer_rest
+    action: seal
+    args:
+      time: payload:seal.time
+      temperature: 175
 
-  # - name: pf400 moves plate from sealer to biometra
-  #   module: pf400
-  #   action: transfer
-  #   args:
-  #     source: sealer.default
-  #     target: biometra.default
-  #     source_plate_rotation: narrow
-  #     target_plate_rotation: wide
+  - name: pf400 moves plate from sealer to biometra
+    module: pf400
+    action: transfer
+    args:
+      source: sealer.default
+      target: biometra.default
+      source_plate_rotation: narrow
+      target_plate_rotation: wide
 
-  # - name: Close lid of biometra
-  #   module: biometra
-  #   action: close_lid
+  - name: Close lid of biometra
+    module: biometra
+    action: close_lid
 
-  # - name: Run biometra program
-  #   module: biometra
-  #   action: run_program
-  #   args:
-  #       program_n: 3
+  - name: Run biometra program
+    module: biometra
+    action: run_program
+    args:
+        program_n: 3
 
-  # - name: Open lid of biometra
-  #   module: biometra
-  #   action: open_lid
+  - name: Open lid of biometra
+    module: biometra
+    action: open_lid
     
-  # - name: pf400 moves plate from biometra to peeler
-  #   module: pf400
-  #   action: transfer
-  #   args:
-  #     source: biometra.default
-  #     target: peeler.default
-  #     source_plate_rotation: wide
-  #     target_plate_rotation: narrow
+  - name: pf400 moves plate from biometra to peeler
+    module: pf400
+    action: transfer
+    args:
+      source: biometra.default
+      target: peeler.default
+      source_plate_rotation: wide
+      target_plate_rotation: narrow
 
-  # - name: Peel plate
-  #   module: peeler_rest
-  #   action: peel
+  - name: Peel plate
+    module: peeler_rest
+    action: peel
 
-  # - name: pf400 moves plate from peeler to camera
-  #   module: pf400
-  #   action: transfer
-  #   args:
-  #     source: peeler.default
-  #     target: camera_module.plate_station
-  #     source_plate_rotation: narrow
-  #     target_plate_rotation: narrow
+  - name: pf400 moves plate from peeler to camera
+    module: pf400
+    action: transfer
+    args:
+      source: peeler.default
+      target: camera_module.plate_station
+      source_plate_rotation: narrow
+      target_plate_rotation: narrow
 
-  # - name: camera takes picture of plate
-  #   module: camera_module
-  #   action: take_picture
-  #   args:
-  #     file_name: "final_image.jpg"
+  - name: camera takes picture of plate
+    module: camera_module
+    action: take_picture
+    args:
+      file_name: "final_image.jpg"
+
+  - name: pf400 moves plate to final location
+    module: pf400
+    action: transfer
+    args:
+      source: camera_module.plate_station
+      target: wc.trash
+      source_plate_rotation: narrow
+      target_plate_rotation: narrow
 
