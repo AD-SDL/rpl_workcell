@@ -24,11 +24,13 @@ def run_flow(protocol, payload, steps_run, experiment):
     #iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':protocol,'payload':payload})
     #iter_thread.run()
     response = experiment.run_job(protocol.resolve(), payload=payload, simulate=False)
+    print(response)
     job_status = experiment.query_job(response["job_id"])
     print(job_status)
     while(job_status["status"] != "finished" and job_status["status"] != "failure"):
         job_status = experiment.query_job(response["job_id"])
         time.sleep(3)
+    #print(experiment.get_job_log(response["job_id"]))
     run_info = job_status["result"]
     run_info["run_dir"] = Path(run_info["run_dir"])
     print(run_info)

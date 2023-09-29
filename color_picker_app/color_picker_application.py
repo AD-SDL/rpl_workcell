@@ -6,7 +6,9 @@ from typing import List
 import json
 import numpy as np
 import os
+import cv2
 import shutil
+import base64
 
 # For extracting colors from each plate
 from tools.plate_color_analysis import get_colors_from_file
@@ -39,62 +41,6 @@ from rpl_wei.exp_app import Experiment
 
 MAX_PLATE_SIZE = 96
 
-
-def test_run():
-    exp = Experiment("127.0.0.1", "8000", "Color_Picker")
-    exp.register_exp()  # parser
-    args = parse_args()
-
-    # target color
-    target_ratio = eval(args.target)
-
-    exp_label = (
-        "ColorPicker_"
-        + str(target_ratio[0])
-        + "_"
-        + str(target_ratio[1])
-        + "_"
-        + str(target_ratio[2])
-        + "_"
-        + str(datetime.date(datetime.now()))
-    )
-    exp_path = "/home/rpl/experiments"
-    exp_type = "color_picker"
-    if args.solver:
-        if args.solver == "Bay":
-            solver = BayesColorSolver
-            solver_name = "Bayesian Solver"
-        elif args.solver == "Evo":
-            solver_name = "Evolutionary Solver"
-            solver = EvolutionaryColorSolver
-        elif args.solver == "Agg":
-            solver = AggroColorSolver
-            solver_name = "Aggressive Genetic Solver"
-    else:
-        solver = EvolutionaryColorSolver
-        solver_name = "Evolutionary Solver"
-    print(solver)
-    print(target_ratio)
-    print(exp_label)
-    run_args = {
-        "target_color": [120, 120, 120],
-        "solver": solver,
-        "solver_name": solver_name,
-        "exp_budget": args.exp_budget,
-        "pop_size": args.pop_size,
-        "plate_max_volume": args.plate_max_volume,
-        "exp_label": exp_label,
-        "exp_path": exp_path,
-        "exp_type": exp_type,
-    }
-    run(**run_args)
-    exp.events.loop_start("Main Loop")
-    for i in range(1, 5):
-        steps_run, _ = run_flow(Path("./workflows/test_wf.yaml"), {}, [], exp)
-        exp.events.loop_check("i < 4", i < 4)
-    exp.events.loop_end()
-
-
 def run(
     exp_type: str,
     exp_label: str = "",
@@ -124,6 +70,11 @@ def run(
     loop_protocol = wf_dir / "cp_wf_mixcolor.yaml"
     final_protocol = wf_dir / "cp_wf_trashplate.yaml"
 
+    #wf_b_dir = Path("/home/rpl/workspace/Barty/workflows")
+    #startup_barty = wf_b_dir / "barty_startup.yaml"
+    #shutdown_barty = wf_b_dir / "barty_shutdown.yaml"
+    refill_barty = wf_dir / "cp_wf_replenish.yaml" 
+
     # Constants
     solver_out_dim = (pop_size, 3)
     use_funcx = False
@@ -139,7 +90,7 @@ def run(
         os.mkdir(exp_folder)
     if not (os.path.isdir(exp_folder / "results")):
         os.mkdir(exp_folder / "results")
-    exp = Experiment("127.0.0.1", "8000", "Color_Picker")
+    exp = Experiment("127.0.0.1", "8000", "Color_Picker",kafka_server="ec2-54-160-200-147.compute-1.amazonaws.com:9092")
     exp.register_exp()
     # Resource Tracking:
     plate_n = 1  # total number of plates
@@ -159,7 +110,8 @@ def run(
     diffs = []  # List of all diffs from all runs of the experiment
     new_plate = True
     payload = {}  # Payload to be sent to the WEI runs
-    exp.events.loop_start("Main Loop")
+    colors_used = [0,0,0]   
+    exp.events.log_loop_start("Main Loop")
     while num_exps + pop_size <= exp_budget:
         new_run = {}
         steps_run = []
@@ -171,13 +123,13 @@ def run(
         print("Starting iteration " + str(current_iter))
 
         # grab new plate if experiment starting or current plate is full
-        exp.events.decision("Need New Plate", (new_plate or current_iter == 0))
-        if new_plate or current_iter == 0:
+        exp.events.log_decision("Need New Plate", (new_plate or current_iter == 0))
+        if (new_plate or current_iter == 0):
             # print('Grabbing New Plate')
             steps_run, _ = run_flow(init_protocol, payload, steps_run, exp)
             curr_wells_used = []
             new_plate = False
-            exp.events.decision("Need Calibration", (current_iter == 0))
+            exp.events.log_decision("Need Calibration", (current_iter == 0))
             if current_iter == 0:
                 # Run the calibration protocol that gets the colors being mixed and ensures the target color is within the possible color space
                 colors, target_color, curr_wells_used, steps_run = calibrate(
@@ -199,6 +151,11 @@ def run(
                 )
                 plate_n = plate_n + 1
 
+        # Starting Barty up.
+        exp.events.log_decision("Refill Max Ink", (current_iter==0))
+        #if current_iter==0:
+  #         steps_run, _ = run_flow(startup_barty, payload, steps_run, exp) 
+
         # Calculate volumes and current wells for creating the OT2 protocol
         exp.events.log_local_compute("solver.run_iteration")
         plate_volumes = solver.run_iteration(
@@ -216,7 +173,12 @@ def run(
         payload, curr_wells_used = convert_volumes_to_payload(
             plate_volumes, curr_wells_used
         )
-        print(payload)
+        # Information tracking of ink usage.
+        curr_colors_used = [sum(payload['color_A_volumes']),sum(payload['color_B_volumes']),sum(payload['color_C_volumes'])] # Add color D later..
+        # Change keys for all files to match ^
+        comb_list = [colors_used, curr_colors_used]
+        colors_used = [sum(vols) for vols in zip(*comb_list)]
+        print('Total vol of colors used so far:', colors_used)
 
         # resets OT2 resources (or not)
         if current_iter == 0:
@@ -241,15 +203,34 @@ def run(
             new_plate = True
             curr_wells_used = []
 
+        # Checking whether to refill ink.
+        for i, color_vol in enumerate(colors_used):
+            exp.events.log_decision("Need Ink", (color_vol >= 5000)) # 5 mL, change to whatever threshold.
+            if color_vol >= 5000:
+                if i == 0:
+                    payload["refill_motor"] = ["motor_1"]
+                elif i == 1:
+                    payload["refill_motor"] = ["motor_4"]
+                elif i == 2:
+                    payload["refill_motor"] = ["motor_3"]
+                # elif i == 3:
+                #   payload["refill_motor"] = ["motor_4"]
+                steps_run, _ = run_flow(refill_barty, payload, steps_run, exp)
+                colors_used[i] = 0
+
         # Analyze image
         # output should be list [pop_size, 3]
-        img_path = run_info["hist"]["Take Picture"]["action_msg"]
+        action_msg = run_info["hist"]["Take Picture"]["action_msg"]
+        image = np.fromstring(base64.b64decode(action_msg), np.uint8)
+        img = cv2.imdecode(image, cv2.IMREAD_COLOR)
+        img_path = run_info["run_dir"] / "results" / "final_image.jpg"
+        cv2.imwrite(str(img_path), img)
 
         if use_funcx:
             print("funcx started")
             exp.events.log_globus_compute("get_colors_from_file")
             fx = FuncXExecutor(endpoint_id=funcx_local_ep)
-            fxresult = fx.submit(get_colors_from_file, img_path)
+            fxresult = fx.submit(get_colors_from_file, img_path) 
             fxresult = fx.submit(get_colors_from_file, img_path)
             plate_colors_ratios = fxresult.result()[1]
             print("funcx finished")
@@ -355,17 +336,20 @@ def run(
         # Save overall results
         print("publishing:")
         publish_iter(exp_folder / "results", exp_folder, exp)
-        exp.events.loop_check(
+        exp.events.log_loop_check(
             "Sufficient Wells in Experiment Budget", num_exps + pop_size <= exp_budget
         )
-    exp.events.loop_end()
+    exp.events.log_loop_end()
     # Trash plate after experiment
+    # Return ink to reservoirs.
+    steps_run, _ = run_flow(shutdown_barty, payload, steps_run, exp)
+
     shutil.copy2(
         run_info["run_dir"] / "results" / "plate_only.jpg",
         (exp_folder / "results" / f"plate_{plate_n}.jpg"),
     )
     steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
-
+    exp.events.end_experiment()
     print("This is our best color so far")
     print(cur_best_color)
     print("Runs on this experiment")
