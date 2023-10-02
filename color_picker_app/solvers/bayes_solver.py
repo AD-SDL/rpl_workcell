@@ -45,7 +45,7 @@ class BayesColorSolver(Solver):
         self.optimizer.tell(prev_pop, prev_grades)
         print("start")
         new_pop = self.optimizer.ask(self.pop_size)
-        new_pop = [(x / np.sum(x)).tolist() for x in new_pop]
+        new_pop = [(x / np.sum(x)).round(3).tolist() for x in new_pop]
         print("end")
         return new_pop
 

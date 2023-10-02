@@ -21,7 +21,7 @@ from solvers.solver import Solver
 from funcx import FuncXExecutor
 
 from datetime import datetime
-
+import random
 # For publishing to RPL Portal
 from tools.publish_v2 import publish_iter
 
@@ -78,7 +78,7 @@ def run(
     funcx_local_ep = "299edea0-db9a-4693-84ba-babfa655b1be"  # local
 
     exp_path = Path(exp_path)
-    exp_label = Path(exp_label)
+    exp_label = Path(exp_label+ str(random.randint(0, 1000)))
     exp_folder = exp_path / exp_label
     if not (os.path.isdir(exp_path)):
         os.makedirs(exp_path)
@@ -352,7 +352,8 @@ def run(
         run_info["run_dir"] / "results" / "plate_only.jpg",
         (exp_folder / "results" / f"plate_{plate_n}.jpg"),
     )
-    steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
+    if new_plate == False:
+        steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
     exp.events.end_experiment()
     print("This is our best color so far")
     print(cur_best_color)
