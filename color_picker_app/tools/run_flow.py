@@ -26,10 +26,10 @@ def run_flow(protocol, payload, steps_run, experiment: Experiment):
     # iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':protocol,'payload':payload})
     # iter_thread.run()
     response = experiment.run_job(protocol.resolve(), payload=payload, simulate=False)
-    job_status = experiment.query_job(response["job_id"])
+    job_status = experiment.query_job(response["run_id"])
     print(job_status)
     while job_status["status"] != "completed" and job_status["status"] != "failure":
-        job_status = experiment.query_job(response["job_id"])
+        job_status = experiment.query_job(response["run_id"])
         print(job_status)
         time.sleep(3)
     # print(experiment.get_job_log(response["job_id"]))
