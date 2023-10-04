@@ -24,86 +24,30 @@ def make_random_plate(dim: Tuple[int] = ()) -> List[List[List[float]]]:
 
 
 class EvolutionaryColorSolver(Solver):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, pop_size) -> None:
+        super().__init__(pop_size)
 
-    def run_iteration(
-        self,
-        target_color: List[float],
-        previous_experiment_colors: Optional[List[List[float]]] = None,
-        return_volumes: bool = True,
-        return_max_volume: float = 275.0,
-        out_dim: Tuple[int] = (96, 3),
-        pop_size: int = 96,
-        prev_best_color: Optional[List[float]] = None,
-    ) -> List[List[float]]:
-        assert pop_size == out_dim[0], "Population size must equal out_dim[0]"
-
-        target_color = sRGBColor(
-            *target_color, is_upscaled=True if max(target_color) > 1 else False
-        )
-
-        if previous_experiment_colors is None:
-            c_ratios = make_random_plate(dim=out_dim)
-            if pop_size >= 3:
-                c_ratios[0] = sRGBColor(1, 0, 0)
-                c_ratios[1] = sRGBColor(0, 1, 0)
-                c_ratios[2] = sRGBColor(0, 0, 1)
-            if return_volumes:
-                return EvolutionaryColorSolver.convert_ratios_to_volumes(c_ratios)
-            else:
-                return c_ratios
-
-        # Flatten if not already flattened
-        previous_experiment_colors = (
-            np.asarray(previous_experiment_colors).reshape((-1, 3)).tolist()
-        )
-        previous_experiment_colors = [
-            sRGBColor(*color_ratio, is_upscaled=True if max(color_ratio) > 1 else False)
-            for color_ratio in previous_experiment_colors
-        ]
-
-        # Find population best color
-        (best_color_position, t) = EvolutionaryColorSolver._find_best_color(
-            previous_experiment_colors, target_color
-        )
-
-        # Augment
-        new_population = EvolutionaryColorSolver._augment(
-            previous_experiment_colors, pop_size, best_color_position
-        )
-
-        # Convert to volumes
-        if return_volumes:
-            return EvolutionaryColorSolver.convert_ratios_to_volumes(
-                new_population, return_max_volume
-            )
-
-        return [c.get_value_tuple() for c in new_population]
-
+   
     def _augment(
-        pop: List[sRGBColor],
-        new_pop_size: int,
-        previos_best_index: Optional[int] = None,
-    ) -> List[sRGBColor]:
+        self,
+        prev_pop: List[sRGBColor],
+        prev_grades: int,
+    ) -> List[float]:
         new_pop = []
-        n = new_pop_size
-        if previos_best_index is not None:
-            n -= 1  # Save one spot for the best color
-            new_pop.append(pop[previos_best_index])
+        n = self.pop_size
+        previous_best_index = np.argmax(prev_grades)
         # combine colors towards average
         for _ in range(floor(n // 3)):
-            t1, t2 = sample(pop, 2)
-            t1_ratios = t1.get_value_tuple()
-            t2_ratios = t2.get_value_tuple()
+            t1, t2 = sample(prev_pop, 2)
+
             new_color_ratio = (
-                ((np.asarray(t1_ratios) + np.asarray(t2_ratios)) / 2).round(3).tolist()
+                ((np.asarray(t1) + np.asarray(t2)) / 2).round(3).tolist()
             )
-            new_pop.append(sRGBColor(*new_color_ratio))
+            new_pop.append((new_color_ratio))
 
         # shift some values up or down
         for _ in range(floor(n // 3)):
-            t_color_ratios = choice(pop).get_value_tuple()
+            t_color_ratios = choice(prev_pop)
 
             new_color_ratio = []
             # randomly shift some of the values up or down
@@ -114,18 +58,15 @@ class EvolutionaryColorSolver(Solver):
                     delta = 0
 
                 new_color_ratio.append(round(r + delta, 3))
-            new_pop.append(sRGBColor(*new_color_ratio))
+            new_pop.append(new_color_ratio)
 
         # generate new randoms
         def _random_init():
-            return sRGBColor(*np.random.rand(3).round(3).tolist())
+            return np.random.rand(3).round(3).tolist()
 
-        for _ in range(len(new_pop), new_pop_size):
+        for _ in range(len(new_pop), self.pop_size):
             new_pop.append(_random_init())
-        if previos_best_index is None and len(new_pop) >= 3:
-            new_pop[0] = sRGBColor(1, 0, 0)
-            new_pop[1] = sRGBColor(0, 1, 0)
-            new_pop[2] = sRGBColor(0, 0, 1)
+        new_pop = [x / np.sum(x) for x in new_pop]
         return new_pop
 
     # def plot_diffs(

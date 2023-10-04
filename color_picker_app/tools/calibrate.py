@@ -78,7 +78,6 @@ def calibrate(
     # target_color = current_plate[3]
     # target_color = target_color.tolist()
     colors = current_plate[0:3]
-    colors = [[255, 0, 1], [0, 255, 2], [0, 0, 255]]
     t = np.asarray(colors)
     colors = t.tolist()
     try:
@@ -86,7 +85,7 @@ def calibrate(
     except Exception as e:
         color_inverse = np.linalg.inv([[255, 0, 0], [0, 255, 0], [0, 0, 255]])
     analytical_sol = color_inverse @ np.array(target_color)
-    print(analytical_sol.tolist())
+    print("analytical solution: " + str(analytical_sol.tolist()))
     color_image = cv2.resize(
         np.asarray([colors]).astype(np.uint8),
         [pop_size * 50, 50],
@@ -94,7 +93,7 @@ def calibrate(
     )
     img_path, curr_wells_used = get_image(
         loop_protocol,
-        np.diag(analytical_sol * plate_max_volume),
+        [analytical_sol / np.sum(analytical_sol) * plate_max_volume],
         experiment,
         curr_wells_used,
         steps_run,

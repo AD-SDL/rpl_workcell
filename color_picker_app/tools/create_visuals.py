@@ -85,10 +85,7 @@ def create_visuals(
     )
 
 
-def create_target_plate(plate_volumes: List[List[float]], colors: List[List[int]]):
-    norms = []
-    for i in plate_volumes:
-        norms.append(i / sum(i))
-    target_plate = np.array(norms) @ np.array(colors)
+def create_target_plate(plate_ratios: List[List[float]], colors: List[List[int]]):
+    target_plate = np.array(plate_ratios) @ np.array(colors)
     target_plate = target_plate.tolist()
     return target_plate
