@@ -31,15 +31,13 @@ class Solver:
     model_name: str = "Generic Model"
 
     def __init__(self, pop_size) -> None:
-        self.pop_size = pop_size 
+        self.pop_size = pop_size
         pass
-
 
     def run_iteration(
         self,
-        previous_ratios:  Optional[List[List[float]]] = None,
+        previous_ratios: Optional[List[List[float]]] = None,
         previous_diffs: Optional[List[float]] = None,
-        
     ) -> List[List[float]]:
         if previous_ratios is None:
             test_ratios = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
@@ -48,18 +46,12 @@ class Solver:
                 ratios.append(test_ratios[ratio % 3])
             return ratios
 
-
-
-
         # Augment
-        new_population = self._augment(
-            previous_ratios, previous_diffs
-        )
+        new_population = self._augment(previous_ratios, previous_diffs)
 
         # Convert to volumes
-        return new_population 
+        return new_population
 
-    
     @staticmethod
     def _find_best_color(
         experiment_colors: List[Union[sRGBColor, List[float]]],

@@ -76,11 +76,19 @@ def draw_my_text_rectangle_width(x, y, length, text, color):
     return (x, y, x + length, y + box_height)
 
 
-def draw_header(offsets):
+def draw_header(offsets, no_transfer_flag):
     draw_bold_text(offsets["python_offset"], 0, "Python")
     draw_bold_text(offsets["workflow_offset"], 0, "Workflow")
     draw_bold_text(offsets["action_offset"], 0, "Action")
-    draw_bold_text(offsets["component_offset"], 0, "Module [: Transfer]")
+    if no_transfer_flag:
+        module_string = "Module"
+    else:
+        module_string = "Module [: Transfer]"
+    draw_bold_text(offsets["component_offset"], 0, module_string)
+    module_width = arial_bold.getsize(module_string)[0]
+    global x_max
+    if offsets["component_offset"] + module_width > x_max:
+        x_max = offsets["component_offset"] + module_width
 
 
 def arrow_from_to(destination, from_box, to_box, color, factor):
@@ -184,9 +192,7 @@ def draw_workflow(offsets, workflow, y_start):
         )
     except:
         repeat_indent = 0
-        if (
-            len(workflow) == 1
-        ):  # Special Casey case: text without workflow, and a clock next to it
+        if len(workflow) == 1:  # Special Casey case
             im_clock = Image.open("clock2.png").resize((20, 20), Image.ANTIALIAS)
             im.paste(im_clock, (125, y_start + y_size))
             return_box = draw_my_text_rectangle_width(
@@ -198,13 +204,14 @@ def draw_workflow(offsets, workflow, y_start):
             )
             y_size += 40
             return (return_box, y_size)
-        return_box = draw_my_text_rectangle_width(
-            offsets["python_step_offset"] + repeat_indent,
-            y_start + y_size,
-            offsets["max_step_width"],
-            "Run:",
-            blue,
-        )
+        else:
+            return_box = draw_my_text_rectangle_width(
+                offsets["python_step_offset"] + repeat_indent,
+                y_start + y_size,
+                offsets["max_step_width"],
+                "Run:",
+                blue,
+            )
         run_box = return_box
         last_box = return_box
 
@@ -293,16 +300,17 @@ def get_sizes(plot):
         "max_action_width": max_action_width,
         "component_offset": action_offset + max_action_width + text_x_offset / 2,
     }
+
     return offsets
 
 
-def process_file(spec_file, output_file):
+def process_file(spec_file, output_file, no_transfer_flag):
     f = open(spec_file, "r")
     plot_spec = json.load(f)
 
     offsets = get_sizes(plot_spec["python"])
 
-    draw_header(offsets)
+    draw_header(offsets, no_transfer_flag)
 
     plot = plot_spec["python"]
     python_program = plot["name"].replace(".py", "")
@@ -333,10 +341,11 @@ def main(argv):
     parser.add_argument(
         "-o", "--output", default="t.pdf", help="Output file name", required=True
     )
+    parser.add_argument("-n", "--notransfer", action="store_true")
 
     args = parser.parse_args()
 
-    process_file(args.input, args.output)
+    process_file(args.input, args.output, args.notransfer)
 
 
 if __name__ == "__main__":

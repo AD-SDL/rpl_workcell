@@ -22,7 +22,7 @@ def publish_iter(folder_path, dest_path, exp):
             "make_input": str(folder_path),
             "funcx_endpoint_compute": "9e370560-9463-4a3d-a836-4db1dfb9ccb6",
             "funcx_endpoint_non_compute": "9e370560-9463-4a3d-a836-4db1dfb9ccb6",
-             "compute_endpoint": "9e370560-9463-4a3d-a836-4db1dfb9ccb6",
+            "compute_endpoint": "9e370560-9463-4a3d-a836-4db1dfb9ccb6",
             "publishv2": {
                 "dataset": str(folder_path),
                 "index": "aefcecc6-e554-4f8c-a25b-147f23091944",

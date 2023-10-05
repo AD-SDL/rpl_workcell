@@ -50,42 +50,23 @@ class BayesColorSolver(Solver):
         return new_pop
 
     @staticmethod
-    # def plot_diffs(difflist: List[List[float]], exp_folder: Any) -> Any:
-    #     import pathlib
-    #     from pathlib import Path
-
-    #     a = []
-    #     print(range(1, len(difflist) + 1))
-    #     for i in difflist:
-    #         if a == [] or min(i) < min(a):
-    #             a.append(min(i))
-    #     plt.figure()
-    #     plt.plot(range(1, len(difflist) + 1), a)
-    #     plt.xlabel("Color Rank")
-    #     plt.ylabel("Color Difference")
-    #     plt.title("Loss Graph")
-    #     print(exp_folder / "results" / "convergence_graph.png")
-    #     plt.savefig(exp_folder / "results" / "convergence_graph.png", dpi=300)
-    #     return a
-    def plot_diffs(
-        difflist: List[List[float]],
-        exp_folder: Any
-    ) -> Any:
+    def plot_diffs(difflist: List[List[float]], exp_folder: Any) -> Any:
         import pathlib
         from pathlib import Path
+
         a = []
-        print(range(1, len(difflist)+1))
+        print(range(1, len(difflist) + 1))
         for i in difflist:
-            if True: #a == [] or min(i) < min(a):
+            if True:  # a == [] or min(i) < min(a):
                 a.append(min(i))
         plt.figure()
         a.sort(reverse=True)
-        plt.plot(range(1, len(a)+1), a)
+        plt.plot(range(1, len(a) + 1), a)
         plt.xlabel("Color Rank")
         plt.ylabel("Color Difference")
         plt.title("Loss Graph")
-        print(exp_folder/"results" / "convergence_graph.png")
-        plt.savefig(exp_folder/"results" / "convergence_graph.png", dpi=300)
+        print(exp_folder / "results" / "convergence_graph.png")
+        plt.savefig(exp_folder / "results" / "convergence_graph.png", dpi=300)
         return a
 
 

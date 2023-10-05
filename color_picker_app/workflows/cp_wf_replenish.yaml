@@ -1,18 +1,19 @@
-name: Color Picker - Barty - Workflow
-
-metadata:  
-  author: Aileen Cleary, Tobias Ginsburg, Rafael Vescovi
-  info: Replenish colors workflow for the RPL Color Picker
+name: Barty - Refill Ink - Workflow
+  
+metadata:
+  name: Barty - Refill Ink - Workflow
+  author: Aileen Cleary
+  info: Refill Ink workflow for Barty for RPL Color Picker
   version: 0.1
 
 modules:
   - name: barty
 
 flowdef:
-  - name: Add colors
-    module: pf400
-    action: add_colors
+  - name: Refill Ink
+    module: barty
+    action: refill_ink 
     args:
-      volumeA: payload.volumeA
-      volumeB: payload.volumeB
-      volumeC: payload.volumeC
+      motors: payload.refill_motor
+    comments: Refill specified color of ink to OT2.
+

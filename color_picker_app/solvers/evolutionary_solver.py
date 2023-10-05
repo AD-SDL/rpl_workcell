@@ -27,7 +27,6 @@ class EvolutionaryColorSolver(Solver):
     def __init__(self, pop_size) -> None:
         super().__init__(pop_size)
 
-   
     def _augment(
         self,
         prev_pop: List[sRGBColor],
@@ -40,9 +39,7 @@ class EvolutionaryColorSolver(Solver):
         for _ in range(floor(n // 3)):
             t1, t2 = sample(prev_pop, 2)
 
-            new_color_ratio = (
-                ((np.asarray(t1) + np.asarray(t2)) / 2).round(3).tolist()
-            )
+            new_color_ratio = ((np.asarray(t1) + np.asarray(t2)) / 2).round(3).tolist()
             new_pop.append((new_color_ratio))
 
         # shift some values up or down
@@ -68,27 +65,6 @@ class EvolutionaryColorSolver(Solver):
             new_pop.append(_random_init())
         new_pop = [x / np.sum(x) for x in new_pop]
         return new_pop
-
-    # def plot_diffs(
-    #     difflist: List[List[float]],
-    #     exp_folder: Any
-    # ) -> Any:
-    #     import pathlib
-    #     from pathlib import Path
-    #     a = []
-    #     print(range(1, len(difflist)+1))
-    #     for i in difflist:
-    #         if True: #a == [] or min(i) < min(a):
-    #             a.append(min(i))
-    #     plt.figure()
-    #     a.sort(reverse=True)
-    #     plt.plot(range(1, len(a)+1), a)
-    #     plt.xlabel("Color Rank")
-    #     plt.ylabel("Color Difference")
-    #     plt.title("Loss Graph")
-    #     print(exp_folder/"results" / "convergence_graph.png")
-    #     plt.savefig(exp_folder/"results" / "convergence_graph.png", dpi=300)
-    #     return a
 
     @staticmethod
     def convert_ratios_to_volumes(

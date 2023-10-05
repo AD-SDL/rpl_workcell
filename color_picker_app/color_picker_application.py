@@ -22,6 +22,7 @@ from funcx import FuncXExecutor
 
 from datetime import datetime
 import random
+
 # For publishing to RPL Portal
 from tools.publish_v2 import publish_iter
 
@@ -72,13 +73,18 @@ def run(
     loop_protocol = wf_dir / "cp_wf_mixcolor.yaml"
     final_protocol = wf_dir / "cp_wf_trashplate.yaml"
 
+    # wf_b_dir = Path("/home/rpl/workspace/Barty/workflows")
+    # startup_barty = wf_b_dir / "barty_startup.yaml"
+    # shutdown_barty = wf_b_dir / "barty_shutdown.yaml"
+    refill_barty = wf_dir / "cp_wf_replenish.yaml"
+
     # Constants
     solver_out_dim = (pop_size, 3)
     use_funcx = False
     funcx_local_ep = "299edea0-db9a-4693-84ba-babfa655b1be"  # local
 
     exp_path = Path(exp_path)
-    exp_label = Path(exp_label+ str(random.randint(0, 1000)))
+    exp_label = Path(exp_label + str(random.randint(0, 1000)))
     exp_folder = exp_path / exp_label
     if not (os.path.isdir(exp_path)):
         os.makedirs(exp_path)
@@ -167,15 +173,17 @@ def run(
                 )
                 plate_n = plate_n + 1
 
+        # Starting Barty up.
+        # exp.events.log_decision("Refill Max Ink", (current_iter == 0))
+        # if current_iter==0:
+        #         steps_run, _ = run_flow(startup_barty, payload, steps_run, exp)
+
         # Calculate volumes and current wells for creating the OT2 protocol
 
         exp.events.log_local_compute("solver.run_iteration")
         if plate_colors:
             prev_diffs = solver._grade_population(prev_colors, target_color)
-        previous_ratios = solver.run_iteration(
-            previous_ratios,
-            prev_diffs
-        )
+        previous_ratios = solver.run_iteration(previous_ratios, prev_diffs)
 
         # Only for visualization, Perform a linear combination of the next colors being tried to show what the solver expects to create on this run.
         target_plate = create_target_plate(previous_ratios, colors)
@@ -221,6 +229,23 @@ def run(
             steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
             new_plate = True
             curr_wells_used = []
+
+        # Checking whether to refill ink.
+        # for i, color_vol in enumerate(colors_used):
+        #     exp.events.log_decision(
+        #         "Need Ink", (color_vol >= 5000)
+        #     )  # 5 mL, change to whatever threshold.
+        #     if color_vol >= 5000:
+        #         if i == 0:
+        #             payload["refill_motor"] = ["motor_1"]
+        #         elif i == 1:
+        #             payload["refill_motor"] = ["motor_4"]
+        #         elif i == 2:
+        #             payload["refill_motor"] = ["motor_3"]
+        #         # elif i == 3:
+        #         #   payload["refill_motor"] = ["motor_4"]
+        #         steps_run, _ = run_flow(refill_barty, payload, steps_run, exp)
+        #         colors_used[i] = 0
 
         # Analyze image
         # output should be list [pop_size, 3]
@@ -342,12 +367,15 @@ def run(
             f.write(report_js)
         # Save overall results
         print("publishing:")
-        #publish_iter(exp_folder / "results", exp_folder, exp)
+        # publish_iter(exp_folder / "results", exp_folder, exp)
         exp.events.log_loop_check(
             "Sufficient Wells in Experiment Budget", num_exps + pop_size <= exp_budget
         )
     exp.events.log_loop_end()
     # Trash plate after experiment
+    # Return ink to reservoirs.
+    # steps_run, _ = run_flow(shutdown_barty, payload, steps_run, exp)
+
     shutil.copy2(
         run_info["run_dir"] / "results" / "plate_only.jpg",
         (exp_folder / "results" / f"plate_{plate_n}.jpg"),
