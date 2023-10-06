@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from pathlib import Path
-from rpl_wei.wei_workcell_base import WEI
+from wei.wei_workcell_base import WEI
 
 
 def main():

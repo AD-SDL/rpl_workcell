@@ -17,9 +17,11 @@ from tools.plate_color_analysis import get_colors_from_file
 from solvers.bayes_solver import BayesColorSolver
 from solvers.evolutionary_solver import EvolutionaryColorSolver
 from solvers.aggressive_genetic_solver import AggroColorSolver
+from solvers.solver import Solver
 from funcx import FuncXExecutor
 
 from datetime import datetime
+import random
 
 # For publishing to RPL Portal
 from tools.publish_v2 import publish_iter
@@ -37,9 +39,10 @@ from tools.calibrate import calibrate
 # For constructing the plots for each run
 from tools.create_visuals import create_visuals, create_target_plate
 
-from rpl_wei.exp_app import Experiment
+from wei.exp_app import Experiment
 
 MAX_PLATE_SIZE = 96
+
 
 def run(
     exp_type: str,
@@ -70,10 +73,10 @@ def run(
     loop_protocol = wf_dir / "cp_wf_mixcolor.yaml"
     final_protocol = wf_dir / "cp_wf_trashplate.yaml"
 
-    #wf_b_dir = Path("/home/rpl/workspace/Barty/workflows")
-    #startup_barty = wf_b_dir / "barty_startup.yaml"
-    #shutdown_barty = wf_b_dir / "barty_shutdown.yaml"
-    refill_barty = wf_dir / "cp_wf_replenish.yaml" 
+    # wf_b_dir = Path("/home/rpl/workspace/Barty/workflows")
+    # startup_barty = wf_b_dir / "barty_startup.yaml"
+    # shutdown_barty = wf_b_dir / "barty_shutdown.yaml"
+    refill_barty = wf_dir / "cp_wf_replenish.yaml"
 
     # Constants
     solver_out_dim = (pop_size, 3)
@@ -81,7 +84,7 @@ def run(
     funcx_local_ep = "299edea0-db9a-4693-84ba-babfa655b1be"  # local
 
     exp_path = Path(exp_path)
-    exp_label = Path(exp_label)
+    exp_label = Path(exp_label + str(random.randint(0, 1000)))
     exp_folder = exp_path / exp_label
     if not (os.path.isdir(exp_path)):
         os.makedirs(exp_path)
@@ -90,7 +93,12 @@ def run(
         os.mkdir(exp_folder)
     if not (os.path.isdir(exp_folder / "results")):
         os.mkdir(exp_folder / "results")
-    exp = Experiment("127.0.0.1", "8000", "Color_Picker",kafka_server="ec2-54-160-200-147.compute-1.amazonaws.com:9092")
+    exp = Experiment(
+        "127.0.0.1",
+        "8000",
+        "Color_Picker",
+        kafka_server="ec2-54-160-200-147.compute-1.amazonaws.com:9092",
+    )
     exp.register_exp()
     # Resource Tracking:
     plate_n = 1  # total number of plates
@@ -99,8 +107,12 @@ def run(
     curr_wells_used = []  # list of all wells used
 
     # Information Tracking:
-    current_plate = None
+    prev_colors = None
     cur_best_color = None
+    previous_ratios = None
+    prev_diffs = None
+    plate_diffs = None
+    plate_colors = None
     cur_best_diff = float(
         "inf"
     )  # Min difference between color found and target color so far
@@ -110,7 +122,7 @@ def run(
     diffs = []  # List of all diffs from all runs of the experiment
     new_plate = True
     payload = {}  # Payload to be sent to the WEI runs
-    colors_used = [0,0,0]   
+    colors_used = [0, 0, 0]
     exp.events.log_loop_start("Main Loop")
     while num_exps + pop_size <= exp_budget:
         new_run = {}
@@ -124,7 +136,7 @@ def run(
 
         # grab new plate if experiment starting or current plate is full
         exp.events.log_decision("Need New Plate", (new_plate or current_iter == 0))
-        if (new_plate or current_iter == 0):
+        if new_plate or current_iter == 0:
             # print('Grabbing New Plate')
             steps_run, _ = run_flow(init_protocol, payload, steps_run, exp)
             curr_wells_used = []
@@ -132,7 +144,14 @@ def run(
             exp.events.log_decision("Need Calibration", (current_iter == 0))
             if current_iter == 0:
                 # Run the calibration protocol that gets the colors being mixed and ensures the target color is within the possible color space
-                colors, target_color, curr_wells_used, steps_run = calibrate(
+                (
+                    colors,
+                    target_color,
+                    curr_wells_used,
+                    steps_run,
+                    analytical_sol,
+                    color_inverse,
+                ) = calibrate(
                     target_color,
                     curr_wells_used,
                     loop_protocol,
@@ -142,6 +161,9 @@ def run(
                     pop_size,
                     exp,
                 )
+                analytical_score = solver._grade_population(
+                    [analytical_sol], target_color
+                )[0]
             else:
                 # save the old plate picture and increment to a new plate
                 filename = "plate_" + str(plate_n) + ".jpg"
@@ -152,33 +174,38 @@ def run(
                 plate_n = plate_n + 1
 
         # Starting Barty up.
-        exp.events.log_decision("Refill Max Ink", (current_iter==0))
-        #if current_iter==0:
-  #         steps_run, _ = run_flow(startup_barty, payload, steps_run, exp) 
+        # exp.events.log_decision("Refill Max Ink", (current_iter == 0))
+        # if current_iter==0:
+        #         steps_run, _ = run_flow(startup_barty, payload, steps_run, exp)
 
         # Calculate volumes and current wells for creating the OT2 protocol
+
         exp.events.log_local_compute("solver.run_iteration")
-        plate_volumes = solver.run_iteration(
-            target_color,
-            current_plate,
-            pop_size=pop_size,
-            out_dim=(pop_size, 3),
-            return_volumes=True,
-            return_max_volume=plate_max_volume,
-        )
+        if plate_colors:
+            prev_diffs = solver._grade_population(prev_colors, target_color)
+        previous_ratios = solver.run_iteration(previous_ratios, prev_diffs)
 
         # Only for visualization, Perform a linear combination of the next colors being tried to show what the solver expects to create on this run.
-        target_plate = create_target_plate(plate_volumes, colors)
+        target_plate = create_target_plate(previous_ratios, colors)
         # Assign volumes to wells and colors and make a payload compatible with the OT2 protopiler
         payload, curr_wells_used = convert_volumes_to_payload(
-            plate_volumes, curr_wells_used
+            np.multiply(previous_ratios, plate_max_volume), curr_wells_used
         )
-        # Information tracking of ink usage.
-        curr_colors_used = [sum(payload['color_A_volumes']),sum(payload['color_B_volumes']),sum(payload['color_C_volumes'])] # Add color D later..
-        # Change keys for all files to match ^
+
+        curr_colors_used = [
+            sum(payload["color_A_volumes"]),
+            sum(payload["color_B_volumes"]),
+            sum(payload["color_C_volumes"]),
+        ]
         comb_list = [colors_used, curr_colors_used]
         colors_used = [sum(vols) for vols in zip(*comb_list)]
-        print('Total vol of colors used so far:', colors_used)
+        print("Total vol of colors used so far:", colors_used)
+
+        for i in colors_used:
+            if i > 5000:
+                print(i, ": Has used 5 mL of ink, Barty refill command")
+                i = 0
+                print("Updated colors_used:", colors_used)
 
         # resets OT2 resources (or not)
         if current_iter == 0:
@@ -204,39 +231,42 @@ def run(
             curr_wells_used = []
 
         # Checking whether to refill ink.
-        for i, color_vol in enumerate(colors_used):
-            exp.events.log_decision("Need Ink", (color_vol >= 5000)) # 5 mL, change to whatever threshold.
-            if color_vol >= 5000:
-                if i == 0:
-                    payload["refill_motor"] = ["motor_1"]
-                elif i == 1:
-                    payload["refill_motor"] = ["motor_4"]
-                elif i == 2:
-                    payload["refill_motor"] = ["motor_3"]
-                # elif i == 3:
-                #   payload["refill_motor"] = ["motor_4"]
-                steps_run, _ = run_flow(refill_barty, payload, steps_run, exp)
-                colors_used[i] = 0
+        # for i, color_vol in enumerate(colors_used):
+        #     exp.events.log_decision(
+        #         "Need Ink", (color_vol >= 5000)
+        #     )  # 5 mL, change to whatever threshold.
+        #     if color_vol >= 5000:
+        #         if i == 0:
+        #             payload["refill_motor"] = ["motor_1"]
+        #         elif i == 1:
+        #             payload["refill_motor"] = ["motor_4"]
+        #         elif i == 2:
+        #             payload["refill_motor"] = ["motor_3"]
+        #         # elif i == 3:
+        #         #   payload["refill_motor"] = ["motor_4"]
+        #         steps_run, _ = run_flow(refill_barty, payload, steps_run, exp)
+        #         colors_used[i] = 0
 
         # Analyze image
         # output should be list [pop_size, 3]
-        action_msg = run_info["hist"]["Take Picture"]["action_msg"]
-        image = np.fromstring(base64.b64decode(action_msg), np.uint8)
+        action_msg = run_info["Take Picture"]["action_msg"]
+        image = np.frombuffer(base64.b64decode(action_msg), np.uint8)
         img = cv2.imdecode(image, cv2.IMREAD_COLOR)
         img_path = run_info["run_dir"] / "results" / "final_image.jpg"
+
         cv2.imwrite(str(img_path), img)
 
         if use_funcx:
             print("funcx started")
             exp.events.log_globus_compute("get_colors_from_file")
             fx = FuncXExecutor(endpoint_id=funcx_local_ep)
-            fxresult = fx.submit(get_colors_from_file, img_path) 
+            fxresult = fx.submit(get_colors_from_file, img_path)
             fxresult = fx.submit(get_colors_from_file, img_path)
             plate_colors_ratios = fxresult.result()[1]
             print("funcx finished")
         else:
             exp.events.log_local_compute("get_colors_from_file")
-            plate_colors_ratios = get_colors_from_file(img_path)[1]
+            plate_colors = get_colors_from_file(img_path)[1]
 
         filename = "plate_" + str(plate_n) + ".jpg"
         # Copy the plate image into the experiment folder
@@ -245,20 +275,20 @@ def run(
             (exp_folder / "results" / filename),
         )
         # Swap BGR to RGB
-        plate_colors_ratios = {a: b[::-1] for a, b in plate_colors_ratios.items()}
+        plate_colors = {a: b[::-1] for a, b in plate_colors.items()}
         # Find the colors to be processed by the solver
-        current_plate = []
+        prev_colors = []
         wells_used = []
         for well in payload["destination_wells"]:
-            color = plate_colors_ratios[well]
+            color = plate_colors[well]
             wells_used.append(well)
-            current_plate.append(color)
+            prev_colors.append(color)
 
         ## save those and the initial colors, etc
         plate_best_color_ind, plate_diffs = solver._find_best_color(
-            current_plate, target_color, cur_best_color
+            prev_colors, target_color, cur_best_color
         )
-        plate_best_color = current_plate[plate_best_color_ind]
+        plate_best_color = prev_colors[plate_best_color_ind]
         plate_best_diff = solver._color_diff(plate_best_color, target_color)
         diffs.append(plate_diffs)
         # Find best colors
@@ -273,7 +303,7 @@ def run(
         ##Plot review
         create_visuals(
             target_plate,
-            current_plate,
+            prev_colors,
             exp_folder,
             current_iter,
             target_color,
@@ -290,15 +320,17 @@ def run(
                 report = json.loads(f.read())
             runs = report["runs"]
         # Create new run log
+        print("prev vols")
+        print(np.multiply(previous_ratios, plate_max_volume).tolist())
         new_run = [
             {
                 "run_number": current_iter,
                 "run_label": str(run_path),
                 "plate_N": plate_n,
                 "tried_values": target_plate,
-                "exp_volumes": plate_volumes,
+                "exp_volumes": np.multiply(previous_ratios, plate_max_volume).tolist(),
                 "wells": list(wells_used),
-                "results": list(map(lambda x: x.tolist(), current_plate)),
+                "results": list(map(lambda x: x.tolist(), prev_colors)),
                 "differences": plate_diffs.tolist(),
                 "best_on_plate": plate_best_color.tolist(),
                 "pos_on_plate": plate_best_color_ind.tolist(),
@@ -335,20 +367,21 @@ def run(
             f.write(report_js)
         # Save overall results
         print("publishing:")
-        publish_iter(exp_folder / "results", exp_folder, exp)
+        # publish_iter(exp_folder / "results", exp_folder, exp)
         exp.events.log_loop_check(
             "Sufficient Wells in Experiment Budget", num_exps + pop_size <= exp_budget
         )
     exp.events.log_loop_end()
     # Trash plate after experiment
     # Return ink to reservoirs.
-    steps_run, _ = run_flow(shutdown_barty, payload, steps_run, exp)
+    # steps_run, _ = run_flow(shutdown_barty, payload, steps_run, exp)
 
     shutil.copy2(
         run_info["run_dir"] / "results" / "plate_only.jpg",
         (exp_folder / "results" / f"plate_{plate_n}.jpg"),
     )
-    steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
+    if new_plate == False:
+        steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
     exp.events.end_experiment()
     print("This is our best color so far")
     print(cur_best_color)
@@ -401,17 +434,17 @@ if __name__ == "__main__":
     exp_type = "color_picker"
     if args.solver:
         if args.solver == "Bay":
-            solver = BayesColorSolver
+            solver = BayesColorSolver(args.pop_size)
             solver_name = "Bayesian Solver"
         elif args.solver == "Evo":
             solver_name = "Evolutionary Solver"
-            solver = EvolutionaryColorSolver
+            solver = EvolutionaryColorSolver(args.pop_size)
         elif args.solver == "Agg":
-            solver = AggroColorSolver
+            solver = AggroColorSolver(args.pop_size)
             solver_name = "Aggressive Genetic Solver"
     else:
-        solver = EvolutionaryColorSolver
-        solver_name = "Evolutionary Solver"
+        solver = Solver()
+        solver_name = "Solver"
     print(solver)
     print(target_ratio)
     print(exp_label)

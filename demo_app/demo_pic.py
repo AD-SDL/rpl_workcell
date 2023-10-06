@@ -3,7 +3,7 @@
 import logging
 from pathlib import Path
 from ..tools.publish import publish_iter
-from rpl_wei.wei_workcell_base import WEI
+from wei.wei_workcell_base import WEI
 import shutil, os
 import json
 from datetime import datetime

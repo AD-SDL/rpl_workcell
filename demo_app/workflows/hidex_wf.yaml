@@ -16,15 +16,15 @@ flowdef:
     args:
       foo: 1
 
-  - name: hidex_close
-    module: hidex
-    command: close
-    args:
-      prog: 1
+  # - name: hidex_close
+  #   module: hidex
+  #   command: close
+  #   args:
+  #     prog: 1
 
-  - name: run_assay
-    module: hidex
-    command: run_assay
-    args:
-      assay_name: "WEI_TEST"
+  # - name: run_assay
+  #   module: hidex
+  #   command: run_assay
+  #   args:
+  #     assay_name: "WEI_TEST"
         

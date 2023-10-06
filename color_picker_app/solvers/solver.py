@@ -7,10 +7,17 @@ import pathlib
 from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
+
 # https://python-colormath.readthedocs.io/en/latest/color_objects.html
 from colormath.color_objects import sRGBColor, LabColor
 from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie2000
+
+
+# def patch_asscalar(a):
+# return a.item()
+
+# setattr(np, "asscalar", patch_asscalar)
 
 
 class BestColor(BaseModel):
@@ -20,89 +27,36 @@ class BestColor(BaseModel):
     diff_to_target: float = float("inf")
 
 
-class GenericSolver:
-    model_name: str =  'Generic Model'
-    
-    @staticmethod
+class Solver:
+    model_name: str = "Generic Model"
+
+    def __init__(self, pop_size) -> None:
+        self.pop_size = pop_size
+        pass
+
     def run_iteration(
-        target_color: List[float],
-        previous_experiment_colors: Optional[List[List[float]]] = None,
-        return_volumes: bool = True,
-        return_max_volume: float = 275.0,
-        out_dim: Tuple[int] = (96, 3),
-        pop_size: int = 96,
-        prev_best_color: Optional[List[float]] = None
+        self,
+        previous_ratios: Optional[List[List[float]]] = None,
+        previous_diffs: Optional[List[float]] = None,
     ) -> List[List[float]]:
-
-        assert pop_size == out_dim[0], "Population size must equal out_dim[0]"
-
-        target_color = sRGBColor(
-            *target_color, is_upscaled=True if max(target_color) > 1 else False
-        )
-
-        if previous_experiment_colors is None:
-            c_ratios = make_random_plate(dim=out_dim)
-            if pop_size >= 3:
-                c_ratios[0] = sRGBColor(0.98, 0.01, 0.01)
-                c_ratios[1] = sRGBColor(0.01, 0.98, 0.01)
-                c_ratios[2] = sRGBColor(0.01, 0.01, 0.98)
-            if return_volumes:
-                return EvolutionaryColorSolver.convert_ratios_to_volumes(c_ratios)
-            else:
-                return c_ratios
-
-        # Flatten if not already flattened
-        previous_experiment_colors = (
-            np.asarray(previous_experiment_colors).reshape((-1, 3)).tolist()
-        )
-        previous_experiment_colors = [
-            sRGBColor(*color_ratio, is_upscaled=True if max(color_ratio) > 1 else False)
-            for color_ratio in previous_experiment_colors
-        ]
-
-        # Find population best color
-        (best_color_position, t) = EvolutionaryColorSolver._find_best_color(
-            previous_experiment_colors, target_color
-        )
+        if previous_ratios is None:
+            test_ratios = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+            ratios = []
+            for ratio in range(0, self.pop_size):
+                ratios.append(test_ratios[ratio % 3])
+            return ratios
 
         # Augment
-        new_population = EvolutionaryColorSolver._augment(
-            previous_experiment_colors, pop_size, best_color_position
-        )
+        new_population = self._augment(previous_ratios, previous_diffs)
 
         # Convert to volumes
-        if return_volumes:
-            return EvolutionaryColorSolver.convert_ratios_to_volumes(
-                new_population, return_max_volume
-            )
-
-        return [c.get_value_tuple() for c in new_population]
-
-    @staticmethod
-    def convert_ratios_to_volumes(
-        color_ratios: List[List[Union[sRGBColor, float]]],
-        total_volume: float = 275.0,
-    ) -> List[List[float]]:
-        sanitized_colors = []
-        for color in color_ratios:
-            if not isinstance(color, sRGBColor):
-                sanitized_colors.append(sRGBColor(*color))
-            else:
-                sanitized_colors.append(color)
-
-        volume_list = []
-        for color in sanitized_colors:
-            color_ratio = np.asarray(color.get_value_tuple())
-            color_ratio /= sum(color_ratio)
-            volume_list.append([r * total_volume for r in color_ratio])
-
-        return volume_list
+        return new_population
 
     @staticmethod
     def _find_best_color(
         experiment_colors: List[Union[sRGBColor, List[float]]],
         target_color: List[Union[sRGBColor, List[float]]],
-        best_color: Optional[List[Union[sRGBColor, List[float]]]] = None
+        best_color: Optional[List[Union[sRGBColor, List[float]]]] = None,
     ) -> Tuple[int, List[float]]:
         """returns index of best color in population
 
@@ -137,19 +91,15 @@ class GenericSolver:
                 for exp_color in experiment_colors
             ]
         plate_diffs = np.array(
-                EvolutionaryColorSolver._grade_population(
-                    experiment_colors, target_color
-                )
+            Solver._grade_population(experiment_colors, target_color)
         )
         return np.argmin(plate_diffs), plate_diffs
-        
 
     @staticmethod
     def _grade_population(
         pop_colors: List[Union[sRGBColor, List[float]]],
         target: Union[sRGBColor, List[float]],
     ):
-
         if not isinstance(target, sRGBColor):
             target = sRGBColor(*target, is_upscaled=True if max(target) > 1 else False)
         if not all([isinstance(exp_color, sRGBColor) for exp_color in pop_colors]):
@@ -163,7 +113,7 @@ class GenericSolver:
 
         diffs = []
         for color in pop_colors:
-            diff = EvolutionaryColorSolver._color_diff(target, color)
+            diff = Solver._color_diff(target, color)
             diffs.append(diff)
 
         return diffs
@@ -173,7 +123,6 @@ class GenericSolver:
         color1_rgb: Union[sRGBColor, List[float]],
         color2_rgb: Union[sRGBColor, List[float]],
     ) -> float:
-
         if not isinstance(color1_rgb, sRGBColor):
             color1_rgb = sRGBColor(
                 *color1_rgb, is_upscaled=True if max(color1_rgb) > 1 else False
@@ -188,17 +137,18 @@ class GenericSolver:
         delta_e = delta_e_cie2000(color1_lab, color2_lab)
         return delta_e
 
-    @staticmethod
     def _augment(
+        self,
         pop: List[sRGBColor],
         new_pop_size: int,
-        previos_best_index: Optional[int] = None,
+        previous_best_index: Optional[int] = None,
+        target_color=None,
     ) -> List[sRGBColor]:
         new_pop = []
         n = new_pop_size
-        if previos_best_index is not None:
+        if previous_best_index is not None:
             n -= 1  # Save one spot for the best color
-            new_pop.append(pop[previos_best_index])
+            new_pop.append(pop[previous_best_index])
         # combine colors towards average
         for _ in range(floor(n // 3)):
             t1, t2 = sample(pop, 2)
@@ -223,37 +173,34 @@ class GenericSolver:
 
                 new_color_ratio.append(round(r + delta, 3))
             new_pop.append(sRGBColor(*new_color_ratio))
-        
+
         # generate new randoms
         def _random_init():
             return sRGBColor(*np.random.rand(3).round(3).tolist())
 
         for _ in range(len(new_pop), new_pop_size):
             new_pop.append(_random_init())
-        if previos_best_index is None and len(new_pop) >= 3:
+        if previous_best_index is None and len(new_pop) >= 3:
             new_pop[0] = sRGBColor(0.98, 0.01, 0.01)
             new_pop[1] = sRGBColor(0.01, 0.98, 0.01)
             new_pop[2] = sRGBColor(0.01, 0.01, 0.98)
         return new_pop
-    
+
     @staticmethod
-    def plot_diffs(
-        difflist: List[List[float]],
-        exp_folder: Any
-    ) -> Any:
+    def plot_diffs(difflist: List[List[float]], exp_folder: Any) -> Any:
         a = []
-        print(range(1, len(difflist)+1))
+        print(range(1, len(difflist) + 1))
         for i in difflist:
-            if True: #a == [] or min(i) < min(a):
+            if True:  # a == [] or min(i) < min(a):
                 a.append(min(i))
         plt.figure()
         a.sort(reverse=True)
-        plt.plot(range(1, len(a)+1), a)
+        plt.plot(range(1, len(a) + 1), a)
         plt.xlabel("Color Rank")
         plt.ylabel("Color Difference")
         plt.title("Loss Graph")
-        print(exp_folder/"results" / "convergence_graph.png")
-        plt.savefig(exp_folder/"results" / "convergence_graph.png", dpi=300)
+        print(exp_folder / "results" / "convergence_graph.png")
+        plt.savefig(exp_folder / "results" / "convergence_graph.png", dpi=300)
         return a
 
 
@@ -270,7 +217,7 @@ if __name__ == "__main__":
 
     target_ratio = [237, 36, 36]
     mixing_colors = [[255, 0, 0], [0, 255, 0], [0, 0, 255]]
-    solver = EvolutionaryColorSolver
+    solver = Solver
 
     init_guesses = make_random_plate(dim=(8, 12, 3))
     if show_visual:
