@@ -14,17 +14,20 @@ def gather_metadata(**data):
         "exp_type": "color_picker",
     }
 
-    input_path = Path(data["make_input"]).expanduser()
+    input_path = Path(data["data_folder"]).expanduser()
     with open(input_path / "exp_data.txt") as f:
         datal = json.loads(f.read())
 
     datal.update(GENERAL_METADATA)
     final_data = data["publishv2"]
     final_data["metadata"] = datal
+
+    with open(data["metadata_file"], "w") as f:
+        json.dump(final_data, f)
     return final_data
 
 
 @generate_flow_definition
 class GatherMetaData(GladierBaseTool):
-    funcx_functions = [gather_metadata]
-    required_input = ["make_input", "funcx_endpoint_compute", "publishv2"]
+    compute_functions = [gather_metadata]
+    required_input = ["data_folder", "compute_endpoint", "publishv2"]

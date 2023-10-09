@@ -105,7 +105,7 @@ and check that the camera_module is publishing frames and the PF-400 is publishi
   ```
    globus-compute-endpoint start default 
   ```
-   to start funcx for publishing  
+   to start compute endpoint for publishing  
 12. In the same terminal, on logan, Run  
   ```
   cd ~/workspace/rpl_workcell/
@@ -142,5 +142,5 @@ ros2 launch camera_module_client camera_publisher.launch.py camera_name:=camera_
 ```
 
 ## Software
-1. If the publish flow is failing, rerun the funcx-endpoint using the same command above, and the same globus command above
+1. If the publish flow is failing, rerun the globus compute-endpoint using the same command above, and the same globus command above
 2. Make sure to check the endpoints in `~/workspace/rpl_workcell/color_picker/tools/publish.py` line up with the local endpoints on Logan

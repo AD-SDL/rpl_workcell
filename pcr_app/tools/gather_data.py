@@ -14,7 +14,6 @@ def gather_metadata(**data):
         "exp_label": "first_image_test",
         "subjects": [{"subject": "SDL"}],
     }
-    print("break here")
     print(data["make_input"])
     input_path = Path(data["make_input"]).expanduser()
     with open(input_path / "wf_steps.txt") as f:
@@ -27,10 +26,9 @@ def gather_metadata(**data):
     return data["pilot"]
     # data["pilot"]["metadata"].update({"wf_steps": datal})
     # pilot['metadata'] = datal
-    return data["pilot"]
 
 
 @generate_flow_definition
 class GatherMetaData(GladierBaseTool):
-    funcx_functions = [gather_metadata]
-    required_input = ["make_input", "funcx_endpoint_compute", "pilot"]
+    compute_functions = [gather_metadata]
+    required_input = ["make_input", "compute_endpoint", "pilot"]

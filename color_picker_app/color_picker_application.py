@@ -80,8 +80,8 @@ def run(
 
     # Constants
     solver_out_dim = (pop_size, 3)
-    use_funcx = False
-    funcx_local_ep = "299edea0-db9a-4693-84ba-babfa655b1be"  # local
+    use_globus_compute = False
+    compute_local_ep = "299edea0-db9a-4693-84ba-babfa655b1be"  # local
 
     exp_path = Path(exp_path)
     exp_label = Path(exp_label + str(random.randint(0, 1000)))
