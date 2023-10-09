@@ -26,5 +26,5 @@ def gather_metadata(**data):
 
 @generate_flow_definition
 class GatherMetaData(GladierBaseTool):
-    funcx_functions = [gather_metadata]
-    required_input = ["make_input", "funcx_endpoint_compute", "publishv2"]
+    compute_functions = [gather_metadata]
+    required_input = ["make_input", "compute_endpoint", "publishv2"]

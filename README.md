@@ -28,7 +28,7 @@ The **config** section defines various infrastructure services that may be used 
 
 ```
   ros_namespace: rpl_workcell                                 # ROS variable namespace name
-  funcx_local_ep: "299edea0-db9a-4693-84ba-babfa655b1be"      # UUID for funcX endpoint used for local computations
+  compute_local_ep: "299edea0-db9a-4693-84ba-babfa655b1be"      # UUID for compute endpoint used for local computations
   globus_local_ep: ""                                         # 
   globus_search_index: "aefcecc6-e554-4f8c-a25b-147f23091944" # UUID for the Globus Search instance
   globus_portal_ep: "bb8d048a-2cad-4029-a9c7-671ec5d1f84d"    # UUID for the portal to which data may be published

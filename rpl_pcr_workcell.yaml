@@ -1,7 +1,7 @@
 name: RPL_PCR_workcell
 
 config:
-  funcx_local_ep: "299edea0-db9a-4693-84ba-babfa655b1be"
+  compute_local_ep: "299edea0-db9a-4693-84ba-babfa655b1be"
   globus_local_ep: ""
   ##
   globus_search_index: "aefcecc6-e554-4f8c-a25b-147f23091944"

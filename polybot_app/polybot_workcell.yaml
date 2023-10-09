@@ -1,7 +1,7 @@
 name: Polybot workcell
 
 config:
-  funcx_local_ep: ""
+  compute_local_ep: ""
   globus_local_ep: ""
   ##
   globus_search_index: "aefcecc6-e554-4f8c-a25b-147f23091944"

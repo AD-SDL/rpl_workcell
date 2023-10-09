@@ -1,6 +1,5 @@
-from gladier import GladierBaseClient, generate_flow_definition, GladierBaseTool
+from gladier import GladierBaseClient, generate_flow_definition
 from gather_data import GatherMetaData
-from pathlib import Path
 
 
 @generate_flow_definition(
@@ -20,8 +19,7 @@ def publish_iter(folder_path, dest_path):
     flow_input = {
         "input": {
             "make_input": str(folder_path.expanduser()),
-            "funcx_endpoint_compute": "299edea0-db9a-4693-84ba-babfa655b1be",
-            "funcx_endpoint_non_compute": "299edea0-db9a-4693-84ba-babfa655b1be",
+            "compute_endpoint": "299edea0-db9a-4693-84ba-babfa655b1be",
             "pilot": {
                 "dataset": str(folder_path.expanduser()),
                 "index": "aefcecc6-e554-4f8c-a25b-147f23091944",
