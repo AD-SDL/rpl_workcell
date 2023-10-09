@@ -40,6 +40,7 @@ flowdef:
       color_A_volumes: payload.color_A_volumes
       color_B_volumes: payload.color_B_volumes
       color_C_volumes: payload.color_C_volumes
+      color_D_volumes: payload.color_D_volumes
       destination_wells: payload.destination_wells
       use_existing_resources: payload.use_existing_resources
     comment: Mix colors A, B and C portions according to input data

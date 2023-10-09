@@ -14,12 +14,12 @@ equipment:
     alias: colorB
     offset: [0, 0, 0.8]
 
-  - name: nest_1_reservoir_15ml
+  - name: nest_1_reservoir_195ml
     location: "8"
     alias: colorC
     offset: [0, 0, 0.8]
 
-  - name: nest_1_reservoir_15ml
+  - name: nest_1_reservoir_195ml
     location: "9"
     alias: colorD
     offset: [0, 0, 0.8]
@@ -72,13 +72,24 @@ commands:
     dispense_clearance: 2
     aspirate_clearance: 1
     drop_tip: False
+
+  - name: replace_tip3
+    replace_tip: True
+
+  - name: Add color D
+    source: colorD:A1
+    destination: payload.destination_wells
+    volume: payload.color_D_volumes
+    dispense_clearance: 2
+    aspirate_clearance: 1
+    drop_tip: False
  
   - name: Mix Colors
     reps: 3
     mix_volume: 100
     location: payload.destination_wells    
   
-  - name: replace_tip3
+  - name: replace_tip4
     replace_tip: True
 
 metadata:

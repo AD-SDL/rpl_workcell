@@ -27,7 +27,7 @@ class BestColor(BaseModel):
 class BayesColorSolver(Solver):
     def __init__(self, pop_size) -> None:
         self.optimizer = Optimizer(
-            dimensions=[(0.0, 1.0), (0.0, 1.0), (0.0, 1.0)],
+            dimensions=[(0.0, 1.0), (0.0, 1.0), (0.0, 1.0), (0.0, 1.0)],
             # base_estimator='GP',
             n_initial_points=4,
             initial_point_generator="random",

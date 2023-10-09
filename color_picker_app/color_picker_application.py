@@ -184,9 +184,12 @@ def run(
         if plate_colors:
             prev_diffs = solver._grade_population(prev_colors, target_color)
         previous_ratios = solver.run_iteration(previous_ratios, prev_diffs)
-
+        print()
         # Only for visualization, Perform a linear combination of the next colors being tried to show what the solver expects to create on this run.
+        print(previous_ratios)
+        print(colors)
         target_plate = create_target_plate(previous_ratios, colors)
+        print(target_plate)
         # Assign volumes to wells and colors and make a payload compatible with the OT2 protopiler
         payload, curr_wells_used = convert_volumes_to_payload(
             np.multiply(previous_ratios, plate_max_volume), curr_wells_used
@@ -221,6 +224,7 @@ def run(
             sum(payload["color_A_volumes"]),
             sum(payload["color_B_volumes"]),
             sum(payload["color_C_volumes"]),
+            sum(payload["color_D_volumes"]),
         ]
         comb_list = [colors_used, curr_colors_used]
         colors_used = [sum(vols) for vols in zip(*comb_list)]
@@ -374,9 +378,6 @@ def run(
         )
     exp.events.log_loop_end()
     # Trash plate after experiment
-    # Return ink to reservoirs.
-    steps_run, _ = run_flow(shutdown_barty, payload, steps_run, exp)
-
     shutil.copy2(
         run_info["run_dir"] / "results" / "plate_only.jpg",
         (exp_folder / "results" / f"plate_{plate_n}.jpg"),
