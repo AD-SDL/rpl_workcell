@@ -3,29 +3,35 @@ equipment:
     location: "2"
     alias: dest
     offset: [0, 0.6, 0]
+
   - name: nest_1_reservoir_195ml
-    location: "4"
+    location: "5"
     alias: colorA
     offset: [0, 0, 0.8]
+
   - name: nest_1_reservoir_195ml
-    location: "7"
+    location: "6"
     alias: colorB
     offset: [0, 0, 0.8]
-  - name: nest_12_reservoir_15ml
-    location: "6"
-    alias: colorC
-  - name: opentrons_96_tiprack_300ul
+
+  - name: nest_1_reservoir_15ml
     location: "8"
-    offset: [0.3, 0.7, -0.5]
-  - name: opentrons_96_tiprack_300ul
+    alias: colorC
+    offset: [0, 0, 0.8]
+
+  - name: nest_1_reservoir_15ml
     location: "9"
-    offset: [0.3, 0.7, -0.5]
+    alias: colorD
+    offset: [0, 0, 0.8]
+
   - name: opentrons_96_tiprack_300ul
     location: "10"
     offset: [0.3, 0.7, -0.5]
+
   - name: opentrons_96_tiprack_300ul
     location: "11"
     offset: [0.3, 0.7, -0.5]
+
   - name: p300_single_gen2
     mount: left
 
@@ -60,7 +66,7 @@ commands:
     replace_tip: True
 
   - name: Add color C
-    source: colorC:A8
+    source: colorC:A1
     destination: payload.destination_wells
     volume: payload.color_C_volumes
     dispense_clearance: 2

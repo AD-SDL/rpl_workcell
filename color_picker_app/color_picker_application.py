@@ -192,21 +192,7 @@ def run(
             np.multiply(previous_ratios, plate_max_volume), curr_wells_used
         )
 
-        curr_colors_used = [
-            sum(payload["color_A_volumes"]),
-            sum(payload["color_B_volumes"]),
-            sum(payload["color_C_volumes"]),
-        ]
-        comb_list = [colors_used, curr_colors_used]
-        colors_used = [sum(vols) for vols in zip(*comb_list)]
-        print("Total vol of colors used so far:", colors_used)
-
-        for i in colors_used:
-            if i > 5000:
-                print(i, ": Has used 5 mL of ink, Barty refill command")
-                i = 0
-                print("Updated colors_used:", colors_used)
-
+       
         # resets OT2 resources (or not)
         if current_iter == 0:
             payload[
@@ -231,21 +217,36 @@ def run(
             curr_wells_used = []
 
         # Checking whether to refill ink.
-        # for i, color_vol in enumerate(colors_used):
-        #     exp.events.log_decision(
-        #         "Need Ink", (color_vol >= 5000)
-        #     )  # 5 mL, change to whatever threshold.
-        #     if color_vol >= 5000:
-        #         if i == 0:
-        #             payload["refill_motor"] = ["motor_1"]
-        #         elif i == 1:
-        #             payload["refill_motor"] = ["motor_4"]
-        #         elif i == 2:
-        #             payload["refill_motor"] = ["motor_3"]
-        #         # elif i == 3:
-        #         #   payload["refill_motor"] = ["motor_4"]
-        #         steps_run, _ = run_flow(refill_barty, payload, steps_run, exp)
-        #         colors_used[i] = 0
+        curr_colors_used = [
+            sum(payload["color_A_volumes"]),
+            sum(payload["color_B_volumes"]),
+            sum(payload["color_C_volumes"]),
+        ]
+        comb_list = [colors_used, curr_colors_used]
+        colors_used = [sum(vols) for vols in zip(*comb_list)]
+        print("Total vol of colors used so far:", colors_used)
+
+        for i in colors_used:
+            if i > 5000:
+                print(i, ": Has used 5 mL of ink, Barty refill command")
+                i = 0
+                print("Updated colors_used:", colors_used)
+
+        for i, color_vol in enumerate(colors_used):
+            exp.events.log_decision(
+                "Need Ink", (color_vol >= 5000)
+            )  # 5 mL, change to whatever threshold.
+            if color_vol >= 5000:
+                if i == 0:
+                    payload["refill_motor"] = ["motor_1"]
+                elif i == 1:
+                    payload["refill_motor"] = ["motor_2"]
+                elif i == 2:
+                    payload["refill_motor"] = ["motor_3"]
+                elif i == 3:
+                  payload["refill_motor"] = ["motor_4"]
+                steps_run, _ = run_flow(refill_barty, payload, steps_run, exp)
+                colors_used[i] = 0
 
         # Analyze image
         # output should be list [pop_size, 3]
@@ -374,7 +375,7 @@ def run(
     exp.events.log_loop_end()
     # Trash plate after experiment
     # Return ink to reservoirs.
-    # steps_run, _ = run_flow(shutdown_barty, payload, steps_run, exp)
+    steps_run, _ = run_flow(shutdown_barty, payload, steps_run, exp)
 
     shutil.copy2(
         run_info["run_dir"] / "results" / "plate_only.jpg",
