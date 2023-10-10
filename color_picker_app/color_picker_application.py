@@ -77,7 +77,7 @@ def run(
     # startup_barty = wf_b_dir / "barty_startup.yaml"
     # shutdown_barty = wf_b_dir / "barty_shutdown.yaml"
     refill_barty = wf_dir / "cp_wf_replenish.yaml"
-
+    use_funcx = False
     # Constants
     solver_out_dim = (pop_size, 3)
     use_globus_compute = False
@@ -372,7 +372,7 @@ def run(
             f.write(report_js)
         # Save overall results
         print("publishing:")
-        # publish_iter(exp_folder / "results", exp_folder, exp)
+        publish_iter(exp_folder / "results", exp_folder, exp)
         exp.events.log_loop_check(
             "Sufficient Wells in Experiment Budget", num_exps + pop_size <= exp_budget
         )

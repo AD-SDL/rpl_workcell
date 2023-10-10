@@ -29,7 +29,6 @@ modules:
 
   #In this case, the rest url used to send actions to the component
       rest_node_address: "http://parker.cels.anl.gov:2000"
-      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
 
   # X, Y, Z, Q0, Q1, Q2, Q3 relative to workcell_origin_coordinates
     workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
@@ -39,7 +38,6 @@ modules:
     interface: wei_rest_node
     config:
       rest_node_address: "http://parker.cels.anl.gov:2001"
-      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
 
   - name: sciclops
@@ -47,7 +45,6 @@ modules:
     interface: wei_rest_node
     config:
       rest_node_address: "http://parker.cels.anl.gov:2002"
-      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0.5713, 1.0934, 1.0514, 0.9831, 0, 0, 0.1826]
 
   - name: ot2_pcr_alpha
@@ -55,7 +52,6 @@ modules:
     interface: wei_rest_node
     config:
       rest_node_address: "http://parker.cels.anl.gov:2003"
-      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0,0,0,1,0,0,0]
 
   - name: ot2_gc_beta
@@ -63,7 +59,6 @@ modules:
     interface: wei_rest_node
     config:
       rest_node_address: "http://parker.cels.anl.gov:2004"
-      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0,0,0,1,0,0,0]
 
   - name: ot2_cp_gamma
@@ -71,7 +66,6 @@ modules:
     interface: wei_rest_node
     config:
       rest_node_address: "http://parker.cels.anl.gov:2005"
-      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0,0,0,1,0,0,0]
 
   - name: pf400
@@ -79,7 +73,6 @@ modules:
     interface: wei_rest_node
     config:
       rest_node_address: "http://strange.cels.anl.gov:3000"
-      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
 
   - name: camera_module
@@ -87,7 +80,6 @@ modules:
     interface: wei_rest_node
     config:
       rest_node_address: "http://strange.cels.anl.gov:3001"
-      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0,0,0,1,0,0,0]
 
   - name: hidex

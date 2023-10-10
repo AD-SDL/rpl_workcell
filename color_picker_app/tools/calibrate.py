@@ -85,12 +85,14 @@ def calibrate(
     t = np.asarray(colors)
     colors = t.tolist()
     try:
-        color_inverse = np.linalg.inv(np.transpose(t))
+        raise(Exception("test"))
+        analytical_sol = np.linalg.lstsq(np.transpose(t), np.array(target_color))
+        print("analytical_sol" + str(analytical_sol))
     except Exception as e:
+        print("approximating")
         color_inverse = np.linalg.inv([[255, 0, 0], [0, 255, 0], [0, 0, 255]])
-
-    analytical_sol = color_inverse @ np.array(target_color)
-    analytical_sol = np.append(analytical_sol, 0)
+        analytical_sol = color_inverse @ np.array(target_color)
+        analytical_sol = np.append(analytical_sol, 0.1)
     analytical_sol = analytical_sol / np.sum(analytical_sol) * plate_max_volume
     analytical_sol = analytical_sol.round(3)
     print("analytical solution: " + str(analytical_sol.tolist()))
