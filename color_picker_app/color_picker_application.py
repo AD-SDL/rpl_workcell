@@ -183,7 +183,6 @@ def run(
         if plate_colors:
             prev_diffs = solver._grade_population(prev_colors, target_color)
         previous_ratios = solver.run_iteration(previous_ratios, prev_diffs)
-        print()
         # Only for visualization, Perform a linear combination of the next colors being tried to show what the solver expects to create on this run.
         print(previous_ratios)
         print(colors)
@@ -194,6 +193,7 @@ def run(
             np.multiply(previous_ratios, plate_max_volume), curr_wells_used
         )
 
+       
        
         # resets OT2 resources (or not)
         if current_iter == 0:
@@ -250,6 +250,37 @@ def run(
                   payload["refill_motor"] = ["motor_4"]
                 steps_run, _ = run_flow(refill_barty, payload, steps_run, exp)
                 colors_used[i] = 0
+        curr_colors_used = [
+            sum(payload["color_A_volumes"]),
+            sum(payload["color_B_volumes"]),
+            sum(payload["color_C_volumes"]),
+            sum(payload["color_D_volumes"]),
+        ]
+        comb_list = [colors_used, curr_colors_used]
+        colors_used = [sum(vols) for vols in zip(*comb_list)]
+        print("Total vol of colors used so far:", colors_used)
+
+        for i in colors_used:
+            if i > 5000:
+                print(i, ": Has used 5 mL of ink, Barty refill command")
+                i = 0
+                print("Updated colors_used:", colors_used)
+
+        for i, color_vol in enumerate(colors_used):
+            exp.events.log_decision(
+                "Need Ink", (color_vol >= 5000)
+            )  # 5 mL, change to whatever threshold.
+            if color_vol >= 5000:
+                if i == 0:
+                    payload["refill_motor"] = ["motor_1"]
+                elif i == 1:
+                    payload["refill_motor"] = ["motor_2"]
+                elif i == 2:
+                    payload["refill_motor"] = ["motor_3"]
+                elif i == 3:
+                  payload["refill_motor"] = ["motor_4"]
+                steps_run, _ = run_flow(refill_barty, payload, steps_run, exp)
+                colors_used[i] = 0
 
         # Analyze image
         # output should be list [pop_size, 3]
@@ -260,6 +291,7 @@ def run(
 
         cv2.imwrite(str(img_path), img)
 
+        if use_globus_compute:
         if use_globus_compute:
             print("funcx started")
             exp.events.log_globus_compute("get_colors_from_file")
@@ -371,6 +403,7 @@ def run(
             f.write(report_js)
         # Save overall results
         print("publishing:")
+        publish_iter(exp_folder / "results", exp_folder, exp)
         publish_iter(exp_folder / "results", exp_folder, exp)
         exp.events.log_loop_check(
             "Sufficient Wells in Experiment Budget", num_exps + pop_size <= exp_budget
