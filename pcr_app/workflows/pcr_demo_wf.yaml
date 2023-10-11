@@ -56,7 +56,7 @@ flowdef:
       target_plate_rotation: narrow
 
   - name: Seal plate in sealer
-    module: sealer_rest
+    module: sealer
     action: seal
     args:
       time: payload:seal.time
