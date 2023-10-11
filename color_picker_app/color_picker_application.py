@@ -77,7 +77,6 @@ def run(
     # startup_barty = wf_b_dir / "barty_startup.yaml"
     # shutdown_barty = wf_b_dir / "barty_shutdown.yaml"
     refill_barty = wf_dir / "cp_wf_replenish.yaml"
-    use_funcx = False
     # Constants
     solver_out_dim = (pop_size, 3)
     use_globus_compute = False
@@ -261,7 +260,7 @@ def run(
 
         cv2.imwrite(str(img_path), img)
 
-        if use_funcx:
+        if use_globus_compute:
             print("funcx started")
             exp.events.log_globus_compute("get_colors_from_file")
             fx = FuncXExecutor(endpoint_id=funcx_local_ep)
