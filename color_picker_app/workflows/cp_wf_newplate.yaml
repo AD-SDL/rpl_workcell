@@ -27,7 +27,7 @@ flowdef:
       target: camera_module.plate_station
       source_plate_rotation: narrow
       target_plate_rotation: narrow
-
+      
   - name: Drain Max Ink
     module: barty
     action: drain_ink_all_motors
