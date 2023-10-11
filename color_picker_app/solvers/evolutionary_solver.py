@@ -59,7 +59,7 @@ class EvolutionaryColorSolver(Solver):
 
         # generate new randoms
         def _random_init():
-            return np.random.rand(3).round(3).tolist()
+            return np.random.rand(4).round(3).tolist()
 
         for _ in range(len(new_pop), self.pop_size):
             new_pop.append(_random_init())

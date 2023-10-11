@@ -1,18 +1,26 @@
 from gladier import GladierBaseClient, generate_flow_definition
-from gather_data_v2 import GatherMetaData
+from tools.gather_data_v2 import GatherMetaData
 
 
-@generate_flow_definition()
+# @generate_flow_definition()
+# class PublishRun(GladierBaseClient):
+#     globus_group = "dda56f31-53d1-11ed-bd8b-0db7472df7d6"
+#     gladier_tools = [GatherMetaData, "gladier_tools.publish.Publishv2"]
+@generate_flow_definition(
+    modifiers={
+        "publishv2_gather_metadata": {"payload": "$.GatherMetadata.details.result[0]"}
+    }
+)
 class PublishRun(GladierBaseClient):
     globus_group = "dda56f31-53d1-11ed-bd8b-0db7472df7d6"
     gladier_tools = [GatherMetaData, "gladier_tools.publish.Publishv2"]
-
 
 def publish_iter(folder_path, dest_path, exp):
     print(str(folder_path))
     print(str(dest_path))
     flow_input = {
         "input": {
+            
             "data_folder": str(folder_path),
             "compute_endpoint": "9e370560-9463-4a3d-a836-4db1dfb9ccb6",
             "publishv2": {
@@ -37,7 +45,7 @@ def publish_iter(folder_path, dest_path, exp):
     label = "ColorPickerRPL"
     # Run the flow
     flow = publishFlow.run_flow(flow_input=flow_input, label=label)
-    exp.events.log_globus_flow(label, flow["action_id"])
+    #exp.events.log_globus_flow(label, flow["action_id"])
     # Track progress
     # action_id = flow['action_id']
     # publishFlow.progress(action_id)

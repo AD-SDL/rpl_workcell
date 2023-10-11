@@ -22,7 +22,7 @@ def gather_metadata(**data):
     final_data = data["publishv2"]
     final_data["metadata"] = datal
 
-    with open(data["metadata_file"], "w") as f:
+    with open(data["publishv2"]["metadata_file"], "w") as f:
         json.dump(final_data, f)
     return final_data
 
