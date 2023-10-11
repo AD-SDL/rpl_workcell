@@ -95,7 +95,7 @@ flowdef:
       target_plate_rotation: narrow
 
   - name: Peel plate
-    module: peeler_rest
+    module: peeler
     action: peel
 
   - name: pf400 moves plate from peeler to camera
