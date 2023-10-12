@@ -30,7 +30,7 @@ from tools.publish_v2 import publish_iter
 from tools.color_utils import convert_volumes_to_payload
 
 # For running WEI flows
-from tools.run_flow import run_flow
+from tools.start_run import start_run_with_log_scraping
 
 # for measuring the three mixed colors for calibration and for
 # ensuring the target color is in the right color space
@@ -137,7 +137,7 @@ def run(
         exp.events.log_decision("Need New Plate", (new_plate or current_iter == 0))
         if new_plate or current_iter == 0:
             # print('Grabbing New Plate')
-            steps_run, _ = run_flow(init_protocol, payload, steps_run, exp)
+            steps_run, _ = start_run_with_log_scraping(init_protocol, payload, steps_run, exp)
             curr_wells_used = []
             new_plate = False
             exp.events.log_decision("Need Calibration", (current_iter == 0))
@@ -204,7 +204,7 @@ def run(
             payload["use_existing_resources"] = True
 
         # Run the flow to mix all of the colors
-        steps_run, run_info = run_flow(loop_protocol, payload, steps_run, exp)
+        steps_run, run_info = start_run_with_log_scraping(loop_protocol, payload, steps_run, exp)
         run_path = run_info["run_dir"].parts[-1]
         if not (os.path.isdir(exp_folder / run_path)):
             os.mkdir(exp_folder / run_path)
@@ -214,7 +214,7 @@ def run(
             used_wells + pop_size > MAX_PLATE_SIZE
         ):  # if we have used all wells or not enough for next iter (thrash plate, start from scratch)
             print("Trashing Used Plate")
-            steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
+            steps_run, _ = start_run_with_log_scraping(final_protocol, payload, steps_run, exp)
             new_plate = True
             curr_wells_used = []
 
@@ -248,7 +248,7 @@ def run(
                     payload["refill_motor"] = ["motor_3"]
                 elif i == 3:
                   payload["refill_motor"] = ["motor_4"]
-                steps_run, _ = run_flow(refill_barty, payload, steps_run, exp)
+                steps_run, _ = start_run_with_log_scraping(refill_barty, payload, steps_run, exp)
                 colors_used[i] = 0
         curr_colors_used = [
             sum(payload["color_A_volumes"]),
@@ -279,7 +279,7 @@ def run(
                     payload["refill_motor"] = ["motor_3"]
                 elif i == 3:
                   payload["refill_motor"] = ["motor_4"]
-                steps_run, _ = run_flow(refill_barty, payload, steps_run, exp)
+                steps_run, _ = start_run_with_log_scraping(refill_barty, payload, steps_run, exp)
                 colors_used[i] = 0
 
         # Analyze image
@@ -415,7 +415,7 @@ def run(
         (exp_folder / "results" / f"plate_{plate_n}.jpg"),
     )
     if new_plate == False:
-        steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
+        steps_run, _ = start_run_with_log_scraping(final_protocol, payload, steps_run, exp)
     exp.events.end_experiment()
     print("This is our best color so far")
     print(cur_best_color)
