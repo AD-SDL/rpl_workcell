@@ -1,7 +1,7 @@
 from typing import List, Dict, Any, Tuple
 
 from matplotlib import pyplot as plt
-from tools.run_flow import run_flow
+from tools.start_run import start_run_with_log_scraping
 from pathlib import Path
 import numpy as np
 from tools.color_utils import convert_volumes_to_payload
@@ -18,7 +18,7 @@ def get_image(loop_protocol, plate_volumes, experiment, curr_wells_used, steps_r
     )
     print(payload)
     payload["use_existing_resources"] = False
-    steps_run, run_info = run_flow(loop_protocol, payload, steps_run, experiment)
+    steps_run, run_info = start_run_with_log_scraping(loop_protocol, payload, steps_run, experiment)
     action_msg = run_info["Take Picture"]["action_msg"]
     image = np.fromstring(base64.b64decode(action_msg), np.uint8)
     img = cv2.imdecode(image, cv2.IMREAD_COLOR)
