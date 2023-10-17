@@ -292,7 +292,6 @@ def run(
         cv2.imwrite(str(img_path), img)
 
         if use_globus_compute:
-        if use_globus_compute:
             print("funcx started")
             exp.events.log_globus_compute("get_colors_from_file")
             fx = FuncXExecutor(endpoint_id=funcx_local_ep)
