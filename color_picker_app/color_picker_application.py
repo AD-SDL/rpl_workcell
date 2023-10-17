@@ -99,6 +99,7 @@ def run(
         kafka_server="ec2-54-160-200-147.compute-1.amazonaws.com:9092",
     )
     exp.register_exp()
+    print("registered")
     # Resource Tracking:
     plate_n = 1  # total number of plates
     current_iter = 0  # total number of itertions
@@ -291,7 +292,6 @@ def run(
 
         cv2.imwrite(str(img_path), img)
 
-        if use_globus_compute:
         if use_globus_compute:
             print("funcx started")
             exp.events.log_globus_compute("get_colors_from_file")
