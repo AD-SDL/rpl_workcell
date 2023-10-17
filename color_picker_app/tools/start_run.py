@@ -6,13 +6,8 @@ from pathlib import Path
 import time
 
 
-def wei_run_flow(wf_file_path, payload):
-    wei_client = WEI(wf_file_path)
-    run_info = wei_client.run_workflow(payload=payload)
-    return run_info
 
-
-def run_flow(protocol, payload, steps_run, experiment: Experiment):
+def start_run_with_log_scraping(protocol, payload, steps_run, experiment: Experiment):
     """Runs a WEI flow and
     updates the steps that have been run in the experiment
     @Inputs:
@@ -23,19 +18,10 @@ def run_flow(protocol, payload, steps_run, experiment: Experiment):
         steps run: The list of steps run in this iteration of the experiment including the new ones added
         by the workflow run by this function
         run_info: The WEI output from running the flow"""
-    # iter_thread=ThreadWithReturnValue(target=wei_run_flow,kwargs={'wf_file_path':protocol,'payload':payload})
-    # iter_thread.run()
-    response = experiment.run_job(protocol.resolve(), payload=payload, simulate=False)
-    job_status = experiment.query_job(response["run_id"])
-    print(job_status)
-    while job_status["status"] != "completed" and job_status["status"] != "failure":
-        job_status = experiment.query_job(response["run_id"])
-        print(job_status)
-        time.sleep(3)
-    # print(experiment.get_job_log(response["job_id"]))
-    run_info = job_status["hist"]
+   
+    result  = experiment.start_run(protocol.resolve(), payload=payload, simulate=False, blocking = True)
+    run_info = result["hist"]
     run_info["run_dir"] = Path(run_info["run_dir"])
-    # print(run_info)
     run_dir = Path(run_info["run_dir"])
     t_steps_run = get_log_info(run_dir, protocol)
     steps_run.append(t_steps_run)
