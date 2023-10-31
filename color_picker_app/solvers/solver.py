@@ -40,10 +40,10 @@ class Solver:
         previous_diffs: Optional[List[float]] = None,
     ) -> List[List[float]]:
         if previous_ratios is None:
-            test_ratios = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+            test_ratios = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
             ratios = []
             for ratio in range(0, self.pop_size):
-                ratios.append(test_ratios[ratio % 3])
+                ratios.append(test_ratios[ratio % 4])
             return ratios
 
         # Augment

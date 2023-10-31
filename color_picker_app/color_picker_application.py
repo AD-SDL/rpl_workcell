@@ -30,7 +30,7 @@ from tools.publish_v2 import publish_iter
 from tools.color_utils import convert_volumes_to_payload
 
 # For running WEI flows
-from tools.run_flow import run_flow
+from tools.start_run import start_run_with_log_scraping
 
 # for measuring the three mixed colors for calibration and for
 # ensuring the target color is in the right color space
@@ -77,7 +77,6 @@ def run(
     # startup_barty = wf_b_dir / "barty_startup.yaml"
     # shutdown_barty = wf_b_dir / "barty_shutdown.yaml"
     refill_barty = wf_dir / "cp_wf_replenish.yaml"
-
     # Constants
     solver_out_dim = (pop_size, 3)
     use_globus_compute = False
@@ -100,6 +99,7 @@ def run(
         kafka_server="ec2-54-160-200-147.compute-1.amazonaws.com:9092",
     )
     exp.register_exp()
+    print("registered")
     # Resource Tracking:
     plate_n = 1  # total number of plates
     current_iter = 0  # total number of itertions
@@ -138,7 +138,7 @@ def run(
         exp.events.log_decision("Need New Plate", (new_plate or current_iter == 0))
         if new_plate or current_iter == 0:
             # print('Grabbing New Plate')
-            steps_run, _ = run_flow(init_protocol, payload, steps_run, exp)
+            steps_run, _ = start_run_with_log_scraping(init_protocol, payload, steps_run, exp)
             curr_wells_used = []
             new_plate = False
             exp.events.log_decision("Need Calibration", (current_iter == 0))
@@ -184,18 +184,47 @@ def run(
         if plate_colors:
             prev_diffs = solver._grade_population(prev_colors, target_color)
         previous_ratios = solver.run_iteration(previous_ratios, prev_diffs)
-
         # Only for visualization, Perform a linear combination of the next colors being tried to show what the solver expects to create on this run.
+        print(previous_ratios)
+        print(colors)
         target_plate = create_target_plate(previous_ratios, colors)
+        print(target_plate)
         # Assign volumes to wells and colors and make a payload compatible with the OT2 protopiler
         payload, curr_wells_used = convert_volumes_to_payload(
             np.multiply(previous_ratios, plate_max_volume), curr_wells_used
         )
 
+       
+       
+        # resets OT2 resources (or not)
+        if current_iter == 0:
+            payload[
+                "use_existing_resources"
+            ] = False  # This assumes the whole plate was reset and all tips are new
+        else:
+            payload["use_existing_resources"] = True
+
+        # Run the flow to mix all of the colors
+        steps_run, run_info = start_run_with_log_scraping(loop_protocol, payload, steps_run, exp)
+        run_path = run_info["run_dir"].parts[-1]
+        if not (os.path.isdir(exp_folder / run_path)):
+            os.mkdir(exp_folder / run_path)
+        runs_list.append(run_info)
+        used_wells = len(curr_wells_used)
+        if (
+            used_wells + pop_size > MAX_PLATE_SIZE
+        ):  # if we have used all wells or not enough for next iter (thrash plate, start from scratch)
+            print("Trashing Used Plate")
+            steps_run, _ = start_run_with_log_scraping(final_protocol, payload, steps_run, exp)
+            new_plate = True
+            curr_wells_used = []
+
+        # Checking whether to refill ink.
         curr_colors_used = [
             sum(payload["color_A_volumes"]),
             sum(payload["color_B_volumes"]),
             sum(payload["color_C_volumes"]),
+            sum(payload["color_D_volumes"]),
         ]
         comb_list = [colors_used, curr_colors_used]
         colors_used = [sum(vols) for vols in zip(*comb_list)]
@@ -207,45 +236,52 @@ def run(
                 i = 0
                 print("Updated colors_used:", colors_used)
 
-        # resets OT2 resources (or not)
-        if current_iter == 0:
-            payload[
-                "use_existing_resources"
-            ] = False  # This assumes the whole plate was reset and all tips are new
-        else:
-            payload["use_existing_resources"] = True
+        for i, color_vol in enumerate(colors_used):
+            exp.events.log_decision(
+                "Need Ink", (color_vol >= 5000)
+            )  # 5 mL, change to whatever threshold.
+            if color_vol >= 5000:
+                if i == 0:
+                    payload["refill_motor"] = ["motor_1"]
+                elif i == 1:
+                    payload["refill_motor"] = ["motor_2"]
+                elif i == 2:
+                    payload["refill_motor"] = ["motor_3"]
+                elif i == 3:
+                  payload["refill_motor"] = ["motor_4"]
+                steps_run, _ = start_run_with_log_scraping(refill_barty, payload, steps_run, exp)
+                colors_used[i] = 0
+        curr_colors_used = [
+            sum(payload["color_A_volumes"]),
+            sum(payload["color_B_volumes"]),
+            sum(payload["color_C_volumes"]),
+            sum(payload["color_D_volumes"]),
+        ]
+        comb_list = [colors_used, curr_colors_used]
+        colors_used = [sum(vols) for vols in zip(*comb_list)]
+        print("Total vol of colors used so far:", colors_used)
 
-        # Run the flow to mix all of the colors
-        steps_run, run_info = run_flow(loop_protocol, payload, steps_run, exp)
-        run_path = run_info["run_dir"].parts[-1]
-        if not (os.path.isdir(exp_folder / run_path)):
-            os.mkdir(exp_folder / run_path)
-        runs_list.append(run_info)
-        used_wells = len(curr_wells_used)
-        if (
-            used_wells + pop_size > MAX_PLATE_SIZE
-        ):  # if we have used all wells or not enough for next iter (thrash plate, start from scratch)
-            print("Trashing Used Plate")
-            steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
-            new_plate = True
-            curr_wells_used = []
+        for i in colors_used:
+            if i > 5000:
+                print(i, ": Has used 5 mL of ink, Barty refill command")
+                i = 0
+                print("Updated colors_used:", colors_used)
 
-        # Checking whether to refill ink.
-        # for i, color_vol in enumerate(colors_used):
-        #     exp.events.log_decision(
-        #         "Need Ink", (color_vol >= 5000)
-        #     )  # 5 mL, change to whatever threshold.
-        #     if color_vol >= 5000:
-        #         if i == 0:
-        #             payload["refill_motor"] = ["motor_1"]
-        #         elif i == 1:
-        #             payload["refill_motor"] = ["motor_4"]
-        #         elif i == 2:
-        #             payload["refill_motor"] = ["motor_3"]
-        #         # elif i == 3:
-        #         #   payload["refill_motor"] = ["motor_4"]
-        #         steps_run, _ = run_flow(refill_barty, payload, steps_run, exp)
-        #         colors_used[i] = 0
+        for i, color_vol in enumerate(colors_used):
+            exp.events.log_decision(
+                "Need Ink", (color_vol >= 5000)
+            )  # 5 mL, change to whatever threshold.
+            if color_vol >= 5000:
+                if i == 0:
+                    payload["refill_motor"] = ["motor_1"]
+                elif i == 1:
+                    payload["refill_motor"] = ["motor_2"]
+                elif i == 2:
+                    payload["refill_motor"] = ["motor_3"]
+                elif i == 3:
+                  payload["refill_motor"] = ["motor_4"]
+                steps_run, _ = start_run_with_log_scraping(refill_barty, payload, steps_run, exp)
+                colors_used[i] = 0
 
         # Analyze image
         # output should be list [pop_size, 3]
@@ -256,7 +292,7 @@ def run(
 
         cv2.imwrite(str(img_path), img)
 
-        if use_funcx:
+        if use_globus_compute:
             print("funcx started")
             exp.events.log_globus_compute("get_colors_from_file")
             fx = FuncXExecutor(endpoint_id=funcx_local_ep)
@@ -367,21 +403,19 @@ def run(
             f.write(report_js)
         # Save overall results
         print("publishing:")
-        # publish_iter(exp_folder / "results", exp_folder, exp)
+        publish_iter(exp_folder / "results", exp_folder, exp)
+        publish_iter(exp_folder / "results", exp_folder, exp)
         exp.events.log_loop_check(
             "Sufficient Wells in Experiment Budget", num_exps + pop_size <= exp_budget
         )
     exp.events.log_loop_end()
     # Trash plate after experiment
-    # Return ink to reservoirs.
-    # steps_run, _ = run_flow(shutdown_barty, payload, steps_run, exp)
-
     shutil.copy2(
         run_info["run_dir"] / "results" / "plate_only.jpg",
         (exp_folder / "results" / f"plate_{plate_n}.jpg"),
     )
     if new_plate == False:
-        steps_run, _ = run_flow(final_protocol, payload, steps_run, exp)
+        steps_run, _ = start_run_with_log_scraping(final_protocol, payload, steps_run, exp)
     exp.events.end_experiment()
     print("This is our best color so far")
     print(cur_best_color)

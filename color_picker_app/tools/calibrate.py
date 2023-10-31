@@ -1,7 +1,7 @@
 from typing import List, Dict, Any, Tuple
 
 from matplotlib import pyplot as plt
-from tools.run_flow import run_flow
+from tools.start_run import start_run_with_log_scraping
 from pathlib import Path
 import numpy as np
 from tools.color_utils import convert_volumes_to_payload
@@ -11,11 +11,14 @@ import base64
 
 
 def get_image(loop_protocol, plate_volumes, experiment, curr_wells_used, steps_run):
+    print(plate_volumes)
+    print(curr_wells_used)
     payload, curr_wells_used = convert_volumes_to_payload(
         plate_volumes, curr_wells_used
     )
+    print(payload)
     payload["use_existing_resources"] = False
-    steps_run, run_info = run_flow(loop_protocol, payload, steps_run, experiment)
+    steps_run, run_info = start_run_with_log_scraping(loop_protocol, payload, steps_run, experiment)
     action_msg = run_info["Take Picture"]["action_msg"]
     image = np.fromstring(base64.b64decode(action_msg), np.uint8)
     img = cv2.imdecode(image, cv2.IMREAD_COLOR)
@@ -61,9 +64,10 @@ def calibrate(
     plate_volumes = (
         np.array(
             [
-                [1, 0, 0],
-                [0, 1, 0],
-                [0, 0, 1],
+                [1, 0, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1],
                 # np.array(target_color) / sum(target_color)
             ]
         )
@@ -73,18 +77,24 @@ def calibrate(
         loop_protocol, plate_volumes, experiment, curr_wells_used, steps_run
     )
     print("starting")
-    curr_wells_used = ["A1", "A2", "A3"]
+    curr_wells_used = ["A1", "A2", "A3", "A4"]
     current_plate = image_analysis(img_path, curr_wells_used)
     # target_color = current_plate[3]
     # target_color = target_color.tolist()
-    colors = current_plate[0:3]
+    colors = current_plate[0:4]
     t = np.asarray(colors)
     colors = t.tolist()
     try:
-        color_inverse = np.linalg.inv(np.transpose(t))
+        raise(Exception("test"))
+        analytical_sol = np.linalg.lstsq(np.transpose(t), np.array(target_color))
+        print("analytical_sol" + str(analytical_sol))
     except Exception as e:
+        print("approximating")
         color_inverse = np.linalg.inv([[255, 0, 0], [0, 255, 0], [0, 0, 255]])
-    analytical_sol = color_inverse @ np.array(target_color)
+        analytical_sol = color_inverse @ np.array(target_color)
+        analytical_sol = np.append(analytical_sol, 0.1)
+    analytical_sol = analytical_sol / np.sum(analytical_sol) * plate_max_volume
+    analytical_sol = analytical_sol.round(3)
     print("analytical solution: " + str(analytical_sol.tolist()))
     color_image = cv2.resize(
         np.asarray([colors]).astype(np.uint8),
@@ -93,14 +103,14 @@ def calibrate(
     )
     img_path, curr_wells_used = get_image(
         loop_protocol,
-        [analytical_sol / np.sum(analytical_sol) * plate_max_volume],
+        [analytical_sol.tolist()],
         experiment,
         curr_wells_used,
         steps_run,
     )
-    curr_wells_used = ["A1", "A2", "A3", "A4"]
+    curr_wells_used = ["A1", "A2", "A3", "A4", "A5"]
     test_plate = image_analysis(img_path, curr_wells_used)
-    analytical_sol = test_plate[3]
+    analytical_sol = test_plate[4]
     print(analytical_sol)
     plt.imsave(exp_folder / "results" / "mixed_colors.png", color_image / 255)
     return (

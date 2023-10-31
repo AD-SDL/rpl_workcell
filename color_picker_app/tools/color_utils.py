@@ -29,19 +29,21 @@ def convert_volumes_to_payload(
         for i in curr_wells_used:
             curr_wells_available.remove(i)
 
-    r_vol, g_vol, b_vol = [], [], []
+    a_vol, b_vol, c_vol, d_vol = [], [], [], []
     dest_wells = []
     for color, well in zip(volumes, curr_wells_available):
         # for color, well in zip(volumes, well_names):
-        r, g, b = color
-        r_vol.append(r)
-        g_vol.append(g)
-        b_vol.append(b)
+        A, B, C, D= color
+        a_vol.append(A)
+        b_vol.append(B)
+        c_vol.append(C)
+        d_vol.append(D)
         dest_wells.append(well)
         curr_wells_used.append(well)
     return {
-        "color_A_volumes": r_vol,
-        "color_B_volumes": g_vol,
-        "color_C_volumes": b_vol,
-        "destination_wells": dest_wells,
+        "color_A_volumes": a_vol,
+        "color_B_volumes": b_vol,
+        "color_C_volumes": c_vol,
+        "color_D_volumes": d_vol,
+        "destination_wells": dest_wells
     }, curr_wells_used

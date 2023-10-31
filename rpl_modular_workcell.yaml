@@ -14,32 +14,19 @@ config:
 #List of all components accessible in this workcell
 modules:
 
-  #Human-legible name specific to an individual component
-  - name: sealer
-
-  #Type of device being connected to, might be multiple components of same
-  #model with different names in a workcell
-    model: A4s_sealer
-
-  #Method of communication with the device
-    interface: wei_rest_node
-
-  #Relevant communication configuration
-    config:
-
-  #In this case, the rest url used to send actions to the component
-      rest_node_address: "http://parker.cels.anl.gov:2000"
-      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
-
-  # X, Y, Z, Q0, Q1, Q2, Q3 relative to workcell_origin_coordinates
-    workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
+  - name: sealer        #Human-legible name specific to an individual component
+    active: false       #Mark this module as active or inactive depending on whether or not it's used in the workflow
+    model: A4s_sealer   #Type of device being connected to, might be multiple components of same model with different names in a workcell
+    interface: wei_rest_node  #Method of communication with the device
+    config:   #Relevant communication configuration
+      rest_node_address: "http://parker.cels.anl.gov:2000"   #In this case, the rest url used to send actions to the component
+    workcell_coordinates: [0,0,0,1,0,0,0]   # X, Y, Z, Q0, Q1, Q2, Q3 relative to workcell_origin_coordinates
 
   - name: peeler
     model: brooks_peeler
     interface: wei_rest_node
     config:
       rest_node_address: "http://parker.cels.anl.gov:2001"
-      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
 
   - name: sciclops
@@ -47,7 +34,6 @@ modules:
     interface: wei_rest_node
     config:
       rest_node_address: "http://parker.cels.anl.gov:2002"
-      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0.5713, 1.0934, 1.0514, 0.9831, 0, 0, 0.1826]
 
   - name: ot2_pcr_alpha
@@ -55,7 +41,6 @@ modules:
     interface: wei_rest_node
     config:
       rest_node_address: "http://parker.cels.anl.gov:2003"
-      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0,0,0,1,0,0,0]
 
   - name: ot2_gc_beta
@@ -63,7 +48,6 @@ modules:
     interface: wei_rest_node
     config:
       rest_node_address: "http://parker.cels.anl.gov:2004"
-      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0,0,0,1,0,0,0]
 
   - name: ot2_cp_gamma
@@ -71,7 +55,6 @@ modules:
     interface: wei_rest_node
     config:
       rest_node_address: "http://parker.cels.anl.gov:2005"
-      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0,0,0,1,0,0,0]
 
   - name: pf400
@@ -79,7 +62,6 @@ modules:
     interface: wei_rest_node
     config:
       rest_node_address: "http://strange.cels.anl.gov:3000"
-      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
 
   - name: camera_module
@@ -87,7 +69,6 @@ modules:
     interface: wei_rest_node
     config:
       rest_node_address: "http://strange.cels.anl.gov:3001"
-      rest_node_auth: "/home/rpl/Documents/mirauth.txt"
     workcell_coordinates: [0,0,0,1,0,0,0]
 
   - name: hidex
@@ -100,7 +81,7 @@ modules:
       tcp_node_port: 2000
 
   - name: barty
-    active: False # Optional flag that marks this module as currently unused
+    active: True # Optional flag that marks this module as currently unused
     model: RPL BARTY
     interface: wei_rest_node
     workcell_coordinates: [0,0,0,1,0,0,0]
