@@ -5,19 +5,18 @@ metadata:
   info: Initial PCR workflow for RPL workcell
   version: 0.1
 
-workcell: /home/rpl/workspace/polybot_workcell/polybot_workcell/polybot_workcell.yaml
+workcell: /home/rpl/workspace/rpl_workcell/polybot_app/polybot_workcell.yaml
 
 modules:
   - name: chemspeed
   - name: tecan
   - name: ur5
 
-
 flowdef:
 
 - name: Open Chemspeed
   module: chemspeed
-  action: open_chemspeed
+  action: open
   args:
     loop_file_path: payload.loop_file_path # use this when running locally
     protocol_file_path: payload.chemspeed_protocol
@@ -26,7 +25,7 @@ flowdef:
 
 - name: Mix Reactions
   module: chemspeed
-  action: run_chemspeed
+  action: run_protocol
   args:
     name_protocol: "closed_loop1"
   checks: RESOURCE_CHECK
@@ -34,9 +33,9 @@ flowdef:
 
 - name: Close chemspeed
   module: chemspeed
-  action: close_chemspeed
+  action: close
   args:
-    name_protocol: "closed_loop1"
+    foo: "bar"
   checks: RESOURCE_CHECK
   comment: resource check not implemented, but will be
 
@@ -51,7 +50,7 @@ flowdef:
 
 - name: Move plate from Chemspeed to Tecan
   module: ur5
-  action: run_urp_program
+  action: transfer
   args:
     program_name: "chemspeed2tecan.urp" 
   checks: null
@@ -61,19 +60,10 @@ flowdef:
   module: tecan
   action: run_tecan
   args: 
+    protocol_path: payload.tecan_protocol
     tecan_iteration: payload.tecan_iteration
-    protocol_path: "path"
   checks: null
   comment: Run protocol at tecan
-
-- name: Close Tecan
-  module: tecan
-  action: close_gate
-  args: 
-    tecan_file_path: payload.tecan_file_path # use this when running locally
-    foo: "bar"
-  checks: null
-  comment: Close Tecan Gate
 
 - name: Open Tecan
   module: tecan
@@ -85,7 +75,7 @@ flowdef:
 
 - name: Move plate from Tecan to Chemspeed
   module: ur5
-  action: run_urp_program
+  action: transfer
   args:
     program_name: "tecan2chemspeed.urp" 
   checks: null
