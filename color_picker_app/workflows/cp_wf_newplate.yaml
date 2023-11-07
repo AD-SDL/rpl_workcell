@@ -9,6 +9,7 @@ metadata:
 modules:
   - name: sciclops
   - name: pf400
+  - name: barty
 
 flowdef:
   - name: Color Plate to Plate Exchange

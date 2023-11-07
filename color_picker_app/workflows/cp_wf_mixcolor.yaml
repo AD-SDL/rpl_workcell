@@ -9,7 +9,7 @@ metadata:
 modules:
   - name: ot2_cp_gamma
   - name: pf400
-  - name: camera
+  - name: camera_module
 
 #A list of steps in the workflow. Each step represents an action on a single module
 flowdef:
