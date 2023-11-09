@@ -39,7 +39,7 @@ from tools.calibrate import calibrate
 # For constructing the plots for each run
 from tools.create_visuals import create_visuals, create_target_plate
 
-from wei.exp_app import Experiment
+from wei import ExperimentClient
 
 MAX_PLATE_SIZE = 96
 
@@ -92,11 +92,10 @@ def run(
         os.mkdir(exp_folder)
     if not (os.path.isdir(exp_folder / "results")):
         os.mkdir(exp_folder / "results")
-    exp = Experiment(
+    exp = ExperimentClient(
         "127.0.0.1",
         "8000",
         "Color_Picker",
-        kafka_server="ec2-54-160-200-147.compute-1.amazonaws.com:9092",
     )
     exp.register_exp()
     print("registered")
