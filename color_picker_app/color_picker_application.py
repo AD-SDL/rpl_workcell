@@ -72,6 +72,7 @@ def run(
     init_protocol = wf_dir / "cp_wf_newplate.yaml"
     loop_protocol = wf_dir / "cp_wf_mixcolor.yaml"
     final_protocol = wf_dir / "cp_wf_trashplate.yaml"
+    reset_colors_wf = wf_dir / "cp_wf_reset_colors.yaml"
 
     # wf_b_dir = Path("/home/rpl/workspace/Barty/workflows")
     # startup_barty = wf_b_dir / "barty_startup.yaml"
@@ -122,6 +123,10 @@ def run(
     new_plate = True
     payload = {}  # Payload to be sent to the WEI runs
     colors_used = [0, 0, 0]
+
+    # Reset Colors
+    exp.start_run(reset_colors_wf.resolve(), blocking = True)
+
     exp.events.log_loop_start("Main Loop")
     while num_exps + pop_size <= exp_budget:
         new_run = {}
@@ -284,18 +289,12 @@ def run(
 
         # Analyze image
         # output should be list [pop_size, 3]
-        action_msg = run_info["Take Picture"]["action_msg"]
-        image = np.frombuffer(base64.b64decode(action_msg), np.uint8)
-        img = cv2.imdecode(image, cv2.IMREAD_COLOR)
-        img_path = run_info["run_dir"] / "results" / "final_image.jpg"
-
-        cv2.imwrite(str(img_path), img)
+        img_path = Path(run_info["Take Picture"]["action_msg"])
 
         if use_globus_compute:
             print("funcx started")
             exp.events.log_globus_compute("get_colors_from_file")
             fx = FuncXExecutor(endpoint_id=funcx_local_ep)
-            fxresult = fx.submit(get_colors_from_file, img_path)
             fxresult = fx.submit(get_colors_from_file, img_path)
             plate_colors_ratios = fxresult.result()[1]
             print("funcx finished")

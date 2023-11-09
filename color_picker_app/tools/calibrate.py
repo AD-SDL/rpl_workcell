@@ -19,12 +19,8 @@ def get_image(loop_protocol, plate_volumes, experiment, curr_wells_used, steps_r
     print(payload)
     payload["use_existing_resources"] = False
     steps_run, run_info = start_run_with_log_scraping(loop_protocol, payload, steps_run, experiment)
-    action_msg = run_info["Take Picture"]["action_msg"]
-    image = np.fromstring(base64.b64decode(action_msg), np.uint8)
-    img = cv2.imdecode(image, cv2.IMREAD_COLOR)
-    img_path = run_info["run_dir"] / "results" / "final_image.jpg"
-    cv2.imwrite(str(img_path), img)
-    return img_path, curr_wells_used
+    img_path = run_info["Take Picture"]["action_msg"]
+    return Path(img_path), curr_wells_used
 
 
 def image_analysis(img_path, curr_wells_used):
