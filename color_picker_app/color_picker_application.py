@@ -125,7 +125,7 @@ def run(
     colors_used = [0, 0, 0]
 
     # Reset Colors
-    exp.start_run(reset_colors_wf.resolve(), blocking = True)
+    exp.start_run(reset_colors_wf.resolve(), blocking = False)
 
     exp.events.log_loop_start("Main Loop")
     while num_exps + pop_size <= exp_budget:
