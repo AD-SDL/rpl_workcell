@@ -77,9 +77,12 @@ def create_visuals(
     plt.imsave(
         exp_folder / "results" / ("run_" + str(current_iter) + "_measured.png"), real_p
     )
-    plt.imsave(
-        exp_folder / "results" / "target_color.png", np.asarray([[target_color]]) / 255
-    ),
+    (
+        plt.imsave(
+            exp_folder / "results" / "target_color.png",
+            np.asarray([[target_color]]) / 255,
+        ),
+    )
     plt.imsave(
         exp_folder / "results" / "best_color.png", np.asarray([[cur_best_color]]) / 255
     )

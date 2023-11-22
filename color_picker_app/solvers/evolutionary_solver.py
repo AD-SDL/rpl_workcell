@@ -1,6 +1,6 @@
 from math import floor
 from random import sample, choice
-from typing import List, Tuple, Optional, Any, Union
+from typing import List, Tuple, Union
 
 from pydantic import BaseModel
 import numpy as np
@@ -8,8 +8,9 @@ import matplotlib.pyplot as plt
 
 # https://python-colormath.readthedocs.io/en/latest/color_objects.html
 from colormath.color_objects import sRGBColor
-from solvers.solver import Solver
+from solvers.solver import Solver, patch_asscalar
 
+setattr(np, "asscalar", patch_asscalar)
 
 class BestColor(BaseModel):
     color: List[float]

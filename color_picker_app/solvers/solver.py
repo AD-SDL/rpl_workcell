@@ -3,8 +3,6 @@ from random import sample, choice
 from typing import List, Tuple, Union, Optional, Any
 
 from pydantic import BaseModel
-import pathlib
-from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -14,10 +12,11 @@ from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie2000
 
 
-# def patch_asscalar(a):
-# return a.item()
+# Workaround: https://github.com/gtaylor/python-colormath/issues/104
+def patch_asscalar(a):
+    return a.item()
 
-# setattr(np, "asscalar", patch_asscalar)
+setattr(np, "asscalar", patch_asscalar)
 
 
 class BestColor(BaseModel):

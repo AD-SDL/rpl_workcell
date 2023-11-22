@@ -1,6 +1,4 @@
-from math import floor
-from random import sample, choice
-from typing import List, Tuple, Union, Optional, Any
+from typing import List, Tuple, Any
 
 from pydantic import BaseModel
 
@@ -8,11 +6,9 @@ import numpy as np
 
 
 # https://python-colormath.readthedocs.io/en/latest/color_objects.html
-from colormath.color_objects import sRGBColor, LabColor
-from colormath.color_conversions import convert_color
-from colormath.color_diff import delta_e_cie2000
+from colormath.color_objects import sRGBColor
 from skopt import Optimizer
-from solvers.solver import Solver
+from solvers.solver import Solver, patch_asscalar
 import matplotlib.pyplot as plt
 
 
@@ -23,7 +19,8 @@ class BestColor(BaseModel):
     diff_to_target: float = float("inf")
 
 
-# setattr(np, "asscalar", patch_asscalar)
+setattr(np, "asscalar", patch_asscalar)
+
 class BayesColorSolver(Solver):
     def __init__(self, pop_size) -> None:
         self.optimizer = Optimizer(
@@ -51,8 +48,6 @@ class BayesColorSolver(Solver):
 
     @staticmethod
     def plot_diffs(difflist: List[List[float]], exp_folder: Any) -> Any:
-        import pathlib
-        from pathlib import Path
 
         a = []
         print(range(1, len(difflist) + 1))

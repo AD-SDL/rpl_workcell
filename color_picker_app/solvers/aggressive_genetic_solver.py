@@ -1,17 +1,15 @@
-from math import floor
-from random import sample, choice
-from typing import List, Tuple, Union, Optional, Any
-from solvers.solver import Solver
+from random import choice
+from typing import List, Tuple, Optional, Any
+from solvers.solver import Solver, patch_asscalar
 from pydantic import BaseModel
 
 import numpy as np
 
 # https://python-colormath.readthedocs.io/en/latest/color_objects.html
-from colormath.color_objects import sRGBColor, LabColor
-from colormath.color_conversions import convert_color
-from colormath.color_diff import delta_e_cie2000
+from colormath.color_objects import sRGBColor
 import matplotlib.pyplot as plt
 
+setattr(np, "asscalar", patch_asscalar)
 
 class BestColor(BaseModel):
     color: List[float]
@@ -77,8 +75,6 @@ class AggroColorSolver(Solver):
 
     @staticmethod
     def plot_diffs(difflist: List[List[float]], exp_folder: Any) -> Any:
-        import pathlib
-        from pathlib import Path
 
         a = []
         print(range(1, len(difflist) + 1))

@@ -7,10 +7,9 @@ import numpy as np
 from tools.color_utils import convert_volumes_to_payload
 from tools.plate_color_analysis import get_colors_from_file
 import cv2
-import base64
 
 
-def get_image(loop_protocol, plate_volumes, experiment, curr_wells_used, steps_run):
+def get_image(loop_protocol, plate_volumes, experiment, curr_wells_used, steps_run, ot2_protocol):
     print(plate_volumes)
     print(curr_wells_used)
     payload, curr_wells_used = convert_volumes_to_payload(
@@ -18,7 +17,10 @@ def get_image(loop_protocol, plate_volumes, experiment, curr_wells_used, steps_r
     )
     print(payload)
     payload["use_existing_resources"] = False
-    steps_run, run_info = start_run_with_log_scraping(loop_protocol, payload, steps_run, experiment)
+    payload["config_path"] = str(ot2_protocol.resolve())
+    steps_run, run_info = start_run_with_log_scraping(
+        loop_protocol, payload, steps_run, experiment
+    )
     img_path = run_info["Take Picture"]["action_msg"]
     return Path(img_path), curr_wells_used
 
@@ -44,6 +46,7 @@ def calibrate(
     steps_run: List[Dict[str, Any]],
     pop_size: int,
     experiment: Any,
+    ot2_protocol: str,
 ) -> Tuple[List[List[int]], List[int], List[str], List[Dict[str, Any]]]:
     """Performs a calibration run of the color picker system
     @Inputs:
@@ -70,7 +73,7 @@ def calibrate(
         * plate_max_volume
     )
     img_path, curr_wells_used = get_image(
-        loop_protocol, plate_volumes, experiment, curr_wells_used, steps_run
+        loop_protocol, plate_volumes, experiment, curr_wells_used, steps_run, ot2_protocol
     )
     print("starting")
     curr_wells_used = ["A1", "A2", "A3", "A4"]
@@ -81,10 +84,10 @@ def calibrate(
     t = np.asarray(colors)
     colors = t.tolist()
     try:
-        raise(Exception("test"))
+        raise (Exception("test"))
         analytical_sol = np.linalg.lstsq(np.transpose(t), np.array(target_color))
         print("analytical_sol" + str(analytical_sol))
-    except Exception as e:
+    except Exception:
         print("approximating")
         color_inverse = np.linalg.inv([[255, 0, 0], [0, 255, 0], [0, 0, 255]])
         analytical_sol = color_inverse @ np.array(target_color)
@@ -103,6 +106,7 @@ def calibrate(
         experiment,
         curr_wells_used,
         steps_run,
+        ot2_protocol
     )
     curr_wells_used = ["A1", "A2", "A3", "A4", "A5"]
     test_plate = image_analysis(img_path, curr_wells_used)

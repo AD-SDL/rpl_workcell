@@ -25,7 +25,7 @@ flowdef:
     module: ot2_cp_gamma
     action: run_protocol
     args:
-      config_path:  /home/rpl/workspace/rpl_workcell/color_picker_app/protocol_files/combined_protocol.yaml
+      config_path: payload.config_path
       color_A_volumes: payload.color_A_volumes
       color_B_volumes: payload.color_B_volumes
       color_C_volumes: payload.color_C_volumes

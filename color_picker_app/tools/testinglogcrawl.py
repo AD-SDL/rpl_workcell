@@ -1,11 +1,9 @@
 from log_info import get_log_info
 import os
 from pathlib import Path
-import re
 from datetime import datetime as dt
 import datetime
 import json
-import time
 import csv
 
 c = Path("C:\\Users\\tgins\\Downloads\\experiments\\goodruns")

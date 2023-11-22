@@ -1,6 +1,6 @@
 #!/bin/bash
 
-session="WEI"
+session="RPL_Workcell"
 folder="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )/.."
 tmux new-session -d -s $session
 tmux set -g mouse on
@@ -14,20 +14,20 @@ if [ "$(redis-cli ping)" != "PONG" ]; then
 fi
 
 window=1
-tmux new-window -t $session:$window -n 'worker'
+tmux new-window -t $session:$window -n 'engine'
 tmux send-keys -t $session:$window 'cd ' $folder C-m
-tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
-tmux send-keys -t $session:$window 'python3 -m wei.engine --workcell ~/workspace/rpl_workcell/rpl_modular_workcell.yaml' C-m
+#tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
+tmux send-keys -t $session:$window 'python3 -m wei.engine --workcell ./rpl_modular_workcell.yaml' C-m
 
 window=2
 tmux new-window -t $session:$window -n 'server'
 tmux send-keys -t $session:$window 'cd ' $folder C-m
-tmux send-keys -t $session:$window 'python3 -m wei.server --workcell ~/workspace/rpl_workcell/rpl_modular_workcell.yaml' C-m
+tmux send-keys -t $session:$window 'python3 -m wei.server --workcell ./rpl_modular_workcell.yaml' C-m
 
 window=3
 tmux new-window -t $session:$window -n 'colorpicker'
 tmux send-keys -t $session:$window 'cd ' $folder C-m
-tmux send-keys -t $session:$window 'python3 ~/workspace/rpl_workcell/color_picker_app/color_picker_application.py' C-m
+tmux send-keys -t $session:$window 'python3 ./color_picker_app/color_picker_application.py' C-m
 
 tmux attach-session -t $session
 

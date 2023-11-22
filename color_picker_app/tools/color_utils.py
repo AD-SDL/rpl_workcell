@@ -33,7 +33,7 @@ def convert_volumes_to_payload(
     dest_wells = []
     for color, well in zip(volumes, curr_wells_available):
         # for color, well in zip(volumes, well_names):
-        A, B, C, D= color
+        A, B, C, D = color
         a_vol.append(A)
         b_vol.append(B)
         c_vol.append(C)
@@ -45,5 +45,5 @@ def convert_volumes_to_payload(
         "color_B_volumes": b_vol,
         "color_C_volumes": c_vol,
         "color_D_volumes": d_vol,
-        "destination_wells": dest_wells
+        "destination_wells": dest_wells,
     }, curr_wells_used

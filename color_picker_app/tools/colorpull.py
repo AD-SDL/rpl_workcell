@@ -5,7 +5,7 @@ import csv
 with open("S16ColorData.csv", "w", newline="") as csvfile:
     writetest = csv.writer(csvfile, delimiter=",")
 
-    exp_path = Path("/home/rpl/experiments/ColorPicker_120_120_120_2023-05-11_16")
+    exp_path = Path("~/experiments/ColorPicker_120_120_120_2023-05-11_16")
     i = 1
     with open(exp_path / "results/exp_data.txt") as f:
         x = json.loads(f.read())

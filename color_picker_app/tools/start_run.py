@@ -1,13 +1,12 @@
 # from wei import WEI
-from tools.threadReturn import ThreadWithReturnValue
 from tools.log_info import get_log_info
 from wei import ExperimentClient
 from pathlib import Path
-import time
 
 
-
-def start_run_with_log_scraping(protocol, payload, steps_run, experiment: ExperimentClient):
+def start_run_with_log_scraping(
+    protocol, payload, steps_run, experiment: ExperimentClient
+):
     """Runs a WEI flow and
     updates the steps that have been run in the experiment
     @Inputs:
@@ -18,8 +17,10 @@ def start_run_with_log_scraping(protocol, payload, steps_run, experiment: Experi
         steps run: The list of steps run in this iteration of the experiment including the new ones added
         by the workflow run by this function
         run_info: The WEI output from running the flow"""
-   
-    result  = experiment.start_run(protocol.resolve(), payload=payload, simulate=False, blocking = True)
+
+    result = experiment.start_run(
+        protocol.resolve(), payload=payload, simulate=False, blocking=True
+    )
     run_info = result["hist"]
     run_info["run_dir"] = Path(run_info["run_dir"])
     run_log = Path(result["run_log"])
