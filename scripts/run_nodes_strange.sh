@@ -1,9 +1,9 @@
-#!/bin/bash                                                                                                                                                                                     
-                                                                                                                                                                                                
-session="nodes"                                                                                                                                                                                 
-tmux new-session -d -s $session                                                                                                                                                                 
-tmux set -g mouse on                                                                                                                                                                            
-                                                                                                                                                                                                
+#!/usr/bin/env bash
+
+session="nodes"
+tmux new-session -d -s $session
+tmux set -g mouse on
+
 
 
 window=0

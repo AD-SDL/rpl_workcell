@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 $WS = ~/workspace
 
@@ -9,7 +9,7 @@ cd $WS
 cd pf400_module
 git pull
 pip install -r requirements.txt
-pip install . 
+pip install .
 cd $WS
 
 ## Camera Module

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 WS=~/workspace
 
 mkdir -p $WS
@@ -8,7 +8,7 @@ cd $WS
 git clone https://github.com/AD-SDL/a4s_sealer_module
 cd a4s_sealer_module
 pip install -r requirements.txt
-pip install . 
+pip install .
 cd $WS
 
 
@@ -16,19 +16,19 @@ cd $WS
 git clone https://github.com/AD-SDL/brooks_xpeel_module
 cd brooks_xpeel_module
 pip install -r requirements.txt
-pip install . 
+pip install .
 cd $WS
 
 ##Sciclops
 git clone https://github.com/AD-SDL/hudson_platecrane_module
 cd hudson_platecrane_module
 pip install -r requirements.txt
-pip install . 
+pip install .
 cd $WS
 
 ##OT2
 git clone https://github.com/AD-SDl/ot2_module
 cd ot2_module
 pip install -r requirements.txt
-pip install . 
+pip install .
 cd $WS

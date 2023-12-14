@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 WS=~/workspace
 
@@ -9,7 +9,7 @@ cd $WS
 git clone https://github.com/AD-SDL/pf400_module
 cd pf400_module
 pip install -r requirements.txt
-pip install . 
+pip install .
 cd $WS
 
 ## Camera Module

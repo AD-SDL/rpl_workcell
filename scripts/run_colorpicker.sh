@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 session="RPL_Workcell"
 folder="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )/.."
@@ -10,7 +10,7 @@ tmux rename-window -t $session:$window 'redis'
 tmux send-keys -t $session:$window 'cd ' $folder C-m
 # Start the redis server, or ping if it's already up
 if [ "$(redis-cli ping)" != "PONG" ]; then
-	tmux send-keys -t $session:$window 'redis-server -' C-m
+	tmux send-keys -t $session:$window 'redis-server' C-m
 fi
 
 window=1

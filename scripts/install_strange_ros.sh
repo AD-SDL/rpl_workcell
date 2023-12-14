@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 source /opt/ros/humble/install.bash
 ROS_WS=~/wei_ws
@@ -18,7 +18,7 @@ git clone https://github.com/AD-SDL/wei
 ## Camera Module
 git clone https://github.com/AD-SDL/camera_module.git
 cd camera_module/camera_module_client
-pip install . 
+pip install .
 
 
 cd ..

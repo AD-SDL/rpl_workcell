@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 session="nodes"
 tmux new-session -d -s $session
