@@ -11,7 +11,7 @@ modules:
   - name: pf400
   - name: peeler
   - name: sealer
-  - name: biometra
+    #  - name: biometra
   - name: sciclops
   - name: camera_module
 
@@ -26,7 +26,8 @@ flowdef:
     action: get_plate
     #These arguments specify the parameters for the action above
     args:
-      loc: "tower2"
+      pos: "tower2"
+      target: sciclops.exchange
     # This is a place for additional notes
     comment: Stage PCR plates
 
@@ -43,7 +44,7 @@ flowdef:
     module: ot2_pcr_alpha
     action: run_protocol
     args:
-      config_path: /home/rpl/workspace/rpl_workcell/pcr_workcell/protocol_files/PCR_prep_full_plate_multi_noresource.yaml
+      config_path: /home/luckierdodge/AD-SDL/rpl_workcell/pcr_app/protocol_files/PCR_prep_full_plate.yaml
       use_existing_resources: False
 
   - name: pf400 moves plate from ot2 to sealer
@@ -71,20 +72,20 @@ flowdef:
       source_plate_rotation: narrow
       target_plate_rotation: wide
 
-  - name: Close lid of biometra
-    module: biometra
-    action: close_lid
+        #  - name: Close lid of biometra
+        #    module: biometra
+        #    action: close_lid
+        #
+        #  - name: Run biometra program
+        #    module: biometra
+        #    action: run_program
+        #    args:
+        #        program_n: 3
+        #
+        #  - name: Open lid of biometra
+        #    module: biometra
+        #    action: open_lid
 
-  - name: Run biometra program
-    module: biometra
-    action: run_program
-    args:
-        program_n: 3
-
-  - name: Open lid of biometra
-    module: biometra
-    action: open_lid
-    
   - name: pf400 moves plate from biometra to peeler
     module: pf400
     action: transfer

@@ -15,7 +15,7 @@ config:
 modules:
 
   - name: sealer        #Human-legible name specific to an individual component
-    active: false       #Mark this module as active or inactive depending on whether or not it's used in the workflow
+    active: true        #Mark this module as active or inactive depending on whether or not it's used in the workflow
     model: A4s_sealer   #Type of device being connected to, might be multiple components of same model with different names in a workcell
     interface: wei_rest_node  #Method of communication with the device
     config:   #Relevant communication configuration

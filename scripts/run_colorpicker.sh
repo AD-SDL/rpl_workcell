@@ -27,7 +27,7 @@ tmux send-keys -t $session:$window 'python3 -m wei.server --workcell ./rpl_modul
 window=3
 tmux new-window -t $session:$window -n 'colorpicker'
 tmux send-keys -t $session:$window 'cd ' $folder C-m
-tmux send-keys -t $session:$window 'python3 ./color_picker_app/color_picker_application.py' C-m
+#tmux send-keys -t $session:$window 'python3 ./color_picker_app/color_picker_application.py' C-m
 
 tmux attach-session -t $session
 
