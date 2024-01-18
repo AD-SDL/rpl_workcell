@@ -1,0 +1,14 @@
+name: squid_app
+include:
+  - ../../compose.yaml # Depend on lab-wide compose
+
+services:
+  squid_app:
+    container_name: squid_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: squid_app
+    env_file: [../../.env]
+    volumes:
+      - ${WEI_DATA_DIR}:/home/app/.wei

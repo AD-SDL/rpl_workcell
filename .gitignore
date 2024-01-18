@@ -150,3 +150,12 @@ experiment_results/
 
 
 *.rdb
+
+.wei/
+
+# Local Environment
+.env
+*.code-workspace
+
+# Ruff
+.ruff_cache

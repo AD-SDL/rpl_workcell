@@ -17,12 +17,12 @@ window=1
 tmux new-window -t $session:$window -n 'engine'
 tmux send-keys -t $session:$window 'cd ' $folder C-m
 #tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
-tmux send-keys -t $session:$window 'python3 -m wei.engine --workcell ./rpl_modular_workcell.yaml' C-m
+tmux send-keys -t $session:$window 'python3 -m wei.engine --workcell ./workcell/rpl_modular_workcell.yaml' C-m
 
 window=2
 tmux new-window -t $session:$window -n 'server'
 tmux send-keys -t $session:$window 'cd ' $folder C-m
-tmux send-keys -t $session:$window 'python3 -m wei.server --workcell ./rpl_modular_workcell.yaml' C-m
+tmux send-keys -t $session:$window 'python3 -m wei.server --workcell ./workcell/rpl_modular_workcell.yaml' C-m
 
 window=3
 tmux new-window -t $session:$window -n 'colorpicker'

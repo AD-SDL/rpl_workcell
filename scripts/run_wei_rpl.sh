@@ -17,12 +17,12 @@ window=1
 tmux new-window -t $session:$window -n 'worker'
 tmux send-keys -t $session:$window 'cd ' $folder C-m
 tmux send-keys -t $session:$window 'source ~/wei_ws/install/setup.bash' C-m
-tmux send-keys -t $session:$window 'python3 -m wei.engine --workcell ~/workspace/rpl_workcell/rpl_modular_workcell.yaml' C-m
+tmux send-keys -t $session:$window 'python3 -m wei.engine --workcell ~/workspace/rpl_workcell/workcell/rpl_modular_workcell.yaml' C-m
 
 window=2
 tmux new-window -t $session:$window -n 'server'
 tmux send-keys -t $session:$window 'cd ' $folder C-m
-tmux send-keys -t $session:$window 'python3 -m wei.server --workcell ~/workspace/rpl_workcell/rpl_modular_workcell.yaml' C-m
+tmux send-keys -t $session:$window 'python3 -m wei.server --workcell ~/workspace/rpl_workcell/workcell/rpl_modular_workcell.yaml' C-m
 
 tmux attach-session -t $session
 

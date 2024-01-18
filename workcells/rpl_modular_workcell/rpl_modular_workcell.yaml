@@ -1,6 +1,6 @@
 name: RPL_Modular_workcell
 
-#Info about data processing and location of the workcell
+#Configuration of the Workcell
 config:
   compute_local_ep: "299edea0-db9a-4693-84ba-babfa655b1be"
   globus_local_ep: ""
@@ -10,6 +10,8 @@ config:
   ##
   globus_group: "dda56f31-53d1-11ed-bd8b-0db7472df7d6"
   workcell_origin_coordinates: [9.4307, -10.4176, 0, 1, 0, 0, 0]
+  redis_host: "rpl_redis"
+  server_host: "rpl_modular_wc_server"
 
 #List of all components accessible in this workcell
 modules:

@@ -1,0 +1,40 @@
+################
+# Parker Nodes #
+################
+services:
+  a4s_sealer_node:
+    image: ghcr.io/ad-sdl/a4s_sealer_module
+    container_name: a4s_sealer_node
+    ports:
+      - 2000:2000
+    command: python3 -m a4s_sealer_rest_client --alias="sealer" --port=2000"
+  brooks_xpeel_node:
+    image: ghcr.io/ad-sdl/brooks_xpeel_module
+    container_name: brooks_xpeel_node
+    ports:
+      - 2001:2001
+    command: python3 -m brooks_xpeel_rest_client --alias="peeler" --port=2001"
+  sciclops_node:
+    image: ghcr.io/ad-sdl/sciclops_module
+    container_name: sciclops_node
+    ports:
+      - 2002:2002
+    command: python3 -m sciclops --alias="sciclops" --port=2002"
+  ot2_alpha_node:
+    image: ghcr.io/ad-sdl/ot2_module
+    container_name: ot2_alpha_node
+    ports:
+      - 2003:2003
+    command: python3 -m ot2_rest_client --alias="ot2_pcr_alpha" --port=2003 --ot2_ip=146.137.240.101"
+  ot2_beta_node:
+    image: ghcr.io/ad-sdl/ot2_module
+    container_name: ot2_beta_node
+    ports:
+      - 2004:2004
+    command: python3 -m ot2_rest_client --alias="ot2_gc_beta" --port=2004 --ot2_ip=146.137.240.100"
+  ot2_gamma_node:
+    image: ghcr.io/ad-sdl/ot2_module
+    container_name: ot2_gamma_node
+    ports:
+      - 2005:2005
+    command: python3 -m ot2_rest_client --alias="ot2_gc_gamma" --port=2005 --ot2_ip=146.137.240.102"
