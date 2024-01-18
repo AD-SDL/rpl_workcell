@@ -2,10 +2,8 @@
 
 import logging
 from pathlib import Path
-from argparse import ArgumentParser
 
 from wei.wei_workcell_base import WEI
-from wei.data_classes import Module, Step
 
 import rclpy
 from wei_executor.weiExecutorNode import weiExecNode

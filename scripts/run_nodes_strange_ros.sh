@@ -43,5 +43,3 @@ tmux send-keys -t $session:$window 'ros2 launch camera_module_client camera_publ
 
 
 tmux attach-session -t $session
-
-

@@ -12,21 +12,22 @@ def tecan_read(**data):
     """
     import os
     import csv
-    print(data['input']['proc_folder'])
-    delimiter='\t'
-    data = {'wavelength': []}
+
+    print(data["input"]["proc_folder"])
+    delimiter = "\t"
+    data = {"wavelength": []}
     column_names = set()
-    filename = data.get('proc_folder') + "/" +  data.get("fname")
-    
-    with open(filename, 'r', encoding="utf-16-le") as input_file:
+    filename = data.get("proc_folder") + "/" + data.get("fname")
+
+    with open(filename, "r", encoding="utf-16-le") as input_file:
         for line in input_file:
             print(line)
             line = line.strip()
 
-            if line.startswith('*'):
-                fields = line[2:].replace('nm', '').split(delimiter)
-                data['wavelength'].extend(fields)
-            elif line.startswith('C'):
+            if line.startswith("*"):
+                fields = line[2:].replace("nm", "").split(delimiter)
+                data["wavelength"].extend(fields)
+            elif line.startswith("C"):
                 columns = line.split(delimiter)
                 column_name = columns[0]
                 column_values = columns[1:]
@@ -38,12 +39,18 @@ def tecan_read(**data):
         csv_filename = asc_basename + ".csv"
         csv_filepath = filename.replace(os.path.basename(filename), csv_filename)
 
-    with open(csv_filepath, 'w', newline='') as output_file:
+    with open(csv_filepath, "w", newline="") as output_file:
         csv_writer = csv.writer(output_file)
-        csv_writer.writerow(['wavelength'] + sorted(column_names))
-        num_rows = max(len(data['wavelength']), max(len(values) for values in data.values() if isinstance(values, list)))
+        csv_writer.writerow(["wavelength"] + sorted(column_names))
+        num_rows = max(
+            len(data["wavelength"]),
+            max(len(values) for values in data.values() if isinstance(values, list)),
+        )
         for i in range(num_rows):
-            row = [data[column][i] if i < len(data[column]) else '' for column in ['wavelength'] + sorted(column_names)]
+            row = [
+                data[column][i] if i < len(data[column]) else ""
+                for column in ["wavelength"] + sorted(column_names)
+            ]
             csv_writer.writerow(row)
 
     return csv_filepath
@@ -52,6 +59,4 @@ def tecan_read(**data):
 @generate_flow_definition()
 class Tecan_Read(GladierBaseTool):
     compute_functions = [tecan_read]
-    required_input = [
-        "compute_endpoint"
-    ]
+    required_input = ["compute_endpoint"]

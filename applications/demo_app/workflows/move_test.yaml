@@ -48,7 +48,7 @@ flowdef:
   #   command: transfer
   #   args:
   #     source: [240.788, -27.154, 313.011, 342.317, 0.0, 683.702]
-  #     target: [279.948, 40.849, 75.130, 598.739, 79.208, -916.456] 
+  #     target: [279.948, 40.849, 75.130, 598.739, 79.208, -916.456]
   #     source_plate_rotation: narrow
   #     target_plate_rotation: wide
   #   checks: null
@@ -58,7 +58,7 @@ flowdef:
   #   module: pf400
   #   command: transfer
   #   args:
-  #     source: [279.948, 40.849, 75.130, 598.739, 79.208, -916.456] 
+  #     source: [279.948, 40.849, 75.130, 598.739, 79.208, -916.456]
   #     target: [264.584, -29.413, 284.376, 372.338, 0.0, 651.621]
   #     source_plate_rotation: wide
   #     target_plate_rotation: narrow

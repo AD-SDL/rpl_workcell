@@ -98,7 +98,7 @@ flowdef:
         test: null
     checks: null
     comment: null
-    
+
   - name: pf400 moves plate from biometra to peeler
     module: pf400
     command: transfer
@@ -133,4 +133,3 @@ flowdef:
     args:
       save_location: local_run_results
       file_name: "final_image.jpg"
-

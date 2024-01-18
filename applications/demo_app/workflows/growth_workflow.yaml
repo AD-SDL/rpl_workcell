@@ -11,7 +11,7 @@ modules:
   - name: pf400
   - name: ot2
   - name: hidex
-  
+
 flowdef:
   - name: PCR Plate Exchange
     module: sciclops
@@ -92,6 +92,6 @@ flowdef:
   #   module: camera
   #   command: take_picture
   #   args:
-  #     f_name: 
+  #     f_name:
   #   checks: null
   #   comments: null

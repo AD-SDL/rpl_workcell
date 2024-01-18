@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import logging
 from pathlib import Path
 from wei.wei_workcell_base import WEI
 

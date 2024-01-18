@@ -26,7 +26,7 @@ flowdef:
       target: camera_module.positions.plate_station
       source_plate_rotation: narrow
       target_plate_rotation: narrow
-      
+
   # - name: Move to final location
   #   module: pf400
   #   command: transfer

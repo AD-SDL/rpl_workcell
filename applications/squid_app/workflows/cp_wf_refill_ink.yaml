@@ -3,7 +3,7 @@ name: Barty - Refill Ink - Workflow
 metadata:
   name: Barty - Refill Ink - Workflow
   author: Aileen Cleary
-  info: Refill Ink workflow for Barty for RPL Color Picker
+  info: Refill a specific Ink using Barty for RPL Color Picker
   version: 0.1
 
 modules:

@@ -39,4 +39,3 @@ tmux send-keys -t $session:$window  'python3 -m ot2_rest_client --alias="ot2_cp_
 
 
 tmux attach-session -t $session
-

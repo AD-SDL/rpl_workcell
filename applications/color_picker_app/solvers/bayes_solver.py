@@ -21,6 +21,7 @@ class BestColor(BaseModel):
 
 setattr(np, "asscalar", patch_asscalar)
 
+
 class BayesColorSolver(Solver):
     def __init__(self, pop_size) -> None:
         self.optimizer = Optimizer(
@@ -48,7 +49,6 @@ class BayesColorSolver(Solver):
 
     @staticmethod
     def plot_diffs(difflist: List[List[float]], exp_folder: Any) -> Any:
-
         a = []
         print(range(1, len(difflist) + 1))
         for i in difflist:

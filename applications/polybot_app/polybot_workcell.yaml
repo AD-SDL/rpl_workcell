@@ -8,8 +8,8 @@ config:
   globus_portal_ep: "bb8d048a-2cad-4029-a9c7-671ec5d1f84d"
   ##
   globus_group: "dda56f31-53d1-11ed-bd8b-0db7472df7d6"
-  origin_coordinates: [0,0,0,1,0,0,0] 
-  
+  origin_coordinates: [0,0,0,1,0,0,0]
+
 modules:
   - name: ur5
     interface: wei_ros_node
@@ -44,5 +44,3 @@ modules:
 
 
 locations:
-
-

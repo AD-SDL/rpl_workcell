@@ -25,4 +25,3 @@ tmux send-keys -t $session:$window 'cd ' $folder C-m
 tmux send-keys -t $session:$window 'python3 -m wei.server --workcell ~/workspace/rpl_workcell/workcell/rpl_modular_workcell.yaml' C-m
 
 tmux attach-session -t $session
-

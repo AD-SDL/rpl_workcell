@@ -9,7 +9,9 @@ from tools.plate_color_analysis import get_colors_from_file
 import cv2
 
 
-def get_image(loop_protocol, plate_volumes, experiment, curr_wells_used, steps_run, ot2_protocol):
+def get_image(
+    loop_protocol, plate_volumes, experiment, curr_wells_used, steps_run, ot2_protocol
+):
     print(plate_volumes)
     print(curr_wells_used)
     payload, curr_wells_used = convert_volumes_to_payload(
@@ -73,7 +75,12 @@ def calibrate(
         * plate_max_volume
     )
     img_path, curr_wells_used = get_image(
-        loop_protocol, plate_volumes, experiment, curr_wells_used, steps_run, ot2_protocol
+        loop_protocol,
+        plate_volumes,
+        experiment,
+        curr_wells_used,
+        steps_run,
+        ot2_protocol,
     )
     print("starting")
     curr_wells_used = ["A1", "A2", "A3", "A4"]
@@ -106,7 +113,7 @@ def calibrate(
         experiment,
         curr_wells_used,
         steps_run,
-        ot2_protocol
+        ot2_protocol,
     )
     curr_wells_used = ["A1", "A2", "A3", "A4", "A5"]
     test_plate = image_analysis(img_path, curr_wells_used)

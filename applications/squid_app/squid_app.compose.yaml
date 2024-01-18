@@ -1,6 +1,6 @@
+# Note: this file is included in the compose.yaml file in the root directory
+#     and is not intended to be used directly.
 name: squid_app
-include:
-  - ../../compose.yaml # Depend on lab-wide compose
 
 services:
   squid_app:
@@ -12,3 +12,4 @@ services:
     env_file: [../../.env]
     volumes:
       - ${WEI_DATA_DIR}:/home/app/.wei
+    profiles: [squid_app]

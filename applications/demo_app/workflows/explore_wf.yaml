@@ -13,7 +13,7 @@ flowdef:
   - name: Explore modules
     module: pf400
     command: explore_workcell
-    args: 
+    args:
       test: null
     checks: null
     comment: Exploring the modules in the workcell

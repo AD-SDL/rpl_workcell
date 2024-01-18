@@ -2,7 +2,6 @@
 
 from pathlib import Path
 from wei import Experiment
-from time import sleep
 
 
 def main():
@@ -14,7 +13,7 @@ def main():
     flow_info = exp.start_run(wf_path.resolve())
     print(flow_info)
 
-    #while True:
+    # while True:
     #    flow_state = exp.query_job(flow_info["job_id"])
     #    print(flow_state)
     #    if flow_state["status"] == "failed" or flow_state["status"] == "success":

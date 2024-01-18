@@ -8,7 +8,7 @@ equipment:
     location: "2"
     alias: backward
     offset: [0, 0, 1]
-  - name: nest_96_wellplate_100ul_pcr_full_skirt 
+  - name: nest_96_wellplate_100ul_pcr_full_skirt
     location: "3"
     alias: dest
     module: Temperature Module

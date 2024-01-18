@@ -83,7 +83,7 @@
       <origin xyz="0 0 0" rpy="0 0 0"/>
     </collision>
   </link>
-  
+
   <link name="${prefix}cart_6">
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -150,7 +150,7 @@
 
   <!-- Joints -->
 
- 
+
   <joint name="pf400_cart_to_cart_1" type="fixed">
     <parent link="${prefix}pf400_cart"/>
     <child link="${prefix}cart_1"/>
@@ -158,7 +158,7 @@
     <origin xyz="1.0 0.91 0.005" rpy="0 0 0"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
-  
+
   <joint name="pf400_cart_to_cart_2" type="fixed">
     <parent link="${prefix}pf400_cart"/>
     <child link="${prefix}cart_2"/>

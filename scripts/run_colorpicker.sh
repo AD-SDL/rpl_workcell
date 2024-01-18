@@ -30,4 +30,3 @@ tmux send-keys -t $session:$window 'cd ' $folder C-m
 #tmux send-keys -t $session:$window 'python3 ./color_picker_app/color_picker_application.py' C-m
 
 tmux attach-session -t $session
-

@@ -16,6 +16,7 @@ from colormath.color_diff import delta_e_cie2000
 def patch_asscalar(a):
     return a.item()
 
+
 setattr(np, "asscalar", patch_asscalar)
 
 

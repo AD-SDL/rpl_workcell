@@ -122,4 +122,3 @@ flowdef:
       target: wc.trash
       source_plate_rotation: narrow
       target_plate_rotation: narrow
-

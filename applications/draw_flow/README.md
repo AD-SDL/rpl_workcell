@@ -1,4 +1,4 @@
-# Draw 
+# Draw
 
 To produce a picture of a RPL workcell program:
 
@@ -11,4 +11,3 @@ For example:
 Produces:
 
 ![Color-picker application, as drawn by draw.py.](color_picker.jpg)
-  

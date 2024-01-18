@@ -80,10 +80,10 @@ ssh rpl@146.137.240.64
 
 ### Navigate in between TMUX shells
 Once the TMUX session is started, you can navigate in between windows to check all the nodes. Number that correspond to the nodes are listed along bottom of the window.
-- `Ctrl+B` 
+- `Ctrl+B`
 - `Desired window number`
-- On Strange, available window numbers are: 0 and 1 
-- On Parker, available window numbers are: 0 to 6 
+- On Strange, available window numbers are: 0 and 1
+- On Parker, available window numbers are: 0 to 6
 
 If you know that TMUX session is running in the background, you can reopen the session on your shell with below commands.
 
@@ -92,10 +92,10 @@ If you know that TMUX session is running in the background, you can reopen the s
 - `w`
 - Choose the window you want to display
 ### Run PCR Campaign on your local computer
-- Before running the PCR Campaign, check all the TMUX windows on both Parker and Strange to make sure all the robots are publishing "READY" state. If any of the robots are in "ERROR" state, refer to the DEBUGGING Section in the Template. 
+- Before running the PCR Campaign, check all the TMUX windows on both Parker and Strange to make sure all the robots are publishing "READY" state. If any of the robots are in "ERROR" state, refer to the DEBUGGING Section in the Template.
 - Open a new shell on the local computer.
 ```
-source /opt/ros/humble/setup.bash  
+source /opt/ros/humble/setup.bash
 source ~/wei_ws/install/setup.bash
 ./home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_full.py
 ```
@@ -119,7 +119,7 @@ Real robot movements can be visualized in the RViz Visualization tool and can al
 - Kill the Sealer node with `Ctrl+C`.
 - `sudo dmesg | grep tty`
 - Restart the Sealer node.
-- `ros2 launch a4s_sealer_client a4s_sealer_client.launch.py sealer_port:={Your Port Name}` 
+- `ros2 launch a4s_sealer_client a4s_sealer_client.launch.py sealer_port:={Your Port Name}`
 #### Peeler issues
 - If there is a connection problem because of the wrong port. Run the following commands to find the correct port name.
 - Kill the Sealer node with Ctrl+C.
@@ -144,12 +144,12 @@ Real robot movements can be visualized in the RViz Visualization tool and can al
     - ```from os import stat
         import clr
         from pathlib import Path
-        import time as time 
+        import time as time
 
 
         dotnet_path = Path(__file__).resolve().parent / 'dotnet' / 'BiometraLibraryNet'
         clr.AddReference(str(dotnet_path))
-        import BiometraLibrary 
+        import BiometraLibrary
         ```
     - ```from biometra_driver.functions import Functions```
     - ```test = Functions()```

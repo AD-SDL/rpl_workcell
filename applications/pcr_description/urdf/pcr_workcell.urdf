@@ -13,7 +13,7 @@
   <material name="orange">
     <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
   </material>
-  
+
   <material name="brown">
     <color rgba="0.870588235294 0.811764705882 0.764705882353 1.0"/>
   </material>
@@ -57,7 +57,7 @@
   <material name="darkbluegrey" >
     <color rgba="0.12156862745098039 0.23137254901960785 0.30196078431372547 1.0" />
   </material>
-  
+
   <material name="darkbluegreen" >
     <color rgba="0.0 0.2 0.23 1.0" />
   </material>
@@ -65,7 +65,7 @@
   <material name="aluminum">
     <color rgba="0.6 0.6 0.6 1"/>
   </material>
-  
+
 
   <!-- Links -->
   <!-- PF400 -->
@@ -617,8 +617,8 @@
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 0"/>
     </collision>
-  </link> 
-  
+  </link>
+
   <!-- Module Carts -->
   <link name="cart_1">
     <visual>
@@ -699,7 +699,7 @@
       <origin xyz="0 0 0" rpy="0 0 0"/>
     </collision>
   </link>
-  
+
   <link name="cart_6">
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -847,10 +847,10 @@
   </link>
 
 
-  
+
   <!-- Wrokcell Setup -->
 
- 
+
   <joint name="pf400_cart_to_cart_1" type="fixed">
     <parent link="pf400_cart"/>
     <child link="cart_1"/>
@@ -858,7 +858,7 @@
     <origin xyz="1.0 0.91 0.005" rpy="0 0 0"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
-  
+
   <joint name="pf400_cart_to_cart_2" type="fixed">
     <parent link="pf400_cart"/>
     <child link="cart_2"/>
@@ -927,7 +927,7 @@
     <parent link="peeler_base"/>
     <child link="peeler_plate"/>
     <axis xyz="0 0 1"/>
-    <origin xyz="0.25 -0.18 0.083" rpy="1.5708 0 0"/> 
+    <origin xyz="0.25 -0.18 0.083" rpy="1.5708 0 0"/>
     <limit effort="1000.0" lower="0.0" upper="0.3" velocity="0.5"/>
   </joint>
 
@@ -951,7 +951,7 @@
     <parent link="hidex_body"/>
     <child link="hidex_plate"/>
     <axis xyz="0 0 1"/>
-    <origin xyz="0.055 -0.09 0.065" rpy="0 0 0"/> 
+    <origin xyz="0.055 -0.09 0.065" rpy="0 0 0"/>
     <limit effort="1000.0" lower="0" upper="0.3" velocity="0.5"/>
   </joint>
 
@@ -1056,7 +1056,7 @@
     <child link="z_carriage"/>
     <axis xyz="0 0 1"/>
     <origin xyz="0.03005 -0.0198 0.17535" rpy="0 0 0"/>
-    <limit effort="1000.0" lower="0.002" upper="1.160" velocity="0.5"/> 
+    <limit effort="1000.0" lower="0.002" upper="1.160" velocity="0.5"/>
   </joint>
 
   <joint name="J2" type="revolute">
@@ -1121,7 +1121,7 @@
     <parent link="sciclops_base"/>
     <child link="sciclops_link1"/>
     <axis xyz="0 1 0"/>
-    <origin xyz="0 0 0" rpy="1.5708 0 0"/> 
+    <origin xyz="0 0 0" rpy="1.5708 0 0"/>
     <limit effort="1000.0" lower="-3.1" upper="3.1" velocity="0.5"/>
   </joint>
 
@@ -1129,7 +1129,7 @@
     <parent link="sciclops_link1"/>
     <child link="sciclops_link2"/>
     <axis xyz="0 1 0"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/> 
+    <origin xyz="0 0 0" rpy="0 0 0"/>
     <limit effort="1000.0" lower="-0.45" upper="0" velocity="0.5"/>
   </joint>
 
@@ -1137,7 +1137,7 @@
     <parent link="sciclops_link2"/>
     <child link="sciclops_link3"/>
     <axis xyz="0 0 1"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/> 
+    <origin xyz="0 0 0" rpy="0 0 0"/>
     <limit effort="1000.0" lower="-0.1" upper="0" velocity="0.5"/>
   </joint>
 
@@ -1145,9 +1145,9 @@
     <parent link="sciclops_link3"/>
     <child link="sciclops_link4"/>
     <axis xyz="0 1 0"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/> 
+    <origin xyz="0 0 0" rpy="0 0 0"/>
     <limit effort="1000.0" lower="-3.1" upper="3.1" velocity="0.5"/>
-  </joint>    
+  </joint>
 
   <joint name="pf400_module" type="fixed">
     <parent link="pf400_cart"/>
@@ -1177,10 +1177,10 @@
     <parent link="cart_5"/>
     <child link="sciclops_base"/>
     <axis xyz="0 0 0"/>
-    <origin xyz="0 -0.04 1.05" rpy="0 0 5.1"/> 
+    <origin xyz="0 -0.04 1.05" rpy="0 0 5.1"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
-  
+
   <joint name="Peeler_Base" type="fixed">
     <parent link="cart_6"/>
     <child link="peeler_base"/>
@@ -1193,7 +1193,7 @@
     <parent link="cart_6"/>
     <child link="sealer_base"/>
     <axis xyz="0 0 0"/>
-    <origin xyz="0.27 -0.53 1.052" rpy="0 0 0"/> 
+    <origin xyz="0.27 -0.53 1.052" rpy="0 0 0"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
 
@@ -1201,7 +1201,7 @@
     <parent link="cart_3"/>
     <child link="hidex_body"/>
     <axis xyz="0 0 0"/>
-    <origin xyz="0.2 -0.45 1.052" rpy="0 0 0"/> 
+    <origin xyz="0.2 -0.45 1.052" rpy="0 0 0"/>
     <limit effort="1000.0" lower="0" upper="0" velocity="0.5"/>
   </joint>
 

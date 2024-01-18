@@ -17,7 +17,7 @@ checks: # Runs all the pre-commit checks
 		pre-commit run --all-files || { echo "Checking fixes\n" ; pre-commit run --all-files; }
 
 register_diaspora: # Registers diaspora for logging events
-	docker compose -f $(LAB_COMPOSE_FILE) run lab_terminal \
+	$(DC) run lab_terminal \
 		wei/scripts/register_diaspora.py
 
 ################################################################################

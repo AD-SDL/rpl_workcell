@@ -50,7 +50,7 @@ commands:
     dispense_clearance: 2
     aspirate_clearance: 1
     drop_tip: False
-    
+
   - name: replace_tip1
     replace_tip: True
 
@@ -60,8 +60,8 @@ commands:
     volume: payload.color_B_volumes
     dispense_clearance: 2
     aspirate_clearance: 1
-    drop_tip: False    
-  
+    drop_tip: False
+
   - name: replace_tip2
     replace_tip: True
 
@@ -83,12 +83,12 @@ commands:
     dispense_clearance: 2
     aspirate_clearance: 1
     drop_tip: False
- 
+
   - name: Mix Colors
     reps: 3
     mix_volume: 100
-    location: payload.destination_wells    
-  
+    location: payload.destination_wells
+
   - name: replace_tip4
     replace_tip: True
 

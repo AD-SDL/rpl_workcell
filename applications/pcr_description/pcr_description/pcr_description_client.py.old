@@ -33,11 +33,11 @@ class PF400DescriptionClient(Node):
 
         self.joint_publisher = self.create_publisher(JointState,'joint_states', 10, callback_group = joint_cb_group)
         self.joint_state_handler = self.create_timer(timer_period, callback = self.joint_state_publisher_callback, callback_group = joint_cb_group)
-    
-    
+
+
     def stateCallback(self):
         '''
-        Publishes the pf400_description state to the 'state' topic. 
+        Publishes the pf400_description state to the 'state' topic.
         '''
         msg = String()
         msg.data = 'State: %s' % self.state
@@ -47,7 +47,7 @@ class PF400DescriptionClient(Node):
 
 
     def joint_state_publisher_callback(self):
-        
+
         # self.get_logger().info("BUGG")
         joint_states = self.pf400.refresh_joint_state()
         pf400_joint_msg = JointState()

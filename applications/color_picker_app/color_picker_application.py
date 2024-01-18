@@ -69,7 +69,12 @@ def run(
     wf_dir = rpl_workcell_path / "color_picker_app" / "workflows"
     init_protocol = wf_dir / "cp_wf_newplate.yaml"
     loop_protocol = wf_dir / "cp_wf_mixcolor.yaml"
-    ot2_protocol = rpl_workcell_path / "color_picker_app" / "protocol_files" / "combined_protocol.yaml"
+    ot2_protocol = (
+        rpl_workcell_path
+        / "color_picker_app"
+        / "protocol_files"
+        / "combined_protocol.yaml"
+    )
     final_protocol = wf_dir / "cp_wf_trashplate.yaml"
     reset_colors_wf = wf_dir / "cp_wf_reset_colors.yaml"
     refill_barty = wf_dir / "cp_wf_replenish.yaml"
@@ -158,7 +163,7 @@ def run(
                     steps_run,
                     pop_size,
                     exp,
-                    ot2_protocol
+                    ot2_protocol,
                 )
                 analytical_score = solver._grade_population(
                     [analytical_sol], target_color

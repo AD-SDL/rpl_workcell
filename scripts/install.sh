@@ -42,4 +42,3 @@ cd $ROS_WS/src/wei
 pip3 install -r requirements/requirements.txt
 pip3 install -e .
 cd $ROS_WS
-

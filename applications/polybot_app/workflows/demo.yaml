@@ -42,7 +42,7 @@ flowdef:
 - name: Open Tecan
   module: tecan
   action: open_gate
-  args: 
+  args:
     protocol_file_path: payload.tecan_protocol
     foo: "bar"
   checks: null
@@ -52,14 +52,14 @@ flowdef:
   module: ur5
   action: transfer
   args:
-    program_name: "chemspeed2tecan.urp" 
+    program_name: "chemspeed2tecan.urp"
   checks: null
   comment: Place plate in Chemspeed deck1
 
 - name: run Tecan
   module: tecan
   action: run_tecan
-  args: 
+  args:
     protocol_path: payload.tecan_protocol
     tecan_iteration: payload.tecan_iteration
   checks: null
@@ -68,7 +68,7 @@ flowdef:
 - name: Open Tecan
   module: tecan
   action: open_gate
-  args: 
+  args:
     foo: "bar"
   checks: null
   comment: Open Tecan Gate
@@ -77,15 +77,14 @@ flowdef:
   module: ur5
   action: transfer
   args:
-    program_name: "tecan2chemspeed.urp" 
+    program_name: "tecan2chemspeed.urp"
   checks: null
   comment: Place plate in Chemspeed deck1
 
 - name: Close Tecan
   module: tecan
   action: close_gate
-  args: 
+  args:
     foo: "bar"
   checks: null
   comment: Close Tecan Gate
-

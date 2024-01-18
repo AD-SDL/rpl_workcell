@@ -10,8 +10,7 @@ REPO_DIR := $(shell git rev-parse --show-toplevel)
 WORKCELLS_DIR := $(REPO_DIR)/workcells
 
 # Docker Configuration
-LAB_COMPOSE_FILE := $(REPO_DIR)/compose.yaml
-COMPOSE_FILE ?= $(LAB_COMPOSE_FILE) # Only assigned if not already assigned by the user/application Makefile
+COMPOSE_FILE += $(REPO_DIR)/compose.yaml
 # Make sure this file is in .gitignore or equivalent
 ENV_FILE := $(REPO_DIR)/.env
 

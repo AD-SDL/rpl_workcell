@@ -12,6 +12,7 @@ from solvers.solver import Solver, patch_asscalar
 
 setattr(np, "asscalar", patch_asscalar)
 
+
 class BestColor(BaseModel):
     color: List[float]
     location: str

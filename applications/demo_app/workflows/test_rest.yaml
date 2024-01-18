@@ -36,7 +36,7 @@ flowdef:
                   }
                 ],
                 "priority": 0,
-                
+
                 "description": ""
                }
   - name: test_start
@@ -55,8 +55,6 @@ flowdef:
                   }
                 ],
                 "priority": 0,
-                
+
                 "description": ""
                }
-          
-  
