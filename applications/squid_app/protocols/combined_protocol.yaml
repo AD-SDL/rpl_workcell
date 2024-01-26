@@ -1,0 +1,99 @@
+equipment:
+  - name: corning_96_wellplate_360ul_flat
+    location: "2"
+    alias: dest
+    offset: [0, 0.6, 0]
+
+  - name: nest_1_reservoir_195ml
+    location: "5"
+    alias: colorA
+    offset: [0, 0, 0.8]
+
+  - name: nest_1_reservoir_195ml
+    location: "6"
+    alias: colorB
+    offset: [0, 0, 0.8]
+
+  - name: nest_1_reservoir_195ml
+    location: "8"
+    alias: colorC
+    offset: [0, 0, 0.8]
+
+  - name: nest_1_reservoir_195ml
+    location: "9"
+    alias: colorD
+    offset: [0, 0, 0.8]
+
+  - name: opentrons_96_tiprack_300ul
+    location: "10"
+    offset: [0.3, 0.7, -0.5]
+
+  - name: opentrons_96_tiprack_300ul
+    location: "11"
+    offset: [0.3, 0.7, -0.5]
+
+  - name: p300_single_gen2
+    mount: left
+
+commands:
+  # - name: add water
+  #   source: source:B1
+  #   destination: payload.destination_wells
+  #   volume: payload.water_volumes
+  #   dispense_clearance: 2
+  #   aspirate_clearance: 0.1
+
+  - name: Add Color A
+    source: colorA:A1
+    destination: payload.destination_wells  # Argument provided (a dictionary)
+    volume: payload.color_A_volumes             # Argument
+    dispense_clearance: 2
+    aspirate_clearance: 1
+    drop_tip: False
+
+  - name: replace_tip1
+    replace_tip: True
+
+  - name: Add color B
+    source: colorB:A1
+    destination: payload.destination_wells
+    volume: payload.color_B_volumes
+    dispense_clearance: 2
+    aspirate_clearance: 1
+    drop_tip: False
+
+  - name: replace_tip2
+    replace_tip: True
+
+  - name: Add color C
+    source: colorC:A1
+    destination: payload.destination_wells
+    volume: payload.color_C_volumes
+    dispense_clearance: 2
+    aspirate_clearance: 1
+    drop_tip: False
+
+  - name: replace_tip3
+    replace_tip: True
+
+  - name: Add color D
+    source: colorD:A1
+    destination: payload.destination_wells
+    volume: payload.color_D_volumes
+    dispense_clearance: 2
+    aspirate_clearance: 1
+    drop_tip: False
+
+  - name: Mix Colors
+    reps: 3
+    mix_volume: 100
+    location: payload.destination_wells
+
+  - name: replace_tip4
+    replace_tip: True
+
+metadata:
+  protocolName: Color Mixing all
+  author: Kyle khippe@anl.gov
+  description: Mixing all colors
+  apiLevel: "2.12"

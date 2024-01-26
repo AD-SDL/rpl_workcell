@@ -10,10 +10,9 @@ readme = "README.md"
 classifiers = [
     "License :: OSI Approved :: MIT License",
 ]
-dependencies = []
+dependencies = [
+    "ad_sdl.wei"
+]
 
 [project.urls]
 homepage = "https://github.com/AD-SDL/rpl_lab"
-
-[project.scripts]
-squid_app = "squid_app:main"

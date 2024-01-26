@@ -26,10 +26,10 @@ build: init # Builds the docker image for APP_NAME
 
 start: init # Starts all the docker containers and detaches, allowing you to run other commands
 start: $(if $(findstring $(USE_DIASPORA),true), register_diaspora)
-	$(DC) up -d --no-recreate --remove-orphans $(args)
+	$(DC) up -d --remove-orphans $(args)
 
 up: init # Starts all the docker containers and attaches, allowing you to see the logs
-	$(DC) up --no-recreate --remove-orphans $(args)
+	$(DC) up --remove-orphans $(args)
 
 ps: init # Shows the status of all the docker containers
 	$(DC) ps $(args)
