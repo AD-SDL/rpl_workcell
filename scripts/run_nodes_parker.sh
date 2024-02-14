@@ -37,6 +37,16 @@ tmux new-window -t $session:$window -n 'ot2_gamma'
 tmux send-keys -t $session:$window  'cd ~/workspace/ot2_module/scripts/' C-m
 tmux send-keys -t $session:$window  'python3 -m ot2_rest_client --alias="ot2_cp_gamma"  --host="parker.cels.anl.gov"  --ot2_ip="146.137.240.102" --port=2005' C-m
 
+window=7
+tmux new-window -t $session:$window -n 'PF400'
+tmux send-keys -t $session:$window 'cd ~/workspace/pf400_module/scripts' C-m
+tmux send-keys -t $session:$window 'python3 pf400_rest_client.py --host="parker.cels.anl.gov" --port 3000 --alias pf400' C-m
+
+window=8
+tmux new-window -t $session:$window -n 'camera_module'
+tmux send-keys -t $session:$window 'cd ~/workspace/camera_module/scripts' C-m
+tmux send-keys -t $session:$window 'python3 camera_rest_client.py --port=3001 --host="parker.cels.anl.gov" --alias camera_module --camera_url=0' C-m
+
 
 tmux attach-session -t $session
 
