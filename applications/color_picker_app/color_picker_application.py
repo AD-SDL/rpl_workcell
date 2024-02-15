@@ -69,12 +69,13 @@ def run(
     wf_dir = rpl_workcell_path / "color_picker_app" / "workflows"
     init_protocol = wf_dir / "cp_wf_newplate.yaml"
     loop_protocol = wf_dir / "cp_wf_mixcolor.yaml"
-    ot2_protocol = (
-        rpl_workcell_path
-        / "color_picker_app"
-        / "protocol_files"
-        / "combined_protocol.yaml"
-    )
+    # ot2_protocol = (
+    #     rpl_workcell_path
+    #     / "color_picker_app"
+    #     / "protocol_files"
+    #     / "combined_protocol.yaml"
+    # )
+    ot2_protocol = Path("/protocol_files/combined_protocol.yaml")
     final_protocol = wf_dir / "cp_wf_trashplate.yaml"
     reset_colors_wf = wf_dir / "cp_wf_reset_colors.yaml"
     refill_barty = wf_dir / "cp_wf_replenish.yaml"
@@ -172,7 +173,7 @@ def run(
                 # save the old plate picture and increment to a new plate
                 filename = "plate_" + str(plate_n) + ".jpg"
                 shutil.copy2(
-                    run_info["run_dir"] / "results" / "plate_only.jpg",
+                    Path(str(run_info["run_dir"]).replace("/home/app", str(Path.home()))) / "results" / "plate_only.jpg",
                     (exp_folder / "results" / filename),
                 )
                 plate_n = plate_n + 1
@@ -292,7 +293,7 @@ def run(
 
         # Analyze image
         # output should be list [pop_size, 3]
-        img_path = Path(run_info["Take Picture"]["action_msg"])
+        img_path = Path(run_info["Take Picture"]["action_msg"].replace("/home/app", str(Path.home())))
 
         # if use_globus_compute:
         #     print("funcx started")
@@ -308,7 +309,7 @@ def run(
         filename = "plate_" + str(plate_n) + ".jpg"
         # Copy the plate image into the experiment folder
         shutil.copy2(
-            run_info["run_dir"] / "results" / "plate_only.jpg",
+            Path(str(run_info["run_dir"]).replace("/home/app", str(Path.home()))) / "results" / "plate_only.jpg",
             (exp_folder / "results" / filename),
         )
         # Swap BGR to RGB
@@ -412,7 +413,7 @@ def run(
     exp.events.log_loop_end()
     # Trash plate after experiment
     shutil.copy2(
-        run_info["run_dir"] / "results" / "plate_only.jpg",
+        Path(str(run_info["run_dir"]).replace("/home/app", str(Path.home()))) / "results" / "plate_only.jpg",
         (exp_folder / "results" / f"plate_{plate_n}.jpg"),
     )
     if not new_plate:

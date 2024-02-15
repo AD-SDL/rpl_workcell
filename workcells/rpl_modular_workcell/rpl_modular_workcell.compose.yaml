@@ -13,6 +13,7 @@ services:
       - 8000:8000
     volumes:
       - ${WORKCELLS_DIR}:/workcell_defs
+      - ../../applications/color_picker_app/protocol_files:/protocol_files
       - ${WEI_DATA_DIR}:/home/app/.wei
       - diaspora_config:/home/app/.diaspora
     command: python3 -m wei.server --workcell /workcell_defs/rpl_modular_workcell/rpl_modular_workcell.yaml --use_diaspora ${USE_DIASPORA}
@@ -24,6 +25,7 @@ services:
     container_name: rpl_modular_wc_engine
     volumes:
       - ${WORKCELLS_DIR}:/workcell_defs
+      - ../../applications/color_picker_app/protocol_files:/protocol_files
       - ${WEI_DATA_DIR}:/home/app/.wei
     command: python3 -m wei.engine --workcell /workcell_defs/rpl_modular_workcell/rpl_modular_workcell.yaml --use_diaspora ${USE_DIASPORA}
     environment:
