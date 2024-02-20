@@ -42,21 +42,21 @@ modules:
     model: ot2
     interface: wei_rest_node
     config:
-      rest_node_address: "http://parker.cels.anl.gov:2003"
+      rest_node_address: "http://ot2_alpha_node:2003"
     workcell_coordinates: [0,0,0,1,0,0,0]
 
   - name: ot2_gc_beta
     model: ot2
     interface: wei_rest_node
     config:
-      rest_node_address: "http://parker.cels.anl.gov:2004"
+      rest_node_address: "http://ot2_beta_node:2004"
     workcell_coordinates: [0,0,0,1,0,0,0]
 
   - name: ot2_cp_gamma
     model: ot2
     interface: wei_rest_node
     config:
-      rest_node_address: "http://parker.cels.anl.gov:2005"
+      rest_node_address: "http://ot2_gamma_node:2005"
     workcell_coordinates: [0,0,0,1,0,0,0]
 
   - name: pf400

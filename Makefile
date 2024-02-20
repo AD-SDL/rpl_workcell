@@ -1,26 +1,29 @@
 ################################################################################
 # RPL Laboratory Makefile
 ################################################################################
-MAKEFILE := $(lastword $(MAKEFILE_LIST))
-MAKEFILE_DIR := $(dir $(MAKEFILE))
-INCLUDE_DIR := $(MAKEFILE_DIR)/make
 
-include $(INCLUDE_DIR)/boilerplate.mk # Boilerplate rules
-include $(INCLUDE_DIR)/lab_config.mk # Laboratory-wide configuration
-include $(INCLUDE_DIR)/docker.mk # Docker-related rules
+.DEFAULT_GOAL := init
 
-################################################################################
-# Rules: Add anything you want to be able to run with `make <target>` below
+.PHONY += init paths checks clean register_diaspora
+init: # Do the initial configuration of the project
+	@test -e .env || cp example.env .env
+	@sed -i 's/^USER_ID=.*/USER_ID=$(shell id -u)/' .env
+	@sed -i 's/^GROUP_ID=.*/GROUP_ID=$(shell id -g)/' .env
+	@sed -i 's/^PROJECT_PATH=.*/PROJECT_PATH=$(shell pwd | sed 's/\//\\\//g')/' .env
+
+.env: init
+
+paths: .env # Create the necessary data directories
+	@mkdir -p $(shell grep -E '^WEI_DATA_DIR=' .env | cut -d '=' -f 2)
+	@mkdir -p $(shell grep -E '^REDIS_DIR=' .env | cut -d '=' -f 2)
 
 checks: # Runs all the pre-commit checks
-	@cd "$(REPO_DIR)" && pre-commit install && \
-		pre-commit run --all-files || { echo "Checking fixes\n" ; pre-commit run --all-files; }
+	@pre-commit install
+	@pre-commit run --all-files || { echo "Checking fixes\n" ; pre-commit run --all-files; }
 
 register_diaspora: # Registers diaspora for logging events
-	$(DC) run lab_terminal \
+	docker compose run lab_terminal \
 		wei/scripts/register_diaspora.py
 
-################################################################################
-
-# Determine which rules don't correspond to actual files (add rules to NOT_PHONY to exclude)
-.PHONY: $(filter-out $(NOT_PHONY), $(RULES))
+clean:
+	@rm .env

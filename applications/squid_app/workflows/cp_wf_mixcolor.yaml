@@ -11,15 +11,15 @@ modules:
   - name: camera_module
 
 flowdef:
-  - name: Move from Camera Module to OT2
-    module: pf400
-    action: transfer
-    args:
-      source: camera_module.plate_station
-      target: ot2_cp_gamma.deck2
-      source_plate_rotation: narrow
-      target_plate_rotation: wide
-    comment: Place plate in ot2
+  # - name: Move from Camera Module to OT2
+  #   module: pf400
+  #   action: transfer
+  #   args:
+  #     source: camera_module.plate_station
+  #     target: ot2_cp_gamma.deck2
+  #     source_plate_rotation: narrow
+  #     target_plate_rotation: wide
+  #   comment: Place plate in ot2
 
   - name: Mix all colors
     module: ot2_cp_gamma
@@ -34,18 +34,18 @@ flowdef:
       use_existing_resources: payload.use_existing_resources
     comment: Mix colors A, B and C portions according to input data
 
-  - name: Move to Picture
-    module: pf400
-    action: transfer
-    args:
-      source: ot2_cp_gamma.deck2
-      target: camera_module.plate_station
-      source_plate_rotation: wide
-      target_plate_rotation: narrow
+  # - name: Move to Picture
+  #   module: pf400
+  #   action: transfer
+  #   args:
+  #     source: ot2_cp_gamma.deck2
+  #     target: camera_module.plate_station
+  #     source_plate_rotation: wide
+  #     target_plate_rotation: narrow
 
-  - name: Take Picture
-    module: camera_module
-    action: take_picture
-    args:
-      save_location: local_run_results
-      file_name: "final_image.jpg"
+  # - name: Take Picture
+  #   module: camera_module
+  #   action: take_picture
+  #   args:
+  #     save_location: local_run_results
+  #     file_name: "final_image.jpg"

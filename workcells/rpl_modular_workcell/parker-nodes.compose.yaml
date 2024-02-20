@@ -20,21 +20,3 @@ services:
     ports:
       - 2002:2002
     command: python3 -m sciclops --alias="sciclops" --port=2002"
-  ot2_alpha_node:
-    image: ghcr.io/ad-sdl/ot2_module
-    container_name: ot2_alpha_node
-    ports:
-      - 2003:2003
-    command: python3 -m ot2_rest_client --alias="ot2_pcr_alpha" --port=2003 --ot2_ip=146.137.240.101"
-  ot2_beta_node:
-    image: ghcr.io/ad-sdl/ot2_module
-    container_name: ot2_beta_node
-    ports:
-      - 2004:2004
-    command: python3 -m ot2_rest_client --alias="ot2_gc_beta" --port=2004 --ot2_ip=146.137.240.100"
-  ot2_gamma_node:
-    image: ghcr.io/ad-sdl/ot2_module
-    container_name: ot2_gamma_node
-    ports:
-      - 2005:2005
-    command: python3 -m ot2_rest_client --alias="ot2_gc_gamma" --port=2005 --ot2_ip=146.137.240.102"
