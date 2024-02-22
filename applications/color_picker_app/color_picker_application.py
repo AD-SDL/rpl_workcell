@@ -404,8 +404,8 @@ def run(
             report_js = json.dumps(report, indent=4)
             f.write(report_js)
         # Save overall results
-        # print("publishing:")
-        # publish_iter(exp_folder / "results", exp_folder, exp)
+        print("publishing:")
+        publish_iter(exp_folder / "results", exp_folder, exp)
         # publish_iter(exp_folder / "results", exp_folder, exp)
         # exp.events.log_loop_check(
         #     "Sufficient Wells in Experiment Budget", num_exps + pop_size <= exp_budget

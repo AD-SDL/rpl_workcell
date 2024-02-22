@@ -23,13 +23,13 @@ def publish_iter(folder_path, dest_path, exp):
     flow_input = {
         "input": {
             "data_folder": str(folder_path),
-            "compute_endpoint": "9e370560-9463-4a3d-a836-4db1dfb9ccb6",
+            "compute_endpoint": "f38226d9-2d6b-4da8-b3c9-723a5467a848",
             "publishv2": {
                 "dataset": str(folder_path),
                 "index": "aefcecc6-e554-4f8c-a25b-147f23091944",
                 "project": "reports",
-                "compute_endpoint": "9e370560-9463-4a3d-a836-4db1dfb9ccb6",
-                "source_collection": "c6480a47-e864-11ed-9a66-83ef71fbf0ae",
+                "compute_endpoint": "f38226d9-2d6b-4da8-b3c9-723a5467a848",
+                "source_collection": "095889ca-cc29-11ee-b0ba-7de3e4236180",
                 "source_collection_basepath": "/",
                 "destination_collection": "bb8d048a-2cad-4029-a9c7-671ec5d1f84d",
                 "metadata_file": str(folder_path / "metadata.json"),
