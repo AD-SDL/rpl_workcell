@@ -51,7 +51,7 @@ def run(
     exp_budget: int = MAX_PLATE_SIZE * 3,
     pop_size: int = MAX_PLATE_SIZE,
     plate_max_volume: float = 275.0,
-    rpl_workcell_path: Path = Path(__file__).parent.parent,
+    rpl_workcell_path: Path = Path(__file__).parent.parent.parent,
 ) -> None:
     """
     Steps
@@ -66,16 +66,15 @@ def run(
     """
 
     # workflows used
-    wf_dir = rpl_workcell_path / "color_picker_app" / "workflows"
+    app_dir = rpl_workcell_path / "applications" / "color_picker_app"
+    wf_dir = app_dir / "workflows"
     init_protocol = wf_dir / "cp_wf_newplate.yaml"
     loop_protocol = wf_dir / "cp_wf_mixcolor.yaml"
-    # ot2_protocol = (
-    #     rpl_workcell_path
-    #     / "color_picker_app"
-    #     / "protocol_files"
-    #     / "combined_protocol.yaml"
-    # )
-    ot2_protocol = Path("/protocol_files/combined_protocol.yaml")
+    ot2_protocol = (
+        app_dir
+        / "protocol_files"
+        / "combined_protocol.yaml"
+    )
     final_protocol = wf_dir / "cp_wf_trashplate.yaml"
     reset_colors_wf = wf_dir / "cp_wf_reset_colors.yaml"
     refill_barty = wf_dir / "cp_wf_replenish.yaml"
@@ -96,8 +95,6 @@ def run(
         "8000",
         "Color_Picker",
     )
-    exp.register_exp()
-    print("registered")
     # Resource Tracking:
     plate_n = 1  # total number of plates
     current_iter = 0  # total number of iterations
@@ -410,7 +407,7 @@ def run(
         # exp.events.log_loop_check(
         #     "Sufficient Wells in Experiment Budget", num_exps + pop_size <= exp_budget
         # )
-    exp.events.log_loop_end()
+    exp.events.log_loop_end("Main Loop")
     # Trash plate after experiment
     shutil.copy2(
         Path(str(run_info["run_dir"]).replace("/home/app", str(Path.home()))) / "results" / "plate_only.jpg",
