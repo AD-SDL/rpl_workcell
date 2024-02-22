@@ -407,7 +407,7 @@ def run(
         # exp.events.log_loop_check(
         #     "Sufficient Wells in Experiment Budget", num_exps + pop_size <= exp_budget
         # )
-    exp.events.log_loop_end()
+    exp.events.log_loop_end("Main Loop")
     # Trash plate after experiment
     shutil.copy2(
         Path(str(run_info["run_dir"]).replace("/home/app", str(Path.home()))) / "results" / "plate_only.jpg",
