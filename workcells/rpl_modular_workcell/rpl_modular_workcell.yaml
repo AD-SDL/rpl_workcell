@@ -12,24 +12,26 @@ config:
   workcell_origin_coordinates: [9.4307, -10.4176, 0, 1, 0, 0, 0]
   redis_host: "rpl_redis"
   server_host: "rpl_modular_wc_server"
+  sequential_scheduler: False
 
 #List of all components accessible in this workcell
 modules:
 
-  # - name: sealer        #Human-legible name specific to an individual component
-  #   active: true        #Mark this module as active or inactive depending on whether or not it's used in the workflow
-  #   model: A4s_sealer   #Type of device being connected to, might be multiple components of same model with different names in a workcell
-  #   interface: wei_rest_node  #Method of communication with the device
-  #   config:   #Relevant communication configuration
-  #     rest_node_address: "http://parker.cels.anl.gov:2000"   #In this case, the rest url used to send actions to the component
-  #   workcell_coordinates: [0,0,0,1,0,0,0]   # X, Y, Z, Q0, Q1, Q2, Q3 relative to workcell_origin_coordinates
+  - name: sealer        #Human-legible name specific to an individual component
+    active: False        #Mark this module as active or inactive depending on whether or not it's used in the workflow
+    model: A4s_sealer   #Type of device being connected to, might be multiple components of same model with different names in a workcell
+    interface: wei_rest_node  #Method of communication with the device
+    config:   #Relevant communication configuration
+      rest_node_address: "http://parker.cels.anl.gov:2000"   #In this case, the rest url used to send actions to the component
+    workcell_coordinates: [0,0,0,1,0,0,0]   # X, Y, Z, Q0, Q1, Q2, Q3 relative to workcell_origin_coordinates
 
-  # - name: peeler
-  #   model: brooks_peeler
-  #   interface: wei_rest_node
-  #   config:
-  #     rest_node_address: "http://parker.cels.anl.gov:2001"
-  #   workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
+  - name: peeler
+    active: False
+    model: brooks_peeler
+    interface: wei_rest_node
+    config:
+      rest_node_address: "http://parker.cels.anl.gov:2001"
+    workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
 
   - name: sciclops
     model: sciclops
@@ -46,6 +48,7 @@ modules:
     workcell_coordinates: [0,0,0,1,0,0,0]
 
   - name: ot2_gc_beta
+    active: False
     model: ot2
     interface: wei_rest_node
     config:

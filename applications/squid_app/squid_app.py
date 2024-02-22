@@ -47,21 +47,21 @@ def main():
         # experiment_id=args.experiment_id,
     )
 
-    wf_dir = Path(__file__).parent.parent.absolute() / "workflows"
-    protocol_dir = Path("/protocols")
+    wf_dir = Path(__file__).parent.absolute() / "workflows"
+    protocol_dir = Path(__file__).parent.absolute() / "protocols"
 
-    # experiment.start_run(
-    #     workflow_file=wf_dir / "cp_wf_reset_colors.yaml",
-    #     payload={},
-    #     blocking=True,
-    #     simulate=False,
-    # )
-    # experiment.start_run(
-    #     workflow_file=wf_dir / "cp_wf_newplate.yaml",
-    #     payload={},
-    #     blocking=True,
-    #     simulate=False,
-    # )
+    experiment.start_run(
+        workflow_file=wf_dir / "cp_wf_reset_colors.yaml",
+        payload={},
+        blocking=True,
+        simulate=False,
+    )
+    experiment.start_run(
+        workflow_file=wf_dir / "cp_wf_newplate.yaml",
+        payload={},
+        blocking=True,
+        simulate=False,
+    )
     experiment.start_run(
         workflow_file=wf_dir / "cp_wf_mixcolor.yaml",
         payload={
