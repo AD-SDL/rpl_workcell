@@ -118,7 +118,7 @@ and check that the camera_module is publishing frames and the PF-400 is publishi
 13. In the a new terminal, Run
   ```
   cd ~/workspace/rpl_workcell/applications/color_picker_app
-  python3 color_picker_app.py
+  python3 color_picker_application.py
   ```
   with the following Arguments:
 	--pop_size: number of wells per loop of the color_picker algorithm
