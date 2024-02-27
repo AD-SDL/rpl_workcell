@@ -57,7 +57,7 @@ def create_visuals(
     f.canvas.draw()
     f.canvas.flush_events()
     plt.pause(0.001)
-    plt.savefig(exp_folder / "results" / "run_summary.png", dpi=300)
+    plt.savefig(exp_folder /  "run_summary.png", dpi=300)
     exp_p = np.asarray([graph_vis]).astype(np.uint8)
     exp_p = cv2.resize(
         np.asarray([graph_vis]).astype(np.uint8),
@@ -65,7 +65,7 @@ def create_visuals(
         interpolation=cv2.INTER_NEAREST,
     )
     plt.imsave(
-        exp_folder / "results" / str("run_" + str(current_iter) + "_expected.png"),
+        exp_folder / str("run_" + str(current_iter) + "_expected.png"),
         exp_p,
     )
     np.asarray([plate_vis]).astype(np.uint8)
@@ -75,16 +75,16 @@ def create_visuals(
         interpolation=cv2.INTER_NEAREST,
     )
     plt.imsave(
-        exp_folder / "results" / ("run_" + str(current_iter) + "_measured.png"), real_p
+        exp_folder /  ("run_" + str(current_iter) + "_measured.png"), real_p
     )
     (
         plt.imsave(
-            exp_folder / "results" / "target_color.png",
+            exp_folder /  "target_color.png",
             np.asarray([[target_color]]) / 255,
         ),
     )
     plt.imsave(
-        exp_folder / "results" / "best_color.png", np.asarray([[cur_best_color]]) / 255
+        exp_folder /  "best_color.png", np.asarray([[cur_best_color]]) / 255
     )
 
 
