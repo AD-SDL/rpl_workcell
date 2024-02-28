@@ -1,0 +1,22 @@
+################
+# Parker Nodes #
+################
+services:
+  a4s_sealer_node:
+    image: ghcr.io/ad-sdl/a4s_sealer_module
+    container_name: a4s_sealer_node
+    ports:
+      - 2000:2000
+    command: python3 -m a4s_sealer_rest_client --alias="sealer" --port=2000"
+  brooks_xpeel_node:
+    image: ghcr.io/ad-sdl/brooks_xpeel_module
+    container_name: brooks_xpeel_node
+    ports:
+      - 2001:2001
+    command: python3 -m brooks_xpeel_rest_client --alias="peeler" --port=2001"
+  sciclops_node:
+    image: ghcr.io/ad-sdl/sciclops_module
+    container_name: sciclops_node
+    ports:
+      - 2002:2002
+    command: python3 -m sciclops --alias="sciclops" --port=2002"

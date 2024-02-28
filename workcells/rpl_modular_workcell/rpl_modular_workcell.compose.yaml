@@ -1,0 +1,62 @@
+# Note: this file is included in the compose.yaml file in the root directory
+#     and is not intended to be used directly.
+name: rpl_modular_wc
+services:
+
+###########
+# Modules #
+###########
+  ot2_alpha_node:
+    image: ghcr.io/ad-sdl/ot2_module
+    container_name: ot2_alpha_node
+    ports:
+      - 2003:2003
+    command: python3 ot2_module/src/ot2_rest_node.py --alias="ot2_pcr_alpha" --port=2003 --ot2_ip=146.137.240.101
+    env_file: [../../.env]
+  ot2_beta_node:
+    image: ghcr.io/ad-sdl/ot2_module
+    container_name: ot2_beta_node
+    ports:
+      - 2004:2004
+    command: python3 ot2_module/src/ot2_rest_node.py --alias="ot2_gc_beta" --port=2004 --ot2_ip=146.137.240.100
+    env_file: [../../.env]
+  ot2_gamma_node:
+    image: ghcr.io/ad-sdl/ot2_module
+    container_name: ot2_gamma_node
+    ports:
+      - 2005:2005
+    command: python3 ot2_module/src/ot2_rest_node.py --alias="ot2_gc_gamma" --port=2005 --ot2_ip=146.137.240.102
+    env_file: [../../.env]
+
+#####################
+# WEI Core Services #
+#####################
+  rpl_modular_wc_server:
+    image: ghcr.io/ad-sdl/wei
+    container_name: rpl_modular_wc_server
+    ports:
+      - 8000:8000
+    volumes:
+      - ${WORKCELLS_DIR}:/workcell_defs
+      - ../../applications/color_picker_app/protocol_files:/protocol_files
+      - ../../applications/squid_app/protocols:/protocols
+      - ${WEI_DATA_DIR}:/home/app/.wei
+      - diaspora_config:/home/app/.diaspora
+    command: python3 -m wei.server --workcell /workcell_defs/rpl_modular_workcell/rpl_modular_workcell.yaml --use_diaspora ${USE_DIASPORA}
+    env_file: [../../.env]
+    depends_on:
+      - rpl_redis
+  rpl_modular_wc_engine:
+    image: ghcr.io/ad-sdl/wei
+    container_name: rpl_modular_wc_engine
+    volumes:
+      - ${WORKCELLS_DIR}:/workcell_defs
+      - ../../applications/color_picker_app/protocol_files:/protocol_files
+      - ../../applications/squid_app/protocols:/protocols
+      - ${WEI_DATA_DIR}:/home/app/.wei
+    command: python3 -m wei.engine --workcell /workcell_defs/rpl_modular_workcell/rpl_modular_workcell.yaml --use_diaspora ${USE_DIASPORA}
+    environment:
+     - PYTHONUNBUFFERED=1 # Fix weird bug with empty logging
+    env_file: [../../.env]
+    depends_on:
+      - rpl_redis

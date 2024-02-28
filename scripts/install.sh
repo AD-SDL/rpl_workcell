@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 
 source /opt/ros/humble/install.bash
@@ -11,7 +11,7 @@ cd $ROS_WS/src
 ##Peeler/Sealer
 git clone https://github.com/AD-SDL/azenta_module
 cd azenta_module/azenta_driver
-pip install . 
+pip install .
 
 ##Sciclops
 git clone https://github.com/AD-SDL/sciclops_module
@@ -21,7 +21,7 @@ git clone https://github.com/AD-SDL/pf400_module
 
 ##OT2
 git clone https://github.com/AD-SDl/ot2_module
-git clone https://github.com/AD-SDl/ot2_driver 
+git clone https://github.com/AD-SDl/ot2_driver
 pip3 install -r ot2_driver/requirements.txt
 
 ##WEI
@@ -42,4 +42,3 @@ cd $ROS_WS/src/wei
 pip3 install -r requirements/requirements.txt
 pip3 install -e .
 cd $ROS_WS
-

@@ -2,7 +2,7 @@
 # Background on Workcells, Carts, Modules, and Workflows
 
 We define conventional hardware and software configurations for robotic equipment and control software in order to simplify the assembly, modification, and scaling of experimental systems. The following figure shows our hardware conventions:
-* A **cart** is a cart with zero or more modules 
+* A **cart** is a cart with zero or more modules
 * A **module** is an hardware component with a name, type, position, etc. (e.g., Pealer, Sealer, OT2 liquid handling robot, plate handler, plate mover, camera)
 * A **workcell**, as show on the left of the image, is formed from multiple (8 in the photo on the left) carts that typically hold multiple modules (12 in the example, as described below).
 * Multiple workcells and other components can be linked via mobile robots
@@ -16,7 +16,7 @@ The software associated with a workflow is then defined by three types of files:
 * A **workflow definition**, in YAML, define a set of **actions** to be executed, in order, on one or more of the modules in the workcell
 * A **protocol definition**, in YAML, defines a set of steps to be performed, in order, on a specified OpenTrons OT2
 
-The figure illustrates the three components for a simple "Color Picker" application that we use to illustrate the use of the technology. 
+The figure illustrates the three components for a simple "Color Picker" application that we use to illustrate the use of the technology.
 
 ![Software involved in Color Picker.](assets/ColorPicker.jpg)
 
@@ -29,20 +29,20 @@ The **config** section defines various infrastructure services that may be used 
 ```
   ros_namespace: rpl_workcell                                 # ROS variable namespace name
   compute_local_ep: "299edea0-db9a-4693-84ba-babfa655b1be"      # UUID for compute endpoint used for local computations
-  globus_local_ep: ""                                         # 
+  globus_local_ep: ""                                         #
   globus_search_index: "aefcecc6-e554-4f8c-a25b-147f23091944" # UUID for the Globus Search instance
   globus_portal_ep: "bb8d048a-2cad-4029-a9c7-671ec5d1f84d"    # UUID for the portal to which data may be published
-  globus_group: "dda56f31-53d1-11ed-bd8b-0db7472df7d6"        # 
+  globus_group: "dda56f31-53d1-11ed-bd8b-0db7472df7d6"        #
 ```
 
-The **modules** section lists the *modules* that are included in the workcell. In the example just listed, there are 12 in total: 
-* a [pf400 sample handler](https://preciseautomation.com/SampleHandler.html) (**pf400**) and two associated cameras, **pf400_camera_right** and **pf400_camera_left**; 
+The **modules** section lists the *modules* that are included in the workcell. In the example just listed, there are 12 in total:
+* a [pf400 sample handler](https://preciseautomation.com/SampleHandler.html) (**pf400**) and two associated cameras, **pf400_camera_right** and **pf400_camera_left**;
 * a [SciClops plate handler](https://hudsonrobotics.com/microplate-handling-2/platecrane-sciclops-3/) (**sciclops**)
 * a [A4S](https://www.azenta.com/products/automated-roll-heat-sealer-formerly-a4s) (**sealer**) and a [Brooks XPeel](https://www.azenta.com/products/automated-plate-seal-remover-formerly-xpeel) (**peeler**), with an associated camera, **sp_module_camera**
 * three [OpenTrons OT2](https://opentrons.com/products/robots/ot-2/) liquid handlers, **ot2_pcr_alpha**, **ot2_pcr_beta**, and **ot2_cp_gamma**;
 * a [Biometra thermal cycler](https://www.analytik-jena.com/products/life-science/pcr-qpcr-thermal-cycler/thermal-cycler-pcr/biometra-trio-series/) (**biometra**)
 * another camera module, **camera_module**
-           
+
 For example, this module specification included in [pcr_workcell.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/pcr_workcell.yaml) described the Sealer module:
 
 ```
@@ -51,7 +51,7 @@ For example, this module specification included in [pcr_workcell.yaml](https://g
     model: sealer                    # Not used at present
     config:
       ros_node: "/std_ns/SealerNode" # ROS2 network name (in name space)
-    positions:                       # One or more spatial locations, with name 
+    positions:                       # One or more spatial locations, with name
       default: [205.128, -2.814, 264.373, 365.863, 79.144, 411.553]
 ```
 
@@ -126,7 +126,7 @@ flowdef:
 This workflow uses three of 12 modules defined in the workcell definition earlier, **pf400**, **ot2_pcr_gamma**, and **camera_module**.
 It comprises four steps:
 * Transfer a plate from `camera_module.positions.plate_station` to `ot2_cp_gamma.positions.deck2`, while rotating the plate 90 degrees
-* Run the "protocol" defined by the file [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/color_picker/protocol_files/combined_protocol.yaml). 
+* Run the "protocol" defined by the file [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/color_picker/protocol_files/combined_protocol.yaml).
 This file specifies a sequence of steps to be performed on the hardware.
 * Transfer the plate to the camera
 * Take a picture of the plate
@@ -135,7 +135,7 @@ This file specifies a sequence of steps to be performed on the hardware.
 
 ## Protocol definition
 
-A protocol file gives the device-specific instructions to be executed on a specific piece of hardware to implement an intended action. For example, [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/protocol_files/ot2_pcr_config.yaml) gives instructions for an OpenTrons OT2. A protocol file specifies a list of **equipment** within the hardware component; a sequence of **commands** to be executed on the equipment; and some describptive **metadata**. For example, the following shows the contents of [combined_protocol.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/color_picker/protocol_files/combined_protocol.yaml), which comprise the equipment section, three commands, and the metadata section. 
+A protocol file gives the device-specific instructions to be executed on a specific piece of hardware to implement an intended action. For example, [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/pcr_workcell/protocol_files/ot2_pcr_config.yaml) gives instructions for an OpenTrons OT2. A protocol file specifies a list of **equipment** within the hardware component; a sequence of **commands** to be executed on the equipment; and some describptive **metadata**. For example, the following shows the contents of [combined_protocol.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/color_picker/protocol_files/combined_protocol.yaml), which comprise the equipment section, three commands, and the metadata section.
 
 Strings of the form *payload.VARIABLE* (e.g., `payload.destination_wells`) refer to arguments passed to the protocol.
 
@@ -143,9 +143,9 @@ The "location" argument here is OT2-specific: it indicates one of 11 plate locat
 
 <img src="assets/DeckMapEmpty.jpg"  width="200">
 
-An "alias" argument defines a string that can be used to refer to a position later in the specifrication: e.g., the fourth line in the YAML below specifies that location "7" can be referred to as "source". 
+An "alias" argument defines a string that can be used to refer to a position later in the specifrication: e.g., the fourth line in the YAML below specifies that location "7" can be referred to as "source".
 
-The wells within a plate are referred to via their column and row, e.g., A1. 
+The wells within a plate are referred to via their column and row, e.g., A1.
 
 The following specification describes an OT2 with the following components:
 * In location 7: A 6-well rack of 50 ml tubes. (These are used to contain the different colors that are to be mixed, in wells A1, A2, and A3.
@@ -162,7 +162,7 @@ equipment:
     location: "9"
 
 commands:
-  - name: Mix Color 1                       # Transfer fluid: A1 -> specified locations 
+  - name: Mix Color 1                       # Transfer fluid: A1 -> specified locations
     source: source:A1
     destination: payload.destination_wells  # Destination wells for transfers (argument)
     volume: payload.red_volumes             # Volumes to be transferred  (argument)
@@ -176,8 +176,8 @@ commands:
     volume: payload.green_volumes
     dispense_clearance: 2
     aspirate_clearance: 1
-    drop_tip: False    
-  
+    drop_tip: False
+
   - name: Mix color 3
     source: source:A3
     destination: payload.destination_wells
@@ -197,8 +197,7 @@ metadata:
 
 ## Command file
 
-A Python program defines the process required to run an experiment. E.g., see [color_picker_loop.py](https://github.com/AD-SDL/rpl_workcell/blob/main/color_picker/color_picker_loop.py) for a color picker program, which calls three workflows: 
+A Python program defines the process required to run an experiment. E.g., see [color_picker_loop.py](https://github.com/AD-SDL/rpl_workcell/blob/main/color_picker/color_picker_loop.py) for a color picker program, which calls three workflows:
 * First, if needed, `cp_wf_newplate.yaml`
 * Then, the workflow given above, `cp_wf_mixcolor.yaml`
 * Finally, as needed, `cp_wf_trashplate.yaml`
-

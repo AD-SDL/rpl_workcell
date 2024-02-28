@@ -1,0 +1,24 @@
+[project]
+name = "color_picker_app"
+version = "0.1.0"
+description = "RPL test application that mixes colors"
+authors = [
+    {name="Ryan D. Lewis", email="ryan.lewis@anl.gov"}
+]
+requires-python = ">=3.8.1"
+readme = "README.md"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+]
+dependencies = [
+    "ad_sdl.wei",
+    "numpy",
+    "colormath",
+    "scikit-optimize",
+    "matplotlib",
+    "opencv-python-headless",
+    "globus-compute-common@git+https://github.com/AD-SDL/funcx-common_pydantic2.git"
+]
+
+[project.urls]
+homepage = "https://github.com/AD-SDL/rpl_lab"

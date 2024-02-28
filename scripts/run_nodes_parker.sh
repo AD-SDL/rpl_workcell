@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 session="nodes"
 tmux new-session -d -s $session
@@ -49,4 +49,3 @@ tmux send-keys -t $session:$window 'python3 camera_rest_client.py --port=3001 --
 
 
 tmux attach-session -t $session
-
