@@ -36,12 +36,15 @@ services:
     container_name: rpl_modular_wc_server
     ports:
       - 8000:8000
+      - 9198:9198
     volumes:
       - ${WORKCELLS_DIR}:/workcell_defs
       - ../../applications/color_picker_app/protocol_files:/protocol_files
       - ../../applications/squid_app/protocols:/protocols
       - ${WEI_DATA_DIR}:/home/app/.wei
-      - diaspora_config:/home/app/.diaspora
+      - ~/.diaspora:/home/app/.diaspora
+    environment:
+     - PYTHONUNBUFFERED=1 # Fix weird bug with empty logging
     command: python3 -m wei.server --workcell /workcell_defs/rpl_modular_workcell/rpl_modular_workcell.yaml --use_diaspora ${USE_DIASPORA}
     env_file: [../../.env]
     depends_on:
@@ -49,11 +52,14 @@ services:
   rpl_modular_wc_engine:
     image: ghcr.io/ad-sdl/wei
     container_name: rpl_modular_wc_engine
+    ports:
+      - 9198:9198
     volumes:
       - ${WORKCELLS_DIR}:/workcell_defs
       - ../../applications/color_picker_app/protocol_files:/protocol_files
       - ../../applications/squid_app/protocols:/protocols
       - ${WEI_DATA_DIR}:/home/app/.wei
+      - ~/.diaspora:/home/app/.diaspora
     command: python3 -m wei.engine --workcell /workcell_defs/rpl_modular_workcell/rpl_modular_workcell.yaml --use_diaspora ${USE_DIASPORA}
     environment:
      - PYTHONUNBUFFERED=1 # Fix weird bug with empty logging

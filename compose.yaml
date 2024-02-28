@@ -33,14 +33,6 @@ services:
     volumes:
       - ${WORKCELLS_DIR}:/workcell_defs
       - ${WEI_DATA_DIR}:/home/app/.wei
-      - diaspora_config:/home/app/.diaspora
     entrypoint: ["/sbin/matchhostfsowner"]
     tty: true
     profiles: [debug]
-
-################
-# Data Storage #
-################
-volumes:
-  diaspora_config:
-    driver: local
