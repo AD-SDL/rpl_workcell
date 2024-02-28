@@ -12,12 +12,13 @@ config:
   workcell_origin_coordinates: [9.4307, -10.4176, 0, 1, 0, 0, 0]
   redis_host: "rpl_redis"
   server_host: "rpl_modular_wc_server"
+  sequential_scheduler: False
 
 #List of all components accessible in this workcell
 modules:
 
   - name: sealer        #Human-legible name specific to an individual component
-    active: true        #Mark this module as active or inactive depending on whether or not it's used in the workflow
+    active: False        #Mark this module as active or inactive depending on whether or not it's used in the workflow
     model: A4s_sealer   #Type of device being connected to, might be multiple components of same model with different names in a workcell
     interface: wei_rest_node  #Method of communication with the device
     config:   #Relevant communication configuration
@@ -25,6 +26,7 @@ modules:
     workcell_coordinates: [0,0,0,1,0,0,0]   # X, Y, Z, Q0, Q1, Q2, Q3 relative to workcell_origin_coordinates
 
   - name: peeler
+    active: False
     model: brooks_peeler
     interface: wei_rest_node
     config:
@@ -42,21 +44,22 @@ modules:
     model: ot2
     interface: wei_rest_node
     config:
-      rest_node_address: "http://parker.cels.anl.gov:2003"
+      rest_node_address: "http://ot2_alpha_node:2003"
     workcell_coordinates: [0,0,0,1,0,0,0]
 
   - name: ot2_gc_beta
+    active: False
     model: ot2
     interface: wei_rest_node
     config:
-      rest_node_address: "http://parker.cels.anl.gov:2004"
+      rest_node_address: "http://ot2_beta_node:2004"
     workcell_coordinates: [0,0,0,1,0,0,0]
 
   - name: ot2_cp_gamma
     model: ot2
     interface: wei_rest_node
     config:
-      rest_node_address: "http://parker.cels.anl.gov:2005"
+      rest_node_address: "http://ot2_gamma_node:2005"
     workcell_coordinates: [0,0,0,1,0,0,0]
 
   - name: pf400
@@ -70,7 +73,7 @@ modules:
     model: camera (logitech)
     interface: wei_rest_node
     config:
-      rest_node_address: "http://strange.cels.anl.gov:3001"
+      rest_node_address: "http://parker.cels.anl.gov:3001"
     workcell_coordinates: [0,0,0,1,0,0,0]
 
   - name: hidex

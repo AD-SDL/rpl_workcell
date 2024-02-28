@@ -199,8 +199,8 @@ class Solver:
         plt.xlabel("Color Rank")
         plt.ylabel("Color Difference")
         plt.title("Loss Graph")
-        print(exp_folder / "results" / "convergence_graph.png")
-        plt.savefig(exp_folder / "results" / "convergence_graph.png", dpi=300)
+        print(exp_folder  / "convergence_graph.png")
+        plt.savefig(exp_folder  / "convergence_graph.png", dpi=300)
         return a
 
 

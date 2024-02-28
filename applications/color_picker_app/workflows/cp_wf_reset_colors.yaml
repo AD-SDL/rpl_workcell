@@ -17,9 +17,9 @@ flowdef:
      foo: bar
     comments: Drain OT2 of max vol of ink.
 
-  - name: Fill Max Ink
-    module: barty
-    action: fill_ink_all_motors
-    args:
-     foo: bar
-    comments: Fill OT2 of max vol of ink.
+  # - name: Fill Max Ink
+  #   module: barty
+  #   action: fill_ink_all_motors
+  #   args:
+  #    foo: bar
+  #   comments: Fill OT2 of max vol of ink.

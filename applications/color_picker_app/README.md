@@ -101,21 +101,24 @@ and check that the camera_module is publishing frames and the PF-400 is publishi
   run ./globusconnectpersonal &
   ```
   to start the globus endpoint for publishing. A window will pop up with a connect button. If when this connect button is pressed it says there is already an instance running, then you are free to close it and skip this step.
+
+  
 11. In the same terminal, Run
   ```
-   globus-compute-endpoint start default
+   globus-compute-endpoint start logan
   ```
    to start compute endpoint for publishing
 12. In the same terminal, on logan, Run
   ```
-  cd ~/workspace/rpl_workcell/
-  bash ./scripts/run_wei_rpl
+	cd ~/workspace/rpl_workcell
+	docker compose up
+  
    ```
     This will start the WEI server and worker
 13. In the a new terminal, Run
   ```
-  cd ~/workspace/rpl_workcell/color_picker
-  ./color_picker_loop
+  cd ~/workspace/rpl_workcell/applications/color_picker_app
+  python3 color_picker_application.py
   ```
   with the following Arguments:
 	--pop_size: number of wells per loop of the color_picker algorithm

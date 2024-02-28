@@ -27,7 +27,7 @@ def main():
     parser.add_argument(
         "--rpl_wc_server",
         type=str,
-        default="rpl_modular_wc_server",
+        default="localhost",
         help="Address of Workcell",
     )
     parser.add_argument(
@@ -44,11 +44,11 @@ def main():
         server_addr=args.rpl_wc_server,
         server_port=args.rpl_wc_port,
         experiment_name="Squid Benchmark Experiment",
-        experiment_id=args.experiment_id,
+        # experiment_id=args.experiment_id,
     )
 
-    wf_dir = Path(__file__).parent.parent.absolute() / "workflows"
-    protocol_dir = Path(__file__).parent.parent.absolute() / "protocols"
+    wf_dir = Path(__file__).parent.absolute() / "workflows"
+    protocol_dir = Path(__file__).parent.absolute() / "protocols"
 
     experiment.start_run(
         workflow_file=wf_dir / "cp_wf_reset_colors.yaml",
@@ -70,7 +70,7 @@ def main():
             "color_B_volumes": 10.0,
             "color_C_volumes": 10.0,
             "color_D_volumes": 10.0,
-            "dest_well": ["A1"],
+            "destination_wells": ["A1"],
             "config_path": str(protocol_dir / "combined_protocol.yaml"),
         },
         blocking=True,

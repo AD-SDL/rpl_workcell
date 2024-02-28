@@ -44,6 +44,7 @@ commands:
   #   aspirate_clearance: 0.1
 
   - name: Add Color A
+    command: transfer
     source: colorA:A1
     destination: payload.destination_wells  # Argument provided (a dictionary)
     volume: payload.color_A_volumes             # Argument
@@ -51,10 +52,12 @@ commands:
     aspirate_clearance: 1
     drop_tip: False
 
-  - name: replace_tip1
+  - name: replace_tip_A
+    command: replace_tip
     replace_tip: True
 
   - name: Add color B
+    command: transfer
     source: colorB:A1
     destination: payload.destination_wells
     volume: payload.color_B_volumes
@@ -62,10 +65,12 @@ commands:
     aspirate_clearance: 1
     drop_tip: False
 
-  - name: replace_tip2
+  - name: replace_tip_B
+    command: replace_tip
     replace_tip: True
 
   - name: Add color C
+    command: transfer
     source: colorC:A1
     destination: payload.destination_wells
     volume: payload.color_C_volumes
@@ -73,10 +78,12 @@ commands:
     aspirate_clearance: 1
     drop_tip: False
 
-  - name: replace_tip3
+  - name: replace_tip_C
+    command: replace_tip
     replace_tip: True
 
   - name: Add color D
+    command: transfer
     source: colorD:A1
     destination: payload.destination_wells
     volume: payload.color_D_volumes
@@ -85,11 +92,13 @@ commands:
     drop_tip: False
 
   - name: Mix Colors
+    command: mix
     reps: 3
     mix_volume: 100
     location: payload.destination_wells
 
-  - name: replace_tip4
+  - name: replace_tip_D
+    command: replace_tip
     replace_tip: True
 
 metadata:

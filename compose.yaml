@@ -4,8 +4,6 @@ include:
   - workcells/rpl_modular_workcell/rpl_modular_workcell.compose.yaml
   # - workcells/n9_workcell/n9_workcell.compose.yaml
   # - workcells/mir_mobile_workcell/mir_mobile_workcell.compose.yaml
-  # Applications
-  - applications/squid_app/squid_app.compose.yaml
 services:
   # Single Redis used by whole lab
   rpl_redis:
@@ -29,7 +27,6 @@ services:
       - rpl_redis
   # Attachable terminal container with WEI installed, for testing/debugging
   # Run docker compose with "--profile debug" to include this container
-  # If using the Makefiles, run "make <target> DEBUG=true"
   lab_terminal:
     image: ghcr.io/ad-sdl/wei
     container_name: lab_terminal

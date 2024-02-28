@@ -22,13 +22,15 @@ from datetime import datetime
 import random
 
 # For publishing to RPL Portal
-# from tools.publish_v2 import publish_iter
+from tools.publish_v2 import publish_iter
 
 # For creating a payload that the OT2 will accept from the solver output
 from tools.color_utils import convert_volumes_to_payload
 
 # For running WEI flows
 from tools.start_run import start_run_with_log_scraping
+
+from tools.collect_files import collect_files
 
 # for measuring the three mixed colors for calibration and for
 # ensuring the target color is in the right color space
@@ -51,7 +53,7 @@ def run(
     exp_budget: int = MAX_PLATE_SIZE * 3,
     pop_size: int = MAX_PLATE_SIZE,
     plate_max_volume: float = 275.0,
-    rpl_workcell_path: Path = Path(__file__).parent.parent,
+    rpl_workcell_path: Path = Path(__file__).parent.parent.parent,
 ) -> None:
     """
     Steps
@@ -66,12 +68,12 @@ def run(
     """
 
     # workflows used
-    wf_dir = rpl_workcell_path / "color_picker_app" / "workflows"
+    app_dir = rpl_workcell_path / "applications" / "color_picker_app"
+    wf_dir = app_dir / "workflows"
     init_protocol = wf_dir / "cp_wf_newplate.yaml"
     loop_protocol = wf_dir / "cp_wf_mixcolor.yaml"
     ot2_protocol = (
-        rpl_workcell_path
-        / "color_picker_app"
+        app_dir
         / "protocol_files"
         / "combined_protocol.yaml"
     )
@@ -88,15 +90,14 @@ def run(
     exp_label = Path(exp_label + str(random.randint(0, 1000)))
     exp_folder = exp_path / exp_label
     exp_path.mkdir(parents=True, exist_ok=True)
+    Path("./publish").mkdir(parents=True, exist_ok=True)
     exp_folder.mkdir(parents=True, exist_ok=True)
     (exp_folder / "results").mkdir(parents=True, exist_ok=True)
     exp = ExperimentClient(
-        "127.0.0.1",
+        "localhost",
         "8000",
         "Color_Picker",
     )
-    exp.register_exp()
-    print("registered")
     # Resource Tracking:
     plate_n = 1  # total number of plates
     current_iter = 0  # total number of iterations
@@ -122,8 +123,8 @@ def run(
     colors_used = [0, 0, 0]
 
     # Reset Colors
-    exp.start_run(reset_colors_wf.resolve(), blocking=False)
-
+    
+    #exp.start_run(reset_colors_wf.resolve(), blocking=False)
     exp.events.log_loop_start("Main Loop")
     while num_exps + pop_size <= exp_budget:
         new_run = {}
@@ -139,40 +140,41 @@ def run(
         exp.events.log_decision("Need New Plate", (new_plate or current_iter == 0))
         if new_plate or current_iter == 0:
             # print('Grabbing New Plate')
-            steps_run, run_info = start_run_with_log_scraping(
-                init_protocol, payload, steps_run, exp
-            )
-            curr_wells_used = []
+           # steps_run, run_info = start_run_with_log_scraping(
+                # init_protocol, payload, steps_run, exp
+           # )
+           # curr_wells_used = []
             new_plate = False
             exp.events.log_decision("Need Calibration", (current_iter == 0))
             if current_iter == 0:
-                # Run the calibration protocol that gets the colors being mixed and ensures the target color is within the possible color space
-                (
-                    colors,
-                    target_color,
-                    curr_wells_used,
-                    steps_run,
-                    analytical_sol,
-                    color_inverse,
-                ) = calibrate(
-                    target_color,
-                    curr_wells_used,
-                    loop_protocol,
-                    exp_folder,
-                    plate_max_volume,
-                    steps_run,
-                    pop_size,
-                    exp,
-                    ot2_protocol,
-                )
-                analytical_score = solver._grade_population(
-                    [analytical_sol], target_color
-                )[0]
+                # # Run the calibration protocol that gets the colors being mixed and ensures the target color is within the possible color space
+                # (
+                #     colors,
+                #     target_color,
+                #     curr_wells_used,
+                #     steps_run,
+                #     analytical_sol,
+                #     color_inverse,
+                # ) = calibrate(
+                #     target_color,
+                #     curr_wells_used,
+                #     loop_protocol,
+                #     exp_folder,
+                #     plate_max_volume,
+                #     steps_run,
+                #     pop_size,
+                #     exp,
+                #     ot2_protocol,
+                # )
+                # analytical_score = solver._grade_population(
+                #     [analytical_sol], target_color
+                # )[0]
+                pass
             else:
                 # save the old plate picture and increment to a new plate
                 filename = "plate_" + str(plate_n) + ".jpg"
                 shutil.copy2(
-                    run_info["run_dir"] / "results" / "plate_only.jpg",
+                    Path(str(run_info["run_dir"]).replace("/home/app", str(Path.home()))) / "results" / "plate_only.jpg",
                     (exp_folder / "results" / filename),
                 )
                 plate_n = plate_n + 1
@@ -185,6 +187,7 @@ def run(
         previous_ratios = solver.run_iteration(previous_ratios, prev_diffs)
         # Only for visualization, Perform a linear combination of the next colors being tried to show what the solver expects to create on this run.
         print(previous_ratios)
+        colors = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
         print(colors)
         target_plate = create_target_plate(previous_ratios, colors)
         print(target_plate)
@@ -204,21 +207,22 @@ def run(
         payload["config_path"] = str(ot2_protocol.resolve())
 
         # Run the flow to mix all of the colors
-        steps_run, run_info = start_run_with_log_scraping(
-            loop_protocol, payload, steps_run, exp
+        run_info= exp.start_run(
+        loop_protocol.resolve(), payload=payload, simulate=False, blocking=True
         )
-        run_path = run_info["run_dir"].parts[-1]
-        if not (os.path.isdir(exp_folder / run_path)):
-            os.mkdir(exp_folder / run_path)
-        runs_list.append(run_info)
+        print(run_info)
+        # run_path = run_info["run_dir"].parts[-1]
+        # if not (os.path.isdir(exp_folder / run_path)):
+        #     os.mkdir(exp_folder / run_path)
+        # runs_list.append(run_info)
         used_wells = len(curr_wells_used)
         if (
             used_wells + pop_size > MAX_PLATE_SIZE
         ):  # if we have used all wells or not enough for next iter (thrash plate, start from scratch)
             print("Trashing Used Plate")
-            steps_run, _ = start_run_with_log_scraping(
-                final_protocol, payload, steps_run, exp
-            )
+            # steps_run, _ = start_run_with_log_scraping(
+            #     final_protocol, payload, steps_run, exp
+            # )
             new_plate = True
             curr_wells_used = []
 
@@ -292,8 +296,10 @@ def run(
 
         # Analyze image
         # output should be list [pop_size, 3]
-        img_path = Path(run_info["Take Picture"]["action_msg"])
-
+        #img_path =
+        #  Path(run_info["Take Picture"]["action_msg"].replace("/home/app", str(Path.home())))
+        img_path = exp.get_step_result_file(run_info, "Take Picture", filename="final_img.jpg")
+        print(img_path)
         # if use_globus_compute:
         #     print("funcx started")
         #     exp.events.log_globus_compute("get_colors_from_file")
@@ -307,10 +313,7 @@ def run(
 
         filename = "plate_" + str(plate_n) + ".jpg"
         # Copy the plate image into the experiment folder
-        shutil.copy2(
-            run_info["run_dir"] / "results" / "plate_only.jpg",
-            (exp_folder / "results" / filename),
-        )
+        
         # Swap BGR to RGB
         plate_colors = {a: b[::-1] for a, b in plate_colors.items()}
         # Find the colors to be processed by the solver
@@ -338,31 +341,22 @@ def run(
         current_iter += 1
         num_exps += pop_size
         ##Plot review
-        create_visuals(
-            target_plate,
-            prev_colors,
-            exp_folder,
-            current_iter,
-            target_color,
-            cur_best_color,
-            pop_size,
-            diffs,
-            solver_out_dim,
-            solver,
-        )
         runs = []
         report = {}
-        if (exp_folder / "results" / "exp_data.txt").is_file():
-            with open(exp_folder / "results" / "exp_data.txt", "r") as f:
+        if (Path(exp.output_dir) / "exp_data.txt").is_file():
+            with open(Path(exp.output_dir) / "exp_data.txt", "r") as f:
                 report = json.loads(f.read())
             runs = report["runs"]
+            
+        
+        
         # Create new run log
         print("prev vols")
         print(np.multiply(previous_ratios, plate_max_volume).tolist())
         new_run = [
             {
                 "run_number": current_iter,
-                "run_label": str(run_path),
+                "run_label": str(run_info["run_id"]),
                 "plate_N": plate_n,
                 "tried_values": target_plate,
                 "exp_volumes": np.multiply(previous_ratios, plate_max_volume).tolist(),
@@ -399,26 +393,43 @@ def run(
         )
 
         # Save run report
-        with open(exp_folder / "results" / "exp_data.txt", "w") as f:
+        with open(exp.output_dir + "/exp_data.txt", "w") as f:
             report_js = json.dumps(report, indent=4)
             f.write(report_js)
+        collect_files(exp, img_path, plate_n)
+
+        create_visuals(
+            target_plate,
+            prev_colors,
+            Path("./publish"),
+            current_iter,
+            target_color,
+            cur_best_color,
+            pop_size,
+            diffs,
+            solver_out_dim,
+            solver,
+        )
         # Save overall results
-        # print("publishing:")
-        # publish_iter(exp_folder / "results", exp_folder, exp)
+        print("publishing:")
+        print(exp_folder)   
+        publish_iter(Path("./publish").resolve(), exp_folder, exp)
         # publish_iter(exp_folder / "results", exp_folder, exp)
         # exp.events.log_loop_check(
         #     "Sufficient Wells in Experiment Budget", num_exps + pop_size <= exp_budget
         # )
-    exp.events.log_loop_end()
+        print(Path(str(run_info["run_dir"]).replace("/home/app", str(Path.home()))))
+    exp.events.log_loop_end("Main Loop")
     # Trash plate after experiment
     shutil.copy2(
-        run_info["run_dir"] / "results" / "plate_only.jpg",
+        Path(str(run_info["run_dir"]).replace("/home/app", str(Path.home()))) / "results" / "plate_only.jpg",
         (exp_folder / "results" / f"plate_{plate_n}.jpg"),
     )
     if not new_plate:
-        steps_run, _ = start_run_with_log_scraping(
-            final_protocol, payload, steps_run, exp
-        )
+        # steps_run, _ = start_run_with_log_scraping(
+        #     final_protocol, payload, steps_run, exp
+        # )
+        pass
     exp.events.end_experiment()
     print("This is our best color so far")
     print(cur_best_color)
