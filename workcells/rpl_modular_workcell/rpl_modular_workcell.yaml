@@ -66,7 +66,7 @@ modules:
     model: pf400
     interface: wei_rest_node
     config:
-      rest_node_address: "http://strange.cels.anl.gov:3000"
+      rest_node_address: "http://pf400_module:3000"
     workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
 
   - name: camera_module
