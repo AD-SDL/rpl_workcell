@@ -1,0 +1,22 @@
+name: Test_Workflow
+
+metadata:
+  author: Rafael Vescovi
+  info: Main workflow for the RPL Instrument Testing
+  version: 0.1
+
+modules:
+  - name: sealer
+  - name: peeler
+
+flowdef:
+  # - name: Test Sealer
+  #   module: sealer
+  #   action: seal
+  #   args:
+  #     temperature: 190
+  #     time: 3
+
+  - name: Test Peeler
+    module: peeler
+    action: peel
