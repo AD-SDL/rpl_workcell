@@ -1,0 +1,8 @@
+name: squid_frontend
+services:
+  squid_frontend:
+    image: ghcr.io/ad-sdl/squid_frontend:main
+    container_name: squid_frontend   
+    privileged: true
+    ports:
+      - 8080:8080

@@ -2,6 +2,7 @@ name: rpl_lab
 include:
   # Workcells
   - workcells/rpl_modular_workcell/rpl_modular_workcell.compose.yaml
+  - dashboard/dashboard.compose.yaml
   # - workcells/n9_workcell/n9_workcell.compose.yaml
   # - workcells/mir_mobile_workcell/mir_mobile_workcell.compose.yaml
 services:
@@ -34,9 +35,9 @@ services:
       - ${WORKCELLS_DIR}:/workcell_defs
       - ${WEI_DATA_DIR}:/home/app/.wei
       - diaspora_config:/home/app/.diaspora
-    entrypoint: ["/sbin/matchhostfsowner"]
+    entrypoint: [ "/sbin/matchhostfsowner" ]
     tty: true
-    profiles: [debug]
+    profiles: [ debug ]
 
 ################
 # Data Storage #
