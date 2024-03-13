@@ -42,6 +42,26 @@ NUC located on the left side of setup of NUCs with monitors, runs the main loop 
 <img src="https://user-images.githubusercontent.com/73187720/232106097-ebe051bf-8085-4a5c-85be-ee22ea282e48.png"  width="300" height="400">
 <img src="https://user-images.githubusercontent.com/73187720/232529076-011500a5-7d9b-4ebf-90dd-26b40df82093.png"  width="300" height="400">
 
+
+
+# Setup Gladier: 
+
+Clone: https://github.com/AD-SDL/funcx-common_pydantic2
+Clone:  https://github.com/AD-SDL/funcx_pydantic2
+
+Pip install . in funcx-common_pydantic2
+Pip install . in funcx_pydantic2/compute_endpoint
+Pip install . in funcx_pydantic2/compute_sdk
+Pip install pyzmq
+
+
+Run globus-compute-endpoint config default
+Run globus-compute-endpoint start  default
+
+Install globus connect personal and set up endpoint.https://www.globus.org/globus-connect-personal
+
+Put the globus connect endpoint uuid in the source_collection key and the globus-compute-endpoint uuid in the compute_endpoint key in publish_v2 in /rpl_workcell/applications/color_picker_app/tools
+
 # Running Instructions:
 ## Basic steps:
 1. Turn  on Strange, Parker and Logan NUCs
