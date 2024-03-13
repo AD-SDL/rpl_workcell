@@ -60,7 +60,7 @@ Run globus-compute-endpoint start  default
 
 Install globus connect personal and set up endpoint.https://www.globus.org/globus-connect-personal
 
-Put endpoint uuids in the compute-endpoint and source_enpoint keys in publish_v2 in /rpl_workcell/applications/color_picker_app/tools
+Put the globus connect endpoint uuid in the source_collection key and the globus-compute-endpoint uuid in the compute_endpoint key in publish_v2 in /rpl_workcell/applications/color_picker_app/tools
 
 # Running Instructions:
 ## Basic steps:
