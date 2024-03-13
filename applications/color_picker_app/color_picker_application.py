@@ -94,7 +94,7 @@ def run(
     exp_folder.mkdir(parents=True, exist_ok=True)
     (exp_folder / "results").mkdir(parents=True, exist_ok=True)
     exp = ExperimentClient(
-        "localhost",
+        "0.0.0.0",
         "8000",
         "Color_Picker",
     )
@@ -298,6 +298,9 @@ def run(
         # output should be list [pop_size, 3]
         #img_path =
         #  Path(run_info["Take Picture"]["action_msg"].replace("/home/app", str(Path.home())))
+        files = exp.get_wf_results_files(run_info["run_id"])
+        print(files)
+        print(exp.get_wf_results_file(files[0], "test.jpg", run_info["run_id"]))
         img_path = exp.get_step_result_file(run_info, "Take Picture", filename="final_img.jpg")
         print(img_path)
         # if use_globus_compute:
