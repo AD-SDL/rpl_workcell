@@ -159,3 +159,6 @@ experiment_results/
 
 # Ruff
 .ruff_cache
+frigate/config/frigate.db
+frigate/config/.vacuum
+frigate/config/.timeline
