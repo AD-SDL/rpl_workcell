@@ -1,0 +1,45 @@
+name: SquidBenchmarkExperiment
+campaign_id: null
+description: Extended version of the ColorPicker experiment, that leverages multiple workcells.
+parameters:
+  well_budget:
+    type: int
+    description: the maximum number of wells that can be used in a single experiment
+  population_size:
+    type: int
+    description: the number of candidates to be evaluated in each iteration
+  target_color:
+    type: list[int]
+    description: The target color to be achieved by the experiment (an RGB value).
+  solver:
+    type: str
+    description: The optimization algorithm to be used.
+  number_of_colors:
+    type: int
+    description: The number of colors to be mixed in the experiment.
+outputs:
+  candidate_volumes:
+    type: list[float]
+    description: A list of amounts of each color to be mixed.
+  candidate_color:
+    type: list[int]
+    description: Measured RGB color produced by the mixture of candidate volumes.
+  candidate_image:
+    type: file
+    description: Image taken which included this candidate.
+  candidate_distance:
+    type: float
+    description: The distance between the candidate color and the target color.
+  plate_id:
+    type: str
+    description: The ID of the plate containing this candidate.
+  plate_well:
+    type: str
+    description: The well number containing this candidate.
+    example: A1
+  workflow_run_id:
+    type: str
+    description: The ID of the workflow run that produced this candidate.
+  iteration_number:
+    type: int
+    description: Which iteration of the experiment/solver loop produced this candidate.
