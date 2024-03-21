@@ -33,13 +33,13 @@ services:
     env_file: [../../.env]
     ports:
       - 3000:3000
-    command: python pf400_module/scripts/pf400_rest_node.py --port 3000 --pf400_ip ${PF400_IP} --pf400_port ${PF400_PORT}
+    command: python -m pf400_rest_node --port 3000 --pf400_ip ${PF400_IP} --pf400_port ${PF400_PORT}
 
 #####################
 # WEI Core Services #
 #####################
   rpl_modular_wc_server:
-    image: ghcr.io/ad-sdl/wei
+    image: ghcr.io/ad-sdl/wei:v0.5.5
     container_name: rpl_modular_wc_server
     ports:
       - 8000:8000
@@ -54,7 +54,7 @@ services:
     depends_on:
       - rpl_redis
   rpl_modular_wc_engine:
-    image: ghcr.io/ad-sdl/wei
+    image: ghcr.io/ad-sdl/wei:v0.5.5
     container_name: rpl_modular_wc_engine
     volumes:
       - ${WORKCELLS_DIR}:/workcell_defs
