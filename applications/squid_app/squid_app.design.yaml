@@ -1,4 +1,4 @@
-name: SquidBenchmarkExperiment
+experiment_name: SquidBenchmarkExperiment
 campaign_id: null
 description: Extended version of the ColorPicker experiment, that leverages multiple workcells.
 parameters:

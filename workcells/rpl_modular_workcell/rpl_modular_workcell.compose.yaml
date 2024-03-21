@@ -39,7 +39,7 @@ services:
 # WEI Core Services #
 #####################
   rpl_modular_wc_server:
-    image: ghcr.io/ad-sdl/wei:v0.5.5
+    image: ghcr.io/ad-sdl/wei
     container_name: rpl_modular_wc_server
     ports:
       - 8000:8000
@@ -54,7 +54,7 @@ services:
     depends_on:
       - rpl_redis
   rpl_modular_wc_engine:
-    image: ghcr.io/ad-sdl/wei:v0.5.5
+    image: ghcr.io/ad-sdl/wei
     container_name: rpl_modular_wc_engine
     volumes:
       - ${WORKCELLS_DIR}:/workcell_defs

@@ -41,7 +41,7 @@ def main():
     )
     args = parser.parse_args()
     experiment = wei.ExperimentClient(
-        server_addr=args.rpl_wc_server,
+        server_host=args.rpl_wc_server,
         server_port=args.rpl_wc_port,
         experiment_design="./squid_app.design.yaml",
         experiment_id=args.experiment_id,
