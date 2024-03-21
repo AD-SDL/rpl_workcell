@@ -13,12 +13,13 @@ config:
   redis_host: "rpl_redis"
   server_host: "rpl_modular_wc_server"
   sequential_scheduler: False
+  use_diaspora: True
 
 #List of all components accessible in this workcell
 modules:
 
   - name: sealer        #Human-legible name specific to an individual component
-    active: False        #Mark this module as active or inactive depending on whether or not it's used in the workflow
+    active: True        #Mark this module as active or inactive depending on whether or not it's used in the workflow
     model: A4s_sealer   #Type of device being connected to, might be multiple components of same model with different names in a workcell
     interface: wei_rest_node  #Method of communication with the device
     config:   #Relevant communication configuration
@@ -26,7 +27,6 @@ modules:
     workcell_coordinates: [0,0,0,1,0,0,0]   # X, Y, Z, Q0, Q1, Q2, Q3 relative to workcell_origin_coordinates
 
   - name: peeler
-    active: False
     model: brooks_peeler
     interface: wei_rest_node
     config:
@@ -66,7 +66,7 @@ modules:
     model: pf400
     interface: wei_rest_node
     config:
-      rest_node_address: "http://pf400_module:3000"
+      rest_node_address: "http://pf400_node:3000"
     workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
 
   - name: camera_module
@@ -77,13 +77,12 @@ modules:
     workcell_coordinates: [0,0,0,1,0,0,0]
 
   - name: hidex
-    active: False # Optional flag that marks this module as currently unused
+    active: True # Optional flag that marks this module as currently unused
     model: Hidex
-    interface: wei_tcp_node
+    interface: wei_rest_node
     workcell_coordinates: [0,0,0,1,0,0,0]
     config:
-      tcp_node_address: "146.137.240.22"
-      tcp_node_port: 2000
+      rest_node_address: "http://wendy.cels.anl.gov:2005"
 
   - name: barty
     active: True # Optional flag that marks this module as currently unused

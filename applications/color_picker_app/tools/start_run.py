@@ -25,6 +25,6 @@ def start_run_with_log_scraping(
     run_info = result["hist"]
     run_info["run_dir"] = Path(run_info["run_dir"])
     run_log = Path(result["run_log"].replace("/home/app", str(Path.home())))
-    t_steps_run = get_log_info(run_log, protocol)
-    steps_run.append(t_steps_run)
+    # t_steps_run = get_log_info(run_log, protocol)
+    # steps_run.append(t_steps_run)
     return steps_run, result
