@@ -94,10 +94,19 @@ def run(
     exp_folder.mkdir(parents=True, exist_ok=True)
     (exp_folder / "results").mkdir(parents=True, exist_ok=True)
     exp = ExperimentClient(
-        "localhost",
+        "mj.cels.anl.gov",
         "8000",
         "Color_Picker",
     )
+    output_dir = (
+                str(Path.cwd())
+                + "/experiment_results/"
+                + str("Color_Picker")
+                + "_id_"
+                + exp.experiment_id
+    )
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+            
     # Resource Tracking:
     plate_n = 1  # total number of plates
     current_iter = 0  # total number of iterations
@@ -139,36 +148,36 @@ def run(
         # grab new plate if experiment starting or current plate is full
         exp.events.log_decision("Need New Plate", (new_plate or current_iter == 0))
         if new_plate or current_iter == 0:
-            # print('Grabbing New Plate')
-           # steps_run, run_info = start_run_with_log_scraping(
-                # init_protocol, payload, steps_run, exp
-           # )
-           # curr_wells_used = []
+            print('Grabbing New Plate')
+            steps_run, run_info = start_run_with_log_scraping(
+                    init_protocol, payload, steps_run, exp
+            )
+            curr_wells_used = []
             new_plate = False
             exp.events.log_decision("Need Calibration", (current_iter == 0))
             if current_iter == 0:
-                # # Run the calibration protocol that gets the colors being mixed and ensures the target color is within the possible color space
-                # (
-                #     colors,
-                #     target_color,
-                #     curr_wells_used,
-                #     steps_run,
-                #     analytical_sol,
-                #     color_inverse,
-                # ) = calibrate(
-                #     target_color,
-                #     curr_wells_used,
-                #     loop_protocol,
-                #     exp_folder,
-                #     plate_max_volume,
-                #     steps_run,
-                #     pop_size,
-                #     exp,
-                #     ot2_protocol,
-                # )
-                # analytical_score = solver._grade_population(
-                #     [analytical_sol], target_color
-                # )[0]
+                # Run the calibration protocol that gets the colors being mixed and ensures the target color is within the possible color space
+                (
+                    colors,
+                    target_color,
+                    curr_wells_used,
+                    steps_run,
+                    analytical_sol,
+                    color_inverse,
+                ) = calibrate(
+                    target_color,
+                    curr_wells_used,
+                    loop_protocol,
+                    exp_folder,
+                    plate_max_volume,
+                    steps_run,
+                    pop_size,
+                    exp,
+                    ot2_protocol,
+                )
+                analytical_score = solver._grade_population(
+                    [analytical_sol], target_color
+                )[0]
                 pass
             else:
                 # save the old plate picture and increment to a new plate
@@ -187,7 +196,6 @@ def run(
         previous_ratios = solver.run_iteration(previous_ratios, prev_diffs)
         # Only for visualization, Perform a linear combination of the next colors being tried to show what the solver expects to create on this run.
         print(previous_ratios)
-        colors = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
         print(colors)
         target_plate = create_target_plate(previous_ratios, colors)
         print(target_plate)
@@ -220,9 +228,9 @@ def run(
             used_wells + pop_size > MAX_PLATE_SIZE
         ):  # if we have used all wells or not enough for next iter (thrash plate, start from scratch)
             print("Trashing Used Plate")
-            # steps_run, _ = start_run_with_log_scraping(
-            #     final_protocol, payload, steps_run, exp
-            # )
+            steps_run, _ = start_run_with_log_scraping(
+                final_protocol, payload, steps_run, exp
+            )
             new_plate = True
             curr_wells_used = []
 
@@ -298,7 +306,7 @@ def run(
         # output should be list [pop_size, 3]
         #img_path =
         #  Path(run_info["Take Picture"]["action_msg"].replace("/home/app", str(Path.home())))
-        img_path = exp.get_step_result_file(run_info, "Take Picture", filename="final_img.jpg")
+        img_path = Path(exp.get_wf_result_file(run_info["hist"]["Take Picture"]["action_msg"], Path(run_info["run_dir"].replace("/home/app", str(Path.home()))) / "results" / "final_img.jpg", run_info["run_id"]))
         print(img_path)
         # if use_globus_compute:
         #     print("funcx started")
@@ -343,8 +351,8 @@ def run(
         ##Plot review
         runs = []
         report = {}
-        if (Path(exp.output_dir) / "exp_data.txt").is_file():
-            with open(Path(exp.output_dir) / "exp_data.txt", "r") as f:
+        if (Path(output_dir) / "exp_data.txt").is_file():
+            with open(Path(output_dir) / "exp_data.txt", "r") as f:
                 report = json.loads(f.read())
             runs = report["runs"]
             
@@ -393,7 +401,7 @@ def run(
         )
 
         # Save run report
-        with open(exp.output_dir + "/exp_data.txt", "w") as f:
+        with open(output_dir + "/exp_data.txt", "w") as f:
             report_js = json.dumps(report, indent=4)
             f.write(report_js)
         collect_files(exp, img_path, plate_n)
@@ -426,9 +434,9 @@ def run(
         (exp_folder / "results" / f"plate_{plate_n}.jpg"),
     )
     if not new_plate:
-        # steps_run, _ = start_run_with_log_scraping(
-        #     final_protocol, payload, steps_run, exp
-        # )
+        steps_run, _ = start_run_with_log_scraping(
+            final_protocol, payload, steps_run, exp
+        )
         pass
     exp.events.end_experiment()
     print("This is our best color so far")

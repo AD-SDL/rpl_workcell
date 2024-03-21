@@ -23,7 +23,7 @@ def get_image(
     steps_run, run_info = start_run_with_log_scraping(
         loop_protocol, payload, steps_run, experiment
     )
-    img_path = run_info["Take Picture"]["action_msg"].replace("/home/app", str(Path.home()))
+    img_path = experiment.get_wf_result_file(run_info["hist"]["Take Picture"]["action_msg"], Path(run_info["run_dir"].replace("/home/app", str(Path.home()))) / "results" / "final_img.jpg", run_info["run_id"])
     return Path(img_path), curr_wells_used
 
 
