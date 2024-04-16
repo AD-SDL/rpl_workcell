@@ -4,5 +4,7 @@ services:
     image: ghcr.io/ad-sdl/squid_frontend:main
     container_name: squid_frontend   
     privileged: true
+    environment:
+      - SERVER_LIST=["http://mj.cels.anl.gov:8000"]
     ports:
       - 8080:8080
