@@ -110,6 +110,13 @@ modules:
     config:
       ros_node_address: '/ur5_client/UR5_Client_Node'
 
+  - name: biometra
+    active: True
+    model: Biometra TRobot II
+    interface: wei_rest_node
+    config:
+      rest_node_address: "http://wendy.cels.anl.gov:2002"
+
 locations:
   pf400: #Joint angles for the PF400 Plate Handler
     sciclops.exchange: [223.0, -38.068, 335.876, 325.434, 79.923, 995.062]

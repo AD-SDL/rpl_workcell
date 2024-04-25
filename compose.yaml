@@ -13,7 +13,7 @@ services:
     ports:
       - 6379:6379
     volumes:
-      - ${REDIS_DIR}:/data
+      - ~/.wei/redis:/data
     command: redis-server --save 60 1 --loglevel warning
   # Redis Commander for viewing lab state in browser
   # Go to http://localhost:8081 to access
@@ -32,8 +32,8 @@ services:
     image: ghcr.io/ad-sdl/wei
     container_name: lab_terminal
     volumes:
-      - ${WORKCELLS_DIR}:/workcell_defs
-      - ${WEI_DATA_DIR}:/home/app/.wei
+      - /home/rpl/workspace/rpl_workcell/workcells:/workcell_defs
+      - ~/.wei:/home/app/.wei
       - diaspora_config:/home/app/.diaspora
     entrypoint: [ "/sbin/matchhostfsowner" ]
     tty: true
