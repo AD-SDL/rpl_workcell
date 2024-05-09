@@ -11,19 +11,25 @@ services:
     container_name: ot2_alpha_node
     ports:
       - 2003:2003
-    command: python3 ot2_module/src/ot2_rest_node.py --alias="ot2_pcr_alpha" --port=2003 --ot2_ip=146.137.240.101
+    command: python3 ot2_module/src/ot2_rest_node.py --alias="ot2_alpha" --port=2003 --ot2_ip=146.137.240.101
   ot2_beta_node:
     image: ghcr.io/ad-sdl/ot2_module
     container_name: ot2_beta_node
     ports:
       - 2004:2004
-    command: python3 ot2_module/src/ot2_rest_node.py --alias="ot2_gc_beta" --port=2004 --ot2_ip=146.137.240.100
+    command: python3 ot2_module/src/ot2_rest_node.py --alias="ot2_beta" --port=2004 --ot2_ip=146.137.240.100
   ot2_gamma_node:
     image: ghcr.io/ad-sdl/ot2_module
     container_name: ot2_gamma_node
     ports:
       - 2005:2005
-    command: python3 ot2_module/src/ot2_rest_node.py --alias="ot2_gc_gamma" --port=2005 --ot2_ip=146.137.240.102
+    command: python3 ot2_module/src/ot2_rest_node.py --alias="ot2_gamma" --port=2005 --ot2_ip=146.137.240.102
+  ot2_delta_node:
+    image: ghcr.io/ad-sdl/ot2_module
+    container_name: ot2_delta_node
+    ports:
+      - 2006:2006
+    command: python3 ot2_module/src/ot2_rest_node.py --alias="ot2_delta" --port=2006 --ot2_ip=146.137.240.103
   pf400_node:
     image: ghcr.io/ad-sdl/pf400_module
     container_name: pf400_node

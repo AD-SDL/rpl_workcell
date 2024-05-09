@@ -44,7 +44,7 @@
                 "command": "transfer",
                 "args": {
                     "source": "camera_module.positions.plate_station",
-                    "target": "ot2_cp_gamma.positions.deck2",
+                    "target": "ot2_gamma.positions.deck2",
                     "source_plate_rotation": "narrow",
                     "target_plate_rotation": "wide"
                 },
@@ -55,7 +55,7 @@
             },
             {
                 "name": "Mix all colors",
-                "module": "ot2_cp_gamma",
+                "module": "ot2_gamma",
                 "command": "run_protocol",
                 "args": {
                     "config_path": "/home/rpl/workspace/rpl_workcell/color_picker/protocol_files/combined_protocol.yaml",
@@ -75,7 +75,7 @@
                 "module": "pf400",
                 "command": "transfer",
                 "args": {
-                    "source": "ot2_cp_gamma.positions.deck2",
+                    "source": "ot2_gamma.positions.deck2",
                     "target": "camera_module.positions.plate_station",
                     "source_plate_rotation": "wide",
                     "target_plate_rotation": "narrow"

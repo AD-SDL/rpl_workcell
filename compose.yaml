@@ -15,29 +15,6 @@ services:
     volumes:
       - ~/.wei/redis:/data
     command: redis-server --save 60 1 --loglevel warning
-  # Redis Commander for viewing lab state in browser
-  # Go to http://localhost:8081 to access
-  redis_commander:
-    image: rediscommander/redis-commander:latest
-    container_name: redis_commander
-    ports:
-      - 8081:8081
-    environment:
-      - REDIS_HOSTS=local:rpl_redis:6379
-    depends_on:
-      - rpl_redis
-  # Attachable terminal container with WEI installed, for testing/debugging
-  # Run docker compose with "--profile debug" to include this container
-  lab_terminal:
-    image: ghcr.io/ad-sdl/wei
-    container_name: lab_terminal
-    volumes:
-      - /home/rpl/workspace/rpl_workcell/workcells:/workcell_defs
-      - ~/.wei:/home/app/.wei
-      - diaspora_config:/home/app/.diaspora
-    entrypoint: [ "/sbin/matchhostfsowner" ]
-    tty: true
-    profiles: [ debug ]
 
 ################
 # Data Storage #

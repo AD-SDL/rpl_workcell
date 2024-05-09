@@ -39,7 +39,7 @@ The **modules** section lists the *modules* that are included in the workcell. I
 * a [pf400 sample handler](https://preciseautomation.com/SampleHandler.html) (**pf400**) and two associated cameras, **pf400_camera_right** and **pf400_camera_left**;
 * a [SciClops plate handler](https://hudsonrobotics.com/microplate-handling-2/platecrane-sciclops-3/) (**sciclops**)
 * a [A4S](https://www.azenta.com/products/automated-roll-heat-sealer-formerly-a4s) (**sealer**) and a [Brooks XPeel](https://www.azenta.com/products/automated-plate-seal-remover-formerly-xpeel) (**peeler**), with an associated camera, **sp_module_camera**
-* three [OpenTrons OT2](https://opentrons.com/products/robots/ot-2/) liquid handlers, **ot2_pcr_alpha**, **ot2_pcr_beta**, and **ot2_cp_gamma**;
+* three [OpenTrons OT2](https://opentrons.com/products/robots/ot-2/) liquid handlers, **ot2_alpha**, **ot2_pcr_beta**, and **ot2_gamma**;
 * a [Biometra thermal cycler](https://www.analytik-jena.com/products/life-science/pcr-qpcr-thermal-cycler/thermal-cycler-pcr/biometra-trio-series/) (**biometra**)
 * another camera module, **camera_module**
 
@@ -78,7 +78,7 @@ metadata:
 workcell: /home/rpl/workspace/rpl_workcell/pcr_workcell/pcr_workcell.yaml
 
 modules:
-  - name: ot2_cp_gamma
+  - name: ot2_gamma
   - name: pf400
   - name: camera
 
@@ -88,13 +88,13 @@ flowdef:
     command: transfer
     args:
       source: camera_module.positions.plate_station
-      target: ot2_cp_gamma.positions.deck2
+      target: ot2_gamma.positions.deck2
       source_plate_rotation: narrow
       target_plate_rotation: wide
     comment: Place plate in ot2
 
   - name: Mix all colors
-    module: ot2_cp_gamma
+    module: ot2_gamma
     command: run_protocol
     args:
       config_path:  /home/rpl/workspace/rpl_workcell/color_picker/protocol_files/combined_protocol.yaml
@@ -109,7 +109,7 @@ flowdef:
     module: pf400
     command: transfer
     args:
-      source: ot2_cp_gamma.positions.deck2
+      source: ot2_gamma.positions.deck2
       target: camera_module.positions.plate_station
       source_plate_rotation: wide
       target_plate_rotation: narrow
@@ -125,7 +125,7 @@ flowdef:
 
 This workflow uses three of 12 modules defined in the workcell definition earlier, **pf400**, **ot2_pcr_gamma**, and **camera_module**.
 It comprises four steps:
-* Transfer a plate from `camera_module.positions.plate_station` to `ot2_cp_gamma.positions.deck2`, while rotating the plate 90 degrees
+* Transfer a plate from `camera_module.positions.plate_station` to `ot2_gamma.positions.deck2`, while rotating the plate 90 degrees
 * Run the "protocol" defined by the file [ot2_pcr_config.yaml](https://github.com/AD-SDL/rpl_workcell/blob/main/color_picker/protocol_files/combined_protocol.yaml).
 This file specifies a sequence of steps to be performed on the hardware.
 * Transfer the plate to the camera

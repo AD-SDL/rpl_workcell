@@ -6,7 +6,7 @@ metadata:
   version: 0.1
 
 modules:
-  - name: ot2_cp_gamma
+  - name: ot2_gamma
   - name: pf400
   - name: camera_module
 
@@ -16,13 +16,13 @@ flowdef:
     action: transfer
     args:
       source: camera_module.plate_station
-      target: ot2_cp_gamma.deck2
+      target: ot2_gamma.deck2
       source_plate_rotation: narrow
       target_plate_rotation: wide
     comment: Place plate in ot2
 
   - name: Mix all colors
-    module: ot2_cp_gamma
+    module: ot2_gamma
     action: run_protocol
     args:
       color_A_volumes: payload.color_A_volumes
@@ -39,7 +39,7 @@ flowdef:
     module: pf400
     action: transfer
     args:
-      source: ot2_cp_gamma.deck2
+      source: ot2_gamma.deck2
       target: camera_module.plate_station
       source_plate_rotation: wide
       target_plate_rotation: narrow
