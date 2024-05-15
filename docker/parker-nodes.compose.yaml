@@ -10,10 +10,8 @@ services:
     container_name: a4s_sealer_node
     ports:
       - 2000:2000
-    command: python -m a4s_sealer_rest_node --port=2000
+    command: python -m a4s_sealer_rest_node --port=2000 --device=/dev/ttyUSB1
     privileged: true
-    volumes:
-      - /dev:/dev
     restart: unless-stopped
 
   brooks_xpeel_node:
@@ -23,19 +21,18 @@ services:
       - 2001:2001
     command: python -m brooks_xpeel_rest_node --port=2001
     privileged: true
-    volumes:
-      - /dev:/dev
     restart: unless-stopped
 
   sciclops_node:
     image: ghcr.io/ad-sdl/hudson_platecrane_module
     container_name: sciclops_node
+    environment:
+      - USER_ID=0
+      - GROUP_ID=0
     ports:
       - 2002:2002
     command: python -m sciclops_rest_node --port 2002
     privileged: true
-    volumes:
-      - /dev:/dev
     restart: unless-stopped
 
   camera_node:
@@ -43,7 +40,7 @@ services:
     container_name: camera_node
     ports:
       - 3001:3001
-    command: python camera_rest_node --port=3001
+    command: python -m camera_rest_node --port=3001
     volumes:
       - /dev/video0:/dev/video0
     restart: unless-stopped
