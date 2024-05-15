@@ -5,31 +5,33 @@ name: parker_nodes
 
 services:
 
-  # a4s_sealer_node:
-  #   image: ghcr.io/ad-sdl/a4s_sealer_module
-  #   container_name: a4s_sealer_node
-  #   environment:
-  #     - USER_ID=1000
-  #     - GROUP_ID=1000
-  #   ports:
-  #     - 2000:2000
-  #   command: python a4s_sealer_module/scripts/a4s_sealer_rest_node.py --port=2000
-  #   privileged: true
-  #   volumes:
-  #     - /dev:/dev
+  a4s_sealer_node:
+    image: ghcr.io/ad-sdl/a4s_sealer_module
+    container_name: a4s_sealer_node
+    environment:
+      - USER_ID=1000
+      - GROUP_ID=1000
+    ports:
+      - 2000:2000
+    command: python a4s_sealer_module/scripts/a4s_sealer_rest_node.py --port=2000
+    privileged: true
+    volumes:
+      - /dev:/dev
+    restart: unless-stopped
 
-  # brooks_xpeel_node:
-  #   image: ghcr.io/ad-sdl/brooks_xpeel_module
-  #   container_name: brooks_xpeel_node
-  #   environment:
-  #     - USER_ID=1000
-  #     - GROUP_ID=1000
-  #   ports:
-  #     - 2001:2001
-  #   command: python brooks_xpeel_module/scripts/brooks_xpeel_rest_node.py --port=2001
-  #   privileged: true
-  #   volumes:
-  #     - /dev:/dev
+  brooks_xpeel_node:
+    image: ghcr.io/ad-sdl/brooks_xpeel_module
+    container_name: brooks_xpeel_node
+    environment:
+      - USER_ID=1000
+      - GROUP_ID=1000
+    ports:
+      - 2001:2001
+    command: python brooks_xpeel_module/scripts/brooks_xpeel_rest_node.py --port=2001
+    privileged: true
+    volumes:
+      - /dev:/dev
+    restart: unless-stopped
 
   sciclops_node:
     image: ghcr.io/ad-sdl/hudson_platecrane_module
@@ -43,6 +45,7 @@ services:
     privileged: true
     volumes:
       - /dev:/dev
+    restart: unless-stopped
 
   camera_node:
     image: ghcr.io/ad-sdl/webcam_module
@@ -56,3 +59,4 @@ services:
     privileged: true
     volumes:
       - /dev/video0:/dev/video0
+    restart: unless-stopped
