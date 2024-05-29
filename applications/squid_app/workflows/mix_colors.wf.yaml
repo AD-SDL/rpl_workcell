@@ -1,4 +1,4 @@
-name: Color Picker - Mix Colors - Workflow
+name: Mix_Colors
 
 metadata:
   author: Tobias Ginsburg, Rafael Vescovi
@@ -6,9 +6,9 @@ metadata:
   version: 0.1
 
 modules:
-  - name: ot2_cp_gamma
-  - name: pf400
-  - name: camera_module
+  - ot2_cp_gamma
+  - pf400
+  - camera_module
 
 flowdef:
   - name: Move from Camera Module to OT2

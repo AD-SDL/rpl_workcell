@@ -1,4 +1,4 @@
-name: Color Picker - Trash Plate - Workflow
+name: Cleanup
 
 metadata:
   author: Tobias Ginsburg, Rafael Vescovi
@@ -6,8 +6,8 @@ metadata:
   version: 0.1
 
 modules:
-  - name: pf400
-  - name: barty
+  - pf400
+  - barty
 
 flowdef:
   - name: Move to final location

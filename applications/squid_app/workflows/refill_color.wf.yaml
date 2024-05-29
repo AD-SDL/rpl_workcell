@@ -1,4 +1,4 @@
-name: Barty - Refill Ink - Workflow
+name: Refill_Color
 
 metadata:
   name: Barty - Refill Ink - Workflow
@@ -7,7 +7,7 @@ metadata:
   version: 0.1
 
 modules:
-  - name: barty
+  - barty
 
 flowdef:
   - name: Refill Ink

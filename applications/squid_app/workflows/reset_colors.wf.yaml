@@ -1,4 +1,4 @@
-name: Color Picker - Reset Colors - Workflow
+name: Reset_Colors
 
 metadata:
   author: Ryan Lewis
@@ -7,7 +7,7 @@ metadata:
 
 
 modules:
-  - name: barty
+  - barty
 
 flowdef:
   - name: Drain Max Ink
@@ -22,4 +22,4 @@ flowdef:
     action: fill_ink_all_motors
     args:
      foo: bar
-    comments: Fill OT2 of max vol of ink.
+    comments: Fill OT2 with max vol of ink.
