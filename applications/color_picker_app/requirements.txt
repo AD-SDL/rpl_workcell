@@ -4,4 +4,5 @@ colormath
 scikit-optimize
 matplotlib
 opencv-python-headless
-globus-compute-common@git+https://github.com/AD-SDL/funcx-common_pydantic2.git
+globus-compute-common
+gladier

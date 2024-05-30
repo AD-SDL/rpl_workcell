@@ -46,16 +46,17 @@ services:
 # WEI Core Services #
 #####################
   rpl_modular_wc_server:
-    image: ghcr.io/ad-sdl/wei:v0.5.5
+    image: ghcr.io/ad-sdl/wei
     container_name: rpl_modular_wc_server
     ports:
       - 8000:8000
     volumes:
-      - /home/rpl/workspace/rpl_workcell/workcells:/workcell_defs
+      - ../../workcells:/workcell_defs
       - ../../applications/color_picker_app/protocol_files:/protocol_files
       - ../../applications/squid_app/protocols:/protocols
       - ~/.wei:/home/app/.wei
       - diaspora_config:/home/app/.diaspora
+      # - ~/.diaspora:/home/app/.diaspora
     command: python3 -m wei.server --workcell /workcell_defs/rpl_modular_workcell/rpl_modular_workcell.yaml
     environment:
       - USER_ID=${USER_ID:-1000}
@@ -64,10 +65,10 @@ services:
       - rpl_redis
     restart: unless-stopped
   rpl_modular_wc_engine:
-    image: ghcr.io/ad-sdl/wei:v0.5.5
+    image: ghcr.io/ad-sdl/wei
     container_name: rpl_modular_wc_engine
     volumes:
-      - /home/rpl/workspace/rpl_workcell/workcells:/workcell_defs
+      - ../../workcells:/workcell_defs
       - ../../applications/color_picker_app/protocol_files:/protocol_files
       - ../../applications/squid_app/protocols:/protocols
       - ~/.wei:/home/app/.wei

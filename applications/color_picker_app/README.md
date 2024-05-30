@@ -44,16 +44,7 @@ NUC located on the left side of setup of NUCs with monitors, runs the main loop 
 
 
 
-# Setup Gladier: 
-
-Clone: https://github.com/AD-SDL/funcx-common_pydantic2
-Clone:  https://github.com/AD-SDL/funcx_pydantic2
-
-Pip install . in funcx-common_pydantic2
-Pip install . in funcx_pydantic2/compute_endpoint
-Pip install . in funcx_pydantic2/compute_sdk
-Pip install pyzmq
-
+# Setup Gladier:
 
 Run globus-compute-endpoint config default
 Run globus-compute-endpoint start  default
@@ -122,7 +113,7 @@ and check that the camera_module is publishing frames and the PF-400 is publishi
   ```
   to start the globus endpoint for publishing. A window will pop up with a connect button. If when this connect button is pressed it says there is already an instance running, then you are free to close it and skip this step.
 
-  
+
 11. In the same terminal, Run
   ```
    globus-compute-endpoint start logan
@@ -132,7 +123,7 @@ and check that the camera_module is publishing frames and the PF-400 is publishi
   ```
 	cd ~/workspace/rpl_workcell
 	docker compose up
-  
+
    ```
     This will start the WEI server and worker
 13. In the a new terminal, Run
