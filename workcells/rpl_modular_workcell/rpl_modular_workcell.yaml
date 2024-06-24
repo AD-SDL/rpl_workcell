@@ -19,7 +19,7 @@ config:
 modules:
 
   - name: sealer        #Human-legible name specific to an individual component
-    active: True        #Mark this module as active or inactive depending on whether or not it's used in the workflow
+    active: False        #Mark this module as active or inactive depending on whether or not it's used in the workflow
     model: A4s_sealer   #Type of device being connected to, might be multiple components of same model with different names in a workcell
     interface: wei_rest_node  #Method of communication with the device
     config:   #Relevant communication configuration
@@ -29,6 +29,7 @@ modules:
   - name: peeler
     model: brooks_peeler
     interface: wei_rest_node
+    active: False
     config:
       rest_node_address: "http://parker.cels.anl.gov:2001"
     workcell_coordinates: [0,0,0,1,0,0,0] # X, Y, Z, Q0, Q1, Q2, Q3
@@ -84,7 +85,7 @@ modules:
     workcell_coordinates: [0,0,0,1,0,0,0]
 
   - name: hidex
-    active: True # Optional flag that marks this module as currently unused
+    active: False # Optional flag that marks this module as currently unused
     model: Hidex
     interface: wei_rest_node
     workcell_coordinates: [0,0,0,1,0,0,0]
@@ -118,7 +119,7 @@ modules:
       ros_node_address: '/ur5_client/UR5_Client_Node'
 
   - name: biometra
-    active: True
+    active: False
     model: Biometra TRobot II
     interface: wei_rest_node
     config:

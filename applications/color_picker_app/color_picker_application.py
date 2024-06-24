@@ -98,6 +98,7 @@ def run(
         "8000",
         "Color_Picker",
     )
+    print(dir(exp))
     output_dir = (
                 str(Path.cwd())
                 + "/experiment_results/"
@@ -134,7 +135,7 @@ def run(
     # Reset Colors
     
     exp.start_run(reset_colors_wf.resolve(), blocking=False)
-    exp.events.log_loop_start("Main Loop")
+    exp.log_loop_start("Main Loop")
     while num_exps + pop_size <= exp_budget:
         new_run = {}
         steps_run = []
@@ -146,7 +147,7 @@ def run(
         print("Starting iteration " + str(current_iter))
 
         # grab new plate if experiment starting or current plate is full
-        exp.events.log_decision("Need New Plate", (new_plate or current_iter == 0))
+        exp.log_decision("Need New Plate",  (new_plate or current_iter == 0))
         if new_plate or current_iter == 0:
             print('Grabbing New Plate')
             steps_run, run_info = start_run_with_log_scraping(
@@ -154,7 +155,7 @@ def run(
             )
             curr_wells_used = []
             new_plate = False
-            exp.events.log_decision("Need Calibration", (current_iter == 0))
+            exp.log_decision("Need Calibration", (current_iter == 0))
             if current_iter == 0:
                 # Run the calibration protocol that gets the colors being mixed and ensures the target color is within the possible color space
                 (
@@ -190,7 +191,7 @@ def run(
 
         # Calculate volumes and current wells for creating the OT2 protocol
 
-        exp.events.log_local_compute("solver.run_iteration")
+        exp.log_local_compute("solver.run_iteration")
         if plate_colors:
             prev_diffs = solver._grade_population(prev_colors, target_color)
         previous_ratios = solver.run_iteration(previous_ratios, prev_diffs)
@@ -252,7 +253,7 @@ def run(
                 print("Updated colors_used:", colors_used)
 
         for i, color_vol in enumerate(colors_used):
-            exp.events.log_decision(
+            exp.log_decision(
                 "Need Ink", (color_vol >= 5000)
             )  # 5 mL, change to whatever threshold.
             if color_vol >= 5000:
@@ -285,7 +286,7 @@ def run(
                 print("Updated colors_used:", colors_used)
 
         for i, color_vol in enumerate(colors_used):
-            exp.events.log_decision(
+            exp.log_decision(
                 "Need Ink", (color_vol >= 5000)
             )  # 5 mL, change to whatever threshold.
             if color_vol >= 5000:
@@ -310,13 +311,13 @@ def run(
         print(img_path)
         # if use_globus_compute:
         #     print("funcx started")
-        #     exp.events.log_globus_compute("get_colors_from_file")
+        #     exp.log_globus_compute("get_colors_from_file")
         #     fx = FuncXExecutor(endpoint_id=compute_local_ep)
         #     fxresult = fx.submit(get_colors_from_file, img_path)
         #     plate_colors_ratios = fxresult.result()[1]
         #     print("funcx finished")
         # else:
-        exp.events.log_local_compute("get_colors_from_file")
+        exp.log_local_compute("get_colors_from_file")
         plate_colors = get_colors_from_file(img_path)[1]
 
         filename = "plate_" + str(plate_n) + ".jpg"
@@ -423,11 +424,11 @@ def run(
         print(exp_folder)   
         publish_iter(Path("./publish").resolve(), exp_folder, exp)
         # publish_iter(exp_folder / "results", exp_folder, exp)
-        # exp.events.log_loop_check(
+        # exp.log_loop_check(
         #     "Sufficient Wells in Experiment Budget", num_exps + pop_size <= exp_budget
         # )
         print(Path(str(run_info["run_dir"]).replace("/home/app", str(Path.home()))))
-    exp.events.log_loop_end("Main Loop")
+    exp.log_loop_end("Main Loop")
     # Trash plate after experiment
     shutil.copy2(
         Path(str(run_info["run_dir"]).replace("/home/app", str(Path.home()))) / "results" / "plate_only.jpg",
@@ -438,7 +439,7 @@ def run(
             final_protocol, payload, steps_run, exp
         )
         pass
-    exp.events.end_experiment()
+    exp.end_experiment()
     print("This is our best color so far")
     print(cur_best_color)
     print("Runs on this experiment")

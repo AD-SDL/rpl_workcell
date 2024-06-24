@@ -92,3 +92,9 @@ def create_target_plate(plate_ratios: List[List[float]], colors: List[List[int]]
     target_plate = np.array(plate_ratios) @ np.array(colors)
     target_plate = target_plate.tolist()
     return target_plate
+
+def make_target_plate(plate_ratios: List[List[float]]):
+    colors = [[255, 0, 255], [0, 255, 255], [255, 255, 0], [0, 0, 0]]
+    target_plate = np.array(plate_ratios) @ np.array(colors)
+    target_plate = target_plate.tolist()
+    return target_plate
