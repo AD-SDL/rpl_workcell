@@ -41,6 +41,5 @@ services:
     ports:
       - 3001:3001
     command: python -m camera_rest_node --port=3001
-    volumes:
-      - /dev/video0:/dev/video0
+    privileged: true
     restart: unless-stopped
