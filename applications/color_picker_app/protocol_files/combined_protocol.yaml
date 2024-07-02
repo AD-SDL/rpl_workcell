@@ -91,17 +91,15 @@ commands:
     aspirate_clearance: 1
     drop_tip: False
 
-  - name: replace_tip_D
-    command: replace_tip
-    replace_tip: True
-
   - name: Mix Colors
     command: mix
     reps: 3
     mix_volume: 100
     location: payload.destination_wells
 
-  
+  - name: replace_tip_D
+    command: replace_tip
+    replace_tip: True
 
 metadata:
   protocolName: Color Mixing all
