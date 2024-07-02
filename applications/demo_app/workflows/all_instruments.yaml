@@ -7,7 +7,7 @@ metadata:
 
 modules:
   - name: sealer
-  - name: peeler
+  - name: brooks_xpeel_module
 
 flowdef:
   # - name: Test Sealer
@@ -18,5 +18,5 @@ flowdef:
   #     time: 3
 
   - name: Test Peeler
-    module: peeler
+    module: brooks_xpeel_module
     action: peel
