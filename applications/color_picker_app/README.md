@@ -150,7 +150,7 @@ and check that the camera_module is publishing frames and the PF-400 is publishi
 cd ~/workspace/rosboard
 /run
 ```
-this will open a dashboard on `localhost:8888`. If you open the camera module channel on this site using the menu on the left, you can see what feed is coming from that camera. It should point down at the plate image station. This can be adjusted on strange by changing the number in this command:
+this will open a dashboard on `localhost:8000`. If you open the camera module channel on this site using the menu on the left, you can see what feed is coming from that camera. It should point down at the plate image station. This can be adjusted on strange by changing the number in this command:
 ```
 ros2 launch camera_module_client camera_publisher.launch.py camera_name:=camera_module camera_number:=$cam_num
 ```

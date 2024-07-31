@@ -107,7 +107,7 @@ def run(
                 + exp.experiment_id
     )
     Path(output_dir).mkdir(parents=True, exist_ok=True)
-            
+
     # Resource Tracking:
     plate_n = 1  # total number of plates
     current_iter = 0  # total number of iterations
@@ -133,7 +133,7 @@ def run(
     colors_used = [0, 0, 0]
 
     # Reset Colors
-    
+
     exp.start_run(reset_colors_wf.resolve(), blocking=False)
     exp.log_loop_start("Main Loop")
     while num_exps + pop_size <= exp_budget:
@@ -322,7 +322,7 @@ def run(
 
         filename = "plate_" + str(plate_n) + ".jpg"
         # Copy the plate image into the experiment folder
-        
+
         # Swap BGR to RGB
         plate_colors = {a: b[::-1] for a, b in plate_colors.items()}
         # Find the colors to be processed by the solver
@@ -356,9 +356,9 @@ def run(
             with open(Path(output_dir) / "exp_data.txt", "r") as f:
                 report = json.loads(f.read())
             runs = report["runs"]
-            
-        
-        
+
+
+
         # Create new run log
         print("prev vols")
         print(np.multiply(previous_ratios, plate_max_volume).tolist())
@@ -421,7 +421,7 @@ def run(
         )
         # Save overall results
         print("publishing:")
-        print(exp_folder)   
+        print(exp_folder)
         publish_iter(Path("./publish").resolve(), exp_folder, exp)
         # publish_iter(exp_folder / "results", exp_folder, exp)
         # exp.log_loop_check(
