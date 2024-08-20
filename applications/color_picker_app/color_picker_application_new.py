@@ -88,22 +88,22 @@ def run(
             wells_used = []
             plate_count += 1
             need_new_plate = False
-    
-    
-    
+
+
+
         exp.log_local_compute("solver.run_iteration")
-        
+
         if previous_ratios:
             grades = solver._grade_population(colors_tested, target_color)
         else:
             grades = None
         print(previous_ratios)
         print(grades)
-        test_ratios = solver.run_iteration(previous_ratios, grades) 
+        test_ratios = solver.run_iteration(previous_ratios, grades)
         if previous_ratios == None:
             previous_ratios = test_ratios
-        else: 
-            previous_ratios += test_ratios      
+        else:
+            previous_ratios += test_ratios
         payload, wells_used = convert_volumes_to_payload(
             np.multiply(test_ratios, PLATE_MAX_VOLUME), wells_used
         )
@@ -116,7 +116,7 @@ def run(
         else:
             payload["use_existing_resources"] = True
         payload["config_path"] = str(ot2_protocol.resolve())
-        
+
 
         run_info= exp.start_run(loop_protocol.resolve(), payload)
 
@@ -140,5 +140,3 @@ def run(
 
 if __name__ == "__main__":
     run()
-
-
