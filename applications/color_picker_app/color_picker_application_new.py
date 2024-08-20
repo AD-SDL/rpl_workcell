@@ -67,7 +67,7 @@ def run(
     pop_size: int = 4,
 ) -> None:
    exp = ExperimentClient(
-        "mj.cels.anl.gov",
+        "logan.cels.anl.gov",
         "8000",
         "Color_Picker",
     )
@@ -124,11 +124,11 @@ def run(
             exp.start_run(final_protocol)
             need_new_plate = True
 
-        img_path = Path(exp.get_wf_result_file(run_info["run_id"], run_info["hist"]["Take Picture"]["action_msg"], Path.home() / "workspace"/  "results" / "final_img.jpg"))
-        print(img_path)
+        datapoint_id = run_info.get_datapoint_id_by_label("image")
+        print(exp.save_datapoint_value(datapoint_id, "image.jpg"))
         exp.log_local_compute("get_colors_from_file")
 
-        measured_colors = get_colors_from_file(img_path)[1]
+        measured_colors = get_colors_from_file(Path("image.jpg"))[1]
         measured_colors = {a: b[::-1] for a, b in measured_colors.items()}
         for well in payload["destination_wells"]:
             color = measured_colors[well]
