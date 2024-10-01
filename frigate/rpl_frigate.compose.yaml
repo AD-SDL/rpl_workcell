@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   frigate:
     container_name: rpl_frigate

@@ -13,7 +13,7 @@ config:
   redis_host: "rpl_redis"
   server_host: "rpl_modular_wc_server"
   sequential_scheduler: False
-  use_diaspora: True
+  use_diaspora: False
 
 #List of all components accessible in this workcell
 modules:

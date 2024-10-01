@@ -6,6 +6,45 @@ services:
 ###########
 # Modules #
 ###########
+  a4s_sealer_node:
+    image: ghcr.io/ad-sdl/a4s_sealer_module
+    container_name: a4s_sealer_node
+    ports:
+      - 2000:2000
+    command: python -m a4s_sealer_rest_node --port=2000 --device=/dev/ttyUSB1
+    privileged: true
+    restart: unless-stopped
+
+  brooks_xpeel_node:
+    image: ghcr.io/ad-sdl/brooks_xpeel_module
+    container_name: brooks_xpeel_node
+    ports:
+      - 2001:2001
+    command: python -m brooks_xpeel_rest_node --port=2001
+    privileged: true
+    restart: unless-stopped
+
+  sciclops_node:
+    image: ghcr.io/ad-sdl/hudson_platecrane_module:latest
+    container_name: sciclops_node
+    environment:
+      - USER_ID=0
+      - GROUP_ID=0
+    ports:
+      - 2002:2002
+    command: python -m sciclops_rest_node --port 2002
+    privileged: true
+    restart: unless-stopped
+
+  camera_node:
+    image: ghcr.io/ad-sdl/camera_module
+    container_name: camera_node
+    ports:
+      - 3001:3001
+    command: python -m camera_rest_node --port=3001 --camera_address=/dev/video0
+    privileged: true
+    restart: unless-stopped
+
   ot2_alpha_node:
     image: ghcr.io/ad-sdl/ot2_module
     container_name: ot2_alpha_node
