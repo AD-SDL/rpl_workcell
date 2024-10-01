@@ -24,7 +24,7 @@ services:
     restart: unless-stopped
 
   sciclops_node:
-    image: ghcr.io/ad-sdl/hudson_platecrane_module
+    image: ghcr.io/ad-sdl/hudson_platecrane_module:latest
     container_name: sciclops_node
     environment:
       - USER_ID=0
@@ -40,6 +40,6 @@ services:
     container_name: camera_node
     ports:
       - 3001:3001
-    command: python -m camera_rest_node --port=3001
+    command: python -m camera_rest_node --port=3001 --camera_address=/dev/video0
     privileged: true
     restart: unless-stopped
