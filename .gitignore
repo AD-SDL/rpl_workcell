@@ -160,6 +160,6 @@ experiment_results/
 
 # Ruff
 .ruff_cache
-frigate/config
+frigate/config/*
 !frigate/config/config.yaml
 frigate/storage

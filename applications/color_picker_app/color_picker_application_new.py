@@ -67,7 +67,7 @@ def run(
     pop_size: int = 4,
 ) -> None:
    exp = ExperimentClient(
-        "mj.cels.anl.gov",
+        "parker.cels.anl.gov",
         "8000",
         "Color_Picker",
     )
