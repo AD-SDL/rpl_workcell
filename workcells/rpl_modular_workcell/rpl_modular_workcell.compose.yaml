@@ -64,19 +64,3 @@ services:
     depends_on:
       - rpl_redis
     restart: unless-stopped
-  rpl_modular_wc_engine:
-    image: ghcr.io/ad-sdl/wei
-    container_name: rpl_modular_wc_engine
-    volumes:
-      - ../../workcells:/workcell_defs
-      - ../../applications/color_picker_app/protocol_files:/protocol_files
-      - ../../applications/squid_app/protocols:/protocols
-      - ~/.wei:/home/app/.wei
-    command: python3 -m wei.engine --workcell /workcell_defs/rpl_modular_workcell/rpl_modular_workcell.yaml
-    environment:
-      - PYTHONUNBUFFERED=1 # Fix weird bug with empty logging
-      - USER_ID=${USER_ID:-1000}
-      - GROUP_ID=${GROUP_ID:-1000}
-    depends_on:
-      - rpl_redis
-    restart: unless-stopped

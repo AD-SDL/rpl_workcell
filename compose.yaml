@@ -2,9 +2,10 @@ name: rpl_lab
 include:
   # Workcells
   - workcells/rpl_modular_workcell/rpl_modular_workcell.compose.yaml
-  - dashboard/dashboard.compose.yaml
   # - workcells/n9_workcell/n9_workcell.compose.yaml
-  # - workcells/mir_mobile_workcell/mir_mobile_workcell.compose.yaml
+  # - workcells/mir_mobile_workcellq/mir_mobile_workcell.compose.yaml
+  # Services
+  - frigate/rpl_frigate.compose.yaml
 services:
   # Single Redis used by whole lab
   rpl_redis:

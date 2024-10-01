@@ -67,7 +67,7 @@ def run(
     pop_size: int = 4,
 ) -> None:
    exp = ExperimentClient(
-        "logan.cels.anl.gov",
+        "mj.cels.anl.gov",
         "8000",
         "Color_Picker",
     )
@@ -119,7 +119,6 @@ def run(
 
 
         run_info= exp.start_run(loop_protocol.resolve(), payload)
-
         if(len(wells_used) + pop_size) > PLATE_WELLS:
             exp.start_run(final_protocol)
             need_new_plate = True

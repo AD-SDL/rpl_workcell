@@ -153,12 +153,13 @@ experiment_results/
 
 .wei/
 
+
 # Local Environment
 .env
 *.code-workspace
 
 # Ruff
 .ruff_cache
-frigate/config/frigate.db
-frigate/config/.vacuum
-frigate/config/.timeline
+frigate/config
+!frigate/config/config.yaml
+frigate/storage

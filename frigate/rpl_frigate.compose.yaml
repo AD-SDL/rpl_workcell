@@ -1,17 +1,16 @@
-version: "3.9"
 services:
   frigate:
     container_name: rpl_frigate
     restart: unless-stopped
     image: ghcr.io/blakeblackshear/frigate:stable
-    deploy:    # <------------- Add this section
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              # device_ids: ['0'] # this is only needed when using multiple GPUs
-              # count: 1 # number of GPUs
-              capabilities: [gpu]
+    # deploy:    # <------------- Add this section
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           # device_ids: ['0'] # this is only needed when using multiple GPUs
+    #           # count: 1 # number of GPUs
+    #           capabilities: [gpu]
     volumes:
       - ./config:/config
       - ./storage:/media/frigate

@@ -13,7 +13,8 @@ config:
   redis_host: "rpl_redis"
   server_host: "rpl_modular_wc_server"
   sequential_scheduler: False
-  use_diaspora: True
+  use_diaspora: False
+  autostart_engine: True
 
 #List of all components accessible in this workcell
 modules:
@@ -44,6 +45,7 @@ modules:
   - name: ot2_alpha
     model: ot2
     interface: wei_rest_node
+    active: False
     config:
       rest_node_address: "http://ot2_alpha_node:2003"
     workcell_coordinates: [0,0,0,1,0,0,0]
@@ -65,6 +67,7 @@ modules:
 
   - name: ot2_delta
     model: ot2
+    active: False
     interface: wei_rest_node
     config:
       rest_node_address: "http://ot2_delta_node:2006"
