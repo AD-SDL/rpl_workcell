@@ -78,7 +78,9 @@ services:
     container_name: pf400_node
     ports:
       - 3000:3000
-    command: python -m pf400_rest_node --port 3000 --pf400_ip 146.137.240.35 --pf400_port 10100
+    command: python -m pf400_rest_node --port 3000 --pf400_ip 146.137.240.35 --pf400_port 10100 --locations_file '/resources/pf400_locations.yaml'
+    volumes:
+      - ../../resources:/resources
     restart: unless-stopped
 
 #####################

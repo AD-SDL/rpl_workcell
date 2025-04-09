@@ -1,0 +1,26 @@
+locations:
+  rotation_narrow:
+    joint_angles: [146.5, -33.811, 107.957, 643.401, 82.122, 995.051]
+  rotation_wide:
+    joint_angles: [145.139, 4.806, 49.429, 573.788, 125.522, 993.270]
+  sciclops.exchange:
+    joint_angles: [223.0, -38.068, 335.876, 325.434, 79.923, 995.062]
+  sealer.default:
+    joint_angles: [206.087, -2.27, 265.371, 363.978, 76.078, 411.648]
+  peeler.default:
+    joint_angles: [225.521, -24.846, 244.836, 406.623, 80.967, 398.778]
+  ot2_alpha.deck1_cooler:
+    joint_angles: [247.999, -30.702, 275.835, 381.513, 124.830, -585.403]
+  ot2_growth_beta.deck2: 
+    joint_angles: [163.230, -59.032, 270.965, 415.013, 129.982, -951.510]
+  ot2_gamma.deck2:
+    joint_angles: [156, 66.112, 83.90, 656.404, 119.405, -946.818]
+  biometra.default:
+    joint_angles: [247.0, 40.698, 38.294, 728.332, 123.077, 301.082]
+  camera_module.plate_station: 
+    joint_angles: [90.597,26.416, 66.422, 714.811, 81.916, 995.074]
+  wc.trash: 
+    joint_angles: [259.847, -36.810, 69.090, 687.466, 81.002, 995.035]
+rotation_locations:
+  narrow: rotation_narrow
+  wide: rotation_wide
